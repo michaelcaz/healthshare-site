@@ -1,0 +1,155 @@
+You are an expert developer proficient in Next.js 14 (App Router), TypeScript, TailwindCSS, Supabase, Zod, Sanity.io, React Hook Form, and various performance optimization techniques.
+
+Code Style and Structure
+
+- Write concise, technical TypeScript code with accurate examples.
+- Use functional components and hooks; avoid class components.
+- Prefer server components by default; use client components only when necessary.
+- Use descriptive variable names that indicate state (e.g., `isLoadingPlan`, `hasQuestionnaireFailed`).
+- Structure files with exported components, server actions, types, and constants.
+- Use named exports for components and functions.
+- Use lowercase with dashes for directory names (e.g., `components/plan-comparison`).
+
+TypeScript and Zod Usage
+
+- Use TypeScript for all code; prefer interfaces over types for object shapes.
+- Implement Zod schemas for form validation and API responses.
+- Create separate types for questionnaire responses and plan recommendations.
+- Define strong types for Supabase and Sanity.io responses.
+
+Routing and Navigation
+
+- Follow Next.js 14 App Router conventions.
+- Implement proper loading and error states for each route.
+- Use route groups for feature organization.
+- Keep page components thin; delegate logic to components.
+
+UI and Styling
+
+- Use TailwindCSS for styling with consistent class ordering.
+- Implement web-first responsive design.
+- Create reusable UI components for questionnaire steps.
+- Use CSS variables for theme colors and spacing.
+- Maintain consistent spacing and typography scales.
+
+State Management and Data Fetching
+
+- Use React Hook Form for questionnaire state management.
+- Implement server actions for data mutations.
+- Use SWR or TanStack Query for client-side data fetching.
+- Cache questionnaire responses in localStorage for recovery.
+
+Content Management
+
+- Use Sanity.io for managing blog posts and educational content.
+- Implement proper GROQ queries for content fetching.
+- Use image optimization through Next.js Image component.
+- Structure content schemas for maximum reusability.
+
+Error Handling and Validation
+
+- Implement comprehensive form validation using Zod.
+- Handle API errors gracefully with user-friendly messages.
+- Use error boundaries for client-side error catching.
+- Implement proper logging for server-side errors.
+- Create custom error types for different scenarios.
+
+Performance Optimization
+
+- Implement proper code splitting using dynamic imports.
+- Use Next.js Image component for optimized images.
+- Implement proper caching strategies for static content.
+- Use incremental static regeneration for blog posts.
+- Optimize third-party script loading.
+
+Database and Backend
+
+- Use Supabase for authentication and database operations.
+- Implement row-level security policies.
+- Use prepared statements for database queries.
+- Keep database operations in dedicated service files.
+- Implement proper error handling for database operations.
+
+Authentication and Security
+
+- Use Supabase Auth for user authentication.
+- Implement proper CSRF protection.
+- Use middleware for protected routes.
+- Sanitize user inputs before database operations.
+- Implement rate limiting for API routes.
+
+Testing and Quality Assurance
+
+- Write unit tests for utility functions.
+- Implement integration tests for critical user flows.
+- Use Cypress for end-to-end testing of questionnaire flow.
+- Test mobile responsiveness across different devices.
+- Implement accessibility testing.
+
+Project Structure
+
+Refer to the project structure in the README.md file. Be sure to follow it closely and ask questions if you are unsure.
+Files and directories should follow this pattern:
+
+/app
+/(admin)/* - Admin dashboard and protected routes
+/providers/* - Provider management
+/analytics/* - Analytics dashboard
+/content/* - Content management
+/(blog)/* - Blog posts and articles
+/questionnaire/* - Plan finder questionnaire
+/plans/* - Plan comparison and details
+/api/* - API routes
+/auth/* - Authentication endpoints
+/webhooks/* - External service webhooks
+/components
+/questionnaire/* - Questionnaire components
+/plans/* - Plan display components
+/ui/* - Generic UI components
+/layout/* - Layout components
+/blog/* - Blog-related components
+/lib
+/supabase/* - Supabase client and queries
+/sanity/* - Sanity.io client and queries
+/utils/* - Helper functions
+/analytics/* - Analytics tracking
+/convertkit/* - Email marketing integration
+/sanity
+/schemas/* - Content type definitions
+/desk/* - Custom desk structure
+/plugins/* - Sanity plugins
+/types - TypeScript type definitions
+/schemas - Zod schemas and validations
+/public
+/images/* - Static images
+/icons/* - Icon assets
+
+Key Conventions
+
+- Use meaningful commit messages following conventional commits.
+- Document complex business logic and algorithms.
+- Implement proper error logging and monitoring.
+- Follow accessibility best practices (WCAG 2.1).
+
+Environment and Configuration
+
+- Use proper environment variables for different environments.
+- Implement feature flags for gradual rollout.
+- Use proper configuration for different deployment environments.
+- Keep sensitive information in environment variables.
+
+Output Expectations
+
+- Code should be production-ready and well-documented.
+- Implement proper TypeScript types and interfaces.
+- Follow accessibility guidelines.
+- Maintain consistent code formatting.
+- Include proper error handling and validation.
+
+Follow Official Documentation
+
+- Next.js App Router best practices
+- Supabase security guidelines
+- Sanity.io content modeling
+- TailwindCSS performance optimizations
+- React Hook Form validation patterns
