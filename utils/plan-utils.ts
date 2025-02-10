@@ -1,0 +1,105 @@
+import { ProviderPlan, AgeBracket, HouseholdType, PlanCost, PricingPlan, providerPlans } from '../types/provider-plans';
+
+export function findPlanCosts(
+  plan: PricingPlan,
+  ageBracket: AgeBracket,
+  householdType: HouseholdType
+): PlanCost[] | undefined {
+  const matrix = plan.planMatrix.find(
+    m => m.ageBracket === ageBracket && m.householdType === householdType
+  );
+  return matrix?.costs;
+}
+
+export function formatCurrency(amount: number): string {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD'
+  }).format(amount);
+}
+
+export function getAllProviders(): string[] {
+  return Array.from(new Set(providerPlans.map((plan: PricingPlan) => plan.providerName)));
+}
+
+export function getPlansForProvider(providerName: string): PricingPlan[] {
+  return providerPlans.filter(plan => plan.providerName === providerName);
+}
+
+export function findCheapestPlan(
+  ageBracket: AgeBracket,
+  householdType: HouseholdType,
+  maxIUA?: number
+): { plan: PricingPlan; cost: PlanCost } | undefined {
+  let cheapestPlan: { plan: PricingPlan; cost: PlanCost } | undefined;
+
+  providerPlans.forEach(plan => {
+    const costs = findPlanCosts(plan, ageBracket, householdType);
+    if (!costs) return;
+
+    const eligibleCosts = maxIUA 
+      ? costs.filter(c => c.initialUnsharedAmount <= maxIUA)
+      : costs;
+
+    eligibleCosts.forEach(cost => {
+      if (!cheapestPlan || cost.monthlyPremium < cheapestPlan.cost.monthlyPremium) {
+        cheapestPlan = { plan, cost };
+      }
+    });
+  });
+
+  return cheapestPlan;
+}
+
+export function calculateAnnualCost(monthlyPremium: number, initialUnsharedAmount: number): number {
+  return (monthlyPremium * 12) + initialUnsharedAmount;
+}
+
+export function getAvailableIUALevels(): number[] {
+  const iuaSet = new Set<number>();
+  
+  providerPlans.forEach(plan => {
+    plan.planMatrix.forEach(matrix => {
+      matrix.costs.forEach(cost => {
+        iuaSet.add(cost.initialUnsharedAmount);
+      });
+    });
+  });
+
+  return Array.from(iuaSet).sort((a, b) => a - b);
+}
+
+export function getPlanComparison(
+  ageBracket: AgeBracket,
+  householdType: HouseholdType,
+  maxIUA?: number
+): Array<{
+  providerName: string;
+  planName: string;
+  monthlyPremium: number;
+  initialUnsharedAmount: number;
+  annualCost: number;
+}> {
+  const comparison: ReturnType<typeof getPlanComparison> = [];
+
+  providerPlans.forEach(plan => {
+    const costs = findPlanCosts(plan, ageBracket, householdType);
+    if (!costs) return;
+
+    const eligibleCosts = maxIUA 
+      ? costs.filter(c => c.initialUnsharedAmount <= maxIUA)
+      : costs;
+
+    eligibleCosts.forEach(cost => {
+      comparison.push({
+        providerName: plan.providerName,
+        planName: plan.planName,
+        monthlyPremium: cost.monthlyPremium,
+        initialUnsharedAmount: cost.initialUnsharedAmount,
+        annualCost: calculateAnnualCost(cost.monthlyPremium, cost.initialUnsharedAmount)
+      });
+    });
+  });
+
+  return comparison.sort((a, b) => a.annualCost - b.annualCost);
+} 

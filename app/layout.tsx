@@ -1,6 +1,10 @@
 import './globals.css'
 import { Inter } from 'next/font/google'
 import { Header } from '@/components/layout/header'
+import { Toaster } from "@/components/ui/toaster"
+import { TooltipProvider } from "@/components/ui/tooltip"
+import { GoogleAnalytics } from '@/components/providers/GoogleAnalytics'
+import { NavBar } from '@/components/marketing/NavBar'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -11,11 +15,17 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <Header />
-        <main className="min-h-screen bg-gray-50 pt-4">
-          {children}
-        </main>
+      <head>
+        <GoogleAnalytics />
+      </head>
+      <body suppressHydrationWarning className={inter.className} style={{ background: 'var(--color-cream-bg)' }}>
+        <TooltipProvider>
+          <Header />
+          <div className="pt-[88px]">
+            {children}
+          </div>
+        </TooltipProvider>
+        <Toaster />
       </body>
     </html>
   )

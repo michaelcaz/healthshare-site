@@ -37,12 +37,18 @@ export enum AnnualHealthcareSpend {
 }
 
 export interface QuestionnaireResponse {
-  zip_code: string
-  household_size: number
   age: number
+  household_size: number
+  iua_preference: '1000' | '2500' | '5000'
   pregnancy: boolean
-  pregnancy_planning: 'yes' | 'no' | 'maybe'
-  medical_conditions: boolean
+  pre_existing: boolean
+  prescription_needs: string
+  provider_preference: string
+  state: string
+  zip: string
   expense_preference: 'lower_monthly' | 'higher_monthly'
-  annual_healthcare_spend: 'less_1000' | '1000_5000' | 'more_5000'
-} 
+  pregnancy_planning: 'yes' | 'no' | 'maybe'
+  medical_conditions: string[]
+  annual_healthcare_spend: string
+  zip_code: string
+}

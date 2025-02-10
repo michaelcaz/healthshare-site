@@ -1,0 +1,7 @@
+export const QUESTIONNAIRE_STEPS = {
+  BASIC_INFO: 1,
+  SAVINGS: 2,
+  HEALTH: 3,
+  COVERAGE: 4,
+  TOTAL_STEPS: 4
+} as const 

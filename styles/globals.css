@@ -1,3 +1,28 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities; 
+
+function calculateWaitingPeriodScore(plan: Plan, questionnaire: QuestionnaireResponse): number {
+  // Only calculate waiting period score if there are medical conditions
+  if (!questionnaire.medical_conditions) {
+    return 0 // Return 0 so it doesn't affect the total score
+  }
+
+  const months = plan.waiting_period_months
+  if (months === 0) return 100
+  if (months <= 3) return 75
+  if (months <= 6) return 50
+  if (months <= 12) return 25
+  return 0
+} 
+
+// Only add waiting period to factors if medical conditions exist
+if (questionnaire.medical_conditions) {
+  const waitingScore = calculateWaitingPeriodScore(plan, questionnaire)
+  factors.push({
+    factor: 'Waiting Period',
+    score: waitingScore,
+    explanation: `This plan has a ${plan.waiting_period_months}-month waiting period for pre-existing conditions`
+  })
+  totalScore += waitingScore
+} 

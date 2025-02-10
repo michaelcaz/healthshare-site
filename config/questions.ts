@@ -1,9 +1,9 @@
 import { Question } from '@/types/questionnaire'
 
 export const questions: Question[] = [
-  // Page 1: Zip Code
+  // Page 1: Basic Info
   {
-    id: 'zip_code',
+    id: 'basic_info',
     type: 'text',
     text: 'What is your ZIP code?',
     required: true,
@@ -14,9 +14,9 @@ export const questions: Question[] = [
     page: 1
   },
 
-  // Page 2: Coverage Type & Age
+  // Page 2: Savings
   {
-    id: 'coverage_type',
+    id: 'savings',
     type: 'select',
     text: 'Who needs coverage?',
     required: true,
@@ -48,9 +48,9 @@ export const questions: Question[] = [
     page: 2
   },
 
-  // Page 3: Pregnancy Questions
+  // Page 3: Health Status
   {
-    id: 'pregnancy',
+    id: 'health_status',
     type: 'boolean',
     text: 'Are you or your partner currently pregnant?',
     required: true,
@@ -69,9 +69,9 @@ export const questions: Question[] = [
     page: 3
   },
 
-  // Page 4: Medical Conditions
+  // Page 4: Coverage Needs
   {
-    id: 'medical_conditions',
+    id: 'coverage_needs',
     type: 'boolean',
     text: 'Do you or a family member have any ongoing medical conditions?',
     required: true,
