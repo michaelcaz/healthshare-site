@@ -67,7 +67,7 @@ export function RecommendationsLayout({
       const costs = getPlanCost(
         topPlan.plan.id,
         questionnaire.age,
-        questionnaire.household_size,
+        questionnaire.coverage_type,
         questionnaire.iua_preference as '1000' | '2500' | '5000'
       )
       return costs || { monthlyPremium: 0, initialUnsharedAmount: 0 }

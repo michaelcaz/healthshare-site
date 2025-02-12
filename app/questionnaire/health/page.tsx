@@ -47,16 +47,26 @@ export default function HealthPage() {
 
   const onSubmit = async (data: HealthData) => {
     try {
+      // Get basic info
+      const basicInfoData = localStorage.getItem('questionnaire-basic-info');
+      const basicInfo = basicInfoData ? JSON.parse(basicInfoData) : {};
+
+      // Get savings data if it exists
       const existingData = localStorage.getItem('questionnaire-data');
-      const questionnaireData: QuestionnaireData = existingData ? JSON.parse(existingData) : {};
+      const questionnaireData: QuestionnaireData = existingData ? JSON.parse(existingData) : {
+        basicInfo: basicInfo
+      };
+
+      // Update health data
       questionnaireData.health = {
         preExistingConditions: data.preExistingConditions || '',
         currentlyPregnant: data.currentlyPregnant || '',
         planningPregnancy: data.planningPregnancy || ''
       };
+
+      // Save updated data
       localStorage.setItem('questionnaire-data', JSON.stringify(questionnaireData));
       
-      // We'll transform and save the complete data in the final step
       router.push('/questionnaire/coverage');
     } catch (error) {
       console.error('Error submitting form:', error);

@@ -10,7 +10,7 @@ import { useState } from 'react';
 import { InfoIcon } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
 import { QuestionnaireResponse, QuestionnaireData } from '@/lib/types';
-import { saveQuestionnaireResponse } from '@/lib/questionnaire';
+import { saveQuestionnaireResponse } from '@/lib/actions/questionnaire';
 
 const coverageSchema = z.object({
   expense_preference: z.enum(['lower_monthly', 'higher_monthly']).optional().refine(val => val !== undefined, {
@@ -30,6 +30,13 @@ const steps = [
   { label: 'Coverage Needs', route: '/questionnaire/coverage' }
 ];
 
+// Add type for the server action response
+interface SaveResponse {
+  success: boolean;
+  error?: string;
+  details?: any;
+}
+
 export default function CoveragePage() {
   const router = useRouter();
   const [showExpenseInfo, setShowExpenseInfo] = useState(false);
@@ -44,36 +51,94 @@ export default function CoveragePage() {
 
   const onSubmit = async (data: CoverageData) => {
     try {
-      const existingData = localStorage.getItem('questionnaire-data');
-      const formData: QuestionnaireData = existingData ? JSON.parse(existingData) : {};
-      formData.coverage = data;
-      localStorage.setItem('questionnaire-data', JSON.stringify(formData));
-
-      // Transform to final QuestionnaireResponse format
+      // 1. Get and validate basic info
+      const existingData = localStorage.getItem('questionnaire-basic-info');
+      console.log('Basic Info Data:', existingData);
+      
+      if (!existingData) {
+        throw new Error('Please complete the basic information first');
+      }
+      
+      const basicInfo = JSON.parse(existingData);
+      console.log('Parsed Basic Info:', basicInfo);
+      
+      // 2. Get and validate health data
+      const healthData = localStorage.getItem('questionnaire-data');
+      console.log('Health Data:', healthData);
+      
+      let parsedHealthData = null;
+      if (healthData) {
+        parsedHealthData = JSON.parse(healthData);
+        console.log('Parsed Health Data:', parsedHealthData);
+      }
+      
+      // 3. Validate required basic info fields
+      if (!basicInfo.zipCode) {
+        throw new Error('Please provide your zip code in the basic information');
+      }
+      
+      if (!basicInfo.oldestAge) {
+        throw new Error('Please provide your age in the basic information');
+      }
+      
+      if (!basicInfo.coverage_type) {
+        throw new Error('Please select who needs coverage in the basic information');
+      }
+      
+      // 4. Build response object with explicit type checking
       const response: QuestionnaireResponse = {
-        age: parseInt(formData.basicInfo?.oldestAge || '0'),
-        household_size: formData.basicInfo?.coverageType === 'just_me' ? 1 : 2,
-        zip: formData.basicInfo?.zipCode || '',
+        // Required fields with validation
+        age: Number(basicInfo.oldestAge),
+        household_size: basicInfo.coverage_type === 'just_me' ? 1 : 
+                       basicInfo.coverage_type === 'me_spouse' ? 2 :
+                       basicInfo.coverage_type === 'me_kids' ? 2 : 4,
+        coverage_type: basicInfo.coverage_type as 'just_me' | 'me_spouse' | 'me_kids' | 'family',
+        zip: basicInfo.zipCode,
+        zip_code: basicInfo.zipCode,
+        
+        // Optional fields with defaults
         iua_preference: '1000',
-        pregnancy: formData.health?.currentlyPregnant === 'yes',
-        pre_existing: formData.health?.preExistingConditions === 'yes',
+        pregnancy: false,
+        pre_existing: false,
         prescription_needs: '',
         provider_preference: '',
-        state: '',
+        state: basicInfo.state || '',
         expense_preference: data.expense_preference || 'lower_monthly',
-        pregnancy_planning: formData.health?.planningPregnancy as 'yes' | 'no' | 'maybe' || 'no',
+        pregnancy_planning: 'no',
         medical_conditions: [],
-        annual_healthcare_spend: data.annual_healthcare_spend || '',
-        zip_code: formData.basicInfo?.zipCode || ''
+        annual_healthcare_spend: data.annual_healthcare_spend || 'less_1000'
       };
 
-      await saveQuestionnaireResponse(response);
+      // 5. Update with health data if available
+      if (parsedHealthData?.health) {
+        response.pregnancy = parsedHealthData.health.currentlyPregnant === 'yes';
+        response.pre_existing = parsedHealthData.health.preExistingConditions === 'yes';
+        response.pregnancy_planning = parsedHealthData.health.planningPregnancy as 'yes' | 'no' | 'maybe' || 'no';
+      }
+
+      // 6. Save to localStorage for recovery
+      localStorage.setItem('questionnaire-data', JSON.stringify({
+        ...parsedHealthData,
+        coverage: data,
+        response
+      }));
+
+      // 7. Save using server action
+      const result = await saveQuestionnaireResponse(response);
+      console.log('Save Result:', result);
+      
+      if (!result.success) {
+        console.error('Validation Errors:', result.details);
+        throw new Error(result.error || 'Failed to save questionnaire response');
+      }
+      
+      // 8. Only redirect on success
       router.push('/recommendations');
     } catch (error) {
       console.error('Error submitting form:', error);
       toast({
         title: 'Error',
-        description: 'Failed to save your responses. Please try again.',
+        description: error instanceof Error ? error.message : 'Failed to save your responses. Please try again.',
         variant: 'destructive',
       });
     }

@@ -6,7 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip"
 import { GoogleAnalytics } from '@/components/providers/GoogleAnalytics'
 import { NavBar } from '@/components/marketing/NavBar'
 import { headers } from 'next/headers'
-import Script from 'next/script'
+// import Script from 'next/script'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -21,11 +21,11 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <GoogleAnalytics />
-        <Script
+        {/* <Script
           src="/scripts/main.js"
           strategy="beforeInteractive"
           nonce={nonce}
-        />
+        /> */}
       </head>
       <body suppressHydrationWarning className={inter.className} style={{ background: 'var(--color-cream-bg)' }}>
         <TooltipProvider>

@@ -4,6 +4,7 @@ import { questionnaireSchema } from '@/schemas/questionnaire'
 import { z } from 'zod'
 import { providerPlans, EligiblePlan, HouseholdType } from '@/types/provider-plans'
 import { getAgeBracket } from './plan-matching/age-brackets'
+import { recoverPartialResponse as recoverFromStorage } from './utils/storage'
 
 const QUESTIONNAIRE_COOKIE = 'questionnaire_response';
 const BACKUP_COOKIE = 'questionnaire_backup';
@@ -44,8 +45,8 @@ export async function saveQuestionnaireResponse(data: QuestionnaireResponse) {
 
 export { clearQuestionnaireResponse } from './actions/questionnaire'
 
-// Recovery mechanism for partial responses
-export { recoverPartialResponse } from './actions/questionnaire'
+// Export recoverPartialResponse from storage utility
+export { recoverPartialResponse } from './utils/storage'
 
 export function findEligiblePlans(response: QuestionnaireResponse): EligiblePlan[] {
   const householdType = getHouseholdType(response.household_size);

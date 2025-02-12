@@ -32,14 +32,14 @@ export function HeroRecommendation({
 
   const keyCoveragePoints = [
     {
-      text: plan.maternity_coverage ? "Maternity Coverage Included" : "No Maternity Coverage",
-      isPositive: plan.maternity_coverage,
-      icon: plan.maternity_coverage ? <Check className="text-green-500" /> : <X className="text-red-500" />
+      text: `Maximum Coverage: ${plan.maxCoverage}`,
+      isPositive: true,
+      icon: <Shield className="text-blue-500" />
     },
     {
-      text: `Pre-existing Conditions: ${plan.pre_existing_waiting_period} month wait`,
-      isPositive: plan.pre_existing_waiting_period <= 12,
-      icon: <AlertCircle className={plan.pre_existing_waiting_period <= 12 ? "text-blue-500" : "text-amber-500"} />
+      text: `Annual Unshared Amount: ${plan.annualUnsharedAmount}`,
+      isPositive: true,
+      icon: <DollarSign className="text-blue-500" />
     }
   ]
 
@@ -48,70 +48,65 @@ export function HeroRecommendation({
       <div className="relative bg-white rounded-xl p-8 shadow-lg border border-blue-100 overflow-hidden">
         {/* Match Score Badge - More prominent */}
         <div className="absolute top-6 right-6 flex items-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-3 rounded-full transform hover:scale-105 transition-transform">
-          <Star className="h-5 w-5 fill-current" />
-          <span className="text-xl font-bold">{Math.round(score)}% Match</span>
+          <Star className="w-5 h-5" />
+          <span className="font-semibold">{badges.matchScore}% Match</span>
         </div>
 
         {/* Plan Name and Provider */}
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold text-gray-900">{plan.name}</h2>
-          <p className="text-gray-600">{plan.provider}</p>
+        <div className="mb-6">
+          <h2 className="text-2xl font-bold text-gray-900">{plan.planName}</h2>
+          <p className="text-lg text-gray-600">{plan.providerName}</p>
         </div>
 
-        {/* Cost Comparison */}
-        <div className="grid grid-cols-2 gap-12 mb-12">
-          <div>
-            <h3 className="text-xl font-semibold text-gray-800 mb-1">Monthly Cost</h3>
-            <div className="text-5xl font-bold text-blue-600">${costs.monthly}</div>
+        {/* Cost Information */}
+        <div className="grid grid-cols-2 gap-6 mb-8">
+          <div className="bg-gray-50 p-4 rounded-lg">
+            <div className="text-sm text-gray-600 mb-1">Monthly Cost</div>
+            <div className="flex items-baseline">
+              <span className="text-3xl font-bold text-gray-900">${costs.monthlyPremium}</span>
+              <span className="text-gray-600 ml-1">/mo</span>
+            </div>
           </div>
-          
-          <div>
-            <div className="group relative">
-              <h3 className="text-xl font-semibold text-gray-800 flex items-center gap-2 mb-1">
-                IUA
-                <span className="cursor-help text-gray-500 hover:text-blue-600 transition-colors">ⓘ
-                  <div className="invisible group-hover:visible absolute z-10 w-64 p-2 bg-gray-900 text-white text-xs rounded-lg -right-2 top-6">
-                    Initial Unshared Amount - the portion you pay before the healthshare begins covering eligible expenses
-                  </div>
-                </span>
-              </h3>
-              <div className="text-5xl font-bold text-blue-600">${costs.incident}</div>
+          <div className="bg-gray-50 p-4 rounded-lg">
+            <div className="text-sm text-gray-600 mb-1">Initial Unshared Amount</div>
+            <div className="flex items-baseline">
+              <span className="text-3xl font-bold text-gray-900">${costs.initialUnsharedAmount}</span>
+              <span className="text-gray-600 ml-1">/year</span>
             </div>
           </div>
         </div>
 
-        {/* Why This Matches You */}
-        <div className="mb-8">
-          <h3 className="text-xl font-semibold text-gray-800 mb-4">Why This Matches You</h3>
-          <div className="grid grid-cols-2 gap-4">
-            {recommendation.factors.slice(0, 4).map((factor, i) => (
-              <div 
-                key={i} 
-                className="flex items-center gap-2 p-3 rounded-lg bg-blue-50 hover:bg-blue-100 transition-colors"
-              >
-                <CheckCircle className="h-5 w-5 text-blue-600" />
-                <span className="text-sm text-blue-900">{factor.factor}</span>
-              </div>
-            ))}
-          </div>
+        {/* Key Coverage Points */}
+        <div className="space-y-4 mb-8">
+          {keyCoveragePoints.map((point, index) => (
+            <div key={index} className="flex items-center gap-3">
+              {point.icon}
+              <span className={cn(
+                "text-gray-700",
+                point.isPositive ? "text-green-700" : "text-red-700"
+              )}>
+                {point.text}
+              </span>
+            </div>
+          ))}
         </div>
 
-        {/* CTAs */}
+        {/* Action Buttons */}
         <div className="flex gap-4">
-          <button
+          <Button
             onClick={onGetPlan}
             disabled={isLoading}
-            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-semibold transform hover:scale-105 transition-all duration-200"
+            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
           >
             Get This Plan
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={onViewDetails}
-            disabled={isLoading}
-            className="flex-1 border-2 border-gray-200 hover:border-blue-200 hover:bg-blue-50 px-8 py-4 rounded-xl font-semibold transform hover:scale-105 transition-all duration-200"
+            variant="outline"
+            className="flex-1"
           >
             View Details
-          </button>
+          </Button>
         </div>
 
         {/* Social Proof */}

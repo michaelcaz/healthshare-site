@@ -4,6 +4,7 @@ import { Card } from '@/components/ui/card'
 import { Checkbox } from '../ui/checkbox'
 import { useSelectedPlans } from './SelectedPlansContext'
 import { type PlanRecommendation } from './types'
+import { getPlanCost } from '@/lib/utils/plan-costs'
 
 interface ComparisonMetric {
   label: string
@@ -47,52 +48,52 @@ export function PlanComparisonGrid({
     )
   }
 
-  const getComparisonMetrics = (plan: PlanRecommendation): ComparisonMetric[] => [
-    {
-      label: 'Monthly Cost',
-      value: `$${plan.plan.monthly_cost}`,
-      tooltip: 'Your monthly payment to maintain coverage'
-    },
-    {
-      label: 'Per-Incident Cost',
-      value: `$${plan.plan.incident_cost}`,
-      tooltip: 'Amount you pay per medical incident before sharing begins'
-    },
-    {
-      label: 'Est. Annual Cost',
-      value: `$${plan.plan.monthly_cost * 12}`,
-      tooltip: 'Estimated total yearly cost including monthly payments'
-    },
-    {
-      label: 'Waiting Periods',
-      value: `${plan.plan.pre_existing_waiting_period} months`,
-      tooltip: 'Time before pre-existing conditions are eligible'
-    },
-    {
-      label: 'Per Incident Max',
-      value: plan.plan.per_incident_maximum ? 
-        `$${plan.plan.per_incident_maximum.toLocaleString()}` : 
-        'Not specified',
-      tooltip: 'Maximum amount shared per medical incident'
-    },
-    {
-      label: 'Annual Max',
-      value: `$${plan.plan.annual_maximum.toLocaleString()}`,
-      tooltip: 'Maximum amount shared per year'
-    },
-    {
-      label: 'Lifetime Max',
-      value: plan.plan.lifetime_maximum ? 
-        `$${plan.plan.lifetime_maximum.toLocaleString()}` : 
-        'Unlimited',
-      tooltip: 'Maximum lifetime sharing amount'
-    },
-    {
-      label: 'Trust Score',
-      value: `${Math.round(plan.score)}%`,
-      tooltip: 'Based on member reviews and program stability'
-    }
-  ]
+  const getComparisonMetrics = (plan: PlanRecommendation): ComparisonMetric[] => {
+    // Get the lowest cost option from the plan matrix
+    const lowestCost = plan.plan.planMatrix
+      .flatMap(bracket => bracket.costs)
+      .reduce((min, cost) => 
+        cost.monthlyPremium < min.monthlyPremium ? cost : min
+      );
+
+    return [
+      {
+        label: 'Monthly Cost',
+        value: `$${lowestCost.monthlyPremium}`,
+        tooltip: 'Starting monthly payment to maintain coverage'
+      },
+      {
+        label: 'Initial Unshared Amount',
+        value: `$${lowestCost.initialUnsharedAmount}`,
+        tooltip: 'Amount you pay before sharing begins'
+      },
+      {
+        label: 'Est. Annual Cost',
+        value: `$${lowestCost.monthlyPremium * 12 + lowestCost.initialUnsharedAmount}`,
+        tooltip: 'Estimated total yearly cost including monthly payments and IUA'
+      },
+      {
+        label: 'Maximum Coverage',
+        value: plan.plan.maxCoverage,
+        tooltip: 'Maximum amount that can be shared'
+      },
+      {
+        label: 'Annual Unshared Amount',
+        value: plan.plan.annualUnsharedAmount,
+        tooltip: 'How the annual unshared amount works'
+      },
+      {
+        label: 'Provider',
+        value: plan.plan.providerName,
+        tooltip: 'Healthcare sharing ministry provider'
+      },
+      {
+        label: 'Match Score',
+        value: `${Math.round(plan.score)}%`,
+        tooltip: 'How well this plan matches your needs'
+      }
+    ]
+  }
 
   return (
     <div className="mt-12">
@@ -112,7 +113,7 @@ export function PlanComparisonGrid({
             <Badge variant="primary" className="bg-blue-500">
               Top Recommendation
             </Badge>
-            <h3 className="font-semibold text-lg">{topPlan.plan.name}</h3>
+            <h3 className="font-semibold text-lg">{topPlan.plan.planName}</h3>
             
             {/* Comparison Metrics */}
             <div className="space-y-3">
@@ -134,7 +135,7 @@ export function PlanComparisonGrid({
               <Badge variant="outline" className="text-blue-500">
                 Alternative {plan.ranking}
               </Badge>
-              <h3 className="font-semibold text-lg">{plan.plan.name}</h3>
+              <h3 className="font-semibold text-lg">{plan.plan.planName}</h3>
               
               {/* Comparison Metrics */}
               <div className="space-y-3">

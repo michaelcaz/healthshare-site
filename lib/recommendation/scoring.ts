@@ -44,7 +44,7 @@ export async function calculatePlanScore(
   // Get all plan costs for comparison
   const allPlanCosts = getAllPlanCosts(
     questionnaire.age,
-    questionnaire.household_size,
+    questionnaire.coverage_type,
     questionnaire.iua_preference
   )
 
@@ -52,7 +52,7 @@ export async function calculatePlanScore(
   const planCost = getPlanCostUtil(
     plan.id,
     questionnaire.age,
-    questionnaire.household_size,
+    questionnaire.coverage_type,
     questionnaire.iua_preference
   )
 
