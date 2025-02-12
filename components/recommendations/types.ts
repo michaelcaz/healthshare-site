@@ -1,5 +1,6 @@
 import { type HealthsharePlan } from '@/types/plans'
 import { type QuestionnaireResponse } from '../../lib/types'
+import { type PricingPlan } from '@/types/provider-plans'
 
 export interface RecommendationsProps {
   recommendations: PlanRecommendation[]
@@ -8,23 +9,19 @@ export interface RecommendationsProps {
 }
 
 export interface PlanRecommendation {
-  plan: HealthsharePlan
+  plan: PricingPlan
   score: number
-  ranking: number
   explanation: string[]
+  ranking: number
   factors: Array<{
     factor: string
     impact: number
   }>
-  coverage_highlights?: Array<{
-    title: string
-    description: string
-  }>
 }
 
 export interface PlanCosts {
-  monthly: number
-  incident: number
+  monthlyPremium: number
+  initialUnsharedAmount: number
 }
 
 export interface RecommendationBadges {

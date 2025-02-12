@@ -21,26 +21,33 @@ export function RecommendationsLayout({
   const [isLoading, setIsLoading] = useState(false)
   const [detailsPlan, setDetailsPlan] = useState<PlanRecommendation | null>(null)
 
+  // Add debugging
+  console.log('Received recommendations:', recommendations)
+  console.log('First recommendation:', recommendations[0])
+
+  // Get the top plan (highest scoring)
   const topPlan = recommendations[0]
-  const alternativePlans = recommendations.slice(1, 4)
-
-  const topPlanCosts = (() => {
-    const costs = getPlanCost(
-      topPlan.plan.id,
-      questionnaire.age,
-      questionnaire.household_size,
-      questionnaire.iua_preference as '1000' | '2500' | '5000'
+  
+  // Enhanced safety check
+  if (!topPlan || !topPlan.plan) {
+    console.error('Invalid recommendation data:', topPlan)
+    return (
+      <div className="max-w-7xl mx-auto px-4 py-12">
+        <h2 className="text-2xl font-bold text-gray-900">
+          No recommendations available
+        </h2>
+        <p className="mt-2 text-gray-600">
+          Please try adjusting your preferences or contact support if this persists.
+        </p>
+      </div>
     )
-    return costs ? {
-      monthly: costs.monthly_cost,
-      incident: costs.incident_cost
-    } : {
-      monthly: topPlan.plan.monthly_cost,
-      incident: topPlan.plan.incident_cost
-    }
-  })()
+  }
 
+  // Move function declarations before any usage
   const getTopReason = (recommendation: PlanRecommendation) => {
+    if (!recommendation?.factors?.length) {
+      return 'Best Overall Match'
+    }
     try {
       const topFactor = recommendation.factors.sort((a, b) => b.impact - a.impact)[0]
       return topFactor?.factor || 'Best Overall Match'
@@ -49,6 +56,28 @@ export function RecommendationsLayout({
       return 'Best Overall Match'
     }
   }
+
+  const topPlanCosts = () => {
+    if (!topPlan?.plan?.id) {
+      console.error('Invalid plan data:', topPlan)
+      return { monthlyPremium: 0, initialUnsharedAmount: 0 }
+    }
+
+    try {
+      const costs = getPlanCost(
+        topPlan.plan.id,
+        questionnaire.age,
+        questionnaire.household_size,
+        questionnaire.iua_preference as '1000' | '2500' | '5000'
+      )
+      return costs || { monthlyPremium: 0, initialUnsharedAmount: 0 }
+    } catch (error) {
+      console.error('Error getting plan costs:', error)
+      return { monthlyPremium: 0, initialUnsharedAmount: 0 }
+    }
+  }
+
+  const alternativePlans = recommendations.slice(1, 4)
 
   const handleViewDetails = (planId: string) => {
     const plan = recommendations.find(r => r.plan.id === planId)
@@ -64,7 +93,7 @@ export function RecommendationsLayout({
       if (window.gtag) {
         window.gtag('event', 'select_plan', {
           plan_id: planId,
-          plan_provider: recommendations.find(r => r.plan.id === planId)?.plan.provider
+          plan_provider: recommendations.find(r => r.plan.id === planId)?.plan.providerName
         })
       }
 
@@ -93,7 +122,7 @@ export function RecommendationsLayout({
             topReason: getTopReason(topPlan),
             matchScore: Math.round(topPlan.score)
           }}
-          costs={topPlanCosts}
+          costs={topPlanCosts()}
           onViewDetails={() => handleViewDetails(topPlan.plan.id)}
           onGetPlan={() => handleGetPlan(topPlan.plan.id)}
           isLoading={isLoading}

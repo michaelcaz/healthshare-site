@@ -1,15 +1,19 @@
 import { 
-  type HealthsharePlan, 
-  type PlanCost, 
-  type AgeBracket, 
-  type HouseholdSize, 
-  type IUALevel 
-} from '@/types/plans'
-import { samplePlans } from '@/data/sample-plans'
+  type PricingPlan,
+  type PlanCost,
+  type HouseholdType 
+} from '@/types/provider-plans'
+import { providerPlans } from '@/data/provider-plans'
+import { getAgeBracket } from '@/lib/plan-matching/age-brackets'
 
-interface PlanCosts {
-  monthly: number
-  incident: number
+function getHouseholdType(size: number): HouseholdType {
+  switch (size) {
+    case 1: return 'Member Only';
+    case 2: return 'Member & Spouse';
+    case 3:
+    case 4: return 'Member & Child(ren)';
+    default: return 'Member & Family';
+  }
 }
 
 export function getPlanCost(
@@ -18,35 +22,23 @@ export function getPlanCost(
   householdSize: number,
   iuaLevel: string
 ): PlanCost | null {
-  const plan = samplePlans.find(p => p.id === planId)
+  const plan = providerPlans.find(p => p.id === planId)
   if (!plan) return null
 
-  // Convert age to bracket
-  let ageBracket = '18-29'
-  if (age >= 30 && age < 40) ageBracket = '30-39'
-  if (age >= 40) ageBracket = '40-49'
+  const ageBracket = getAgeBracket(age, plan.ageRules)
+  if (!ageBracket) return null
 
-  // Find closest matching cost
-  const costs = plan.costs.filter(c => c.age_bracket === ageBracket)
-  if (!costs.length) return null
-
-  // Get closest household size
-  const closestSize = costs
-    .map(c => c.household_size)
-    .reduce((prev, curr) => 
-      Math.abs(curr - householdSize) < Math.abs(prev - householdSize) ? curr : prev
+  const householdType = getHouseholdType(householdSize)
+  
+  const costs = plan.planMatrix
+    .filter(matrix => 
+      matrix.ageBracket === ageBracket && 
+      matrix.householdType === householdType
     )
+    .flatMap(matrix => matrix.costs)
+    .filter(cost => cost.initialUnsharedAmount.toString() === iuaLevel)
 
-  // Get closest IUA level
-  const validIUAs = ['1000', '2500', '5000']
-  const targetIUA = validIUAs.includes(iuaLevel) ? iuaLevel : '1000'
-
-  const cost = costs.find(c => 
-    c.household_size === closestSize &&
-    c.iua_level === targetIUA
-  )
-
-  return cost || costs[0] // Fallback to first available cost
+  return costs[0] || null
 }
 
 // Helper to get costs for all plans
@@ -54,8 +46,8 @@ export function getAllPlanCosts(
   age: number,
   householdSize: number,
   iuaLevel: string
-): Array<{ plan: HealthsharePlan; cost: PlanCost | null }> {
-  return samplePlans.map(plan => ({
+): Array<{ plan: PricingPlan; cost: PlanCost | null }> {
+  return providerPlans.map(plan => ({
     plan,
     cost: getPlanCost(plan.id, age, householdSize, iuaLevel)
   }))

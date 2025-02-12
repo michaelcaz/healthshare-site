@@ -305,6 +305,7 @@ export const providerPlans: PricingPlan[] = [
     sourceUrl: 'https://www.joincrowdhealth.com/resources/member-guide',
     ageRules: crowdHealthAgeRules,
     planMatrix: [
+      // Single Members with custom age brackets
       {
         ageBracket: '18-54',
         householdType: 'Member Only',
@@ -319,45 +320,46 @@ export const providerPlans: PricingPlan[] = [
           { monthlyPremium: 335, initialUnsharedAmount: 500 }
         ]
       },
-      // Couples and Families
+      // Member & Spouse
       {
-        ageBracket: '18-29',
+        ageBracket: '18-54',
         householdType: 'Member & Spouse',
         costs: [
           { monthlyPremium: 390, initialUnsharedAmount: 500 }
         ]
       },
       {
-        ageBracket: '18-29',
-        householdType: 'Member & Child(ren)',
-        costs: [
-          { monthlyPremium: 390, initialUnsharedAmount: 500 }
-        ]
-      },
-      {
-        ageBracket: '18-29',
-        householdType: 'Member & Family',
-        costs: [
-          { monthlyPremium: 640, initialUnsharedAmount: 500 }
-        ]
-      },
-      // Repeat for other age brackets...
-      {
-        ageBracket: '50-64',
+        ageBracket: '55-64',
         householdType: 'Member & Spouse',
         costs: [
           { monthlyPremium: 670, initialUnsharedAmount: 500 }
         ]
       },
+      // Member & Child(ren)
       {
-        ageBracket: '50-64',
+        ageBracket: '18-54',
+        householdType: 'Member & Child(ren)',
+        costs: [
+          { monthlyPremium: 585, initialUnsharedAmount: 500 }
+        ]
+      },
+      {
+        ageBracket: '55-64',
         householdType: 'Member & Child(ren)',
         costs: [
           { monthlyPremium: 725, initialUnsharedAmount: 500 }
         ]
       },
+      // Member & Family
       {
-        ageBracket: '50-64',
+        ageBracket: '18-54',
+        householdType: 'Member & Family',
+        costs: [
+          { monthlyPremium: 640, initialUnsharedAmount: 500 }
+        ]
+      },
+      {
+        ageBracket: '55-64',
         householdType: 'Member & Family',
         costs: [
           { monthlyPremium: 695, initialUnsharedAmount: 500 }

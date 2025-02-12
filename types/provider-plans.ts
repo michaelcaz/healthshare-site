@@ -95,6 +95,14 @@ export interface PricingPlan {
   planMatrix: PlanMatrix[];
 }
 
+export interface EligiblePlan {
+  id: string;
+  providerName: string;
+  planName: string;
+  maxCoverage: string;
+  eligiblePrices: PlanCost[];
+}
+
 // Update the providerPlans array type
 export const providerPlans: PricingPlan[] = [ /* ... */ ];
 

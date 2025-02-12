@@ -1,7 +1,8 @@
 import { getAllPlans } from '@/lib/supabase/plans'
 import { type QuestionnaireResponse } from '@/types/questionnaire'
-import { type HealthsharePlan, type PlanCost } from '@/types/plans'
+import { type PlanCost } from '@/types/plans'
 import { getPlanCost as getPlanCostUtil, getAllPlanCosts } from '@/lib/utils/plan-costs'
+import { type PricingPlan, healthshareProviders } from '@/types/provider-plans'
 
 interface Plan {
   id: string
@@ -14,6 +15,7 @@ interface Plan {
 }
 
 interface PlanScore {
+  plan: PricingPlan
   plan_id: string
   total_score: number
   explanation: string[]
@@ -24,8 +26,16 @@ interface PlanScore {
   }[]
 }
 
+type HealthcareSpend = 'less_1000' | '1000_5000' | 'more_5000';
+
+const expectedHealthcareCosts: Record<HealthcareSpend, number> = {
+  'less_1000': 500,
+  '1000_5000': 3000,
+  'more_5000': 7500
+};
+
 export async function calculatePlanScore(
-  plan: HealthsharePlan,
+  plan: PricingPlan,
   questionnaire: QuestionnaireResponse
 ): Promise<PlanScore> {
   const factors = []
@@ -48,6 +58,7 @@ export async function calculatePlanScore(
 
   if (!planCost) {
     return {
+      plan,
       plan_id: plan.id,
       total_score: 0,
       explanation: ['No valid cost found for your criteria'],
@@ -57,7 +68,7 @@ export async function calculatePlanScore(
 
   // Monthly cost scoring (ranked)
   const monthlyRankedPlans = allPlanCosts.sort((a, b) => 
-    (a.cost?.monthly_cost ?? Infinity) - (b.cost?.monthly_cost ?? Infinity)
+    (a.cost?.monthlyPremium ?? Infinity) - (b.cost?.monthlyPremium ?? Infinity)
   )
   const monthlyPosition = monthlyRankedPlans.findIndex(p => p.plan.id === plan.id)
   const monthlyScore = Math.max(50 - (monthlyPosition * 10), 10)
@@ -65,16 +76,16 @@ export async function calculatePlanScore(
   factors.push({
     factor: 'Monthly Cost',
     score: monthlyScore,
-    explanation: `Monthly cost: $${planCost.monthly_cost}${
+    explanation: `Monthly cost: $${planCost.monthlyPremium}${
       monthlyPosition === 0 
         ? ' (lowest available rate)'
-        : ` ($${planCost.monthly_cost - monthlyRankedPlans[0].cost!.monthly_cost} more than lowest option)`
+        : ` ($${planCost.monthlyPremium - monthlyRankedPlans[0].cost!.monthlyPremium} more than lowest option)`
     }`
   })
 
   // Incident cost scoring (ranked)
   const incidentRankedPlans = allPlanCosts.sort((a, b) => 
-    (a.cost?.incident_cost ?? Infinity) - (b.cost?.incident_cost ?? Infinity)
+    (a.cost?.initialUnsharedAmount ?? Infinity) - (b.cost?.initialUnsharedAmount ?? Infinity)
   )
   const incidentPosition = incidentRankedPlans.findIndex(p => p.plan.id === plan.id)
   const incidentScore = Math.max(100 - (incidentPosition * 10), 50)
@@ -82,20 +93,14 @@ export async function calculatePlanScore(
   factors.push({
     factor: 'Incident Cost',
     score: incidentScore,
-    explanation: `Incident cost: $${planCost.incident_cost} (ranked ${incidentPosition + 1} lowest)`
+    explanation: `Incident cost: $${planCost.initialUnsharedAmount} (ranked ${incidentPosition + 1} lowest)`
   })
 
   // Annual Healthcare Spend Scoring
-  const expectedHealthcareCosts = {
-    'less_1000': 500,      // Midpoint of 0-1000
-    '1000_5000': 3000,     // Midpoint of 1000-5000
-    'more_5000': 7500      // Conservative estimate for >5000
-  }
-  
-  // Calculate total annual cost for each plan (premiums + expected healthcare costs)
   const annualCosts = allPlanCosts.map(p => ({
     id: p.plan.id,
-    totalCost: ((p.cost?.monthly_cost ?? 0) * 12) + expectedHealthcareCosts[questionnaire.annual_healthcare_spend]
+    totalCost: ((p.cost?.monthlyPremium ?? 0) * 12) + 
+      expectedHealthcareCosts[questionnaire.annual_healthcare_spend as HealthcareSpend]
   }))
   
   // Sort plans by total annual cost (lowest to highest)
@@ -108,14 +113,16 @@ export async function calculatePlanScore(
   factors.push({
     factor: 'Expected Annual Costs',
     score: spendScore,
-    explanation: `Total annual cost estimate: $${(planCost.monthly_cost * 12) + expectedHealthcareCosts[questionnaire.annual_healthcare_spend]} (ranked ${position + 1} lowest based on your expected healthcare usage)`
+    explanation: `Total annual cost estimate: $${(planCost.monthlyPremium * 12) + expectedHealthcareCosts[questionnaire.annual_healthcare_spend as HealthcareSpend]} (ranked ${position + 1} lowest based on your expected healthcare usage)`
   })
 
   // Pre-existing Conditions (Score based on waiting period length)
   if (questionnaire.medical_conditions) {
-    const waitingPeriodMonths = plan.pre_existing_waiting_period
-    let conditionScore = 0
-    let explanation = ''
+    const fullPlan = healthshareProviders[plan.id.split('-')[0]]?.plans
+      .find(p => p.id === plan.id);
+    const waitingPeriodMonths = fullPlan?.preExistingConditions?.waitingPeriod ?? 0;
+    let conditionScore = 0;
+    let explanation = '';
 
     if (waitingPeriodMonths <= 12) {
       conditionScore = 100
@@ -138,9 +145,26 @@ export async function calculatePlanScore(
     })
   }
 
+  // Add maternity scoring
+  if (questionnaire.pregnancy || questionnaire.pregnancy_planning === 'yes') {
+    const fullPlan = healthshareProviders[plan.id.split('-')[0]]?.plans
+      .find(p => p.id === plan.id);
+    
+    if (!fullPlan?.maternity?.coverage?.services?.length) {
+      return {
+        plan,
+        plan_id: plan.id,
+        total_score: 0,
+        explanation: ['Plan does not include maternity coverage'],
+        factors: []
+      };
+    }
+  }
+
   totalScore = factors.reduce((sum, f) => sum + f.score, 0) / factors.length
 
   return {
+    plan,
     plan_id: plan.id,
     total_score: totalScore,
     explanation: factors.map(f => f.explanation),

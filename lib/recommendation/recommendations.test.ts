@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { getRecommendations } from './recommendations'
-import { samplePlans } from '@/data/sample-plans'
+import { providerPlans } from '@/data/provider-plans'
+import { healthshareProviders } from '@/types/provider-plans'
 
 describe('getRecommendations', () => {
   const sampleQuestionnaire = {
@@ -21,7 +22,7 @@ describe('getRecommendations', () => {
   }
 
   it('returns recommendations in correct order', async () => {
-    const recommendations = await getRecommendations(samplePlans, sampleQuestionnaire)
+    const recommendations = await getRecommendations(providerPlans, sampleQuestionnaire)
     
     expect(recommendations.length).toBeGreaterThan(0)
     expect(recommendations[0].ranking).toBe(1)
@@ -36,14 +37,18 @@ describe('getRecommendations', () => {
       pregnancy: true
     }
 
-    const recommendations = await getRecommendations(samplePlans, pregnancyQuestionnaire)
+    const recommendations = await getRecommendations(providerPlans, pregnancyQuestionnaire)
     
     expect(recommendations.every(r => r.score > 0)).toBe(true)
-    expect(recommendations.every(r => r.plan.maternity_coverage)).toBe(true)
+    expect(recommendations.every(r => {
+      const fullPlan = healthshareProviders[r.plan.id.split('-')[0]]?.plans
+        .find(p => p.id === r.plan.id);
+      return fullPlan?.maternity?.coverage?.services?.length ?? 0 > 0;
+    })).toBe(true)
   })
 
   it('includes explanations and factors', async () => {
-    const recommendations = await getRecommendations(samplePlans, sampleQuestionnaire)
+    const recommendations = await getRecommendations(providerPlans, sampleQuestionnaire)
     
     recommendations.forEach(rec => {
       expect(rec.explanation).toBeDefined()

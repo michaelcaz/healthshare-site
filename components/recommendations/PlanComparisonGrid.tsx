@@ -70,7 +70,9 @@ export function PlanComparisonGrid({
     },
     {
       label: 'Per Incident Max',
-      value: `$${plan.plan.per_incident_maximum.toLocaleString()}`,
+      value: plan.plan.per_incident_maximum ? 
+        `$${plan.plan.per_incident_maximum.toLocaleString()}` : 
+        'Not specified',
       tooltip: 'Maximum amount shared per medical incident'
     },
     {

@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { calculatePlanScore } from './scoring'
-import { samplePlans } from '@/data/sample-plans'
+import { providerPlans } from '@/data/provider-plans'
+import { healthshareProviders } from '@/types/provider-plans'
 
 describe('calculatePlanScore', () => {
   const sampleQuestionnaire = {
@@ -9,14 +10,19 @@ describe('calculatePlanScore', () => {
     iua_preference: '1000' as const,
     pregnancy: false,
     pregnancy_planning: 'no' as const,
-    medical_conditions: false,
+    medical_conditions: [],
     expense_preference: 'lower_monthly' as const,
     annual_healthcare_spend: 'less_1000' as const,
+    pre_existing: false,
+    prescription_needs: 'low',
+    provider_preference: 'any',
+    state: 'TX',
+    zip: '12345',
     zip_code: '12345'
   }
 
   it('returns valid score structure', async () => {
-    const plan = samplePlans[0] // Crowd Health plan
+    const plan = providerPlans[0]
     const score = await calculatePlanScore(plan, sampleQuestionnaire)
 
     expect(score).toHaveProperty('plan_id')
@@ -28,7 +34,13 @@ describe('calculatePlanScore', () => {
   })
 
   it('handles maternity needs correctly', async () => {
-    const plan = samplePlans[0]
+    const plan = providerPlans.find(p => {
+      const fullPlan = healthshareProviders[p.id.split('-')[0]]?.plans
+        .find(plan => plan.id === p.id);
+      return fullPlan?.maternity?.coverage?.services?.length ?? 0 > 0;
+    });
+    if (!plan) throw new Error('No plan with maternity coverage found');
+
     const pregnancyQuestionnaire = {
       ...sampleQuestionnaire,
       pregnancy: true
@@ -38,11 +50,15 @@ describe('calculatePlanScore', () => {
     const maternityFactor = score.factors.find(f => f.factor.includes('Maternity'))
     
     expect(maternityFactor).toBeDefined()
-    expect(score.total_score).toBeGreaterThan(0) // Plan has maternity coverage
+    expect(score.total_score).toBeGreaterThan(0)
   })
 
   it('penalizes plans without needed coverage', async () => {
-    const planWithoutMaternity = samplePlans.find(p => !p.maternity_coverage)!
+    const planWithoutMaternity = providerPlans.find(p => {
+      const fullPlan = healthshareProviders[p.id.split('-')[0]]?.plans
+        .find(plan => plan.id === p.id);
+      return !(fullPlan?.maternity?.coverage?.services?.length ?? 0 > 0);
+    })!;
     const pregnancyQuestionnaire = {
       ...sampleQuestionnaire,
       pregnancy: true
@@ -53,7 +69,7 @@ describe('calculatePlanScore', () => {
   })
 
   it('considers cost preferences', async () => {
-    const plan = samplePlans[0]
+    const plan = providerPlans[0]
     const lowCostQuestionnaire = {
       ...sampleQuestionnaire,
       expense_preference: 'lower_monthly' as const

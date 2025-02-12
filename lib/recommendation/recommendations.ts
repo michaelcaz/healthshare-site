@@ -1,9 +1,9 @@
-import { type HealthsharePlan } from '@/types/plans'
+import { type PricingPlan } from '@/types/provider-plans'
 import { calculatePlanScore } from './scoring'
 import { type QuestionnaireResponse } from '@/types/questionnaire'
 
 export interface PlanRecommendation {
-  plan: HealthsharePlan
+  plan: PricingPlan
   score: number
   explanation: string[]
   ranking: number
@@ -14,34 +14,24 @@ export interface PlanRecommendation {
 }
 
 export async function getRecommendations(
-  plans: HealthsharePlan[],
+  plans: PricingPlan[],
   questionnaire: QuestionnaireResponse
 ): Promise<PlanRecommendation[]> {
-  // Calculate scores for all plans
-  const scoredPlans = await Promise.all(
-    plans.map(async (plan) => {
-      const score = await calculatePlanScore(plan, questionnaire)
-      return {
-        plan,
-        score: score.total_score,
-        explanation: score.explanation,
-        factors: score.factors.map(f => ({
-          factor: f.factor,
-          impact: f.score
-        })),
-        ranking: 0 // Will be set after sorting
-      }
-    })
-  )
+  const scores = await Promise.all(
+    plans.map(plan => calculatePlanScore(plan, questionnaire))
+  );
 
-  // Sort by score descending and add rankings
-  const rankedPlans = scoredPlans
-    .sort((a, b) => b.score - a.score)
-    .map((plan, index) => ({
-      ...plan,
-      ranking: index + 1
-    }))
-
-  // Return all plans instead of filtering
-  return rankedPlans
+  return scores
+    .filter(score => score.total_score > 0)
+    .sort((a, b) => b.total_score - a.total_score)
+    .map((score, i) => ({
+      plan: score.plan,
+      score: score.total_score,
+      explanation: score.explanation,
+      ranking: i + 1,
+      factors: score.factors.map(f => ({
+        factor: f.factor,
+        impact: f.score
+      }))
+    }));
 } 

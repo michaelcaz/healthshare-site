@@ -7,7 +7,18 @@ import { CheckCircle, Star } from 'lucide-react'
 import { Badge } from '../ui/badge'
 
 interface TrustElementsProps {
-  recommendation: PlanRecommendation
+  recommendation: {
+    plan: {
+      id: string;
+      providerName: string;
+      planName: string;
+    };
+    score: number;
+    factors: Array<{
+      factor: string;
+      impact: number;
+    }>;
+  }
 }
 
 export function TrustElements({ recommendation }: TrustElementsProps) {
@@ -74,7 +85,7 @@ export function TrustElements({ recommendation }: TrustElementsProps) {
 
           {/* Provider Info Card */}
           <Card className="p-6">
-            <h3 className="text-lg font-semibold mb-4">About {plan.provider}</h3>
+            <h3 className="text-lg font-semibold mb-4">About {plan.providerName}</h3>
             <div className="space-y-4">
               <div className="flex items-center gap-4">
                 {/* Provider logo would go here */}
