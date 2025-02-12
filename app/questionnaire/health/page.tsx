@@ -8,6 +8,9 @@ import { cn } from '@/lib/utils';
 import { ProgressIndicator } from '@/components/questionnaire/progress-indicator';
 import { useState } from 'react';
 import { InfoIcon } from 'lucide-react';
+import { toast } from '@/components/ui/use-toast';
+import { QuestionnaireData } from '@/lib/types';
+import { saveQuestionnaireResponse } from '@/lib/questionnaire';
 
 const healthSchema = z.object({
   preExistingConditions: z.enum(['yes', 'no']).optional().refine(val => val !== undefined, {
@@ -45,12 +48,23 @@ export default function HealthPage() {
   const onSubmit = async (data: HealthData) => {
     try {
       const existingData = localStorage.getItem('questionnaire-data');
-      const questionnaireData = existingData ? JSON.parse(existingData) : {};
-      questionnaireData.health = data;
+      const questionnaireData: QuestionnaireData = existingData ? JSON.parse(existingData) : {};
+      questionnaireData.health = {
+        preExistingConditions: data.preExistingConditions || '',
+        currentlyPregnant: data.currentlyPregnant || '',
+        planningPregnancy: data.planningPregnancy || ''
+      };
       localStorage.setItem('questionnaire-data', JSON.stringify(questionnaireData));
+      
+      // We'll transform and save the complete data in the final step
       router.push('/questionnaire/coverage');
     } catch (error) {
       console.error('Error submitting form:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to save your responses. Please try again.',
+        variant: 'destructive',
+      });
     }
   };
 

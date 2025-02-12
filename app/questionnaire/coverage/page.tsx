@@ -8,6 +8,9 @@ import { cn } from '@/lib/utils';
 import { ProgressIndicator } from '@/components/questionnaire/progress-indicator';
 import { useState } from 'react';
 import { InfoIcon } from 'lucide-react';
+import { toast } from '@/components/ui/use-toast';
+import { QuestionnaireResponse, QuestionnaireData } from '@/lib/types';
+import { saveQuestionnaireResponse } from '@/lib/questionnaire';
 
 const coverageSchema = z.object({
   expense_preference: z.enum(['lower_monthly', 'higher_monthly']).optional().refine(val => val !== undefined, {
@@ -42,13 +45,37 @@ export default function CoveragePage() {
   const onSubmit = async (data: CoverageData) => {
     try {
       const existingData = localStorage.getItem('questionnaire-data');
-      const questionnaireData = existingData ? JSON.parse(existingData) : {};
-      questionnaireData.coverage = data;
-      localStorage.setItem('questionnaire-data', JSON.stringify(questionnaireData));
-      await router.push('/recommendations');
-      router.refresh();
+      const formData: QuestionnaireData = existingData ? JSON.parse(existingData) : {};
+      formData.coverage = data;
+      localStorage.setItem('questionnaire-data', JSON.stringify(formData));
+
+      // Transform to final QuestionnaireResponse format
+      const response: QuestionnaireResponse = {
+        age: parseInt(formData.basicInfo?.oldestAge || '0'),
+        household_size: formData.basicInfo?.coverageType === 'just_me' ? 1 : 2,
+        zip: formData.basicInfo?.zipCode || '',
+        iua_preference: '1000',
+        pregnancy: formData.health?.currentlyPregnant === 'yes',
+        pre_existing: formData.health?.preExistingConditions === 'yes',
+        prescription_needs: '',
+        provider_preference: '',
+        state: '',
+        expense_preference: data.expense_preference || 'lower_monthly',
+        pregnancy_planning: formData.health?.planningPregnancy as 'yes' | 'no' | 'maybe' || 'no',
+        medical_conditions: [],
+        annual_healthcare_spend: data.annual_healthcare_spend || '',
+        zip_code: formData.basicInfo?.zipCode || ''
+      };
+
+      await saveQuestionnaireResponse(response);
+      router.push('/recommendations');
     } catch (error) {
       console.error('Error submitting form:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to save your responses. Please try again.',
+        variant: 'destructive',
+      });
     }
   };
 

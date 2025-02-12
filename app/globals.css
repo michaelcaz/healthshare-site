@@ -97,13 +97,6 @@
     perspective: 1000px;
   }
 
-  .grain-overlay {
-    @apply absolute inset-0 pointer-events-none opacity-40;
-    background-image: url('/textures/grain.png');
-    background-repeat: repeat;
-    mix-blend-mode: overlay;
-  }
-
   .section-transition {
     @apply transition-all duration-700 ease-out;
   }

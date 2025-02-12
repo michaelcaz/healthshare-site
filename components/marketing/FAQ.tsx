@@ -29,8 +29,6 @@ export function FAQ() {
 
   return (
     <section className="relative py-[var(--section-spacing)]" style={{ background: 'var(--color-cream-bg)' }}>
-      <div className="grain-overlay" />
-
       <div className="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div 
           ref={ref}

@@ -7,6 +7,8 @@ import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { ProgressIndicator } from '@/components/questionnaire/progress-indicator';
 import { useState, useEffect } from 'react';
+import { toast } from '@/components/ui/use-toast';
+import { QuestionnaireData } from '@/lib/types';
 
 const savingsSchema = z.object({
   currentPremium: z.string().optional()
@@ -75,12 +77,19 @@ export default function SavingsPage() {
   const onSubmit = async (data: SavingsData) => {
     try {
       const existingData = localStorage.getItem('questionnaire-data');
-      const questionnaireData = existingData ? JSON.parse(existingData) : {};
+      const questionnaireData: QuestionnaireData = existingData ? JSON.parse(existingData) : {};
       questionnaireData.savings = data;
       localStorage.setItem('questionnaire-data', JSON.stringify(questionnaireData));
+      
+      // Don't save to Supabase until final step
       router.push('/questionnaire/health');
     } catch (error) {
       console.error('Error submitting form:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to save your responses. Please try again.',
+        variant: 'destructive',
+      });
     }
   };
 
@@ -113,6 +122,8 @@ export default function SavingsPage() {
                     <input
                       {...form.register('currentPremium')}
                       type="number"
+                      id="currentPremium"
+                      name="currentPremium"
                       placeholder="Enter amount"
                       className={cn(
                         "w-full p-3 pl-8 rounded-lg",

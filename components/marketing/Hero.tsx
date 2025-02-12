@@ -21,9 +21,8 @@ export function Hero() {
 
   const content = (
     <section className="relative min-h-[75vh] flex items-start mt-[-2rem]">
-      {/* Background with grain */}
+      {/* Background color */}
       <div className="absolute inset-0" style={{ background: 'var(--color-cream-bg)' }}>
-        <div className="grain-overlay absolute inset-0" />
       </div>
 
       {/* Floating shapes for visual interest */}
@@ -100,15 +99,19 @@ export function Hero() {
             className="max-w-2xl mx-auto"
           >
             <div className="flex gap-4">
-              <input
-                type="text"
-                placeholder="Enter ZIP code"
-                className="flex-1 px-6 py-4 rounded-xl text-lg border border-gray-200 focus:outline-none focus:border-gray-300"
-                style={{ 
-                  background: 'white',
-                  color: 'var(--color-warm-gray)'
-                }}
-              />
+              <label htmlFor="zipCode" className="flex-1">
+                <input
+                  type="text"
+                  id="zipCode"
+                  name="zipCode"
+                  placeholder="Enter ZIP code"
+                  className="w-full px-6 py-4 rounded-xl text-lg border border-gray-200 focus:outline-none focus:border-gray-300"
+                  style={{ 
+                    background: 'white',
+                    color: 'var(--color-warm-gray)'
+                  }}
+                />
+              </label>
               <button
                 className="px-8 py-4 rounded-xl font-semibold whitespace-nowrap transition-all hover:-translate-y-0.5"
                 style={{ 
@@ -129,7 +132,6 @@ export function Hero() {
     return (
       <section className="relative min-h-[75vh] flex items-start mt-[-2rem]">
         <div className="absolute inset-0" style={{ background: 'var(--color-cream-bg)' }}>
-          <div className="grain-overlay absolute inset-0" />
         </div>
         {/* Static content for SSR */}
         <div className="relative w-full pt-24">
