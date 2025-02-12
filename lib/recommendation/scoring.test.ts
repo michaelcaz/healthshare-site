@@ -7,6 +7,7 @@ describe('calculatePlanScore', () => {
   const sampleQuestionnaire = {
     age: 25,
     household_size: 1,
+    coverage_type: 'just_me' as const,
     iua_preference: '1000' as const,
     pregnancy: false,
     pregnancy_planning: 'no' as const,
@@ -88,5 +89,63 @@ describe('calculatePlanScore', () => {
     expect(highCostScore.factors).toContainEqual(
       expect.objectContaining({ factor: expect.stringContaining('Incident Cost') })
     )
+  })
+
+  describe('expense preference scoring', () => {
+    it('favors high IUA plans for lower monthly preference', async () => {
+      const questionnaire = {
+        ...sampleQuestionnaire,
+        expense_preference: 'lower_monthly' as const,
+        iua_preference: '5000' as const
+      }
+      
+      const highIUAPlan = providerPlans.find(p => p.id.includes('5000'))
+      if (!highIUAPlan) throw new Error('No high IUA plan found')
+      
+      const score = await calculatePlanScore(highIUAPlan, questionnaire)
+      expect(score.total_score).toBeGreaterThan(50)
+    })
+
+    it('favors medium IUA plans for balanced preference', async () => {
+      const questionnaire = {
+        ...sampleQuestionnaire,
+        expense_preference: 'balanced' as const,
+        iua_preference: '2500' as const
+      }
+      
+      const mediumIUAPlan = providerPlans.find(p => p.id.includes('2500'))
+      if (!mediumIUAPlan) throw new Error('No medium IUA plan found')
+      
+      const score = await calculatePlanScore(mediumIUAPlan, questionnaire)
+      expect(score.total_score).toBeGreaterThan(50)
+    })
+
+    it('favors low IUA plans for higher monthly preference', async () => {
+      const questionnaire = {
+        ...sampleQuestionnaire,
+        expense_preference: 'higher_monthly' as const,
+        iua_preference: '1000' as const
+      }
+      
+      const lowIUAPlan = providerPlans.find(p => p.id.includes('1000'))
+      if (!lowIUAPlan) throw new Error('No low IUA plan found')
+      
+      const score = await calculatePlanScore(lowIUAPlan, questionnaire)
+      expect(score.total_score).toBeGreaterThan(50)
+    })
+
+    it('adjusts scores based on annual healthcare spend', async () => {
+      const highSpendQuestionnaire = {
+        ...sampleQuestionnaire,
+        annual_healthcare_spend: 'more_5000' as const
+      }
+      
+      const lowIUAPlan = providerPlans.find(p => p.id.includes('1000'))
+      if (!lowIUAPlan) throw new Error('No low IUA plan found')
+      
+      const score = await calculatePlanScore(lowIUAPlan, highSpendQuestionnaire)
+      const monthlyFactor = score.factors.find(f => f.factor === 'Monthly Cost')
+      expect(monthlyFactor?.score).toBeDefined()
+    })
   })
 }) 

@@ -11,7 +11,7 @@ export const questionnaireSchema = z.object({
   provider_preference: z.string().default(''),
   state: z.string().default(''),
   zip: z.string(),
-  expense_preference: z.enum(['lower_monthly', 'higher_monthly']).default('lower_monthly'),
+  expense_preference: z.enum(['lower_monthly', 'balanced', 'higher_monthly']).default('balanced'),
   pregnancy_planning: z.enum(['yes', 'no', 'maybe']).default('no'),
   medical_conditions: z.array(z.string()).default([]),
   annual_healthcare_spend: z.string().default(''),

@@ -27,6 +27,7 @@ export interface Question {
 
 export enum ExpensePreference {
   LOWER_MONTHLY = 'lower_monthly',
+  BALANCED = 'balanced',
   HIGHER_MONTHLY = 'higher_monthly'
 }
 
@@ -47,7 +48,7 @@ export interface QuestionnaireResponse {
   provider_preference: string
   state: string
   zip: string
-  expense_preference: 'lower_monthly' | 'higher_monthly'
+  expense_preference: 'lower_monthly' | 'balanced' | 'higher_monthly'
   pregnancy_planning: 'yes' | 'no' | 'maybe'
   medical_conditions: string[]
   annual_healthcare_spend: string

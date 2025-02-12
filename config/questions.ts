@@ -89,9 +89,13 @@ export const questions: Question[] = [
         value: 'lower_monthly', 
         label: 'Lower monthly costs, but I\'ll cover small medical costs myself'
       },
-      { 
-        value: 'higher_monthly', 
-        label: 'Higher monthly costs for more protection on big expenses'
+      {
+        value: 'balanced',
+        label: 'Balanced approach between monthly costs and out-of-pocket expenses'
+      },
+      {
+        value: 'higher_monthly',
+        label: 'Higher monthly costs for lower out-of-pocket expenses'
       }
     ],
     tooltip: 'Small medical costs typically include routine doctor visits, basic prescriptions, and preventive care.',

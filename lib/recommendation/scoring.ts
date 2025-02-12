@@ -83,13 +83,41 @@ export async function calculatePlanScore(
     }`
   })
 
-  // Incident cost scoring (ranked)
+  // Initial Unshared Amount scoring (ranked)
   const incidentRankedPlans = allPlanCosts.sort((a, b) => 
     (a.cost?.initialUnsharedAmount ?? Infinity) - (b.cost?.initialUnsharedAmount ?? Infinity)
   )
   const incidentPosition = incidentRankedPlans.findIndex(p => p.plan.id === plan.id)
-  const incidentScore = Math.max(100 - (incidentPosition * 10), 50)
+  let incidentScore = Math.max(100 - (incidentPosition * 10), 50)
   
+  // Adjust score based on expense preference and IUA alignment
+  const iua = planCost.initialUnsharedAmount
+  switch (questionnaire.expense_preference) {
+    case 'lower_monthly':
+      // Prefer higher IUA (5000)
+      if (iua === 5000) incidentScore *= 1.3;
+      else if (iua === 2500) incidentScore *= 1.1;
+      break;
+    case 'balanced':
+      // Prefer middle IUA (2500)
+      if (iua === 2500) incidentScore *= 1.3;
+      else if (iua === 1000 || iua === 5000) incidentScore *= 1.1;
+      break;
+    case 'higher_monthly':
+      // Prefer lower IUA (1000)
+      if (iua === 1000) incidentScore *= 1.3;
+      else if (iua === 2500) incidentScore *= 1.1;
+      break;
+  }
+
+  // Adjust monthly cost weight based on healthcare spend
+  let monthlyWeight = 1;
+  if (questionnaire.annual_healthcare_spend === 'less_1000') {
+    monthlyWeight = 1.2; // Increase importance of monthly cost for low spenders
+  } else if (questionnaire.annual_healthcare_spend === 'more_5000') {
+    monthlyWeight = 0.8; // Decrease importance of monthly cost for high spenders
+  }
+
   factors.push({
     factor: 'Incident Cost',
     score: incidentScore,
