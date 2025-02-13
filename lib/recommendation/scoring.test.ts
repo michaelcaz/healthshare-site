@@ -99,7 +99,9 @@ describe('calculatePlanScore', () => {
         iua_preference: '5000' as const
       }
       
-      const highIUAPlan = providerPlans.find(p => p.id.includes('5000'))
+      const highIUAPlan = providerPlans.find(p => 
+        p.planMatrix.some(m => m.costs.some(c => c.initialUnsharedAmount === 5000))
+      )
       if (!highIUAPlan) throw new Error('No high IUA plan found')
       
       const score = await calculatePlanScore(highIUAPlan, questionnaire)
@@ -113,7 +115,9 @@ describe('calculatePlanScore', () => {
         iua_preference: '2500' as const
       }
       
-      const mediumIUAPlan = providerPlans.find(p => p.id.includes('2500'))
+      const mediumIUAPlan = providerPlans.find(p => 
+        p.planMatrix.some(m => m.costs.some(c => c.initialUnsharedAmount === 2500))
+      )
       if (!mediumIUAPlan) throw new Error('No medium IUA plan found')
       
       const score = await calculatePlanScore(mediumIUAPlan, questionnaire)
@@ -127,7 +131,9 @@ describe('calculatePlanScore', () => {
         iua_preference: '1000' as const
       }
       
-      const lowIUAPlan = providerPlans.find(p => p.id.includes('1000'))
+      const lowIUAPlan = providerPlans.find(p => 
+        p.planMatrix.some(m => m.costs.some(c => c.initialUnsharedAmount === 1000))
+      )
       if (!lowIUAPlan) throw new Error('No low IUA plan found')
       
       const score = await calculatePlanScore(lowIUAPlan, questionnaire)
@@ -140,7 +146,9 @@ describe('calculatePlanScore', () => {
         annual_healthcare_spend: 'more_5000' as const
       }
       
-      const lowIUAPlan = providerPlans.find(p => p.id.includes('1000'))
+      const lowIUAPlan = providerPlans.find(p => 
+        p.planMatrix.some(m => m.costs.some(c => c.initialUnsharedAmount === 1000))
+      )
       if (!lowIUAPlan) throw new Error('No low IUA plan found')
       
       const score = await calculatePlanScore(lowIUAPlan, highSpendQuestionnaire)

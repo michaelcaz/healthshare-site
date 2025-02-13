@@ -74,7 +74,7 @@ export function AuthForm({ type }: AuthFormProps) {
 
   return (
     <div className="grid gap-6">
-      <Form {...form}>
+      <Form form={form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <FormField
             control={form.control}
@@ -127,24 +127,24 @@ export function AuthForm({ type }: AuthFormProps) {
             )}
           </Button>
         </form>
-        <div className="mt-4 text-center text-sm">
-          {type === 'login' ? (
-            <>
-              Don't have an account?{' '}
-              <Link href="/auth/signup" className="text-primary hover:underline">
-                Sign up
-              </Link>
-            </>
-          ) : (
-            <>
-              Already have an account?{' '}
-              <Link href="/auth/login" className="text-primary hover:underline">
-                Sign in
-              </Link>
-            </>
-          )}
-        </div>
       </Form>
+      <div className="mt-4 text-center text-sm">
+        {type === 'login' ? (
+          <>
+            Don't have an account?{' '}
+            <Link href="/auth/signup" className="text-primary hover:underline">
+              Sign up
+            </Link>
+          </>
+        ) : (
+          <>
+            Already have an account?{' '}
+            <Link href="/auth/login" className="text-primary hover:underline">
+              Sign in
+            </Link>
+          </>
+        )}
+      </div>
     </div>
   )
 } 

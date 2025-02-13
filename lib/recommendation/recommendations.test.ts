@@ -7,6 +7,7 @@ describe('getRecommendations', () => {
   const sampleQuestionnaire = {
     age: 25,
     household_size: 1,
+    coverage_type: 'just_me' as const,
     iua_preference: '1000' as const,
     pregnancy: false,
     pregnancy_planning: 'no' as const,

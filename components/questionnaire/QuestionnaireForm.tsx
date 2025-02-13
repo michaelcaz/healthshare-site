@@ -16,6 +16,9 @@ import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { getClientStorage, setClientStorage } from '@/lib/utils/client-storage';
 import { logError, getErrorMessage, AppError } from '@/lib/utils/error-logging';
+import { steps } from '@/lib/questionnaire/steps';
+import { Button } from '@/components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const STORAGE_KEY = 'questionnaire-basic-info';
 
@@ -33,15 +36,168 @@ const basicInfoSchema = z.object({
     .refine((val) => {
       const age = parseInt(val);
       return age >= 18 && age <= 120;
-    }, 'Age must be between 18 and 120')
+    }, 'Age must be between 18 and 120'),
+  pre_existing: z.enum(['yes', 'no'], {
+    required_error: 'Please select an option'
+  }),
+  pregnancy: z.enum(['yes', 'no'], {
+    required_error: 'Please select an option'
+  }),
+  pregnancy_planning: z.enum(['yes', 'no', 'maybe']).optional(),
+  expense_preference: z.enum(['lower_monthly', 'balanced', 'higher_monthly'], {
+    required_error: 'Please select a preferred way to handle medical expenses'
+  }),
+  iua_preference: z.enum(['1000', '2500', '5000'], {
+    required_error: 'Please select an Initial Unshared Amount (IUA) preference'
+  }),
+  annual_healthcare_spend: z.enum(['less_1000', '1000_5000', 'more_5000'], {
+    required_error: 'Please estimate your annual healthcare spending'
+  })
 });
 
 type BasicInfoData = z.infer<typeof basicInfoSchema>;
 
-export default function QuestionnaireForm() {
+const getFieldLabel = (field: string): string => {
+  const labels: Record<string, string> = {
+    zipCode: "What's your zip code?",
+    coverage_type: "Who needs coverage?",
+    oldestAge: "What is the age of the oldest person needing coverage?",
+    pre_existing: "Do you have any pre-existing conditions?",
+    pregnancy: "Are you currently pregnant?",
+    pregnancy_planning: "Are you planning to become pregnant?",
+    expense_preference: "What's your preferred way to handle medical expenses?",
+    iua_preference: "What Initial Unshared Amount (IUA) would you prefer?",
+    annual_healthcare_spend: "How much did you spend on healthcare last year (outside of insurance)?"
+  }
+  return labels[field] || field
+}
+
+const renderFormControl = (fieldName: string, field: any, watchFields?: Record<string, any>) => {
+  switch (fieldName) {
+    case 'coverage_type':
+      return (
+        <div className="relative">
+          <Select onValueChange={field.onChange} defaultValue={field.value}>
+            <SelectTrigger className="w-full bg-white">
+              <SelectValue placeholder="Select who needs coverage" />
+            </SelectTrigger>
+            <SelectContent className="z-50 bg-white" position="popper" sideOffset={5}>
+              <SelectItem value="just_me">Just me</SelectItem>
+              <SelectItem value="me_spouse">Me + Spouse/Partner</SelectItem>
+              <SelectItem value="me_kids">Me + Kids</SelectItem>
+              <SelectItem value="family">Family</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      )
+    case 'oldestAge':
+      return (
+        <Input 
+          {...field} 
+          type="number" 
+          min="18" 
+          max="120" 
+          placeholder="Enter age"
+          className="bg-white"
+        />
+      )
+    case 'pre_existing':
+      return (
+        <div className="relative">
+          <Select onValueChange={field.onChange} defaultValue={field.value}>
+            <SelectTrigger className="w-full bg-white">
+              <SelectValue placeholder="Select an option" />
+            </SelectTrigger>
+            <SelectContent className="z-50 bg-white" position="popper" sideOffset={5}>
+              <SelectItem value="no">No</SelectItem>
+              <SelectItem value="yes">Yes</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      )
+    case 'pregnancy':
+      return (
+        <div className="relative">
+          <Select onValueChange={field.onChange} defaultValue={field.value}>
+            <SelectTrigger className="w-full bg-white">
+              <SelectValue placeholder="Select an option" />
+            </SelectTrigger>
+            <SelectContent className="z-50 bg-white" position="popper" sideOffset={5}>
+              <SelectItem value="no">No</SelectItem>
+              <SelectItem value="yes">Yes</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      )
+    case 'pregnancy_planning':
+      return (
+        <div className="relative">
+          <Select onValueChange={field.onChange} defaultValue={field.value}>
+            <SelectTrigger className="w-full bg-white">
+              <SelectValue placeholder="Select an option" />
+            </SelectTrigger>
+            <SelectContent className="z-50 bg-white" position="popper" sideOffset={5}>
+              <SelectItem value="no">No</SelectItem>
+              <SelectItem value="yes">Yes</SelectItem>
+              <SelectItem value="maybe">Maybe</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      )
+    case 'expense_preference':
+      return (
+        <div className="relative">
+          <Select onValueChange={field.onChange} defaultValue={field.value}>
+            <SelectTrigger className="w-full bg-white">
+              <SelectValue placeholder="Select your preference" />
+            </SelectTrigger>
+            <SelectContent className="z-50 bg-white" position="popper" sideOffset={5}>
+              <SelectItem value="lower_monthly">Lower monthly cost, higher out-of-pocket</SelectItem>
+              <SelectItem value="balanced">Balanced monthly and out-of-pocket costs</SelectItem>
+              <SelectItem value="higher_monthly">Higher monthly cost, lower out-of-pocket</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      )
+    case 'iua_preference':
+      return (
+        <div className="relative">
+          <Select onValueChange={field.onChange} defaultValue={field.value}>
+            <SelectTrigger className="w-full bg-white">
+              <SelectValue placeholder="Select your IUA preference" />
+            </SelectTrigger>
+            <SelectContent className="z-50 bg-white" position="popper" sideOffset={5}>
+              <SelectItem value="1000">$1,000 IUA</SelectItem>
+              <SelectItem value="2500">$2,500 IUA</SelectItem>
+              <SelectItem value="5000">$5,000 IUA</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      )
+    case 'annual_healthcare_spend':
+      return (
+        <div className="relative">
+          <Select onValueChange={field.onChange} defaultValue={field.value}>
+            <SelectTrigger className="w-full bg-white">
+              <SelectValue placeholder="Select your estimated spending" />
+            </SelectTrigger>
+            <SelectContent className="z-50 bg-white" position="popper" sideOffset={5}>
+              <SelectItem value="less_1000">Less than $1,000</SelectItem>
+              <SelectItem value="1000_5000">$1,000 - $5,000</SelectItem>
+              <SelectItem value="more_5000">More than $5,000</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      )
+    default:
+      return <Input {...field} placeholder={`Enter ${fieldName}`} className="bg-white" />
+  }
+}
+
+export const QuestionnaireForm = () => {
   const [startTime] = useState(Date.now());
   const [isComplete, setIsComplete] = useState(false);
-  const [currentStep, setCurrentStep] = useState(1);
+  const [currentStep, setCurrentStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [formError, setFormError] = useState<string | null>(null);
@@ -51,13 +207,23 @@ export default function QuestionnaireForm() {
     defaultValues: {
       zipCode: '',
       coverage_type: undefined,
-      oldestAge: ''
+      oldestAge: '',
+      pre_existing: undefined,
+      pregnancy: undefined,
+      pregnancy_planning: undefined,
+      expense_preference: undefined,
+      iua_preference: undefined,
+      annual_healthcare_spend: undefined
     },
-    mode: 'onChange' // Enable real-time validation
+    mode: 'onChange'
   });
+
+  const watchPregnancy = form.watch('pregnancy');
   
   const router = useRouter();
   const { toast } = useToast();
+
+  const step = steps[currentStep];
 
   // Load saved form data
   useEffect(() => {
@@ -109,16 +275,14 @@ export default function QuestionnaireForm() {
         coverage_type: data.coverage_type,
         zip: data.zipCode,
         // Set defaults for required fields
-        iua_preference: '1000',
-        pregnancy: false,
-        pre_existing: false,
-        prescription_needs: '',
-        provider_preference: '',
+        iua_preference: data.iua_preference,
+        pregnancy: data.pregnancy === 'yes',
+        pre_existing: data.pre_existing === 'yes',
         state: '',
-        expense_preference: 'lower_monthly',
-        pregnancy_planning: 'no',
+        expense_preference: data.expense_preference,
+        pregnancy_planning: data.pregnancy_planning || 'no',
         medical_conditions: [],
-        annual_healthcare_spend: '',
+        annual_healthcare_spend: data.annual_healthcare_spend,
         zip_code: data.zipCode
       };
 
@@ -175,107 +339,50 @@ export default function QuestionnaireForm() {
           )}
           
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <div className="space-y-6">
-              <h2 className="text-xl font-semibold text-gray-900">
-                Let's start with the basics
-              </h2>
-
-              <FormField
-                control={form.control}
-                name="zipCode"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel htmlFor="zipCode">What's your zip code?</FormLabel>
-                    <FormControl>
-                      <Input 
-                        {...field} 
-                        id="zipCode"
-                        maxLength={5} 
-                        placeholder="Enter your zip code"
-                        aria-describedby={form.formState.errors.zipCode ? "zipCode-error" : undefined}
-                        className={cn(
-                          form.formState.errors.zipCode && "border-red-300 focus:border-red-500"
-                        )}
-                      />
-                    </FormControl>
-                    <FormMessage id="zipCode-error" />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="coverage_type"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel htmlFor="coverage_type">Who needs coverage?</FormLabel>
-                    <FormControl>
-                      <select
-                        {...field}
-                        id="coverage_type"
-                        aria-describedby={form.formState.errors.coverage_type ? "coverage-type-error" : undefined}
-                        className={cn(
-                          "w-full p-3 rounded-lg",
-                          "border border-gray-200",
-                          "focus:outline-none focus:ring-2 focus:ring-blue-500",
-                          "transition duration-200",
-                          "text-gray-900",
-                          form.formState.errors.coverage_type && "border-red-300 focus:ring-red-500"
-                        )}
-                      >
-                        <option value="">Select who needs coverage</option>
-                        <option value="just_me">Just me</option>
-                        <option value="me_spouse">Me + Spouse/Partner</option>
-                        <option value="me_kids">Me + Kids</option>
-                        <option value="family">Family</option>
-                      </select>
-                    </FormControl>
-                    <FormMessage id="coverage-type-error" />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="oldestAge"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel htmlFor="oldestAge">What is the age of the oldest person needing coverage?</FormLabel>
-                    <FormControl>
-                      <Input 
-                        {...field} 
-                        id="oldestAge"
-                        type="number" 
-                        min="18" 
-                        max="120" 
-                        placeholder="Enter age"
-                        aria-describedby={form.formState.errors.oldestAge ? "age-error" : undefined}
-                        className={cn(
-                          form.formState.errors.oldestAge && "border-red-300 focus:border-red-500"
-                        )}
-                      />
-                    </FormControl>
-                    <FormMessage id="age-error" />
-                  </FormItem>
-                )}
-              />
+            <div className="space-y-4">
+              <h2 className="text-2xl font-semibold">{step.title}</h2>
+              <p className="text-gray-600">{step.description}</p>
+              
+              {/* Render form fields based on current step */}
+              {step.fields.map(field => {
+                // Skip rendering pregnancy_planning if pregnancy is not "no"
+                if (field === 'pregnancy_planning' && watchPregnancy !== 'no') {
+                  return null;
+                }
+                
+                return (
+                  <FormField
+                    key={field}
+                    control={form.control}
+                    name={field}
+                    render={({ field: formField }) => (
+                      <FormItem className="space-y-2">
+                        <FormLabel className="text-base">{getFieldLabel(field)}</FormLabel>
+                        <FormControl>
+                          {renderFormControl(field, formField, { pregnancy: watchPregnancy })}
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )
+              })}
             </div>
 
-            <div className="flex justify-end pt-6">
-              <button
-                type="submit"
-                disabled={isSubmitting || !form.formState.isValid}
-                aria-busy={isSubmitting}
-                className={cn(
-                  "px-6 py-2 rounded-full text-white",
-                  "transition-colors duration-200",
-                  (isSubmitting || !form.formState.isValid) && "opacity-50 cursor-not-allowed",
-                  "hover:bg-opacity-90"
-                )}
-                style={{ background: 'var(--color-coral-primary)' }}
+            <div className="flex justify-between mt-8">
+              {currentStep > 0 && (
+                <Button onClick={() => setCurrentStep(prev => prev - 1)} variant="outline">
+                  Previous
+                </Button>
+              )}
+              
+              <Button 
+                type={currentStep === steps.length - 1 ? 'submit' : 'button'}
+                onClick={currentStep === steps.length - 1 ? undefined : () => setCurrentStep(prev => prev + 1)}
+                className="ml-auto"
               >
-                {isSubmitting ? 'Saving...' : 'Continue'}
-              </button>
+                {currentStep === steps.length - 1 ? 'Submit' : 'Next'}
+              </Button>
             </div>
           </form>
         </div>

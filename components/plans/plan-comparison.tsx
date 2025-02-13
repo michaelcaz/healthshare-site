@@ -27,6 +27,7 @@ export function PlanComparison({
           value={ageBracket}
           onChange={(e) => setAgeBracket(e.target.value as AgeBracket)}
           className="rounded-md border border-gray-300 px-3 py-2"
+          aria-label="Age bracket"
         >
           <option value="18-29">18-29</option>
           <option value="30-39">30-39</option>
@@ -38,6 +39,7 @@ export function PlanComparison({
           value={householdType}
           onChange={(e) => setHouseholdType(e.target.value as HouseholdType)}
           className="rounded-md border border-gray-300 px-3 py-2"
+          aria-label="Household type"
         >
           <option value="Member Only">Individual</option>
           <option value="Member & Spouse">Individual + Spouse</option>
@@ -49,6 +51,7 @@ export function PlanComparison({
           value={maxIUA || ''}
           onChange={(e) => setMaxIUA(e.target.value ? Number(e.target.value) : undefined)}
           className="rounded-md border border-gray-300 px-3 py-2"
+          aria-label="Maximum IUA"
         >
           <option value="">Any IUA</option>
           {iuaLevels.map((level) => (
@@ -84,7 +87,10 @@ export function PlanComparison({
                 <td className="px-6 py-4 text-sm text-gray-900">
                   {formatCurrency(plan.initialUnsharedAmount)}
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-900">
+                <td 
+                  className="px-6 py-4 text-sm text-gray-900"
+                  data-testid="annual-cost"
+                >
                   {formatCurrency(plan.annualCost)}
                 </td>
               </tr>

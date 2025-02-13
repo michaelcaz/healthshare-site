@@ -16,42 +16,62 @@ export const CoverageTimeline: React.FC<CoverageTimelineProps> = ({ plan }) => {
           <div className="flex items-start gap-3 p-4 bg-green-50 rounded-lg">
             <CheckCircle className="h-5 w-5 text-green-500 mt-0.5" />
             <div>
-              <div className="font-medium">Preventive Care & Wellness</div>
+              <div className="font-medium">Initial Unshared Amount (IUA)</div>
               <div className="text-sm text-gray-600">
-                Annual physicals, wellness visits, and preventive services
+                {plan.plan.annualUnsharedAmount}
+              </div>
+            </div>
+          </div>
+          <div className="flex items-start gap-3 p-4 bg-green-50 rounded-lg">
+            <CheckCircle className="h-5 w-5 text-green-500 mt-0.5" />
+            <div>
+              <div className="font-medium">Maximum Coverage</div>
+              <div className="text-sm text-gray-600">
+                {plan.plan.maxCoverage}
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Waiting Periods */}
+      {/* Plan Details */}
       <section>
-        <h3 className="text-xl font-semibold mb-4">Waiting Periods</h3>
+        <h3 className="text-xl font-semibold mb-4">Plan Details</h3>
         <div className="grid gap-4">
-          {plan.plan.pre_existing_waiting_period > 0 && (
-            <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg">
-              <Clock className="h-5 w-5 text-blue-500 mt-0.5" />
-              <div>
-                <div className="font-medium">Pre-existing Conditions</div>
-                <div className="text-sm text-gray-600">
-                  {plan.plan.pre_existing_waiting_period} months waiting period
-                </div>
+          <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg">
+            <Clock className="h-5 w-5 text-blue-500 mt-0.5" />
+            <div>
+              <div className="font-medium">Provider Network</div>
+              <div className="text-sm text-gray-600">
+                {plan.plan.providerName} Network
               </div>
             </div>
-          )}
-          
-          {plan.plan.maternity_coverage && plan.plan.maternity_waiting_period && (
-            <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg">
-              <Clock className="h-5 w-5 text-blue-500 mt-0.5" />
-              <div>
-                <div className="font-medium">Maternity Coverage</div>
-                <div className="text-sm text-gray-600">
-                  {plan.plan.maternity_waiting_period} months waiting period
-                </div>
+          </div>
+          <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg">
+            <Clock className="h-5 w-5 text-blue-500 mt-0.5" />
+            <div>
+              <div className="font-medium">Plan Type</div>
+              <div className="text-sm text-gray-600">
+                {plan.plan.planName}
               </div>
             </div>
-          )}
+          </div>
+          <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg">
+            <Clock className="h-5 w-5 text-blue-500 mt-0.5" />
+            <div>
+              <div className="font-medium">Learn More</div>
+              <div className="text-sm text-gray-600">
+                <a 
+                  href={plan.plan.sourceUrl} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:underline"
+                >
+                  View full plan details
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </div>

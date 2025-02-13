@@ -44,8 +44,6 @@ export interface QuestionnaireResponse {
   iua_preference: '1000' | '2500' | '5000'
   pregnancy: boolean
   pre_existing: boolean
-  prescription_needs: string
-  provider_preference: string
   state: string
   zip: string
   expense_preference: 'lower_monthly' | 'balanced' | 'higher_monthly'

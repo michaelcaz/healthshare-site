@@ -187,6 +187,28 @@ export async function calculatePlanScore(
         factors: []
       };
     }
+
+    // Calculate maternity score based on waiting period and coverage
+    let maternityScore = 100;
+    const waitingPeriod = fullPlan.maternity.waitingPeriod.months;
+    
+    // Adjust score based on waiting period
+    if (waitingPeriod > 10) maternityScore -= 20;
+    if (waitingPeriod > 12) maternityScore -= 20;
+
+    // Adjust score based on coverage comprehensiveness
+    const services = fullPlan.maternity.coverage.services;
+    const essentialServices = ['prenatal', 'delivery', 'postnatal'];
+    const hasAllEssential = essentialServices.every(service => 
+      services.some(s => s.toLowerCase().includes(service.toLowerCase()))
+    );
+    if (!hasAllEssential) maternityScore -= 30;
+
+    factors.push({
+      factor: 'Maternity Coverage',
+      score: maternityScore,
+      explanation: `Maternity coverage available with ${waitingPeriod}-month waiting period. Covers: ${services.join(', ')}`
+    });
   }
 
   totalScore = factors.reduce((sum, f) => sum + f.score, 0) / factors.length

@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic'
 
 // Dynamically import the form component with no SSR
 const QuestionnaireForm = dynamic(
-  () => import('@/components/questionnaire/QuestionnaireForm'),
+  () => import('@/components/questionnaire/QuestionnaireForm').then(mod => mod.QuestionnaireForm),
   { ssr: false }
 )
 

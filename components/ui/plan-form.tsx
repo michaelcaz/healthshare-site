@@ -1,58 +1,45 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-
-interface Provider {
-  id: string
-  name: string
-}
+import { type PricingPlan, type PlanMatrix, type AgeBracket, type HouseholdType } from '@/types/provider-plans'
 
 interface PlanFormProps {
   onSuccess?: () => void
   onCancel?: () => void
-  initialData?: {
-    id?: string
-    name: string
-    provider_id: string
-    monthly_cost: number
-    annual_cost: number
-    description: string
-    features: string[]
-    is_active: boolean
-  }
+  initialData?: PricingPlan
 }
+
+const AGE_BRACKETS: AgeBracket[] = ['18-29', '30-39', '40-49', '50-64']
+const HOUSEHOLD_TYPES: HouseholdType[] = ['Member Only', 'Member & Spouse', 'Member & Child(ren)', 'Member & Family']
+const IUA_OPTIONS = [1000, 2500, 5000]
 
 export function PlanForm({ onSuccess, onCancel, initialData }: PlanFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [providers, setProviders] = useState<Provider[]>([])
   const supabase = createClientComponentClient()
 
-  const [formData, setFormData] = useState({
-    name: initialData?.name || '',
-    provider_id: initialData?.provider_id || '',
-    monthly_cost: initialData?.monthly_cost || 0,
-    annual_cost: initialData?.annual_cost || 0,
-    description: initialData?.description || '',
-    features: initialData?.features || [''],
-    is_active: initialData?.is_active ?? true,
+  const [formData, setFormData] = useState<PricingPlan>(initialData || {
+    id: '',
+    providerName: '',
+    planName: '',
+    maxCoverage: '',
+    annualUnsharedAmount: '',
+    sourceUrl: '',
+    ageRules: {
+      type: 'standard'
+    },
+    planMatrix: AGE_BRACKETS.flatMap(ageBracket =>
+      HOUSEHOLD_TYPES.map(householdType => ({
+        ageBracket,
+        householdType,
+        costs: IUA_OPTIONS.map(initialUnsharedAmount => ({
+          monthlyPremium: 0,
+          initialUnsharedAmount
+        }))
+      }))
+    )
   })
-
-  useEffect(() => {
-    async function loadProviders() {
-      const { data } = await supabase
-        .from('providers')
-        .select('id, name')
-        .eq('is_active', true)
-      
-      if (data) {
-        setProviders(data)
-      }
-    }
-
-    loadProviders()
-  }, [supabase])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -60,24 +47,19 @@ export function PlanForm({ onSuccess, onCancel, initialData }: PlanFormProps) {
     setError(null)
 
     try {
-      const submitData = {
-        ...formData,
-        features: formData.features.filter(f => f.trim() !== '')
-      }
-
       if (initialData?.id) {
         // Update existing plan
         const { error } = await supabase
-          .from('plans')
-          .update(submitData)
+          .from('pricing_plans')
+          .update(formData)
           .eq('id', initialData.id)
 
         if (error) throw error
       } else {
         // Create new plan
         const { error } = await supabase
-          .from('plans')
-          .insert([submitData])
+          .from('pricing_plans')
+          .insert([formData])
 
         if (error) throw error
       }
@@ -90,23 +72,32 @@ export function PlanForm({ onSuccess, onCancel, initialData }: PlanFormProps) {
     }
   }
 
-  const handleFeatureChange = (index: number, value: string) => {
-    const newFeatures = [...formData.features]
-    newFeatures[index] = value
-    setFormData({ ...formData, features: newFeatures })
-  }
+  const updateMatrixCost = (
+    ageBracket: AgeBracket,
+    householdType: HouseholdType,
+    initialUnsharedAmount: number,
+    monthlyPremium: number
+  ) => {
+    const newMatrix = formData.planMatrix.map(entry => {
+      if (entry.ageBracket === ageBracket && entry.householdType === householdType) {
+        return {
+          ...entry,
+          costs: entry.costs.map(cost => {
+            if (cost.initialUnsharedAmount === initialUnsharedAmount) {
+              return { ...cost, monthlyPremium }
+            }
+            return cost
+          })
+        }
+      }
+      return entry
+    })
 
-  const addFeature = () => {
-    setFormData({ ...formData, features: [...formData.features, ''] })
-  }
-
-  const removeFeature = (index: number) => {
-    const newFeatures = formData.features.filter((_, i) => i !== index)
-    setFormData({ ...formData, features: newFeatures })
+    setFormData({ ...formData, planMatrix: newMatrix })
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-8">
       {error && (
         <div className="rounded-md bg-red-50 p-4">
           <div className="flex">
@@ -121,164 +112,138 @@ export function PlanForm({ onSuccess, onCancel, initialData }: PlanFormProps) {
       )}
 
       <div>
-        <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="providerName" className="block text-sm font-medium text-gray-700">
+          Provider Name
+        </label>
+        <input
+          type="text"
+          name="providerName"
+          id="providerName"
+          required
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          value={formData.providerName}
+          onChange={(e) => setFormData({ ...formData, providerName: e.target.value })}
+        />
+      </div>
+
+      <div>
+        <label htmlFor="planName" className="block text-sm font-medium text-gray-700">
           Plan Name
         </label>
         <input
           type="text"
-          name="name"
-          id="name"
+          name="planName"
+          id="planName"
           required
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-          value={formData.name}
-          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+          value={formData.planName}
+          onChange={(e) => setFormData({ ...formData, planName: e.target.value })}
         />
       </div>
 
       <div>
-        <label htmlFor="provider_id" className="block text-sm font-medium text-gray-700">
-          Provider
+        <label htmlFor="maxCoverage" className="block text-sm font-medium text-gray-700">
+          Maximum Coverage
         </label>
-        <select
-          id="provider_id"
-          name="provider_id"
+        <input
+          type="text"
+          name="maxCoverage"
+          id="maxCoverage"
           required
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-          value={formData.provider_id}
-          onChange={(e) => setFormData({ ...formData, provider_id: e.target.value })}
-        >
-          <option value="">Select a provider</option>
-          {providers.map((provider) => (
-            <option key={provider.id} value={provider.id}>
-              {provider.name}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-        <div>
-          <label htmlFor="monthly_cost" className="block text-sm font-medium text-gray-700">
-            Monthly Cost
-          </label>
-          <div className="mt-1 relative rounded-md shadow-sm">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <span className="text-gray-500 sm:text-sm">$</span>
-            </div>
-            <input
-              type="number"
-              name="monthly_cost"
-              id="monthly_cost"
-              required
-              min="0"
-              step="0.01"
-              className="mt-1 block w-full pl-7 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-              value={formData.monthly_cost}
-              onChange={(e) => setFormData({ ...formData, monthly_cost: parseFloat(e.target.value) })}
-            />
-          </div>
-        </div>
-
-        <div>
-          <label htmlFor="annual_cost" className="block text-sm font-medium text-gray-700">
-            Annual Cost
-          </label>
-          <div className="mt-1 relative rounded-md shadow-sm">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <span className="text-gray-500 sm:text-sm">$</span>
-            </div>
-            <input
-              type="number"
-              name="annual_cost"
-              id="annual_cost"
-              required
-              min="0"
-              step="0.01"
-              className="mt-1 block w-full pl-7 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-              value={formData.annual_cost}
-              onChange={(e) => setFormData({ ...formData, annual_cost: parseFloat(e.target.value) })}
-            />
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <label htmlFor="description" className="block text-sm font-medium text-gray-700">
-          Description
-        </label>
-        <textarea
-          name="description"
-          id="description"
-          rows={4}
-          required
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-          value={formData.description}
-          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+          value={formData.maxCoverage}
+          onChange={(e) => setFormData({ ...formData, maxCoverage: e.target.value })}
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700">Features</label>
-        <div className="mt-2 space-y-2">
-          {formData.features.map((feature, index) => (
-            <div key={index} className="flex gap-2">
-              <input
-                type="text"
-                value={feature}
-                onChange={(e) => handleFeatureChange(index, e.target.value)}
-                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                placeholder="Enter a feature"
-              />
-              <button
-                type="button"
-                onClick={() => removeFeature(index)}
-                className="inline-flex items-center rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-              >
-                Remove
-              </button>
+        <label htmlFor="annualUnsharedAmount" className="block text-sm font-medium text-gray-700">
+          Annual Unshared Amount Description
+        </label>
+        <input
+          type="text"
+          name="annualUnsharedAmount"
+          id="annualUnsharedAmount"
+          required
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          value={formData.annualUnsharedAmount}
+          onChange={(e) => setFormData({ ...formData, annualUnsharedAmount: e.target.value })}
+        />
+      </div>
+
+      <div>
+        <label htmlFor="sourceUrl" className="block text-sm font-medium text-gray-700">
+          Source URL
+        </label>
+        <input
+          type="url"
+          name="sourceUrl"
+          id="sourceUrl"
+          required
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          value={formData.sourceUrl}
+          onChange={(e) => setFormData({ ...formData, sourceUrl: e.target.value })}
+        />
+      </div>
+
+      <div>
+        <h3 className="text-lg font-medium text-gray-900 mb-4">Plan Matrix</h3>
+        <div className="space-y-6">
+          {AGE_BRACKETS.map(ageBracket => (
+            <div key={ageBracket}>
+              <h4 className="text-md font-medium text-gray-700 mb-2">Age Bracket: {ageBracket}</h4>
+              {HOUSEHOLD_TYPES.map(householdType => (
+                <div key={`${ageBracket}-${householdType}`} className="mb-4">
+                  <h5 className="text-sm font-medium text-gray-600 mb-2">{householdType}</h5>
+                  <div className="grid grid-cols-3 gap-4">
+                    {IUA_OPTIONS.map(iua => (
+                      <div key={`${ageBracket}-${householdType}-${iua}`}>
+                        <label className="block text-xs text-gray-500 mb-1">
+                          Monthly Premium (${iua} IUA)
+                        </label>
+                        <input
+                          type="number"
+                          min="0"
+                          step="0.01"
+                          required
+                          className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                          value={
+                            formData.planMatrix
+                              .find(m => m.ageBracket === ageBracket && m.householdType === householdType)
+                              ?.costs.find(c => c.initialUnsharedAmount === iua)
+                              ?.monthlyPremium || 0
+                          }
+                          onChange={(e) => updateMatrixCost(
+                            ageBracket,
+                            householdType,
+                            iua,
+                            parseFloat(e.target.value)
+                          )}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
             </div>
           ))}
+        </div>
+      </div>
+
+      <div className="flex justify-end gap-4">
+        {onCancel && (
           <button
             type="button"
-            onClick={addFeature}
-            className="inline-flex items-center rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            onClick={onCancel}
+            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
-            Add Feature
+            Cancel
           </button>
-        </div>
-      </div>
-
-      <div className="relative flex items-start">
-        <div className="flex h-5 items-center">
-          <input
-            id="is_active"
-            name="is_active"
-            type="checkbox"
-            className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-            checked={formData.is_active}
-            onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })}
-          />
-        </div>
-        <div className="ml-3 text-sm">
-          <label htmlFor="is_active" className="font-medium text-gray-700">
-            Active
-          </label>
-          <p className="text-gray-500">Plan is currently available for new members</p>
-        </div>
-      </div>
-
-      <div className="flex justify-end gap-3">
-        <button
-          type="button"
-          onClick={onCancel}
-          className="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-        >
-          Cancel
-        </button>
+        )}
         <button
           type="submit"
           disabled={isSubmitting}
-          className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50"
+          className="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
           {isSubmitting ? 'Saving...' : initialData ? 'Update Plan' : 'Create Plan'}
         </button>

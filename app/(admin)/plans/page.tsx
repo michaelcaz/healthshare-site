@@ -1,34 +1,35 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { StatusBadge } from '@/components/ui/status-badge'
 import { LoadingState } from '@/components/ui/loading-state'
 import { ConfirmationDialog } from '@/components/ui/confirmation-dialog'
 import { PlanForm } from '@/components/ui/plan-form'
 import { SearchInput } from '@/components/ui/search-input'
+import { type PricingPlan } from '@/types/provider-plans'
 
 export default function PlansPage() {
   const [isLoading, setIsLoading] = useState(true)
-  const [plans, setPlans] = useState<any[]>([])
+  const [plans, setPlans] = useState<PricingPlan[]>([])
   const [searchQuery, setSearchQuery] = useState('')
-  const [filteredPlans, setFilteredPlans] = useState<any[]>([])
+  const [filteredPlans, setFilteredPlans] = useState<PricingPlan[]>([])
   const [showAddForm, setShowAddForm] = useState(false)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
-  const [selectedPlan, setSelectedPlan] = useState<any>(null)
+  const [selectedPlan, setSelectedPlan] = useState<PricingPlan | null>(null)
   const supabase = createClientComponentClient()
+
+  useEffect(() => {
+    loadPlans()
+  }, [])
 
   // Load plans
   const loadPlans = async () => {
     setIsLoading(true)
     const { data } = await supabase
-      .from('plans')
-      .select(`
-        *,
-        providers (
-          name
-        )
-      `)
+      .from('pricing_plans')
+      .select('*')
+      .order('providerName', { ascending: true })
     setPlans(data || [])
     setFilteredPlans(data || [])
     setIsLoading(false)
@@ -38,8 +39,8 @@ export default function PlansPage() {
   const handleSearch = (query: string) => {
     setSearchQuery(query)
     const filtered = plans.filter(plan => 
-      plan.name.toLowerCase().includes(query.toLowerCase()) ||
-      plan.providers?.name.toLowerCase().includes(query.toLowerCase())
+      plan.planName.toLowerCase().includes(query.toLowerCase()) ||
+      plan.providerName.toLowerCase().includes(query.toLowerCase())
     )
     setFilteredPlans(filtered)
   }
@@ -49,7 +50,7 @@ export default function PlansPage() {
     if (!selectedPlan) return
 
     await supabase
-      .from('plans')
+      .from('pricing_plans')
       .delete()
       .eq('id', selectedPlan.id)
 
@@ -75,6 +76,17 @@ export default function PlansPage() {
         />
       </div>
     )
+  }
+
+  // Get representative costs for a plan (middle tier, single member, 30-39 age bracket)
+  const getRepresentativeCosts = (plan: PricingPlan) => {
+    const costs = plan.planMatrix
+      .find(matrix => matrix.ageBracket === '30-39' && matrix.householdType === 'Member Only')
+      ?.costs.find(cost => cost.initialUnsharedAmount === 2500)
+    
+    return {
+      monthlyPremium: costs?.monthlyPremium || 0
+    }
   }
 
   return (
@@ -113,16 +125,16 @@ export default function PlansPage() {
                 <thead className="bg-gray-50">
                   <tr>
                     <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
-                      Name
+                      Plan Name
                     </th>
                     <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                       Provider
                     </th>
                     <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                      Monthly Cost
+                      Monthly Premium (Representative)
                     </th>
                     <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                      Status
+                      Max Coverage
                     </th>
                     <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6">
                       <span className="sr-only">Actions</span>
@@ -133,16 +145,16 @@ export default function PlansPage() {
                   {(searchQuery ? filteredPlans : plans).map((plan) => (
                     <tr key={plan.id}>
                       <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
-                        {plan.name}
+                        {plan.planName}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        {plan.providers?.name}
+                        {plan.providerName}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        ${plan.monthly_cost.toFixed(2)}
+                        ${getRepresentativeCosts(plan).monthlyPremium.toFixed(2)}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        <StatusBadge status={plan.is_active ? 'active' : 'inactive'} />
+                        {plan.maxCoverage}
                       </td>
                       <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                         <button
@@ -172,7 +184,7 @@ export default function PlansPage() {
         }}
         onConfirm={handleDelete}
         title="Delete Plan"
-        message={`Are you sure you want to delete ${selectedPlan?.name}? This action cannot be undone.`}
+        message={`Are you sure you want to delete ${selectedPlan?.planName}? This action cannot be undone.`}
         confirmText="Delete"
         cancelText="Cancel"
       />

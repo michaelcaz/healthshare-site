@@ -1,23 +1,24 @@
-import { render } from '@testing-library/react';
-import { screen } from '@testing-library/dom';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { PlanComparison } from '@/components/plans/plan-comparison';
+import { expect, describe, test } from 'vitest';
+import '@testing-library/jest-dom/vitest';
 
 describe('PlanComparison Component', () => {
   test('renders all providers', () => {
     render(
       <PlanComparison 
-        initialAgeBracket="30-39"
+        initialAgeBracket="18-29"
         initialHouseholdType="Member Only"
       />
     );
     
     // Check for provider names
-    expect(screen.getByText('Zion Healthshare')).toBeInTheDocument();
+    expect(screen.getAllByText('Zion Healthshare')).toHaveLength(6);
     expect(screen.getByText('CrowdHealth')).toBeInTheDocument();
   });
 
-  test('filters work correctly', () => {
+  test('filters work correctly', async () => {
     render(
       <PlanComparison 
         initialAgeBracket="30-39"
@@ -26,8 +27,8 @@ describe('PlanComparison Component', () => {
     );
 
     // Change age bracket
-    const ageSelect = screen.getByRole('combobox', { name: /age/i });
-    userEvent.selectOptions(ageSelect, '50-64');
+    const ageSelect = screen.getByRole('combobox', { name: /age bracket/i });
+    await userEvent.selectOptions(ageSelect, '50-64');
 
     // Verify prices updated
     const prices = screen.getAllByText(/\$\d+/);

@@ -1,19 +1,25 @@
 import { 
   type PricingPlan,
   type PlanCost,
-  type HouseholdType 
+  type HouseholdType,
+  type CoverageType
 } from '@/types/provider-plans'
 import { providerPlans } from '@/data/provider-plans'
 import { getAgeBracket } from '@/lib/plan-matching/age-brackets'
 
+const COVERAGE_TYPE_MAP: Record<CoverageType, HouseholdType> = {
+  'just_me': 'Member Only',
+  'me_spouse': 'Member & Spouse',
+  'me_kids': 'Member & Child(ren)',
+  'family': 'Member & Family'
+} as const
+
 function getHouseholdType(coverageType: string): HouseholdType {
-  switch (coverageType) {
-    case 'just_me': return 'Member Only';
-    case 'me_spouse': return 'Member & Spouse';
-    case 'me_kids': return 'Member & Child(ren)';
-    case 'family': return 'Member & Family';
-    default: throw new Error('Invalid coverage type');
+  const mappedType = COVERAGE_TYPE_MAP[coverageType as CoverageType]
+  if (!mappedType) {
+    throw new Error(`Invalid coverage type: ${coverageType}`)
   }
+  return mappedType
 }
 
 export function getPlanCost(

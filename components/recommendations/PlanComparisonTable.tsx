@@ -15,39 +15,52 @@ export function PlanComparisonTable({
   onClose,
   maxPlans = 3 
 }: PlanComparisonTableProps) {
+  // Get representative costs for each plan (middle tier, single member, 30-39 age bracket)
+  const getRepresentativeCosts = (plan: PlanRecommendation) => {
+    const costs = plan.plan.planMatrix
+      .find(matrix => matrix.ageBracket === '30-39' && matrix.householdType === 'Member Only')
+      ?.costs.find(cost => cost.initialUnsharedAmount === 2500)
+    
+    return {
+      monthlyPremium: costs?.monthlyPremium || 0,
+      initialUnsharedAmount: costs?.initialUnsharedAmount || 0,
+      annualCost: (costs?.monthlyPremium || 0) * 12
+    }
+  }
+
   const comparisonCategories = [
     {
       title: 'Monthly Costs',
       items: [
-        { label: 'Monthly Premium', key: 'monthly_cost' },
-        { label: 'Per-Incident Cost', key: 'incident_cost' },
-        { label: 'Annual Estimated', key: 'annual_cost' }
-      ]
-    },
-    {
-      title: 'Coverage Limits',
-      items: [
-        { label: 'Per Incident Maximum', key: 'per_incident_maximum' },
-        { label: 'Annual Maximum', key: 'annual_maximum' },
-        { label: 'Lifetime Maximum', key: 'lifetime_maximum' }
-      ]
-    },
-    {
-      title: 'Waiting Periods',
-      items: [
-        { label: 'Pre-existing Conditions', key: 'pre_existing_waiting_period' },
-        { label: 'Maternity', key: 'maternity_waiting_period' },
-        { label: 'Preventive Care', key: 'preventive_waiting_period' }
+        { 
+          label: 'Monthly Premium',
+          getValue: (plan: PlanRecommendation) => getRepresentativeCosts(plan).monthlyPremium
+        },
+        { 
+          label: 'Initial Unshared Amount',
+          getValue: (plan: PlanRecommendation) => getRepresentativeCosts(plan).initialUnsharedAmount
+        },
+        { 
+          label: 'Annual Estimated',
+          getValue: (plan: PlanRecommendation) => getRepresentativeCosts(plan).annualCost
+        }
       ]
     },
     {
       title: 'Coverage Details',
       items: [
-        { label: 'Doctor Visits', key: 'doctor_visits' },
-        { label: 'Prescriptions', key: 'prescription_coverage' },
-        { label: 'Emergency Care', key: 'emergency_coverage' },
-        { label: 'Surgery', key: 'surgery_coverage' },
-        { label: 'Maternity', key: 'maternity_coverage' }
+        { 
+          label: 'Maximum Coverage',
+          getValue: (plan: PlanRecommendation) => plan.plan.maxCoverage
+        },
+        { 
+          label: 'Annual Unshared Amount',
+          getValue: (plan: PlanRecommendation) => plan.plan.annualUnsharedAmount
+        },
+        { 
+          label: 'Provider Network',
+          getValue: (plan: PlanRecommendation) => `${plan.plan.providerName} Network`
+        }
       ]
     }
   ]
@@ -73,7 +86,7 @@ export function PlanComparisonTable({
               <Badge className="mb-2">
                 {plan.ranking === 1 ? 'Top Match' : `Match #${plan.ranking}`}
               </Badge>
-              <h4 className="font-medium">{plan.plan.name}</h4>
+              <h4 className="font-medium">{plan.plan.planName}</h4>
               <Button
                 variant="ghost"
                 size="sm"
@@ -93,11 +106,11 @@ export function PlanComparisonTable({
               </div>
               
               {category.items.map((item) => (
-                <div key={item.key} className="contents">
+                <div key={item.label} className="contents">
                   <div className="p-2 border-b">{item.label}</div>
                   {selectedPlans.map((plan) => (
                     <div key={plan.plan.id} className="p-2 border-b">
-                      {formatValue(plan.plan[item.key as keyof typeof plan.plan])}
+                      {formatValue(item.getValue(plan))}
                     </div>
                   ))}
                 </div>

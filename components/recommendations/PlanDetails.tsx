@@ -1,5 +1,5 @@
 import { type PlanRecommendation } from './types'
-import { Building, Shield } from 'lucide-react'
+import { Building, Shield, DollarSign } from 'lucide-react'
 import React from 'react'
 
 interface PlanDetailsProps {
@@ -7,6 +7,11 @@ interface PlanDetailsProps {
 }
 
 export const PlanDetails: React.FC<PlanDetailsProps> = ({ plan }) => {
+  // Get representative costs (middle tier, single member, 30-39 age bracket)
+  const representativeCosts = plan.plan.planMatrix
+    .find(matrix => matrix.ageBracket === '30-39' && matrix.householdType === 'Member Only')
+    ?.costs.find(cost => cost.initialUnsharedAmount === 2500)
+
   return (
     <div className="space-y-8 p-6">
       {/* Provider Information */}
@@ -15,47 +20,61 @@ export const PlanDetails: React.FC<PlanDetailsProps> = ({ plan }) => {
         <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg">
           <Building className="h-5 w-5 text-blue-500 mt-0.5" />
           <div>
-            <div className="font-medium">{plan.plan.provider}</div>
+            <div className="font-medium">{plan.plan.providerName}</div>
             <div className="text-sm text-gray-600">
-              Plan Name: {plan.plan.name}
+              Plan Name: {plan.plan.planName}
             </div>
           </div>
         </div>
       </section>
 
-      {/* Coverage Maximums */}
+      {/* Coverage Details */}
       <section>
-        <h3 className="text-xl font-semibold mb-4">Coverage Maximums</h3>
+        <h3 className="text-xl font-semibold mb-4">Coverage Details</h3>
         <div className="grid gap-4">
           <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg">
             <Shield className="h-5 w-5 text-blue-500 mt-0.5" />
             <div>
-              <div className="font-medium">Annual Maximum</div>
+              <div className="font-medium">Maximum Coverage</div>
               <div className="text-sm text-gray-600">
-                ${plan.plan.annual_maximum.toLocaleString()} per year
+                {plan.plan.maxCoverage}
               </div>
             </div>
           </div>
           <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg">
             <Shield className="h-5 w-5 text-blue-500 mt-0.5" />
             <div>
-              <div className="font-medium">Per-Incident Maximum</div>
+              <div className="font-medium">Annual Unshared Amount</div>
               <div className="text-sm text-gray-600">
-                ${plan.plan.per_incident_maximum.toLocaleString()} per incident
+                {plan.plan.annualUnsharedAmount}
               </div>
             </div>
           </div>
-          {plan.plan.lifetime_maximum && (
-            <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg">
-              <Shield className="h-5 w-5 text-blue-500 mt-0.5" />
-              <div>
-                <div className="font-medium">Lifetime Maximum</div>
-                <div className="text-sm text-gray-600">
-                  ${plan.plan.lifetime_maximum.toLocaleString()}
-                </div>
+        </div>
+      </section>
+
+      {/* Cost Information */}
+      <section>
+        <h3 className="text-xl font-semibold mb-4">Representative Costs</h3>
+        <div className="grid gap-4">
+          <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg">
+            <DollarSign className="h-5 w-5 text-blue-500 mt-0.5" />
+            <div>
+              <div className="font-medium">Monthly Premium</div>
+              <div className="text-sm text-gray-600">
+                ${representativeCosts?.monthlyPremium.toLocaleString()} (based on 30-39 age bracket, single member)
               </div>
             </div>
-          )}
+          </div>
+          <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg">
+            <DollarSign className="h-5 w-5 text-blue-500 mt-0.5" />
+            <div>
+              <div className="font-medium">Initial Unshared Amount</div>
+              <div className="text-sm text-gray-600">
+                ${representativeCosts?.initialUnsharedAmount.toLocaleString()} per incident
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </div>

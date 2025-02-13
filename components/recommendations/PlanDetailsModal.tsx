@@ -32,7 +32,7 @@ export function PlanDetailsModal({ plan, isOpen, onClose }: PlanDetailsModalProp
       <div className="relative z-50 w-full max-w-4xl bg-white rounded-lg shadow-xl">
         <div className="flex justify-between items-center p-6 border-b">
           <div className="flex items-center gap-4">
-            <h2 className="text-2xl font-bold">{plan.plan.name}</h2>
+            <h2 className="text-2xl font-bold">{plan.plan.planName}</h2>
             <div className="flex items-center gap-2 bg-blue-500 text-white px-3 py-1 rounded-full">
               <Star className="h-4 w-4 fill-current" />
               <span className="font-medium">{Math.round(plan.score)}% Match</span>

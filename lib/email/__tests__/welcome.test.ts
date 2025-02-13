@@ -39,7 +39,8 @@ describe('sendWelcomeEmail', () => {
         headers: {
           'Content-Type': 'application/json',
           Authorization: 'Bearer test-api-key'
-        }
+        },
+        body: expect.stringContaining('"email":"test@example.com"')
       })
     )
   })
@@ -48,19 +49,22 @@ describe('sendWelcomeEmail', () => {
     process.env.CONVERTKIT_API_KEY = ''
     process.env.CONVERTKIT_WELCOME_SEQUENCE_ID = ''
 
-    await expect(
-      sendWelcomeEmail({
-        user: mockUser,
-        firstName: 'Test'
-      })
-    ).rejects.toThrow('Missing ConvertKit configuration')
+    const result = await sendWelcomeEmail({
+      user: mockUser,
+      firstName: 'Test'
+    })
+
+    expect(result).toBe(false)
   })
 
   it('retries on failure', async () => {
     ;(global.fetch as ReturnType<typeof vi.fn>)
       .mockRejectedValueOnce(new Error('Network error'))
       .mockRejectedValueOnce(new Error('Network error'))
-      .mockResolvedValueOnce({ ok: true, json: () => Promise.resolve({ subscription: { id: 123 } }) })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: () => Promise.resolve({ subscription: { id: 123 } })
+      })
 
     const result = await sendWelcomeEmail({
       user: mockUser,

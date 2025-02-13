@@ -1,12 +1,30 @@
-import { ProviderPlan, AgeBracket, HouseholdType, PlanCost, PricingPlan, providerPlans } from '../types/provider-plans';
+import { ProviderPlan, AgeBracket, HouseholdType, PlanCost, PricingPlan } from '../types/provider-plans';
+import { providerPlans } from '../data/provider-plans';
+
+function getMatchingAgeBracket(plan: PricingPlan, ageBracket: AgeBracket): string {
+  if (plan.ageRules.type === 'standard') {
+    return ageBracket;
+  }
+
+  // For custom age brackets, find the matching range
+  const age = parseInt(ageBracket.split('-')[0]);
+  if (plan.ageRules.type === 'custom' && plan.ageRules.customBrackets) {
+    const customBracket = plan.ageRules.customBrackets.ranges.find(
+      range => age >= range.min && age <= range.max
+    );
+    return customBracket?.bracket || ageBracket;
+  }
+  return ageBracket;
+}
 
 export function findPlanCosts(
   plan: PricingPlan,
   ageBracket: AgeBracket,
   householdType: HouseholdType
 ): PlanCost[] | undefined {
+  const matchingBracket = getMatchingAgeBracket(plan, ageBracket);
   const matrix = plan.planMatrix.find(
-    m => m.ageBracket === ageBracket && m.householdType === householdType
+    m => m.ageBracket === matchingBracket && m.householdType === householdType
   );
   return matrix?.costs;
 }

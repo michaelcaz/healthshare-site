@@ -2,10 +2,11 @@
 
 import { useState, useEffect } from 'react'
 import { type QuestionnaireResponse } from '@/types/questionnaire'
-import { samplePlans } from '@/data/sample-plans'
+import { providerPlans } from '@/data/provider-plans'
 import { getRecommendations } from '@/lib/recommendation/recommendations'
 import { type PlanRecommendation } from '@/lib/recommendation/recommendations'
 import { HeroRecommendation } from '@/components/recommendations/HeroRecommendation'
+import { type PlanCosts } from '@/components/recommendations/types'
 
 interface PlanRecommendationsProps {
   response: QuestionnaireResponse
@@ -18,7 +19,7 @@ export function PlanRecommendations({ response }: PlanRecommendationsProps) {
   useEffect(() => {
     const loadRecommendations = async () => {
       try {
-        const recs = await getRecommendations(samplePlans, response)
+        const recs = await getRecommendations(providerPlans, response)
         setRecommendations(recs)
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load recommendations')
@@ -47,9 +48,14 @@ export function PlanRecommendations({ response }: PlanRecommendationsProps) {
     matchScore: Math.round(topPlan.score)
   }
 
-  const heroCosts = {
-    monthly: topPlan.plan.monthly_cost,
-    incident: topPlan.plan.incident_cost
+  // Get the middle cost option (2500 IUA) for a single member in the 30-39 age bracket
+  const representativeCosts = topPlan.plan.planMatrix
+    .find(matrix => matrix.ageBracket === '30-39' && matrix.householdType === 'Member Only')
+    ?.costs.find(cost => cost.initialUnsharedAmount === 2500)
+
+  const heroCosts: PlanCosts = {
+    monthlyPremium: representativeCosts?.monthlyPremium || 0,
+    initialUnsharedAmount: representativeCosts?.initialUnsharedAmount || 0
   }
 
   return (
@@ -73,24 +79,30 @@ export function PlanRecommendations({ response }: PlanRecommendationsProps) {
       />
 
       <div className="grid gap-4 md:grid-cols-2 mt-6">
-        {recommendations.slice(1).map((rec) => (
-          <div key={rec.plan.id} className="bg-white p-4 rounded-lg shadow">
-            <h3 className="font-medium">{rec.plan.name}</h3>
-            <p className="text-sm text-gray-600 mt-1">{rec.plan.provider}</p>
-            <div className="mt-2">
-              <div className="text-lg font-semibold">${rec.plan.monthly_cost}/mo</div>
-              <div className="text-sm text-gray-500">
-                ${rec.plan.incident_cost} per incident
+        {recommendations.slice(1).map((rec) => {
+          const planCosts = rec.plan.planMatrix
+            .find(matrix => matrix.ageBracket === '30-39' && matrix.householdType === 'Member Only')
+            ?.costs.find(cost => cost.initialUnsharedAmount === 2500)
+
+          return (
+            <div key={rec.plan.id} className="bg-white p-4 rounded-lg shadow">
+              <h3 className="font-medium">{rec.plan.planName}</h3>
+              <p className="text-sm text-gray-600 mt-1">{rec.plan.providerName}</p>
+              <div className="mt-2">
+                <div className="text-lg font-semibold">${planCosts?.monthlyPremium || 0}/mo</div>
+                <div className="text-sm text-gray-500">
+                  ${planCosts?.initialUnsharedAmount || 0} per incident
+                </div>
+              </div>
+              <div className="mt-4">
+                <div className="text-sm font-medium">Match Score: {Math.round(rec.score)}%</div>
+                <div className="text-sm text-gray-500 mt-1">
+                  {rec.explanation[0]}
+                </div>
               </div>
             </div>
-            <div className="mt-4">
-              <div className="text-sm font-medium">Match Score: {Math.round(rec.score)}%</div>
-              <div className="text-sm text-gray-500 mt-1">
-                {rec.explanation[0]}
-              </div>
-            </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
 
       {error && (
