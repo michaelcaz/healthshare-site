@@ -46,7 +46,7 @@ const nextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
   // Enable static exports for static pages
-  output: 'standalone',
+  // output: 'standalone', // Commented out for Vercel deployment
 }
 
 export default withSentryConfig(nextConfig, {
