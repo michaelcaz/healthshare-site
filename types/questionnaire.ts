@@ -51,4 +51,5 @@ export interface QuestionnaireResponse {
   medical_conditions: string[]
   annual_healthcare_spend: string
   zip_code: string
+  provider_preference?: string
 }

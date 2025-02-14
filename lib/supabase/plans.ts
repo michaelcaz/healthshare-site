@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/client'
+import { getClientInstance } from '@/lib/supabase/client'
 
 interface Plan {
   id: string
@@ -11,7 +11,7 @@ interface Plan {
 } 
 
 export async function getAllPlans(): Promise<Plan[]> {
-  const supabase = createClient()
+  const supabase = getClientInstance()
   const { data, error } = await supabase
     .from('plans')
     .select('*')

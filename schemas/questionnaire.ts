@@ -7,7 +7,6 @@ export const questionnaireSchema = z.object({
   iua_preference: z.enum(['1000', '2500', '5000']).default('1000'),
   pregnancy: z.boolean().default(false),
   pre_existing: z.boolean().default(false),
-  prescription_needs: z.string().default(''),
   provider_preference: z.string().default(''),
   state: z.string().default(''),
   zip: z.string(),

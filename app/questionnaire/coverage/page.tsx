@@ -100,7 +100,6 @@ export default function CoveragePage() {
         iua_preference: '1000',
         pregnancy: false,
         pre_existing: false,
-        prescription_needs: '',
         provider_preference: '',
         state: basicInfo.state || '',
         expense_preference: data.expense_preference || 'lower_monthly',

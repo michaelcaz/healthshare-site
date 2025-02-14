@@ -1,3 +1,7 @@
+// This file configures the initialization of Sentry on the client.
+// The config you add here will be used whenever a users loads a page in their browser.
+// https://docs.sentry.io/platforms/javascript/guides/nextjs/
+
 import * as Sentry from '@sentry/nextjs'
 
 Sentry.init({
@@ -11,11 +15,12 @@ Sentry.init({
 
   // Performance Monitoring
   integrations: [
-    new Sentry.BrowserTracing({
-      // Set `tracePropagationTargets` to control for which URLs distributed tracing should be enabled
-      tracePropagationTargets: ['localhost', /^https:\/\/healthshare\.com/],
+    Sentry.browserProfilingIntegration(),
+    Sentry.replayIntegration({
+      // Additional Replay configuration goes here
+      maskAllText: true,
+      blockAllMedia: true,
     }),
-    new Sentry.Replay(),
   ],
 
   // Session Replay

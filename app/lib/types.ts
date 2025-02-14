@@ -14,7 +14,6 @@ interface QuestionnaireData {
   };
   coverage?: {
     expense_preference: string;
-    prescription_needs: string;
     doctor_visits: string;
   };
 } 
