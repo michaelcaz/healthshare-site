@@ -9,7 +9,8 @@ import { ProgressIndicator } from '@/components/questionnaire/progress-indicator
 import { useState } from 'react';
 import { InfoIcon } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
-import { QuestionnaireResponse, QuestionnaireData } from '@/lib/types';
+import { QuestionnaireResponse } from '@/types/questionnaire';
+import { QuestionnaireData } from '@/lib/types';
 import { saveQuestionnaireResponse } from '@/lib/actions/questionnaire';
 
 const coverageSchema = z.object({
@@ -93,14 +94,12 @@ export default function CoveragePage() {
                        basicInfo.coverage_type === 'me_spouse' ? 2 :
                        basicInfo.coverage_type === 'me_kids' ? 2 : 4,
         coverage_type: basicInfo.coverage_type as 'just_me' | 'me_spouse' | 'me_kids' | 'family',
-        zip: basicInfo.zipCode,
         zip_code: basicInfo.zipCode,
         
         // Optional fields with defaults
         iua_preference: '1000',
         pregnancy: false,
         pre_existing: false,
-        provider_preference: '',
         state: basicInfo.state || '',
         expense_preference: data.expense_preference || 'lower_monthly',
         pregnancy_planning: 'no',

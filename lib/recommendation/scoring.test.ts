@@ -21,7 +21,7 @@ describe('calculatePlanScore', () => {
     zip_code: '12345'
   }
 
-  const mockResponse = {
+  const mockQuestionnaire = {
     age: 35,
     household_size: 1,
     coverage_type: 'just_me',
@@ -35,7 +35,7 @@ describe('calculatePlanScore', () => {
     medical_conditions: [],
     annual_healthcare_spend: 'less_1000',
     zip_code: '75001'
-  };
+  } as const;
 
   it('returns valid score structure', async () => {
     const plan = providerPlans[0]

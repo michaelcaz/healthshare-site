@@ -1,13 +1,15 @@
 'use client'
 
 import { SelectedPlansProvider } from '@/components/recommendations/SelectedPlansContext'
-import { RecommendationsLayout } from '@/components/recommendations/RecommendationsLayout'
+import { RecommendationsLayout } from '@/components/recommendations'
 import { getQuestionnaireResponse } from '@/lib/utils/storage'
 import { getRecommendations } from '@/lib/recommendation/recommendations'
 import { providerPlans } from '@/data/provider-plans'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { QuestionnaireResponse } from '@/lib/types'
+import { PlanRecommendation } from '@/lib/recommendation/recommendations'
+import { toast } from '@/components/ui/use-toast'
+import { QuestionnaireResponse } from '@/types/questionnaire'
 
 export default function RecommendationsPage() {
   const router = useRouter()

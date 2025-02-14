@@ -1,4 +1,4 @@
-import { QuestionnaireResponse } from '@/lib/types'
+import { QuestionnaireResponse } from '@/types/questionnaire'
 import { questionnaireSchema } from '@/schemas/questionnaire'
 
 const STORAGE_KEY = 'questionnaire-data'

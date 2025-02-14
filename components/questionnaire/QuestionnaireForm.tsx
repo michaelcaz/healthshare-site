@@ -9,7 +9,7 @@ import { TrustBadges } from '@/components/ui/TrustBadges';
 import { useRouter } from 'next/navigation';
 import { saveQuestionnaireResponse } from '@/lib/actions/questionnaire';
 import { useToast } from '@/components/ui/toast';
-import { QuestionnaireResponse } from '@/lib/types';
+import { QuestionnaireResponse } from '@/types/questionnaire';
 import { AgeBracket, HouseholdType } from '@/types/provider-plans';
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
@@ -44,7 +44,7 @@ const basicInfoSchema = z.object({
     required_error: 'Please select an option'
   }),
   pregnancy_planning: z.enum(['yes', 'no', 'maybe']).optional(),
-  expense_preference: z.enum(['lower_monthly', 'balanced', 'higher_monthly'], {
+  expense_preference: z.enum(['lower_monthly', 'higher_monthly'], {
     required_error: 'Please select a preferred way to handle medical expenses'
   }),
   iua_preference: z.enum(['1000', '2500', '5000'], {
@@ -153,7 +153,6 @@ const renderFormControl = (fieldName: string, field: any, watchFields?: Record<s
             </SelectTrigger>
             <SelectContent className="z-50 bg-white" position="popper" sideOffset={5}>
               <SelectItem value="lower_monthly">Lower monthly cost, higher out-of-pocket</SelectItem>
-              <SelectItem value="balanced">Balanced monthly and out-of-pocket costs</SelectItem>
               <SelectItem value="higher_monthly">Higher monthly cost, lower out-of-pocket</SelectItem>
             </SelectContent>
           </Select>
@@ -211,7 +210,7 @@ export const QuestionnaireForm = () => {
       pre_existing: undefined,
       pregnancy: undefined,
       pregnancy_planning: undefined,
-      expense_preference: undefined,
+      expense_preference: undefined as 'lower_monthly' | 'higher_monthly' | undefined,
       iua_preference: undefined,
       annual_healthcare_spend: undefined
     },
@@ -273,7 +272,7 @@ export const QuestionnaireForm = () => {
         age: parseInt(data.oldestAge),
         household_size: data.coverage_type === 'just_me' ? 1 : 2,
         coverage_type: data.coverage_type,
-        zip: data.zipCode,
+        zip_code: data.zipCode,
         // Set defaults for required fields
         iua_preference: data.iua_preference,
         pregnancy: data.pregnancy === 'yes',
@@ -282,8 +281,7 @@ export const QuestionnaireForm = () => {
         expense_preference: data.expense_preference,
         pregnancy_planning: data.pregnancy_planning || 'no',
         medical_conditions: [],
-        annual_healthcare_spend: data.annual_healthcare_spend,
-        zip_code: data.zipCode
+        annual_healthcare_spend: data.annual_healthcare_spend
       };
 
       const result = await saveQuestionnaireResponse(response);

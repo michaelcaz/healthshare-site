@@ -7,14 +7,12 @@ export const questionnaireSchema = z.object({
   iua_preference: z.enum(['1000', '2500', '5000']).default('1000'),
   pregnancy: z.boolean().default(false),
   pre_existing: z.boolean().default(false),
-  provider_preference: z.string().default(''),
   state: z.string().default(''),
-  zip: z.string(),
-  expense_preference: z.enum(['lower_monthly', 'balanced', 'higher_monthly']).default('balanced'),
+  zip_code: z.string(),
+  expense_preference: z.enum(['lower_monthly', 'higher_monthly']).default('lower_monthly'),
   pregnancy_planning: z.enum(['yes', 'no', 'maybe']).default('no'),
   medical_conditions: z.array(z.string()).default([]),
-  annual_healthcare_spend: z.string().default(''),
-  zip_code: z.string()
+  annual_healthcare_spend: z.string().default('')
 })
 
 export type QuestionnaireData = z.infer<typeof questionnaireSchema>

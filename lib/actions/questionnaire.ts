@@ -1,7 +1,7 @@
 'use server'
 
 import { cookies } from 'next/headers'
-import { QuestionnaireResponse } from '@/lib/types'
+import { QuestionnaireResponse } from '@/types/questionnaire'
 import { questionnaireSchema } from '@/schemas/questionnaire'
 
 const QUESTIONNAIRE_COOKIE = 'questionnaire-data'

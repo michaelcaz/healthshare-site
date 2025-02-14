@@ -6,21 +6,19 @@ import { providerPlans } from '@/data/provider-plans';
 
 describe('Plan Recommendations Integration', () => {
   const baseQuestionnaire: QuestionnaireResponse = {
-    age: 30,
+    age: 35,
     household_size: 1,
-    coverage_type: 'just_me' as const,
-    iua_preference: '1000' as '1000' | '2500' | '5000',
+    coverage_type: 'just_me',
+    iua_preference: '1000',
     pregnancy: false,
     pre_existing: false,
-    prescription_needs: '',
-    provider_preference: '',
-    state: '',
-    zip: '12345',
+    state: 'TX',
+    zip: '75001',
     expense_preference: 'lower_monthly',
     pregnancy_planning: 'no',
     medical_conditions: [],
     annual_healthcare_spend: 'less_1000',
-    zip_code: '12345'
+    zip_code: '75001'
   };
 
   const planMatcher = new PlanMatchingService(providerPlans);

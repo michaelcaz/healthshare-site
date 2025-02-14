@@ -3,7 +3,7 @@
 import { type RecommendationsProps, type PlanRecommendation } from './types'
 import { HeroRecommendation } from './HeroRecommendation'
 import { getPlanCost } from '@/lib/utils/plan-costs'
-import { type QuestionnaireResponse } from '../../lib/types'
+import { type QuestionnaireResponse } from '@/types/questionnaire'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { useSelectedPlans } from './SelectedPlansContext'
@@ -68,7 +68,7 @@ export function RecommendationsLayout({
         topPlan.plan.id,
         questionnaire.age,
         questionnaire.coverage_type,
-        questionnaire.iua_preference as '1000' | '2500' | '5000'
+        questionnaire.iua_preference
       )
       return costs || { monthlyPremium: 0, initialUnsharedAmount: 0 }
     } catch (error) {

@@ -1,6 +1,4 @@
-import { QuestionnaireResponse as BaseResponse } from '@/types/questionnaire'
-
-export type QuestionnaireResponse = BaseResponse
+import { QuestionnaireResponse } from '@/types/questionnaire';
 
 export interface QuestionnaireData {
   basicInfo?: {
@@ -12,12 +10,15 @@ export interface QuestionnaireData {
     currentPremium?: string;
   };
   health?: {
-    preExistingConditions?: string;
-    currentlyPregnant?: string;
-    planningPregnancy?: string;
+    preExistingConditions: string;
+    currentlyPregnant: string;
+    planningPregnancy: string;
   };
   coverage?: {
-    expense_preference?: 'lower_monthly' | 'higher_monthly';
-    annual_healthcare_spend?: 'less_1000' | '1000_5000' | 'more_5000';
+    expense_preference: string;
+    doctor_visits: string;
   };
-} 
+}
+
+// Re-export QuestionnaireResponse for backward compatibility
+export type { QuestionnaireResponse }; 

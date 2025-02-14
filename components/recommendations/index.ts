@@ -1,6 +1,8 @@
-import { type QuestionnaireResponse } from '@/lib/types'
+import { type QuestionnaireResponse } from '@/types/questionnaire'
 import { type PlanRecommendation } from '@/lib/recommendation/recommendations'
 import { type HealthsharePlan } from '@/types/plans'
+
+export { RecommendationsLayout } from './RecommendationsLayout'
 
 // Main container
 export interface RecommendationsProps {

@@ -45,11 +45,9 @@ export interface QuestionnaireResponse {
   pregnancy: boolean
   pre_existing: boolean
   state: string
-  zip: string
   expense_preference: 'lower_monthly' | 'balanced' | 'higher_monthly'
   pregnancy_planning: 'yes' | 'no' | 'maybe'
   medical_conditions: string[]
   annual_healthcare_spend: string
   zip_code: string
-  provider_preference?: string
 }

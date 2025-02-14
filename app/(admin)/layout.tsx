@@ -53,6 +53,12 @@ export default async function AdminLayout({
             >
               Analytics
             </Link>
+            <Link
+              href="/admin/studio"
+              className="text-sm font-medium transition-colors hover:text-primary"
+            >
+              Studio
+            </Link>
           </nav>
         </div>
       </div>

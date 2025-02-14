@@ -1,5 +1,5 @@
 import { saveQuestionnaireResponse as saveResponse, getQuestionnaireResponse as getResponse } from './actions/questionnaire'
-import { QuestionnaireResponse } from '@/lib/types'
+import { QuestionnaireResponse } from '@/types/questionnaire'
 import { questionnaireSchema } from '@/schemas/questionnaire'
 import { z } from 'zod'
 import { providerPlans, EligiblePlan, HouseholdType } from '@/types/provider-plans'
