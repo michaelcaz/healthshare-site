@@ -2,9 +2,14 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { createBrowserClient } from '@supabase/ssr'
 import { type QuestionnaireResponse } from '@/types/questionnaire'
 import { PlanRecommendations } from '@/components/questionnaire/plan-recommendations'
+
+const supabase = createBrowserClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+)
 
 export default function ResultsPage() {
   const router = useRouter()
@@ -15,7 +20,6 @@ export default function ResultsPage() {
   useEffect(() => {
     const fetchLatestResponse = async () => {
       try {
-        const supabase = createClientComponentClient()
         const { data, error } = await supabase
           .from('questionnaire_responses')
           .select('*')

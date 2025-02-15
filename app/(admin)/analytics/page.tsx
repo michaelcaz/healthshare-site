@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { createBrowserClient } from '@supabase/ssr'
 import { LoadingState } from '@/components/ui/loading-state'
 import { QuestionnaireChart } from '@/components/ui/questionnaire-chart'
 import { PlanRecommendationsChart } from '@/components/ui/plan-recommendations-chart'
@@ -21,7 +21,10 @@ export default function AnalyticsPage() {
     planRecommendations: 0,
     referralClicks: 0
   })
-  const supabase = createClientComponentClient()
+  const supabase = createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  )
 
   useEffect(() => {
     async function loadAnalytics() {

@@ -1,13 +1,18 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { createBrowserClient } from '@supabase/ssr'
 import { StatusBadge } from '@/components/ui/status-badge'
 import { LoadingState } from '@/components/ui/loading-state'
 import { ConfirmationDialog } from '@/components/ui/confirmation-dialog'
 import { PlanForm } from '@/components/ui/plan-form'
 import { SearchInput } from '@/components/ui/search-input'
 import { type PricingPlan } from '@/types/provider-plans'
+
+const supabase = createBrowserClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+)
 
 export default function PlansPage() {
   const [isLoading, setIsLoading] = useState(true)
@@ -17,7 +22,6 @@ export default function PlansPage() {
   const [showAddForm, setShowAddForm] = useState(false)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [selectedPlan, setSelectedPlan] = useState<PricingPlan | null>(null)
-  const supabase = createClientComponentClient()
 
   useEffect(() => {
     loadPlans()

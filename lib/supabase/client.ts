@@ -1,4 +1,4 @@
-import { createClientComponentClient, createServerComponentClient } from '@supabase/auth-helpers-nextjs'
+import { createBrowserClient, createServerClient } from '@supabase/ssr'
 import { createClient } from '@supabase/supabase-js'
 import { cookies } from 'next/headers'
 import type { Database } from '@/types/supabase'
@@ -7,18 +7,32 @@ const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
 // Client-side singleton
-let clientInstance: ReturnType<typeof createClientComponentClient<Database>> | null = null
+let clientInstance: ReturnType<typeof createBrowserClient<Database>> | null = null
 
 export function getClientInstance() {
   if (!clientInstance) {
-    clientInstance = createClientComponentClient<Database>()
+    clientInstance = createBrowserClient<Database>(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY
+    )
   }
   return clientInstance
 }
 
 // Server-side client (creates new instance per-request)
 export function getServerClient() {
-  return createServerComponentClient<Database>({ cookies })
+  const cookieStore = cookies()
+  return createServerClient<Database>(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY,
+    {
+      cookies: {
+        get(name: string) {
+          return cookieStore.get(name)?.value
+        },
+      },
+    }
+  )
 }
 
 // Admin client for background jobs
@@ -70,7 +84,7 @@ export async function withRetry<T>(
 
 // Helper for type-safe queries
 export function createTypedQuery(
-  client: ReturnType<typeof createClientComponentClient<Database>>,
+  client: ReturnType<typeof createBrowserClient<Database>>,
   table: keyof Database['auth']['Tables']
 ) {
   return client.from(table)
