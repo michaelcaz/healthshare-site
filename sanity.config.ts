@@ -18,6 +18,7 @@ export default defineConfig({
   basePath: '/admin/studio-cms',
   projectId,
   dataset,
+  apiVersion,
   // Add and edit the content schema in the './sanity/schemaTypes' folder
   schema,
   plugins: [
