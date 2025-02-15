@@ -1,11 +1,10 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { createBrowserClient } from '@supabase/ssr'
 import { Button } from '@/components/ui/button'
 import {
-  Form,
   FormControl,
   FormField,
   FormItem,
@@ -34,6 +33,7 @@ const supabase = createBrowserClient(
 
 export function AuthForm({ type }: AuthFormProps) {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -67,8 +67,11 @@ export function AuthForm({ type }: AuthFormProps) {
         if (error) throw error
       }
 
+      // Get the redirectedFrom parameter or default to '/'
+      const redirectTo = searchParams.get('redirectedFrom') || '/'
+      
       router.refresh()
-      router.push('/')
+      router.push(redirectTo)
     } catch (error) {
       setError(error instanceof Error ? error.message : 'An error occurred')
     } finally {
@@ -78,77 +81,63 @@ export function AuthForm({ type }: AuthFormProps) {
 
   return (
     <div className="grid gap-6">
-      <Form form={form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input placeholder="you@example.com" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Password</FormLabel>
-                <FormControl>
-                  <Input type="password" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          {error && (
-            <div className="text-sm text-red-500">
-              {error}
-            </div>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input placeholder="you@example.com" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
           )}
-          {type === 'login' && (
-            <div className="text-sm text-right">
-              <Link
-                href="/auth/reset-password"
-                className="text-primary hover:underline"
-              >
-                Forgot your password?
-              </Link>
-            </div>
+        />
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Password</FormLabel>
+              <FormControl>
+                <Input type="password" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
           )}
-          <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading ? (
-              'Loading...'
-            ) : type === 'login' ? (
-              'Sign In'
-            ) : (
-              'Sign Up'
-            )}
-          </Button>
-        </form>
-      </Form>
-      <div className="mt-4 text-center text-sm">
-        {type === 'login' ? (
-          <>
-            Don't have an account?{' '}
-            <Link href="/auth/signup" className="text-primary hover:underline">
-              Sign up
-            </Link>
-          </>
-        ) : (
-          <>
-            Already have an account?{' '}
-            <Link href="/auth/login" className="text-primary hover:underline">
-              Sign in
-            </Link>
-          </>
+        />
+
+        {error && (
+          <div className="text-sm text-red-500">
+            {error}
+          </div>
         )}
-      </div>
+
+        <Button
+          type="submit"
+          className="w-full"
+          disabled={isLoading}
+        >
+          {isLoading ? (
+            <div className="flex items-center space-x-2">
+              <span className="animate-spin">⌛</span>
+              <span>Please wait...</span>
+            </div>
+          ) : (
+            <span>{type === 'login' ? 'Sign in' : 'Sign up'}</span>
+          )}
+        </Button>
+
+        {type === 'login' && (
+          <div className="text-sm text-center">
+            <Link href="/auth/reset-password" className="text-primary hover:underline">
+              Forgot password?
+            </Link>
+          </div>
+        )}
+      </form>
     </div>
   )
 } 

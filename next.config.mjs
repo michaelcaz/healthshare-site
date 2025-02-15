@@ -19,6 +19,15 @@ const nextConfig = {
   headers: async () => {
     return [
       {
+        source: '/admin/studio-cms/:path*',
+        headers: [
+          {
+            key: 'X-Frame-Options',
+            value: 'SAMEORIGIN',
+          },
+        ],
+      },
+      {
         source: '/:path*',
         headers: [
           {
@@ -47,6 +56,24 @@ const nextConfig = {
   reactStrictMode: true,
   // Enable static exports for static pages
   // output: 'standalone', // Commented out for Vercel deployment
+  experimental: {
+    serverComponentsExternalPackages: ['next-sanity']
+  },
+  // Sanity Studio specific configuration
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      // Ensure we have the proper fallbacks for client-side
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        dns: false,
+        net: false,
+        tls: false,
+        crypto: false,
+      }
+    }
+    return config
+  },
 }
 
 export default withSentryConfig(nextConfig, {

@@ -2,6 +2,14 @@ import Link from 'next/link'
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Admin Dashboard',
+  description: 'Healthshare Plan Finder Admin Dashboard',
+}
+
+export const dynamic = 'force-dynamic'
 
 export default async function AdminLayout({
   children,
@@ -30,12 +38,12 @@ export default async function AdminLayout({
   
   return (
     <div className="min-h-screen bg-gray-100">
-      <div className="border-b">
+      <div className="border-b bg-white">
         <div className="container flex h-16 items-center">
           <h1 className="text-lg font-semibold">Admin Dashboard</h1>
           <nav className="flex items-center space-x-6 ml-6">
             <Link
-              href="/admin"
+              href="/admin/dashboard"
               className="text-sm font-medium transition-colors hover:text-primary"
             >
               Overview
@@ -65,7 +73,7 @@ export default async function AdminLayout({
               Analytics
             </Link>
             <Link
-              href="/admin/studio"
+              href="/admin/studio-cms"
               className="text-sm font-medium transition-colors hover:text-primary"
             >
               Studio
@@ -74,7 +82,7 @@ export default async function AdminLayout({
         </div>
       </div>
 
-      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+      <main className="container max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         {children}
       </main>
     </div>

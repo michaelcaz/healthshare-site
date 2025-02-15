@@ -1,7 +1,8 @@
 'use client'
 
 /**
- * This configuration is used to for the Sanity Studio that's mounted on the `/app/admin/[[...tool]]/page.tsx` route
+ * This configuration is used to for the Sanity Studio that's mounted on the `/admin/studio-cms` route
+ * The studio is wrapped in a route group (studio) to isolate its routing from the rest of the admin section
  */
 
 import {defineConfig} from 'sanity'
@@ -14,7 +15,7 @@ import {schema} from './sanity/schemaTypes'
 import {structure} from './sanity/structure'
 
 export default defineConfig({
-  basePath: '/(admin)/studio',
+  basePath: '/admin/studio-cms',
   projectId,
   dataset,
   // Add and edit the content schema in the './sanity/schemaTypes' folder

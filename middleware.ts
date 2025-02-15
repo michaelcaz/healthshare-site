@@ -4,7 +4,7 @@ import type { NextRequest } from 'next/server'
 import type { Database } from '@/types/supabase'
 
 export async function middleware(req: NextRequest) {
-  const res = NextResponse.next()
+  let res = NextResponse.next()
   const supabase = createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -43,6 +43,14 @@ export async function middleware(req: NextRequest) {
     max: 100 // max requests per window
   }
 
+  // Protected routes
+  if (req.nextUrl.pathname.startsWith('/admin') && !session) {
+    const redirectUrl = req.nextUrl.clone()
+    redirectUrl.pathname = '/auth/login'
+    redirectUrl.searchParams.set('redirectedFrom', req.nextUrl.pathname)
+    res = NextResponse.redirect(redirectUrl)
+  }
+
   // Add security headers
   const nonce = Buffer.from(crypto.randomUUID()).toString('base64')
   const cspHeader = `
@@ -59,40 +67,15 @@ export async function middleware(req: NextRequest) {
     upgrade-insecure-requests;
   `.replace(/\s{2,}/g, ' ').trim()
 
-  const response = NextResponse.next()
-  
-  response.headers.set('X-DNS-Prefetch-Control', 'on')
-  response.headers.set('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload')
-  response.headers.set('X-Frame-Options', 'DENY')
-  response.headers.set('X-Content-Type-Options', 'nosniff')
-  response.headers.set('Referrer-Policy', 'origin-when-cross-origin')
-  response.headers.set('Content-Security-Policy', cspHeader)
-  response.headers.set('X-Permitted-Cross-Domain-Policies', 'none')
+  // Apply security headers
+  res.headers.set('Content-Security-Policy', cspHeader)
+  res.headers.set('X-Content-Type-Options', 'nosniff')
+  res.headers.set('X-Frame-Options', 'DENY')
+  res.headers.set('X-XSS-Protection', '1; mode=block')
+  res.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
+  res.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()')
 
-  // Handle auth routes
-  if (req.nextUrl.pathname.startsWith('/api/auth')) {
-    return response
-  }
-
-  // Protected routes
-  if (
-    req.nextUrl.pathname.startsWith('/admin') ||
-    req.nextUrl.pathname.startsWith('/dashboard')
-  ) {
-    if (!session) {
-      return NextResponse.redirect(new URL('/auth/signin', req.url))
-    }
-    
-    // Check for admin role if accessing admin routes
-    if (
-      req.nextUrl.pathname.startsWith('/admin') &&
-      session.user.user_metadata.role !== 'admin'
-    ) {
-      return NextResponse.redirect(new URL('/', req.url))
-    }
-  }
-
-  return response
+  return res
 }
 
 export const config = {

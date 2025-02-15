@@ -1,11 +1,10 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { createBrowserClient } from '@supabase/ssr'
 import { Button } from '@/components/ui/button'
 import {
-  Form,
   FormControl,
   FormField,
   FormItem,
@@ -18,7 +17,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 
 const formSchema = z.object({
-  password: z.string().min(6, 'Password must be at least 6 characters'),
+  password: z.string().min(8, 'Password must be at least 8 characters'),
   confirmPassword: z.string(),
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords don't match",
@@ -32,34 +31,9 @@ const supabase = createBrowserClient(
 
 export function UpdatePasswordForm() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
-
-  // Check for access token on mount
-  useEffect(() => {
-    const checkSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession()
-      if (!session) {
-        // If no session, check for access token in URL
-        const params = new URLSearchParams(window.location.hash.substring(1))
-        const accessToken = params.get('access_token')
-        if (accessToken) {
-          const { error } = await supabase.auth.setSession({
-            access_token: accessToken,
-            refresh_token: params.get('refresh_token') || '',
-          })
-          if (error) {
-            setError('Invalid or expired reset link')
-            router.push('/auth/reset-password')
-          }
-        } else {
-          setError('No reset link found')
-          router.push('/auth/reset-password')
-        }
-      }
-    }
-    checkSession()
-  }, [router, supabase.auth])
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -75,10 +49,12 @@ export function UpdatePasswordForm() {
 
     try {
       const { error } = await supabase.auth.updateUser({
-        password: values.password,
+        password: values.password
       })
+
       if (error) throw error
 
+      // Successfully updated password
       router.push('/auth/login?message=Password updated successfully')
     } catch (error) {
       setError(error instanceof Error ? error.message : 'An error occurred')
@@ -88,7 +64,7 @@ export function UpdatePasswordForm() {
   }
 
   return (
-    <Form form={form}>
+    <div className="grid gap-6">
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <FormField
           control={form.control}
@@ -97,12 +73,17 @@ export function UpdatePasswordForm() {
             <FormItem>
               <FormLabel>New Password</FormLabel>
               <FormControl>
-                <Input type="password" {...field} />
+                <Input 
+                  type="password" 
+                  placeholder="Enter your new password"
+                  {...field} 
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
           name="confirmPassword"
@@ -110,21 +91,38 @@ export function UpdatePasswordForm() {
             <FormItem>
               <FormLabel>Confirm Password</FormLabel>
               <FormControl>
-                <Input type="password" {...field} />
+                <Input 
+                  type="password" 
+                  placeholder="Confirm your new password"
+                  {...field} 
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
+
         {error && (
           <div className="text-sm text-red-500">
             {error}
           </div>
         )}
-        <Button type="submit" className="w-full" disabled={loading}>
-          {loading ? 'Updating...' : 'Update Password'}
+
+        <Button
+          type="submit"
+          className="w-full"
+          disabled={loading}
+        >
+          {loading ? (
+            <div className="flex items-center space-x-2">
+              <span className="animate-spin">⌛</span>
+              <span>Updating password...</span>
+            </div>
+          ) : (
+            'Update Password'
+          )}
         </Button>
       </form>
-    </Form>
+    </div>
   )
 } 
