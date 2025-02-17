@@ -127,8 +127,8 @@ export const healthshareProviders: Record<string, ProviderPlan> = {
             additionalDetails: "All maternity requests will be subject to a $2,500 IUA no matter the household IUA"
           },
           waitingPeriod: {
-            months: 12,
-            details: "12 month waiting period before maternity is covered. Conception must occur after waiting period."
+            months: 6,
+            details: "6 month waiting period before maternity is covered. Conception must occur after waiting period."
           }
         },
         preExistingConditions: {
@@ -181,8 +181,8 @@ export const healthshareProviders: Record<string, ProviderPlan> = {
             additionalDetails: "As of April 1st, all maternity requests will be subject to a $2,500 IUA no matter the household IUA"
           },
           waitingPeriod: {
-            months: 12,
-            details: "12 month waiting period before maternity is covered"
+            months: 6,
+            details: "6 month waiting period before maternity is covered"
           }
         },
         preExistingConditions: {

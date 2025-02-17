@@ -5,7 +5,7 @@ import { EligiblePlan } from '@/types/provider-plans';
 import { providerPlans } from '@/data/provider-plans';
 
 describe('Plan Recommendations Integration', () => {
-  const baseQuestionnaire: QuestionnaireResponse = {
+  const sampleQuestionnaire: QuestionnaireResponse = {
     age: 35,
     household_size: 1,
     coverage_type: 'just_me',
@@ -13,32 +13,31 @@ describe('Plan Recommendations Integration', () => {
     pregnancy: false,
     pre_existing: false,
     state: 'TX',
-    zip: '75001',
+    zip_code: '75001',
     expense_preference: 'lower_monthly',
     pregnancy_planning: 'no',
     medical_conditions: [],
-    annual_healthcare_spend: 'less_1000',
-    zip_code: '75001'
-  };
+    visit_frequency: 'just_checkups'
+  }
 
   const planMatcher = new PlanMatchingService(providerPlans);
 
   it('correctly maps CrowdHealth age brackets', () => {
     // Test age 54 (should get CrowdHealth 18-54 bracket)
-    const youngResponse = { ...baseQuestionnaire, age: 54, coverage_type: 'just_me' as const };
+    const youngResponse = { ...sampleQuestionnaire, age: 54, coverage_type: 'just_me' as const };
     const youngPlans = planMatcher.findEligiblePlans(youngResponse);
     const crowdHealthYoung = youngPlans.find((p: EligiblePlan) => p.id === 'crowdhealth-basic');
     expect(crowdHealthYoung?.eligiblePrices[0].monthlyPremium).toEqual(195);
 
     // Test age 55 (should get CrowdHealth 55-64 bracket)
-    const olderResponse = { ...baseQuestionnaire, age: 55, coverage_type: 'just_me' as const };
+    const olderResponse = { ...sampleQuestionnaire, age: 55, coverage_type: 'just_me' as const };
     const olderPlans = planMatcher.findEligiblePlans(olderResponse);
     const crowdHealthOlder = olderPlans.find((p: EligiblePlan) => p.id === 'crowdhealth-basic');
     expect(crowdHealthOlder?.eligiblePrices[0].monthlyPremium).toEqual(335);
   });
 
   it('includes all eligible plans for standard age brackets', () => {
-    const response = { ...baseQuestionnaire, age: 35, coverage_type: 'just_me' as const };
+    const response = { ...sampleQuestionnaire, age: 35, coverage_type: 'just_me' as const };
     const plans = planMatcher.findEligiblePlans(response);
     
     // Should include both standard and custom bracket plans
@@ -48,14 +47,14 @@ describe('Plan Recommendations Integration', () => {
 
   it('correctly filters by household size', () => {
     // Single member
-    const singleResponse = { ...baseQuestionnaire, age: 30, household_size: 1, coverage_type: 'just_me' as const };
+    const singleResponse = { ...sampleQuestionnaire, age: 30, household_size: 1, coverage_type: 'just_me' as const };
     const singlePlans = planMatcher.findEligiblePlans(singleResponse);
     expect(singlePlans.every(p => 
       p.eligiblePrices.length > 0
     )).toBeTruthy();
 
     // Family
-    const familyResponse = { ...baseQuestionnaire, age: 30, household_size: 4, coverage_type: 'family' as const };
+    const familyResponse = { ...sampleQuestionnaire, age: 30, household_size: 4, coverage_type: 'family' as const };
     const familyPlans = planMatcher.findEligiblePlans(familyResponse);
     const crowdHealthFamily = familyPlans.find(p => p.id === 'crowdhealth-basic');
     expect(crowdHealthFamily?.eligiblePrices[0].monthlyPremium).toEqual(640); // CrowdHealth family rate
@@ -63,7 +62,7 @@ describe('Plan Recommendations Integration', () => {
 
   it('filters by IUA preference when specified', () => {
     const response = { 
-      ...baseQuestionnaire, 
+      ...sampleQuestionnaire, 
       age: 30, 
       household_size: 1,
       coverage_type: 'just_me' as const,

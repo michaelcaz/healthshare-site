@@ -5,20 +5,18 @@ import { healthshareProviders } from '@/types/provider-plans'
 
 describe('calculatePlanScore', () => {
   const sampleQuestionnaire = {
-    age: 25,
+    age: 35,
     household_size: 1,
     coverage_type: 'just_me' as const,
     iua_preference: '1000' as const,
     pregnancy: false,
+    pre_existing: false,
+    state: 'TX',
+    zip_code: '75001',
+    expense_preference: 'lower_monthly' as const,
     pregnancy_planning: 'no' as const,
     medical_conditions: [],
-    expense_preference: 'lower_monthly' as const,
-    annual_healthcare_spend: 'less_1000' as const,
-    pre_existing: false,
-    provider_preference: 'any',
-    state: 'TX',
-    zip: '12345',
-    zip_code: '12345'
+    visit_frequency: 'just_checkups' as const
   }
 
   const mockQuestionnaire = {
@@ -169,6 +167,54 @@ describe('calculatePlanScore', () => {
       const score = await calculatePlanScore(lowIUAPlan, highSpendQuestionnaire)
       const monthlyFactor = score.factors.find(f => f.factor === 'Monthly Cost')
       expect(monthlyFactor?.score).toBeDefined()
+    })
+  })
+
+  describe('visit frequency scoring', () => {
+    it('adjusts scores based on visit frequency for lower monthly preference', async () => {
+      const lowVisitQuestionnaire = {
+        ...sampleQuestionnaire,
+        visit_frequency: 'just_checkups' as const,
+        expense_preference: 'lower_monthly' as const
+      }
+      
+      const highIUAPlan = providerPlans.find(p => 
+        p.planMatrix.some(m => m.costs.some(c => c.initialUnsharedAmount === 5000))
+      )
+      if (!highIUAPlan) throw new Error('No high IUA plan found')
+      
+      const score = await calculatePlanScore(highIUAPlan, lowVisitQuestionnaire)
+      expect(score.total_score).toBeGreaterThan(50)
+    })
+
+    it('adjusts scores based on visit frequency for higher monthly preference', async () => {
+      const highVisitQuestionnaire = {
+        ...sampleQuestionnaire,
+        visit_frequency: 'monthly_plus' as const,
+        expense_preference: 'higher_monthly' as const
+      }
+      
+      const lowIUAPlan = providerPlans.find(p => 
+        p.planMatrix.some(m => m.costs.some(c => c.initialUnsharedAmount === 1000))
+      )
+      if (!lowIUAPlan) throw new Error('No low IUA plan found')
+      
+      const score = await calculatePlanScore(lowIUAPlan, highVisitQuestionnaire)
+      expect(score.total_score).toBeGreaterThan(50)
+    })
+
+    it('includes expected visit costs in annual cost calculations', async () => {
+      const highVisitQuestionnaire = {
+        ...sampleQuestionnaire,
+        visit_frequency: 'monthly_plus' as const
+      }
+      
+      const plan = providerPlans[0]
+      const score = await calculatePlanScore(plan, highVisitQuestionnaire)
+      
+      const annualCostFactor = score.factors.find(f => f.factor === 'Annual Cost')
+      expect(annualCostFactor?.explanation).toContain('including expected visits')
+      expect(annualCostFactor?.score).toBeDefined()
     })
   })
 }) 

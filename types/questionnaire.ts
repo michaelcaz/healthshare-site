@@ -48,6 +48,6 @@ export interface QuestionnaireResponse {
   expense_preference: 'lower_monthly' | 'balanced' | 'higher_monthly'
   pregnancy_planning: 'yes' | 'no' | 'maybe'
   medical_conditions: string[]
-  annual_healthcare_spend: string
   zip_code: string
+  visit_frequency: 'just_checkups' | 'few_months' | 'monthly_plus'
 }

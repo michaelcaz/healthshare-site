@@ -12,7 +12,7 @@ export const questionnaireSchema = z.object({
   expense_preference: z.enum(['lower_monthly', 'higher_monthly']).default('lower_monthly'),
   pregnancy_planning: z.enum(['yes', 'no', 'maybe']).default('no'),
   medical_conditions: z.array(z.string()).default([]),
-  annual_healthcare_spend: z.string().default('')
+  visit_frequency: z.enum(['just_checkups', 'few_months', 'monthly_plus']).default('just_checkups')
 })
 
 export type QuestionnaireData = z.infer<typeof questionnaireSchema>

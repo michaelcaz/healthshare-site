@@ -13,16 +13,16 @@ import { QuestionnaireResponse } from '@/types/questionnaire';
 import { QuestionnaireData } from '@/lib/types';
 import { saveQuestionnaireResponse } from '@/lib/actions/questionnaire';
 
-const coverageSchema = z.object({
+const formSchema = z.object({
   expense_preference: z.enum(['lower_monthly', 'higher_monthly']).optional().refine(val => val !== undefined, {
-    message: "Please answer this question to continue"
+    message: 'Please select your expense preference'
   }),
-  annual_healthcare_spend: z.enum(['less_1000', '1000_5000', 'more_5000']).optional().refine(val => val !== undefined, {
-    message: "Please answer this question to continue"
+  iua_preference: z.enum(['1000', '2500', '5000']).optional().refine(val => val !== undefined, {
+    message: 'Please select your IUA preference'
   })
 });
 
-type CoverageData = z.infer<typeof coverageSchema>;
+type FormData = z.infer<typeof formSchema>;
 
 const steps = [
   { label: 'Basic Info', route: '/questionnaire' },
@@ -42,15 +42,15 @@ export default function CoveragePage() {
   const router = useRouter();
   const [showExpenseInfo, setShowExpenseInfo] = useState(false);
   
-  const form = useForm<CoverageData>({
-    resolver: zodResolver(coverageSchema),
+  const form = useForm<FormData>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       expense_preference: undefined,
-      annual_healthcare_spend: undefined
+      iua_preference: undefined
     }
   });
 
-  const onSubmit = async (data: CoverageData) => {
+  const onSubmit = async (data: FormData) => {
     try {
       // 1. Get and validate basic info
       const existingData = localStorage.getItem('questionnaire-basic-info');
@@ -88,23 +88,17 @@ export default function CoveragePage() {
       
       // 4. Build response object with explicit type checking
       const response: QuestionnaireResponse = {
-        // Required fields with validation
-        age: Number(basicInfo.oldestAge),
-        household_size: basicInfo.coverage_type === 'just_me' ? 1 : 
-                       basicInfo.coverage_type === 'me_spouse' ? 2 :
-                       basicInfo.coverage_type === 'me_kids' ? 2 : 4,
-        coverage_type: basicInfo.coverage_type as 'just_me' | 'me_spouse' | 'me_kids' | 'family',
+        age: parseInt(basicInfo.oldestAge),
+        household_size: basicInfo.coverage_type === 'just_me' ? 1 : 2,
+        coverage_type: basicInfo.coverage_type,
         zip_code: basicInfo.zipCode,
-        
-        // Optional fields with defaults
-        iua_preference: '1000',
+        iua_preference: data.iua_preference || '1000',
         pregnancy: false,
         pre_existing: false,
-        state: basicInfo.state || '',
+        state: '',
         expense_preference: data.expense_preference || 'lower_monthly',
         pregnancy_planning: 'no',
-        medical_conditions: [],
-        annual_healthcare_spend: data.annual_healthcare_spend || 'less_1000'
+        medical_conditions: []
       };
 
       // 5. Update with health data if available
@@ -189,7 +183,7 @@ export default function CoveragePage() {
                   What is your typical annual healthcare spending?
                 </label>
                 <select
-                  {...form.register('annual_healthcare_spend')}
+                  {...form.register('iua_preference')}
                   className={cn(
                     "w-full p-3 rounded-lg",
                     "border border-gray-200",
@@ -199,9 +193,9 @@ export default function CoveragePage() {
                   )}
                 >
                   <option value="" className="text-gray-500">Select an option</option>
-                  <option value="less_1000">Less than $1,000</option>
-                  <option value="1000_5000">$1,000 - $5,000</option>
-                  <option value="more_5000">More than $5,000</option>
+                  <option value="1000">Less than $1,000</option>
+                  <option value="2500">$1,000 - $2,500</option>
+                  <option value="5000">More than $5,000</option>
                 </select>
               </div>
             </div>

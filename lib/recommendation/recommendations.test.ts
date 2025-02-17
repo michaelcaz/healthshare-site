@@ -5,20 +5,17 @@ import { healthshareProviders } from '@/types/provider-plans'
 
 describe('getRecommendations', () => {
   const sampleQuestionnaire = {
-    age: 25,
+    age: 35,
     household_size: 1,
     coverage_type: 'just_me' as const,
     iua_preference: '1000' as const,
     pregnancy: false,
-    pregnancy_planning: 'no' as const,
-    medical_conditions: [],
-    expense_preference: 'lower_monthly' as const,
-    annual_healthcare_spend: 'less_1000' as const,
     pre_existing: false,
-    provider_preference: 'any',
     state: 'TX',
-    zip: '12345',
-    zip_code: '12345'
+    zip_code: '75001',
+    expense_preference: 'lower_monthly' as const,
+    pregnancy_planning: 'no' as const,
+    medical_conditions: []
   }
 
   const mockQuestionnaire = {
@@ -37,6 +34,12 @@ describe('getRecommendations', () => {
     zip_code: '75001'
   } as const;
 
+  const pregnancyQuestionnaire = {
+    ...sampleQuestionnaire,
+    pregnancy: true,
+    pregnancy_planning: 'yes' as const
+  }
+
   it('returns recommendations in correct order', async () => {
     const recommendations = await getRecommendations(providerPlans, sampleQuestionnaire)
     
@@ -48,11 +51,6 @@ describe('getRecommendations', () => {
   })
 
   it('filters out non-viable plans', async () => {
-    const pregnancyQuestionnaire = {
-      ...sampleQuestionnaire,
-      pregnancy: true
-    }
-
     const recommendations = await getRecommendations(providerPlans, pregnancyQuestionnaire)
     
     expect(recommendations.every(r => r.score > 0)).toBe(true)

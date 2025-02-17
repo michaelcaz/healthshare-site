@@ -3,6 +3,7 @@ import { type QuestionnaireResponse } from '@/types/questionnaire'
 import { type PlanCost } from '@/types/plans'
 import { getPlanCost as getPlanCostUtil, getAllPlanCosts } from '@/lib/utils/plan-costs'
 import { type PricingPlan, healthshareProviders } from '@/types/provider-plans'
+import { calculateAnnualHealthcareCosts } from '@/lib/utils/visit-calculator'
 
 interface Plan {
   id: string
@@ -25,14 +26,6 @@ interface PlanScore {
     explanation: string
   }[]
 }
-
-type HealthcareSpend = 'less_1000' | '1000_5000' | 'more_5000';
-
-const expectedHealthcareCosts: Record<HealthcareSpend, number> = {
-  'less_1000': 500,
-  '1000_5000': 3000,
-  'more_5000': 7500
-};
 
 export async function calculatePlanScore(
   plan: PricingPlan,
@@ -66,82 +59,91 @@ export async function calculatePlanScore(
     }
   }
 
+  // Calculate expected annual healthcare costs based on visit frequency
+  const expectedAnnualCosts = calculateAnnualHealthcareCosts(
+    questionnaire.coverage_type,
+    questionnaire.visit_frequency
+  )
+
   // Monthly cost scoring (ranked)
   const monthlyRankedPlans = allPlanCosts.sort((a, b) => 
     (a.cost?.monthlyPremium ?? Infinity) - (b.cost?.monthlyPremium ?? Infinity)
   )
-  const monthlyPosition = monthlyRankedPlans.findIndex(p => p.plan.id === plan.id)
-  const monthlyScore = Math.max(50 - (monthlyPosition * 10), 10)
+  const lowestPremium = monthlyRankedPlans[0].cost?.monthlyPremium ?? 0
+  const currentPremium = planCost.monthlyPremium
+  const percentageAboveLowest = (currentPremium - lowestPremium) / lowestPremium
+  const monthlyScore = Math.max(50 - (percentageAboveLowest * 100), 10)
   
   factors.push({
     factor: 'Monthly Cost',
     score: monthlyScore,
-    explanation: `Monthly cost: $${planCost.monthlyPremium}${
-      monthlyPosition === 0 
+    explanation: `Monthly cost: $${currentPremium}${
+      currentPremium === lowestPremium 
         ? ' (lowest available rate)'
-        : ` ($${planCost.monthlyPremium - monthlyRankedPlans[0].cost!.monthlyPremium} more than lowest option)`
+        : ` (${Math.round(percentageAboveLowest * 100)}% more than lowest option at $${lowestPremium})`
     }`
   })
 
-  // Initial Unshared Amount scoring (ranked)
+  // Initial Unshared Amount scoring (percentage-based)
   const incidentRankedPlans = allPlanCosts.sort((a, b) => 
     (a.cost?.initialUnsharedAmount ?? Infinity) - (b.cost?.initialUnsharedAmount ?? Infinity)
   )
-  const incidentPosition = incidentRankedPlans.findIndex(p => p.plan.id === plan.id)
-  let incidentScore = Math.max(100 - (incidentPosition * 10), 50)
+  const lowestIUA = incidentRankedPlans[0].cost?.initialUnsharedAmount ?? 0
+  const currentIUA = planCost.initialUnsharedAmount
+  const percentageAboveLowestIUA = (currentIUA - lowestIUA) / lowestIUA
+  let incidentScore = Math.max(100 - (percentageAboveLowestIUA * 100), 50)
   
-  // Adjust score based on expense preference and IUA alignment
-  const iua = planCost.initialUnsharedAmount
+  // Adjust score based on expense preference, IUA alignment, and visit frequency
   switch (questionnaire.expense_preference) {
     case 'lower_monthly':
-      // Prefer higher IUA (5000)
-      if (iua === 5000) incidentScore *= 1.3;
-      else if (iua === 2500) incidentScore *= 1.1;
-      break;
-    case 'balanced':
-      // Prefer middle IUA (2500)
-      if (iua === 2500) incidentScore *= 1.3;
-      else if (iua === 1000 || iua === 5000) incidentScore *= 1.1;
+      // Prefer higher IUA (5000) for lower visit frequency
+      if (questionnaire.visit_frequency === 'just_checkups') {
+        if (currentIUA === 5000) incidentScore *= 1.3;
+        else if (currentIUA === 2500) incidentScore *= 1.1;
+      }
       break;
     case 'higher_monthly':
-      // Prefer lower IUA (1000)
-      if (iua === 1000) incidentScore *= 1.3;
-      else if (iua === 2500) incidentScore *= 1.1;
+      // Prefer lower IUA (1000) for higher visit frequency
+      if (questionnaire.visit_frequency === 'monthly_plus') {
+        if (currentIUA === 1000) incidentScore *= 1.3;
+        else if (currentIUA === 2500) incidentScore *= 1.1;
+      }
       break;
-  }
-
-  // Adjust monthly cost weight based on healthcare spend
-  let monthlyWeight = 1;
-  if (questionnaire.annual_healthcare_spend === 'less_1000') {
-    monthlyWeight = 1.2; // Increase importance of monthly cost for low spenders
-  } else if (questionnaire.annual_healthcare_spend === 'more_5000') {
-    monthlyWeight = 0.8; // Decrease importance of monthly cost for high spenders
   }
 
   factors.push({
     factor: 'Incident Cost',
     score: incidentScore,
-    explanation: `Incident cost: $${planCost.initialUnsharedAmount} (ranked ${incidentPosition + 1} lowest)`
+    explanation: `Initial Unshared Amount: $${currentIUA}${
+      currentIUA === lowestIUA 
+        ? ' (lowest available)'
+        : ` (${Math.round(percentageAboveLowestIUA * 100)}% more than lowest option at $${lowestIUA})`
+    }`
   })
 
-  // Annual Healthcare Spend Scoring
+  // Calculate total annual cost for comparison
   const annualCosts = allPlanCosts.map(p => ({
     id: p.plan.id,
-    totalCost: ((p.cost?.monthlyPremium ?? 0) * 12) + 
-      expectedHealthcareCosts[questionnaire.annual_healthcare_spend as HealthcareSpend]
+    totalCost: (p.cost?.monthlyPremium ?? 0) * 12 + expectedAnnualCosts
   }))
   
   // Sort plans by total annual cost (lowest to highest)
   const sortedByAnnualCost = annualCosts.sort((a, b) => a.totalCost - b.totalCost)
   
-  // Find this plan's position and calculate score
-  const position = sortedByAnnualCost.findIndex(p => p.id === plan.id)
-  const spendScore = Math.max(100 - (position * 10), 50)
+  // Calculate percentage-based score for annual costs
+  const lowestAnnualCost = sortedByAnnualCost[0].totalCost
+  const currentAnnualCost = (planCost.monthlyPremium * 12) + expectedAnnualCosts
+  const percentageAboveLowestAnnual = (currentAnnualCost - lowestAnnualCost) / lowestAnnualCost
+  const annualScore = Math.max(100 - (percentageAboveLowestAnnual * 100), 50)
 
   factors.push({
-    factor: 'Expected Annual Costs',
-    score: spendScore,
-    explanation: `Total annual cost estimate: $${(planCost.monthlyPremium * 12) + expectedHealthcareCosts[questionnaire.annual_healthcare_spend as HealthcareSpend]} (ranked ${position + 1} lowest based on your expected healthcare usage)`
+    factor: 'Annual Cost',
+    score: annualScore,
+    explanation: `Total annual cost (including expected visits): $${currentAnnualCost}${
+      currentAnnualCost === lowestAnnualCost
+        ? ' (lowest available)'
+        : ` (${Math.round(percentageAboveLowestAnnual * 100)}% more than lowest option at $${lowestAnnualCost})`
+    }`
   })
 
   // Pre-existing Conditions (Score based on waiting period length)

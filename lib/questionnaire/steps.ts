@@ -3,19 +3,37 @@ export const steps = [
     id: 'basic-info',
     title: 'Basic Information',
     description: 'Let\'s start with the basics',
-    fields: ['zipCode', 'coverage_type', 'oldestAge']
+    fields: ['age', 'household_size', 'coverage_type']
   },
   {
-    id: 'health-needs',
-    title: 'Health Needs',
-    description: 'Tell us about your healthcare needs',
-    fields: ['pre_existing', 'pregnancy', 'pregnancy_planning']
+    id: 'location',
+    title: 'Location',
+    description: 'Tell us about your location',
+    fields: ['state', 'zip_code']
+  },
+  {
+    id: 'health-status',
+    title: 'Health Status',
+    description: 'Tell us about your health status',
+    fields: ['pre_existing', 'medical_conditions']
+  },
+  {
+    id: 'pregnancy',
+    title: 'Pregnancy',
+    description: 'Tell us about your pregnancy',
+    fields: ['pregnancy', 'pregnancy_planning']
+  },
+  {
+    id: 'visit-frequency',
+    title: 'Expected Doctor Visits',
+    description: 'Help us understand your expected healthcare needs',
+    fields: ['visit_frequency']
   },
   {
     id: 'preferences',
-    title: 'Preferences',
-    description: 'Help us understand your preferences',
-    fields: ['expense_preference', 'iua_preference', 'annual_healthcare_spend']
+    title: 'Cost Preferences',
+    description: 'Help us understand your cost preferences',
+    fields: ['expense_preference', 'iua_preference']
   },
   {
     id: 'review',
@@ -23,6 +41,6 @@ export const steps = [
     description: 'Review your information',
     fields: []
   }
-]
+] as const
 
 export type QuestionnaireStep = typeof steps[number] 
