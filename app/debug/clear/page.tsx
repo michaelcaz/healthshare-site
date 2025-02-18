@@ -1,6 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import { Button } from '@/components/ui/button'
 
 function clearAllStorage() {
   if (typeof window === 'undefined') return
@@ -8,6 +9,7 @@ function clearAllStorage() {
   // Clear localStorage
   try {
     window.localStorage.clear()
+    console.log('✓ LocalStorage cleared')
   } catch (error) {
     console.warn('Error clearing localStorage:', error)
   }
@@ -15,6 +17,7 @@ function clearAllStorage() {
   // Clear sessionStorage
   try {
     window.sessionStorage.clear()
+    console.log('✓ SessionStorage cleared')
   } catch (error) {
     console.warn('Error clearing sessionStorage:', error)
   }
@@ -25,6 +28,7 @@ function clearAllStorage() {
       const [name] = cookie.split('=')
       document.cookie = `${name.trim()}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`
     })
+    console.log('✓ Cookies cleared')
   } catch (error) {
     console.warn('Error clearing cookies:', error)
   }
@@ -35,24 +39,15 @@ export default function DebugClearPage() {
 
   const clearAll = async () => {
     try {
-      // First clear client-side storage
+      // Clear client-side storage
       clearAllStorage()
+      console.log('✓ All storage cleared')
 
-      // Then call the server endpoint to clear server-side storage
-      const response = await fetch('/api/debug/clear-all', {
-        method: 'POST',
-      })
-      
-      if (!response.ok) {
-        throw new Error('Failed to clear server-side data')
-      }
-
-      // Redirect to questionnaire page
-      router.push('/questionnaire')
+      // Redirect to home page
+      router.push('/')
+      router.refresh()
     } catch (error) {
       console.error('Error clearing data:', error)
-      // Still redirect even if there's an error, as we've cleared client-side data
-      router.push('/questionnaire')
     }
   }
 
@@ -68,12 +63,12 @@ export default function DebugClearPage() {
           </p>
         </div>
         <div className="mt-8 space-y-6">
-          <button
+          <Button
             onClick={clearAll}
             className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
           >
             Clear All Data & Reload
-          </button>
+          </Button>
         </div>
       </div>
     </div>

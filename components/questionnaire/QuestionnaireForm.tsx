@@ -1,9 +1,9 @@
 'use client';
 
-import { useForm } from 'react-hook-form';
+import { useForm, UseFormReturn } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, forwardRef } from 'react';
 import { trackQuestionnaireStep, trackAbandonment } from '@/lib/analytics/funnel-tracking';
 import { TrustBadges } from '@/components/ui/TrustBadges';
 import { useRouter } from 'next/navigation';
@@ -20,23 +20,51 @@ import { steps } from '@/lib/questionnaire/steps';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { getVisitFrequencyOptions } from '@/lib/utils/visit-calculator';
+import Cookies from 'js-cookie';
 
-const STORAGE_KEY = 'questionnaire-basic-info';
+const COOKIE_KEY = 'questionnaire-form-data';
+const COOKIE_OPTIONS = {
+  expires: 1, // 1 day
+  path: '/',
+  sameSite: 'lax'
+};
 
 const formSchema = z.object({
-  age: z.number().min(18).max(120),
-  household_size: z.number().min(1).max(10),
-  coverage_type: z.enum(['just_me', 'me_spouse', 'me_kids', 'family']),
-  iua_preference: z.enum(['1000', '2500', '5000']),
-  pregnancy: z.boolean(),
-  pre_existing: z.boolean(),
-  state: z.string(),
-  zip_code: z.string(),
-  expense_preference: z.enum(['lower_monthly', 'higher_monthly']),
-  pregnancy_planning: z.enum(['yes', 'no', 'maybe']),
-  medical_conditions: z.array(z.string()),
-  visit_frequency: z.enum(['just_checkups', 'few_months', 'monthly_plus'])
-})
+  age: z.coerce.number().min(18, "Age must be at least 18").max(120, "Age must be 120 or less"),
+  household_size: z.coerce.number().min(1, "Household size must be at least 1").max(10, "Household size must be 10 or less"),
+  coverage_type: z.enum(['just_me', 'me_spouse', 'me_kids', 'family'], {
+    errorMap: () => ({ message: "Please select who needs coverage" })
+  }),
+  iua_preference: z.enum(['1000', '2500', '5000'], {
+    errorMap: () => ({ message: "Please select an IUA preference" })
+  }),
+  pregnancy: z.enum(['true', 'false'], {
+    errorMap: () => ({ message: "Please indicate if you are currently pregnant" })
+  }).transform(val => val === 'true'),
+  pre_existing: z.enum(['true', 'false'], {
+    errorMap: () => ({ message: "Please indicate if you have pre-existing conditions" })
+  }).transform(val => val === 'true'),
+  state: z.string().min(1, "Please enter your state"),
+  zip_code: z.string().min(5, "Please enter a valid ZIP code"),
+  expense_preference: z.enum(['lower_monthly', 'higher_monthly'], {
+    errorMap: () => ({ message: "Please select your cost preference" })
+  }),
+  pregnancy_planning: z.enum(['yes', 'no', 'maybe'], {
+    errorMap: () => ({ message: "Please indicate your pregnancy plans" })
+  }),
+  medical_conditions: z.union([
+    z.string(),
+    z.array(z.string())
+  ]).optional().transform(val => {
+    if (typeof val === 'string') {
+      return val.split(',').map(c => c.trim()).filter(Boolean);
+    }
+    return Array.isArray(val) ? val : [];
+  }),
+  visit_frequency: z.enum(['just_checkups', 'few_months', 'monthly_plus'], {
+    errorMap: () => ({ message: "Please select your expected visit frequency" })
+  })
+});
 
 const questionLabels: Record<keyof z.infer<typeof formSchema>, string> = {
   age: "What is your age?",
@@ -61,12 +89,25 @@ const getFieldLabel = (field: keyof z.infer<typeof formSchema>, watchFields?: Re
   return questionLabels[field] || field;
 }
 
+// Create a forwarded ref version of Select
+const ForwardedSelect = forwardRef((props: any, ref) => (
+  <Select {...props} />
+));
+ForwardedSelect.displayName = 'ForwardedSelect';
+
 const renderFormControl = (fieldName: string, field: any, watchFields?: Record<string, any>) => {
+  const fieldId = `form-field-${fieldName}`;
+  
   switch (fieldName) {
     case 'coverage_type':
       return (
         <div className="relative">
-          <Select onValueChange={field.onChange} defaultValue={field.value}>
+          <ForwardedSelect 
+            {...field}
+            id={fieldId}
+            name={fieldName}
+            onValueChange={field.onChange}
+          >
             <SelectTrigger className="w-full bg-white">
               <SelectValue placeholder="Select who needs coverage" />
             </SelectTrigger>
@@ -76,13 +117,15 @@ const renderFormControl = (fieldName: string, field: any, watchFields?: Record<s
               <SelectItem value="me_kids">Me + Kids</SelectItem>
               <SelectItem value="family">Family</SelectItem>
             </SelectContent>
-          </Select>
+          </ForwardedSelect>
         </div>
       )
     case 'age':
       return (
         <Input 
           {...field} 
+          id={fieldId}
+          name={fieldName}
           type="number" 
           min="18" 
           max="120" 
@@ -93,35 +136,50 @@ const renderFormControl = (fieldName: string, field: any, watchFields?: Record<s
     case 'pre_existing':
       return (
         <div className="relative">
-          <Select onValueChange={field.onChange} defaultValue={field.value}>
+          <ForwardedSelect 
+            {...field}
+            id={fieldId}
+            name={fieldName}
+            onValueChange={field.onChange}
+          >
             <SelectTrigger className="w-full bg-white">
               <SelectValue placeholder="Select an option" />
             </SelectTrigger>
             <SelectContent className="z-50 bg-white" position="popper" sideOffset={5}>
-              <SelectItem value="no">No</SelectItem>
-              <SelectItem value="yes">Yes</SelectItem>
+              <SelectItem value="false">No</SelectItem>
+              <SelectItem value="true">Yes</SelectItem>
             </SelectContent>
-          </Select>
+          </ForwardedSelect>
         </div>
       )
     case 'pregnancy':
       return (
         <div className="relative">
-          <Select onValueChange={field.onChange} defaultValue={field.value}>
+          <ForwardedSelect 
+            {...field}
+            id={fieldId}
+            name={fieldName}
+            onValueChange={field.onChange}
+          >
             <SelectTrigger className="w-full bg-white">
               <SelectValue placeholder="Select an option" />
             </SelectTrigger>
             <SelectContent className="z-50 bg-white" position="popper" sideOffset={5}>
-              <SelectItem value="no">No</SelectItem>
-              <SelectItem value="yes">Yes</SelectItem>
+              <SelectItem value="false">No</SelectItem>
+              <SelectItem value="true">Yes</SelectItem>
             </SelectContent>
-          </Select>
+          </ForwardedSelect>
         </div>
       )
     case 'pregnancy_planning':
       return (
         <div className="relative">
-          <Select onValueChange={field.onChange} defaultValue={field.value}>
+          <ForwardedSelect 
+            {...field}
+            id={fieldId}
+            name={fieldName}
+            onValueChange={field.onChange}
+          >
             <SelectTrigger className="w-full bg-white">
               <SelectValue placeholder="Select an option" />
             </SelectTrigger>
@@ -130,13 +188,18 @@ const renderFormControl = (fieldName: string, field: any, watchFields?: Record<s
               <SelectItem value="yes">Yes</SelectItem>
               <SelectItem value="maybe">Maybe</SelectItem>
             </SelectContent>
-          </Select>
+          </ForwardedSelect>
         </div>
       )
     case 'expense_preference':
       return (
         <div className="relative">
-          <Select onValueChange={field.onChange} defaultValue={field.value}>
+          <ForwardedSelect 
+            {...field}
+            id={fieldId}
+            name={fieldName}
+            onValueChange={field.onChange}
+          >
             <SelectTrigger className="w-full bg-white">
               <SelectValue placeholder="Select your preference" />
             </SelectTrigger>
@@ -144,13 +207,29 @@ const renderFormControl = (fieldName: string, field: any, watchFields?: Record<s
               <SelectItem value="lower_monthly">Lower monthly cost, higher out-of-pocket</SelectItem>
               <SelectItem value="higher_monthly">Higher monthly cost, lower out-of-pocket</SelectItem>
             </SelectContent>
-          </Select>
+          </ForwardedSelect>
         </div>
+      )
+    case 'medical_conditions':
+      return (
+        <Input 
+          {...field}
+          id={fieldId}
+          name={fieldName}
+          type="text"
+          placeholder="Enter medical conditions"
+          className="bg-white"
+        />
       )
     case 'iua_preference':
       return (
         <div className="relative">
-          <Select onValueChange={field.onChange} defaultValue={field.value}>
+          <ForwardedSelect 
+            {...field}
+            id={fieldId}
+            name={fieldName}
+            onValueChange={field.onChange}
+          >
             <SelectTrigger className="w-full bg-white">
               <SelectValue placeholder="Select your IUA preference" />
             </SelectTrigger>
@@ -159,7 +238,7 @@ const renderFormControl = (fieldName: string, field: any, watchFields?: Record<s
               <SelectItem value="2500">$2,500 IUA</SelectItem>
               <SelectItem value="5000">$5,000 IUA</SelectItem>
             </SelectContent>
-          </Select>
+          </ForwardedSelect>
         </div>
       )
     case 'visit_frequency':
@@ -168,7 +247,12 @@ const renderFormControl = (fieldName: string, field: any, watchFields?: Record<s
       
       return (
         <div className="relative">
-          <Select onValueChange={field.onChange} defaultValue={field.value}>
+          <ForwardedSelect 
+            {...field}
+            id={fieldId}
+            name={fieldName}
+            onValueChange={field.onChange}
+          >
             <SelectTrigger className="w-full bg-white">
               <SelectValue placeholder="Select visit frequency" />
             </SelectTrigger>
@@ -179,13 +263,23 @@ const renderFormControl = (fieldName: string, field: any, watchFields?: Record<s
                 </SelectItem>
               ))}
             </SelectContent>
-          </Select>
+          </ForwardedSelect>
         </div>
-      );
+      )
     default:
-      return <Input {...field} placeholder={`Enter ${fieldName}`} className="bg-white" />
+      return (
+        <Input 
+          {...field}
+          id={fieldId}
+          name={fieldName}
+          placeholder={`Enter ${fieldName}`}
+          className="bg-white"
+        />
+      )
   }
 }
+
+type FormValues = z.infer<typeof formSchema>;
 
 export const QuestionnaireForm = () => {
   const [startTime] = useState(Date.now());
@@ -195,8 +289,7 @@ export const QuestionnaireForm = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [formError, setFormError] = useState<string | null>(null);
   
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<FormValues>({
     defaultValues: {
       age: 0,
       household_size: 1,
@@ -211,7 +304,7 @@ export const QuestionnaireForm = () => {
       medical_conditions: [],
       visit_frequency: 'just_checkups'
     },
-    mode: 'onChange'
+    mode: 'onBlur'
   });
 
   const watchPregnancy = form.watch('pregnancy');
@@ -223,21 +316,48 @@ export const QuestionnaireForm = () => {
 
   // Load saved form data
   useEffect(() => {
-    try {
-      const savedData = getClientStorage(STORAGE_KEY);
-      if (savedData) {
-        Object.entries(savedData).forEach(([key, value]) => {
-          form.setValue(key as keyof z.infer<typeof formSchema>, value as string);
-        });
+    const loadSavedData = async () => {
+      setIsLoading(true);
+      try {
+        const savedData = Cookies.get(COOKIE_KEY);
+        if (savedData) {
+          try {
+            const parsedData = JSON.parse(savedData);
+            Object.entries(parsedData).forEach(([key, value]) => {
+              if (key in form.getValues()) {
+                form.setValue(key as keyof FormValues, value as any);
+              }
+            });
+          } catch (parseError) {
+            console.warn('Could not parse saved form data:', parseError);
+          }
+        }
+      } catch (error) {
+        console.warn('Error loading form data:', error);
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error) {
-      logError(error, {
-        component: 'QuestionnaireForm',
-        action: 'loadSavedData'
-      });
-    } finally {
-      setIsLoading(false);
-    }
+    };
+
+    loadSavedData();
+  }, [form]);
+
+  // Save form data when it changes
+  useEffect(() => {
+    const saveFormData = async () => {
+      try {
+        const formData = form.getValues();
+        Cookies.set(COOKIE_KEY, JSON.stringify(formData), COOKIE_OPTIONS);
+      } catch (error) {
+        console.warn('Could not save form data:', error);
+      }
+    };
+
+    const subscription = form.watch(() => {
+      saveFormData();
+    });
+
+    return () => subscription.unsubscribe();
   }, [form]);
 
   // Track questionnaire progress
@@ -254,57 +374,72 @@ export const QuestionnaireForm = () => {
     };
   }, [currentStep, isComplete, startTime]);
 
-  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+  const onSubmit = async (data: FormValues) => {
     if (isSubmitting) return;
+    
+    setIsSubmitting(true);
     setFormError(null);
     
     try {
-      setIsSubmitting(true);
-
-      // Save form data to client storage
-      setClientStorage(STORAGE_KEY, data);
-
-      // Transform to QuestionnaireResponse format
-      const response: QuestionnaireResponse = {
-        age: data.age,
-        household_size: data.household_size,
-        coverage_type: data.coverage_type,
-        zip_code: data.zip_code,
-        iua_preference: data.iua_preference,
-        pregnancy: data.pregnancy,
-        pre_existing: data.pre_existing,
-        state: data.state,
-        expense_preference: data.expense_preference,
-        pregnancy_planning: data.pregnancy_planning,
-        medical_conditions: data.medical_conditions,
-        visit_frequency: data.visit_frequency
-      };
-
-      const result = await saveQuestionnaireResponse(response);
+      // Validate current step fields only
+      const currentStepFields = step.fields as unknown as Array<keyof FormValues>;
+      const currentStepData = Object.fromEntries(
+        Object.entries(data).filter(([key]) => 
+          currentStepFields.includes(key as keyof FormValues)
+        )
+      );
       
-      if (!result?.success) {
-        throw new AppError('Failed to save response', {
-          component: 'QuestionnaireForm',
-          action: 'saveResponse',
-          data: response
-        });
+      const stepSchema = formSchema.pick(
+        currentStepFields.reduce((acc, field) => ({
+          ...acc,
+          [field]: true
+        }), {}) as Record<keyof FormValues, true>
+      );
+
+      const validationResult = stepSchema.safeParse(currentStepData);
+
+      if (!validationResult.success) {
+        const errorMessage = validationResult.error.errors
+          .map(err => err.message)
+          .join('. ');
+        throw new Error(errorMessage);
       }
 
-      setIsComplete(true);
-      router.push('/questionnaire/savings');
-    } catch (error) {
-      const errorMessage = getErrorMessage(error);
-      logError(error, {
-        component: 'QuestionnaireForm',
-        action: 'submitForm',
-        data: data
+      if (currentStep < steps.length - 1) {
+        setCurrentStep(prev => prev + 1);
+        setIsSubmitting(false);
+        return;
+      }
+
+      // On final step, validate entire form
+      const finalValidation = formSchema.safeParse(data);
+      if (!finalValidation.success) {
+        const errorMessage = finalValidation.error.errors
+          .map(err => err.message)
+          .join('. ');
+        throw new Error(errorMessage);
+      }
+
+      const transformedData = finalValidation.data;
+      const response = await saveQuestionnaireResponse(transformedData);
+      
+      if (!response.success) {
+        throw new Error(response.error || 'Failed to save questionnaire');
+      }
+      
+      trackQuestionnaireStep('QUESTIONNAIRE_COMPLETE', {
+        stepNumber: steps.length,
+        stepName: 'Complete',
       });
       
-      setFormError(errorMessage);
+      setIsComplete(true);
+      router.push('/recommendations');
+    } catch (error) {
+      setFormError(getErrorMessage(error));
       toast({
         title: 'Error',
-        description: errorMessage,
-        variant: 'destructive',
+        description: getErrorMessage(error),
+        variant: 'destructive'
       });
     } finally {
       setIsSubmitting(false);
@@ -337,12 +472,12 @@ export const QuestionnaireForm = () => {
               <h2 className="text-2xl font-semibold">{step.title}</h2>
               <p className="text-gray-600">{step.description}</p>
               
-              {/* Render form fields based on current step */}
               {step.fields.map(field => {
-                // Skip rendering pregnancy_planning if pregnancy is true
-                if (field === 'pregnancy_planning' && watchPregnancy === true) {
+                if (field === 'pregnancy_planning' && form.watch('pregnancy') === true) {
                   return null;
                 }
+                
+                const fieldId = `form-field-${field}`;
                 
                 return (
                   <FormField
@@ -351,12 +486,12 @@ export const QuestionnaireForm = () => {
                     name={field}
                     render={({ field: formField }) => (
                       <FormItem className="space-y-2">
-                        <FormLabel className="text-base">
+                        <FormLabel htmlFor={fieldId} className="text-base">
                           {getFieldLabel(field as keyof z.infer<typeof formSchema>, { coverage_type: form.watch('coverage_type') })}
                         </FormLabel>
                         <FormControl>
                           {renderFormControl(field, formField, { 
-                            pregnancy: watchPregnancy,
+                            pregnancy: form.watch('pregnancy'),
                             coverage_type: form.watch('coverage_type')
                           })}
                         </FormControl>
@@ -367,10 +502,14 @@ export const QuestionnaireForm = () => {
                 )
               })}
             </div>
-
+            
             <div className="flex justify-between mt-8">
               {currentStep > 0 && (
-                <Button onClick={() => setCurrentStep(prev => prev - 1)} variant="outline">
+                <Button 
+                  type="button"
+                  onClick={() => setCurrentStep(prev => prev - 1)} 
+                  variant="outline"
+                >
                   Previous
                 </Button>
               )}
@@ -379,8 +518,9 @@ export const QuestionnaireForm = () => {
                 type={currentStep === steps.length - 1 ? 'submit' : 'button'}
                 onClick={currentStep === steps.length - 1 ? undefined : () => setCurrentStep(prev => prev + 1)}
                 className="ml-auto"
+                disabled={isSubmitting}
               >
-                {currentStep === steps.length - 1 ? 'Submit' : 'Next'}
+                {isSubmitting ? 'Submitting...' : currentStep === steps.length - 1 ? 'Submit' : 'Next'}
               </Button>
             </div>
           </form>

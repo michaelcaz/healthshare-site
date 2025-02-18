@@ -51,29 +51,39 @@ export async function middleware(req: NextRequest) {
     res = NextResponse.redirect(redirectUrl)
   }
 
-  // Add security headers
-  const nonce = Buffer.from(crypto.randomUUID()).toString('base64')
+  // Add CSP headers
   const cspHeader = `
     default-src 'self';
-    script-src 'self' 'nonce-${nonce}' 'strict-dynamic' https: ${process.env.NODE_ENV === 'development' ? "'unsafe-eval'" : ''};
-    style-src 'self' 'unsafe-inline';
-    img-src 'self' blob: data: https:;
-    font-src 'self';
-    object-src 'none';
-    base-uri 'self';
+    script-src 'self' 'unsafe-eval' 'unsafe-inline' https://*.sentry.io https://*.launchdarkly.com;
+    style-src 'self' 'unsafe-inline' https://api.fontshare.com https://cdn.fontshare.com;
+    style-src-elem 'self' 'unsafe-inline' https://api.fontshare.com https://cdn.fontshare.com;
+    font-src 'self' data: https://api.fontshare.com https://cdn.fontshare.com;
+    img-src 'self' https://cdn.sanity.io https://lrwewkxwfgmzkvhozdin.supabase.co https://images.unsplash.com data: blob:;
+    connect-src 'self' 
+      https://lrwewkxwfgmzkvhozdin.supabase.co 
+      https://*.supabase.co 
+      https://api.fontshare.com 
+      https://cdn.fontshare.com
+      https://*.sentry.io
+      https://*.launchdarkly.com
+      https://events.launchdarkly.com
+      wss://*.supabase.co;
+    frame-ancestors 'self';
     form-action 'self';
-    frame-ancestors 'none';
-    block-all-mixed-content;
+    base-uri 'self';
+    object-src 'none';
+    worker-src 'self' blob:;
+    child-src 'self' blob:;
+    frame-src 'self';
     upgrade-insecure-requests;
-  `.replace(/\s{2,}/g, ' ').trim()
+  `.replace(/\s+/g, ' ').trim()
 
-  // Apply security headers
+  // Set security headers
   res.headers.set('Content-Security-Policy', cspHeader)
+  res.headers.set('X-Frame-Options', 'SAMEORIGIN')
   res.headers.set('X-Content-Type-Options', 'nosniff')
-  res.headers.set('X-Frame-Options', 'DENY')
+  res.headers.set('Referrer-Policy', 'origin-when-cross-origin')
   res.headers.set('X-XSS-Protection', '1; mode=block')
-  res.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
-  res.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()')
 
   return res
 }
@@ -81,13 +91,12 @@ export async function middleware(req: NextRequest) {
 export const config = {
   matcher: [
     /*
-     * Match all request paths except:
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
-     * - public folder
-     * - auth routes (login, signup, etc)
      */
-    '/((?!_next/static|_next/image|favicon.ico|public|auth).*)',
+    '/((?!api|_next/static|_next/image|favicon.ico).*)',
   ],
 } 

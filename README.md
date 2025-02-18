@@ -308,7 +308,6 @@ Navigation structure:
 
   - [ ] Comparison Features (In Progress - View Details Modal)
     - [x] Cost breakdown (monthly vs. per-incident)
-    - [ ] Medical Services tab content
     - [ ] Coverage Timeline tab content
     - [ ] Coverage highlights section
     - [ ] Consider moving action buttons to left sidebar
@@ -360,7 +359,6 @@ Navigation structure:
 - [ ] Implement FAQ system
 - [ ] Set up blog infrastructure
 - [ ] Create content preview system
-- [ ] Add search functionality
 - [ ] Implement SEO components
 - [ ] Create sitemap
 

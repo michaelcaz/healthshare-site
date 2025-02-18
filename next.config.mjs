@@ -7,6 +7,9 @@ const nextConfig = {
       'lrwewkxwfgmzkvhozdin.supabase.co', // For Supabase hosted images
     ],
     formats: ['image/avif', 'image/webp'],
+    dangerouslyAllowSVG: true,
+    contentDispositionType: 'attachment',
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
   typescript: {
     // During development, type errors won't fail the build
@@ -16,40 +19,26 @@ const nextConfig = {
     // During development, lint errors won't fail the build
     ignoreDuringBuilds: process.env.NODE_ENV === 'development',
   },
-  headers: async () => {
-    return [
-      {
-        source: '/admin/studio-cms/:path*',
-        headers: [
-          {
-            key: 'X-Frame-Options',
-            value: 'SAMEORIGIN',
-          },
-        ],
-      },
-      {
-        source: '/:path*',
-        headers: [
-          {
-            key: 'X-Frame-Options',
-            value: 'DENY',
-          },
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
-          },
-          {
-            key: 'Referrer-Policy',
-            value: 'origin-when-cross-origin',
-          },
-          {
-            key: 'X-XSS-Protection',
-            value: '1; mode=block',
-          },
-        ],
-      },
-    ]
-  },
+  headers: async () => [
+    {
+      source: '/:path*',
+      headers: [
+        {
+          key: 'Cross-Origin-Opener-Policy',
+          value: 'same-origin'
+        }
+      ],
+    },
+    {
+      source: '/admin/studio-cms/:path*',
+      headers: [
+        {
+          key: 'X-Frame-Options',
+          value: 'SAMEORIGIN',
+        }
+      ],
+    }
+  ],
   // Optimize production builds
   swcMinify: true,
   poweredByHeader: false,
@@ -72,6 +61,10 @@ const nextConfig = {
         crypto: false,
       }
     }
+    // Suppress punycode warning
+    config.ignoreWarnings = [
+      { module: /node_modules\/punycode/ }
+    ];
     return config
   },
 }

@@ -34,12 +34,6 @@ export const steps = [
     title: 'Cost Preferences',
     description: 'Help us understand your cost preferences',
     fields: ['expense_preference', 'iua_preference']
-  },
-  {
-    id: 'review',
-    title: 'Review',
-    description: 'Review your information',
-    fields: []
   }
 ] as const
 
