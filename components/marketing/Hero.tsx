@@ -25,35 +25,9 @@ export function Hero() {
   if (!mounted) return null;
 
   return (
-    <section className="relative min-h-[calc(100vh-6rem)] flex items-center justify-center overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 bg-background-warmer">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background-warmer/50 to-background/50" />
-      </div>
-
-      {/* Floating Elements */}
-      <div ref={parallaxRef} className="absolute inset-0 pointer-events-none">
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 0.1, y: 0 }}
-          transition={{ duration: 1 }}
-          className="absolute top-[10%] left-[15%] w-72 h-72 rounded-full bg-primary animate-float"
-        />
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 0.05, y: 0 }}
-          transition={{ duration: 1, delay: 0.2 }}
-          className="absolute top-[20%] right-[10%] w-96 h-96 rounded-full bg-accent animate-float"
-          style={{ animationDelay: '2s' }}
-        />
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 0.08, y: 0 }}
-          transition={{ duration: 1, delay: 0.4 }}
-          className="absolute bottom-[10%] left-[35%] w-48 h-48 rounded-full bg-primary-light animate-float"
-          style={{ animationDelay: '4s' }}
-        />
-      </div>
+    <section className="relative min-h-[calc(100vh-6rem)] flex items-center justify-center overflow-hidden bg-white">
+      {/* Decorative Circle */}
+      <div className="absolute left-[10%] top-[20%] w-[500px] h-[500px] rounded-full bg-[#FFF1EC] opacity-50 blur-3xl" />
 
       {/* Content */}
       <div className="relative container mx-auto px-4 py-16 flex flex-col lg:flex-row items-center gap-16">
@@ -65,8 +39,8 @@ export function Hero() {
           className="flex-1 text-center lg:text-left max-w-xl lg:max-w-none pt-8"
         >
           <h1 className="text-[3.5rem] leading-[1.1] font-bold mb-6 text-gray-warm">
-            Healthcare,{' '}
-            <span className="text-primary">simplified.</span>
+            It's not health insurance.{' '}
+            <span className="text-[#6366F1]">That's the point.</span>
           </h1>
           <p className="text-xl leading-relaxed text-gray-warm/80 mb-10 max-w-xl">
             Find the perfect healthcare sharing ministry plan for your needs. 

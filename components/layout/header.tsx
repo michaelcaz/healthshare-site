@@ -38,22 +38,22 @@ export function Header() {
             />
           </Link>
 
-          <nav className="hidden md:flex items-center space-x-10">
+          <nav className="hidden md:flex items-center gap-standard">
             <Link 
               href="/about"
-              className="text-base font-medium text-gray-warm/90 hover:text-gray-warm transition-colors"
+              className="text-lg font-medium text-gray-warm/90 hover:text-gray-warm transition-colors"
             >
               About
             </Link>
             <Link 
               href="/blog"
-              className="text-base font-medium text-gray-warm/90 hover:text-gray-warm transition-colors"
+              className="text-lg font-medium text-gray-warm/90 hover:text-gray-warm transition-colors"
             >
               Blog
             </Link>
             <Link 
               href="/what-is-healthshare"
-              className="text-base font-medium text-gray-warm/90 hover:text-gray-warm transition-colors"
+              className="text-lg font-medium text-gray-warm/90 hover:text-gray-warm transition-colors"
             >
               What's a Healthshare?
             </Link>
@@ -63,7 +63,7 @@ export function Header() {
             <motion.button
               whileHover={{ scale: 1.02, y: -1 }}
               whileTap={{ scale: 0.98 }}
-              className="hidden md:inline-flex btn-primary px-6 py-2.5 rounded-xl text-base"
+              className="hidden md:inline-flex btn-primary btn-arrow"
             >
               Get Started
             </motion.button>

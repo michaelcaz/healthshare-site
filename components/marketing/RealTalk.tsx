@@ -6,7 +6,7 @@ import { useInView } from 'react-intersection-observer';
 const considerations = [
   {
     title: "Yes, There's More Manual Work",
-    icon: "📝",
+    icon: "⚡️",
     pro: "With insurance, you just hand over your card. With healthshares, you'll pay smaller bills directly and submit them for reimbursement through a dashboard.",
     perspective: "But here's the thing: This extra step is why you save 40-50% on costs. Plus, being a cash-pay patient often gets you better service and attention.",
     callout: "The 10 minutes you spend uploading a receipt saves you hundreds of dollars."
@@ -15,12 +15,12 @@ const considerations = [
     title: "The Legal Protection Myth",
     icon: "⚖️",
     pro: "Yes, insurance is a legally binding contract. In theory, you can sue if they wrongfully deny claims.",
-    perspective: "But let's be real: Insurance companies have mastered the 'Delay, Deny, Defend' system. With a 35% claim denial rate, how protected are you really? Most people can't afford years of litigation.",
+    perspective: "But let's be real: Insurance companies have mastered the 'Delay, Deny, Defend' system. With a 35% claim denial rate, how protected are you really?",
     callout: "Would you rather have a 98% approval rate or the right to sue for a denial?"
   },
   {
     title: "The Bankruptcy Question",
-    icon: "🏦",
+    icon: "🛡️",
     pro: "A few healthshares have gone bankrupt. This is a real concern and we won't sugarcoat it.",
     perspective: "However, more insurance companies have actually gone bankrupt. At Zion, we maintain 3 YEARS of claims expenses in reserve - that's more than most insurance companies.",
     callout: "Ask your insurance company about their reserve ratio. We'll wait."
@@ -41,67 +41,51 @@ export function RealTalk() {
   });
 
   return (
-    <section className="relative py-24" style={{ background: 'var(--color-cream-bg)' }}>
+    <section className="relative py-24 section" ref={ref}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-4xl font-bold mb-16 text-center" style={{ color: 'var(--color-warm-gray)' }}>
+        <motion.h2 
+          className="h2 text-center mb-16"
+          initial={{ opacity: 0, y: 20 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6 }}
+        >
           Let's Talk About The Hard Parts
-        </h2>
+        </motion.h2>
 
-        <div className="grid lg:grid-cols-3 gap-8">
-          {/* Manual Work Card */}
-          <div>
-            <h3 className="text-xl font-semibold mb-6 text-center" style={{ color: 'var(--color-warm-gray)' }}>
-              Yes, There's More Manual Work
-            </h3>
-            
-            <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-sm space-y-3 min-h-[320px]">
-              <div className="bg-[#e9e9eb] text-black p-3 rounded-[22px] rounded-tl-md max-w-[85%] text-sm">
-                With insurance, you just hand over your card. With healthshares, you'll pay smaller bills directly and submit them for reimbursement through a dashboard.
+        <div className="grid lg:grid-cols-2 gap-8 relative">
+          {considerations.map((item, index) => (
+            <motion.div
+              key={item.title}
+              className="hard-parts-card"
+              initial={{ opacity: 0, y: 20 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: index * 0.2 }}
+              style={{
+                marginTop: index % 2 === 1 ? '2rem' : '0',
+                zIndex: considerations.length - index
+              }}
+            >
+              <div className="hard-parts-icon">
+                <span className="text-2xl">{item.icon}</span>
               </div>
-
-              <div className="bg-[#0b93f6] text-white p-3 rounded-[22px] rounded-tr-md ml-auto max-w-[85%] text-sm">
-                But here's the thing: This extra step is why you save 40-50% on costs. Plus, being a cash-pay patient often gets you better service and attention.
+              
+              <h3 className="text-xl font-semibold mb-4">
+                {item.title}
+              </h3>
+              
+              <div className="space-y-4">
+                <p className="text-gray-600">
+                  {item.pro}
+                </p>
+                <p className="text-gray-800">
+                  {item.perspective}
+                </p>
+                <p className="text-primary font-medium">
+                  {item.callout}
+                </p>
               </div>
-
-              <div className="bg-[#0b93f6] text-white p-3 rounded-[22px] rounded-tr-md ml-auto max-w-[85%] text-sm">
-                The 10 minutes you spend uploading a receipt saves you hundreds of dollars.
-              </div>
-            </div>
-          </div>
-
-          {/* Pre-existing Conditions Card */}
-          <div>
-            <h3 className="text-xl font-semibold mb-6 text-center" style={{ color: 'var(--color-warm-gray)' }}>
-              Pre-existing Conditions
-            </h3>
-            
-            <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-sm space-y-3 min-h-[320px]">
-              <div className="bg-[#e9e9eb] text-black p-3 rounded-[22px] rounded-tl-md max-w-[85%] text-sm">
-                Most healthshares have waiting periods for pre-existing conditions. Some conditions might not be eligible for sharing right away.
-              </div>
-
-              <div className="bg-[#0b93f6] text-white p-3 rounded-[22px] rounded-tr-md ml-auto max-w-[85%] text-sm">
-                But new conditions are covered from day one. And many pre-existing conditions become eligible after 1-2 years of membership.
-              </div>
-            </div>
-          </div>
-
-          {/* Not Insurance Card */}
-          <div>
-            <h3 className="text-xl font-semibold mb-6 text-center" style={{ color: 'var(--color-warm-gray)' }}>
-              Not Insurance
-            </h3>
-            
-            <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-sm space-y-3 min-h-[320px]">
-              <div className="bg-[#e9e9eb] text-black p-3 rounded-[22px] rounded-tl-md max-w-[85%] text-sm">
-                Healthshares aren't insurance. They're not regulated the same way and don't have the same guarantees.
-              </div>
-
-              <div className="bg-[#0b93f6] text-white p-3 rounded-[22px] rounded-tr-md ml-auto max-w-[85%] text-sm">
-                But they've been around for 30+ years, and the best ones have excellent track records of sharing medical costs.
-              </div>
-            </div>
-          </div>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>
