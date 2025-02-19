@@ -1,83 +1,103 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useInView } from 'react-intersection-observer';
-import { SwipeableTestimonials } from '../ui/SwipeableTestimonials';
+import { Star, Users, Clock, ThumbsUp } from 'lucide-react';
+import { cn } from '@/lib/utils';
+
+interface TestimonialCardProps {
+  image: string;
+  name: string;
+  role: string;
+  quote: string;
+  savings: string;
+}
+
+const TestimonialCard = ({ image, name, role, quote, savings }: TestimonialCardProps) => (
+  <motion.div 
+    whileHover={{ y: -4 }}
+    className={cn(
+      "p-6 rounded-xl border border-gray-100",
+      "hover:shadow-lg hover:border-indigo-100 transition-all"
+    )}
+  >
+    <div className="flex items-center gap-3 mb-4">
+      <div className="relative">
+        <img 
+          src={image} 
+          alt={name} 
+          className="w-14 h-14 rounded-full object-cover border-2 border-white shadow-sm" 
+        />
+        <div className="absolute inset-0 rounded-full shadow-inner" />
+      </div>
+      <div>
+        <h3 className="font-semibold text-gray-900">{name}</h3>
+        <p className="text-gray-500 text-sm">{role}</p>
+      </div>
+    </div>
+    <p className="text-gray-700 mb-4">"{quote}"</p>
+    <p className="text-indigo-600 font-semibold">Saved {savings} annually</p>
+  </motion.div>
+);
+
+interface StatisticProps {
+  value: string;
+  label: string;
+  icon: React.ElementType;
+}
+
+const Statistic = ({ value, label, icon: Icon }: StatisticProps) => (
+  <motion.div 
+    whileHover={{ y: -2 }}
+    className="text-center p-6 rounded-xl border border-gray-100 bg-white/80 backdrop-blur-sm hover:shadow-md transition-all"
+  >
+    <div className="flex items-center justify-center gap-2 mb-1">
+      <Icon className="w-5 h-5 text-indigo-600" />
+      <span className="text-4xl font-bold text-gray-900">{value}</span>
+    </div>
+    <p className="text-gray-600">{label}</p>
+  </motion.div>
+);
 
 const testimonials = [
   {
-    id: 1,
+    image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=150&h=150",
     name: "Sarah Johnson",
     role: "Self-employed Designer",
-    image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=150&h=150",
     quote: "Switching to healthshare was the best decision for my family. The monthly costs are so much more manageable.",
-    savings: "Saved $4,800 annually"
+    savings: "$4,800"
   },
   {
-    id: 2,
+    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=150&h=150",
     name: "Michael Chen",
     role: "Small Business Owner",
-    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=150&h=150",
     quote: "The transparency and community aspect really sets this apart from traditional insurance.",
-    savings: "Saved $3,600 annually"
+    savings: "$3,600"
   },
   {
-    id: 3,
+    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150&h=150",
     name: "Emily Rodriguez",
     role: "Freelance Developer",
-    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150&h=150",
     quote: "I love how simple everything is. No more confusion about what's covered and what's not.",
-    savings: "Saved $5,200 annually"
+    savings: "$5,200"
   }
 ];
 
 export function SocialProof() {
-  const [ref, inView] = useInView({
-    triggerOnce: true,
-    threshold: 0.1
-  });
-
-  const containerVariants = {
-    hidden: {},
-    visible: {
-      transition: {
-        staggerChildren: 0.2
-      }
-    }
-  };
-
-  const itemVariants = {
+  const fadeInUpVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.8,
-        ease: [0.215, 0.61, 0.355, 1]
-      }
-    }
-  };
-
-  const statsVariants = {
-    hidden: { opacity: 0, scale: 0.95 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: {
-        duration: 0.6,
-        ease: [0.215, 0.61, 0.355, 1]
-      }
-    }
+    visible: { opacity: 1, y: 0 },
   };
 
   return (
-    <section className="relative py-[var(--section-spacing)]" style={{ background: 'var(--color-cream-bg)' }}>
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div 
-          ref={ref}
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.8 }}
+    <section className="relative py-24 bg-white">
+      <div className="absolute left-[10%] top-[20%] w-[500px] h-[500px] rounded-full bg-[#FFF1EC] opacity-50 blur-3xl" />
+      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          variants={fadeInUpVariants}
           className="text-center mb-16"
         >
           <h2 className="mb-4 font-bold leading-tight" style={{ 
@@ -86,99 +106,41 @@ export function SocialProof() {
           }}>
             Real Members <span style={{ color: 'var(--color-coral-primary)' }}>Real Savings</span>
           </h2>
-          <p className="max-w-3xl mx-auto" style={{ 
-            fontSize: 'var(--text-xl)',
-            color: 'var(--color-warm-gray)',
-            opacity: 0.9 
-          }}>
+          <div className="w-24 h-1 bg-[#6366F1] mx-auto rounded-full" />
+          <p className="text-xl text-gray-600 mt-4 mb-12">
             Join thousands who made the switch and never looked back.
           </p>
         </motion.div>
 
-        {/* Desktop Testimonials */}
-        <motion.div 
-          variants={containerVariants}
-          initial="hidden"
-          animate={inView ? "visible" : "hidden"}
-          className="hidden md:grid grid-cols-3 gap-8 mb-20"
-        >
-          {testimonials.map((testimonial) => (
-            <motion.div 
-              key={testimonial.id}
-              variants={itemVariants}
-              className="bg-white/80 backdrop-blur-sm rounded-xl p-8 shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-300"
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+          {testimonials.map((testimonial, index) => (
+            <motion.div
+              key={index}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              variants={fadeInUpVariants}
             >
-              <div className="flex items-center mb-6">
-                <div className="relative">
-                  <img 
-                    src={testimonial.image} 
-                    alt=""
-                    className="w-14 h-14 rounded-full object-cover border-2 border-white shadow-sm"
-                  />
-                  <div className="absolute inset-0 rounded-full shadow-inner" />
-                </div>
-                <div className="ml-4">
-                  <div className="font-semibold" style={{ color: 'var(--color-warm-gray)' }}>
-                    {testimonial.name}
-                  </div>
-                  <div className="text-sm" style={{ color: 'var(--color-warm-gray)', opacity: 0.7 }}>
-                    {testimonial.role}
-                  </div>
-                </div>
-              </div>
-              
-              <blockquote className="mb-4" style={{ color: 'var(--color-warm-gray)', opacity: 0.9 }}>
-                "{testimonial.quote}"
-              </blockquote>
-              
-              <div className="font-semibold" style={{ color: 'var(--color-coral-primary)' }}>
-                {testimonial.savings}
-              </div>
+              <TestimonialCard {...testimonial} />
             </motion.div>
           ))}
-        </motion.div>
-
-        {/* Mobile Testimonials */}
-        <div className="md:hidden mb-20">
-          <motion.div 
-            variants={itemVariants}
-            initial="hidden"
-            animate={inView ? "visible" : "hidden"}
-            className="bg-white/80 backdrop-blur-sm rounded-xl p-8 shadow-sm border border-gray-100"
-          >
-            <SwipeableTestimonials testimonials={testimonials} />
-          </motion.div>
         </div>
 
-        {/* Stats Section */}
-        <motion.div 
-          variants={containerVariants}
+        <motion.div
           initial="hidden"
-          animate={inView ? "visible" : "hidden"}
-          className="grid grid-cols-2 md:grid-cols-4 gap-8"
+          whileInView="visible"
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          variants={fadeInUpVariants}
+          className="border-t border-gray-200 pt-12"
         >
-          {[
-            { number: '96%', label: 'Member Satisfaction' },
-            { number: '$12.4M', label: 'Shared Last Month' },
-            { number: '4.9/5', label: 'App Store Rating' },
-            { number: '10 Yrs', label: 'Trusted Service' },
-          ].map((stat, index) => (
-            <motion.div 
-              key={index}
-              variants={statsVariants}
-              className="bg-white/60 backdrop-blur-sm rounded-xl p-6 border border-gray-100 text-center"
-            >
-              <div 
-                className="text-3xl font-bold mb-2"
-                style={{ color: 'var(--color-coral-primary)' }}
-              >
-                {stat.number}
-              </div>
-              <div style={{ color: 'var(--color-warm-gray)', opacity: 0.9 }}>
-                {stat.label}
-              </div>
-            </motion.div>
-          ))}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <Statistic value="96%" label="Member Satisfaction" icon={ThumbsUp} />
+            <Statistic value="$12.4M" label="Shared Last Month" icon={Users} />
+            <Statistic value="4.9/5" label="App Store Rating" icon={Star} />
+            <Statistic value="10 Yrs" label="Trusted Service" icon={Clock} />
+          </div>
         </motion.div>
       </div>
     </section>
