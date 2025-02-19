@@ -1,11 +1,19 @@
+import Image from 'next/image';
+
 export function Header() {
   return (
     <header className="border-b">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         <div className="flex items-center">
           {/* Logo/Brand */}
-          <a href="/" className="text-xl font-semibold">
-            Healthshare Finder
+          <a href="/" className="flex items-center">
+            <Image 
+              src="/images/logo.svg" 
+              alt="Riff" 
+              width={96} 
+              height={32} 
+              priority
+            />
           </a>
         </div>
         

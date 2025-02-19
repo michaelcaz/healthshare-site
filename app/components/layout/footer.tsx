@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 export function Footer() {
   return (
     <footer className="border-t mt-auto">
@@ -5,7 +7,15 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Company Info */}
           <div>
-            <h3 className="font-semibold mb-4">Healthshare Finder</h3>
+            <div className="mb-4">
+              <Image 
+                src="/images/logo.svg" 
+                alt="Riff" 
+                width={96} 
+                height={32} 
+                priority
+              />
+            </div>
             <p className="text-sm text-gray-600">
               Helping you find the perfect healthshare plan for your needs.
             </p>
@@ -42,7 +52,7 @@ export function Footer() {
         </div>
 
         <div className="mt-8 pt-8 border-t text-sm text-center text-gray-600">
-          © {new Date().getFullYear()} Healthshare Finder. All rights reserved.
+          © {new Date().getFullYear()} All rights reserved.
         </div>
       </div>
     </footer>
