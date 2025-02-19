@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { Info, DollarSign, Building2, Calendar, CheckSquare } from 'lucide-react';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Alert, AlertDescription } from '../ui/alert';
 
 const features = [
   {
@@ -96,7 +96,7 @@ export function ComparisonTable() {
                   exit={{ opacity: 0, y: -10 }}
                   className="col-span-3 mt-2"
                 >
-                  <Alert>
+                  <Alert variant="info">
                     <Info className="h-4 w-4" />
                     <AlertDescription>
                       {feature.description}
