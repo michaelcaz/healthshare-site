@@ -48,14 +48,9 @@ export function HealthshareExplainer() {
           </p>
         </motion.div>
 
-        {/* Three Column Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {/* Two Column Layout */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {[
-            {
-              title: "How it Works",
-              description: "Members contribute monthly. When someone needs care, the community shares the cost. Simple as that.",
-              icon: "⚡️"
-            },
             {
               title: "Who It's For",
               description: "Ideal for healthy individuals and families looking for quality healthcare without the premium price tag.",

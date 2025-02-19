@@ -26,7 +26,7 @@ export function NavBar() {
       animate={{ y: 0 }}
       transition={{ duration: 0.6 }}
     >
-      <div className="container mx-auto px-6">
+      <div className="container mx-auto px-4">
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center">
             <Image
@@ -38,7 +38,7 @@ export function NavBar() {
             />
           </Link>
 
-          <nav className="hidden md:flex items-center gap-standard">
+          <div className="hidden md:flex items-center gap-8 ml-auto">
             <Link 
               href="/about"
               className="text-lg font-medium text-gray-warm/90 hover:text-gray-warm transition-colors"
@@ -57,33 +57,30 @@ export function NavBar() {
             >
               What's a Healthshare?
             </Link>
-          </nav>
-
-          <div className="flex items-center space-x-6">
             <motion.button
               whileHover={{ scale: 1.02, y: -1 }}
               whileTap={{ scale: 0.98 }}
-              className="hidden md:inline-flex btn-primary btn-arrow"
+              className="btn-primary btn-arrow"
             >
               Get Started
             </motion.button>
-            
-            <button className="md:hidden p-2 rounded-lg hover:bg-gray-100/80">
-              <svg
-                className="w-6 h-6 text-gray-warm"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              </svg>
-            </button>
           </div>
+            
+          <button className="md:hidden p-2 rounded-lg hover:bg-gray-100/80">
+            <svg
+              className="w-6 h-6 text-gray-warm"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 6h16M4 12h16M4 18h16"
+              />
+            </svg>
+          </button>
         </div>
       </div>
     </motion.header>

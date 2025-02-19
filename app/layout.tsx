@@ -29,7 +29,7 @@ export default function RootLayout({
       <body suppressHydrationWarning className={inter.className} style={{ background: 'var(--color-cream-bg)' }}>
         <TooltipProvider>
           <Header />
-          <main className="pt-[88px]">
+          <main className="pt-[76px]">
             {children}
           </main>
         </TooltipProvider>
