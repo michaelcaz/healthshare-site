@@ -8,31 +8,31 @@ import { Alert, AlertDescription } from '../ui/alert';
 
 const features = [
   {
-    icon: <DollarSign className="w-5 h-5 text-green-600" />,
+    icon: <DollarSign className="w-9 h-9 text-emerald-500 stroke-[2.5]" />,
     name: 'Monthly Cost',
-    riff: '30-50% lower',
-    insurance: 'Higher premiums',
+    riff: '30-50% less',
+    insurance: 'Sky-high premiums',
     description: 'Save significantly on your monthly healthcare costs while maintaining quality coverage.'
   },
   {
-    icon: <Building2 className="w-5 h-5 text-blue-600" />,
+    icon: <Building2 className="w-9 h-9 text-emerald-500 stroke-[2.5]" />,
     name: 'Network Restrictions',
-    riff: 'See any provider',
-    insurance: 'Limited networks',
+    riff: 'Any provider',
+    insurance: 'Restrictive networks',
     description: 'Choose your preferred healthcare providers without network restrictions.'
   },
   {
-    icon: <Calendar className="w-5 h-5 text-orange-600" />,
+    icon: <Calendar className="w-9 h-9 text-emerald-500 stroke-[2.5]" />,
     name: 'Enrollment Period',
     riff: 'Join anytime',
-    insurance: 'Once per year',
-    description: 'No need to wait for open enrollment - join whenever you need coverage.'
+    insurance: 'Once yearly',
+    description: 'You can cancel your insurance and join any health share plan at any time.'
   },
   {
-    icon: <CheckSquare className="w-5 h-5 text-green-600" />,
+    icon: <CheckSquare className="w-9 h-9 text-emerald-500 stroke-[2.5]" />,
     name: 'Claim Approval',
-    riff: '98% approval rate',
-    insurance: '65% approval rate',
+    riff: '98% approved',
+    insurance: '49%-85%',
     description: 'Higher likelihood of claim approval means more peace of mind.'
   }
 ];
@@ -45,18 +45,23 @@ export function ComparisonTable() {
   });
 
   return (
-    <section className="section" ref={ref}>
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="relative py-24 overflow-hidden" ref={ref}>
+      {/* Background with reduced opacity overlay */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 bg-gradient-to-r from-[#4A3C8D] to-[#2B1F6B]" />
+      </div>
+
+      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-12"
+          className="text-center mb-16"
         >
-          <h2 className="text-4xl font-bold text-gray-800 mb-4">
+          <h2 className="text-5xl font-bold text-white mb-4 font-display">
             See the Difference
           </h2>
-          <p className="text-xl text-gray-600">
+          <p className="text-xl text-gray-200 italic font-light">
             A side-by-side look at what makes us different.
           </p>
         </motion.div>
@@ -65,61 +70,116 @@ export function ComparisonTable() {
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="bg-white rounded-lg shadow-lg p-6"
+          className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl p-8 border border-gray-100"
         >
-          <div className="grid grid-cols-3 gap-4 mb-6">
-            <div className="font-semibold text-lg text-gray-600">Feature</div>
-            <div className="font-semibold text-lg text-indigo-600">Riff</div>
-            <div className="font-semibold text-lg text-gray-600">Insurance</div>
+          {/* Mobile View: Feature List */}
+          <div className="md:hidden space-y-6">
+            {features.map((feature, index) => (
+              <div
+                key={feature.name}
+                className={`space-y-5 p-5 rounded-xl transition-all duration-300 min-w-[320px] border border-gray-100
+                  ${hoveredFeature === index ? 'bg-gray-50/80 shadow-md' : 'hover:bg-gray-50/40'}`}
+                onClick={() => setHoveredFeature(hoveredFeature === index ? null : index)}
+              >
+                <div className="flex items-center gap-4">
+                  <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center">
+                    {feature.icon}
+                  </div>
+                  <span className="font-bold text-base text-gray-900 leading-8">{feature.name}</span>
+                </div>
+                
+                <div className="grid grid-cols-2 gap-6">
+                  <div>
+                    <div className="text-sm font-medium text-emerald-600 mb-2">Riff</div>
+                    <div className="text-emerald-600 font-bold text-lg leading-8">{feature.riff}</div>
+                  </div>
+                  <div>
+                    <div className="text-sm font-medium text-orange-600 mb-2">Insurance</div>
+                    <div className="text-orange-600 text-lg leading-8">{feature.insurance}</div>
+                  </div>
+                </div>
+                
+                {hoveredFeature === index && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                  >
+                    <Alert variant="info" className="bg-indigo-50/50 border border-indigo-100">
+                      <Info className="h-5 w-5 text-indigo-600" />
+                      <AlertDescription className="text-indigo-900">
+                        {feature.description}
+                      </AlertDescription>
+                    </Alert>
+                  </motion.div>
+                )}
+              </div>
+            ))}
           </div>
 
-          {features.map((feature, index) => (
-            <div
-              key={feature.name}
-              className={`grid grid-cols-3 gap-4 p-4 rounded-lg transition-colors duration-200 ${
-                hoveredFeature === index ? 'bg-gray-50' : ''
-              }`}
-              onMouseEnter={() => setHoveredFeature(index)}
-              onMouseLeave={() => setHoveredFeature(null)}
-            >
-              <div className="flex items-center gap-3">
-                {feature.icon}
-                <span className="font-medium text-gray-700">{feature.name}</span>
-              </div>
-              <div className="text-coral-500 font-medium">{feature.riff}</div>
-              <div className="text-gray-600">{feature.insurance}</div>
-              
-              {hoveredFeature === index && (
-                <motion.div 
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  className="col-span-3 mt-2"
-                >
-                  <Alert variant="info">
-                    <Info className="h-4 w-4" />
-                    <AlertDescription>
-                      {feature.description}
-                    </AlertDescription>
-                  </Alert>
-                </motion.div>
-              )}
+          {/* Desktop View: Grid Layout */}
+          <div className="hidden md:block">
+            <div className="grid grid-cols-3 gap-6 mb-8">
+              <div className="font-bold text-xl text-gray-900 px-5">Feature</div>
+              <div className="font-bold text-xl text-emerald-600 px-5">Riff</div>
+              <div className="font-bold text-xl text-orange-600 px-5">Insurance</div>
             </div>
-          ))}
+
+            {features.map((feature, index) => (
+              <div
+                key={feature.name}
+                className={`grid grid-cols-3 gap-6 p-5 rounded-xl transition-all duration-300 border border-gray-100
+                  ${hoveredFeature === index ? 'bg-gray-50/80 shadow-md' : 'hover:bg-gray-50/40'}`}
+                onMouseEnter={() => setHoveredFeature(index)}
+                onMouseLeave={() => setHoveredFeature(null)}
+              >
+                <div className="flex items-center gap-4">
+                  <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center">
+                    {feature.icon}
+                  </div>
+                  <span className="font-bold text-base text-gray-900 leading-8">{feature.name}</span>
+                </div>
+                <div className="text-emerald-600 font-bold text-lg flex items-center px-5 leading-8">{feature.riff}</div>
+                <div className="text-orange-600 text-lg flex items-center px-5 leading-8">{feature.insurance}</div>
+                
+                {hoveredFeature === index && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="col-span-3 mt-4"
+                  >
+                    <Alert variant="info" className="bg-indigo-50/50 border border-indigo-100">
+                      <Info className="h-5 w-5 text-indigo-600" />
+                      <AlertDescription className="text-indigo-900">
+                        {feature.description}
+                      </AlertDescription>
+                    </Alert>
+                  </motion.div>
+                )}
+              </div>
+            ))}
+          </div>
         </motion.div>
 
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="mt-8 text-center"
+          className="mt-16 text-center px-4 sm:px-0"
         >
-          <button className="bg-indigo-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors duration-200">
-            Get Started →
+          <button 
+            className="group relative w-full sm:w-[200px] h-12 bg-emerald-500 text-white px-8 py-3 rounded-xl 
+                     text-lg font-bold hover:bg-emerald-600 transition-all duration-300 
+                     hover:scale-105 hover:shadow-lg border border-emerald-400"
+          >
+            Find My Plan →
+            <span className="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-emerald-700 text-white 
+                           px-4 py-2 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 
+                           text-sm whitespace-nowrap shadow-lg">
+              Save 30-50% today!
+            </span>
           </button>
-          <p className="mt-4 text-sm text-gray-600">
-            Calculate your potential savings with Riff
-          </p>
         </motion.div>
       </div>
     </section>

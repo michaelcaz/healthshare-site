@@ -126,22 +126,6 @@ export function SocialProof() {
             </motion.div>
           ))}
         </div>
-
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          variants={fadeInUpVariants}
-          className="border-t border-gray-200 pt-12"
-        >
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <Statistic value="96%" label="Member Satisfaction" icon={ThumbsUp} />
-            <Statistic value="$12.4M" label="Shared Last Month" icon={Users} />
-            <Statistic value="4.9/5" label="App Store Rating" icon={Star} />
-            <Statistic value="10 Yrs" label="Trusted Service" icon={Clock} />
-          </div>
-        </motion.div>
       </div>
     </section>
   );

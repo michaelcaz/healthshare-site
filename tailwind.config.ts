@@ -8,6 +8,11 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
+        display: ['var(--font-display)', 'system-ui', 'sans-serif'],
+        handwriting: ['var(--font-handwriting)', 'cursive'],
+      },
       colors: {
         primary: {
           DEFAULT: 'var(--color-primary)',

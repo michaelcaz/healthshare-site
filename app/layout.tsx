@@ -1,5 +1,5 @@
 import './globals.css'
-import { Inter } from 'next/font/google'
+import { Inter, Montserrat, Caveat } from 'next/font/google'
 import { Header } from '@/components/layout/header'
 import { Toaster } from "@/components/ui/toaster"
 import { TooltipProvider } from "@/components/ui/tooltip"
@@ -7,7 +7,15 @@ import { GoogleAnalytics } from '@/components/providers/GoogleAnalytics'
 import { headers } from 'next/headers'
 // import Script from 'next/script'
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
+const montserrat = Montserrat({ 
+  subsets: ['latin'],
+  variable: '--font-display'
+})
+const caveat = Caveat({
+  subsets: ['latin'],
+  variable: '--font-handwriting'
+})
 
 export default function RootLayout({
   children,
@@ -26,7 +34,7 @@ export default function RootLayout({
           nonce={nonce}
         /> */}
       </head>
-      <body suppressHydrationWarning className={inter.className} style={{ background: 'var(--color-cream-bg)' }}>
+      <body suppressHydrationWarning className={`${inter.variable} ${montserrat.variable} ${caveat.variable} font-sans`} style={{ background: 'var(--color-cream-bg)' }}>
         <TooltipProvider>
           <Header />
           <main className="pt-[76px]">

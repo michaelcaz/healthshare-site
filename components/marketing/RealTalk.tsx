@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Zap, Scale, Shield, UserPlus } from 'lucide-react';
+import { Zap, Scale, Shield, UserPlus, ChevronUp, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface ConcernBlockProps {
@@ -77,26 +77,20 @@ const ConcernBlock = ({ icon: Icon, title, description, highlight }: ConcernBloc
 const concerns = [
   {
     icon: Zap,
-    title: "Yes, There's More Manual Work",
+    title: "There's More Manual Work",
     description: "With insurance, you just hand over your card. With healthshares, you'll pay smaller bills directly and submit them for reimbursement through a dashboard.\n\nBut here's the thing: This extra step is why you save 40-50% on costs. Plus, being a cash-pay patient often gets you better service and attention.",
-    highlight: "The 10 minutes you spend uploading a receipt saves you hundreds of dollars."
+    highlight: "The 2 minutes you spend uploading a receipt saves you hundreds of dollars."
   },
   {
     icon: Scale,
     title: "The Legal Protection Myth",
-    description: "Yes, insurance is a legally binding contract. In theory, you can sue if they wrongfully deny claims.\n\nBut let's be real: Insurance companies have mastered the 'Delay, Deny, Defend' system. With a 35% claim denial rate, how protected are you really?",
-    highlight: "Would you rather have a 98% approval rate or the right to sue for a denial?"
-  },
-  {
-    icon: Shield,
-    title: "The Bankruptcy Question",
-    description: "A few healthshares have gone bankrupt. This is a real concern and we won't sugarcoat it.\n\nHowever, more insurance companies have actually gone bankrupt. At Zion, we maintain 3 YEARS of claims expenses in reserve - that's more than most insurance companies.",
-    highlight: "Ask your insurance company about their reserve ratio. We'll wait."
+    description: "Insurance is a legally binding contract. In theory, you can sue if they wrongfully deny claims.\n\nBut let's be real: Insurance companies have mastered the 'Delay, Deny, Defend' system. With a 35% claim denial rate, how protected are you really?",
+    highlight: "Would you rather have a 98% approval rate or the right to sue for a denial and spend 2-3 years trying to fight the best attorneys in the WORLD in court?"
   },
   {
     icon: UserPlus,
-    title: "The Social Pressure",
-    description: "Yes, your friends might raise eyebrows. 'Sounds like a scam,' they'll say.\n\nRemember Airbnb? 'You're letting strangers sleep in your house?!' Now it's worth billions. Healthcare is changing, and early adopters always face skepticism.",
+    title: "Fear of Unknown Risk",
+    description: "Your friends might raise eyebrows. 'Sounds like a scam,' they'll say.\n\nRemember Airbnb? 'You're letting strangers sleep in your house?!' Now millions trust it every day. Healthcare's changing—health shares are the next big thing. Early adopters always face skepticism, but with 95%+ member approval ratings, you're joining a trusted crew, not a gamble.",
     highlight: "The rebels always seem crazy before they're considered pioneers."
   }
 ];
@@ -105,6 +99,12 @@ export function RealTalk() {
   const fadeInUpVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 },
+  };
+
+  const [activeSection, setActiveSection] = useState<number | null>(null);
+
+  const toggleSection = (index: number) => {
+    setActiveSection(activeSection === index ? null : index);
   };
 
   return (
@@ -123,11 +123,11 @@ export function RealTalk() {
             fontSize: 'var(--h2)',
             color: 'var(--color-warm-gray)' 
           }}>
-            "This Seems Too Good to Be True, Why Haven't I Already Heard of This?"
+            Worried? We Get It—Here's Why Health Shares Beat the Insurance Nightmare
           </h2>
           <div className="w-24 h-1 bg-[#6366F1] mx-auto rounded-full" />
           <p className="text-xl text-gray-600 mt-4">
-            We get it. Here's our honest take on the four biggest concerns we hear.
+            We get it. Here's our honest take on the three biggest concerns we hear.
           </p>
         </motion.div>
         
@@ -141,7 +141,54 @@ export function RealTalk() {
               transition={{ duration: 0.5, delay: index * 0.1 }}
               variants={fadeInUpVariants}
             >
-              <ConcernBlock {...concern} />
+              <div className="bg-white rounded-xl border border-gray-200 overflow-hidden transition-all">
+                <button
+                  onClick={() => toggleSection(index)}
+                  className={cn(
+                    "w-full px-6 py-4 flex items-center justify-between",
+                    "text-left transition-colors duration-200",
+                    "hover:bg-gray-50",
+                    activeSection === index ? "bg-gray-50" : ""
+                  )}
+                >
+                  <div className="flex items-center gap-3">
+                    <concern.icon className="w-5 h-5 text-indigo-600" />
+                    <h3 className="text-lg font-semibold text-gray-900">{concern.title}</h3>
+                  </div>
+                  <div className={cn(
+                    "flex items-center justify-center w-8 h-8 rounded-full",
+                    "transition-colors duration-200",
+                    activeSection === index 
+                      ? "bg-indigo-100 text-indigo-600" 
+                      : "bg-gray-100 text-gray-500 hover:bg-indigo-50 hover:text-indigo-600"
+                  )}>
+                    {activeSection === index ? (
+                      <ChevronUp className="w-5 h-5" />
+                    ) : (
+                      <ChevronDown className="w-5 h-5" />
+                    )}
+                  </div>
+                </button>
+                
+                {activeSection === index && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="px-6 pb-6"
+                  >
+                    <div className="mt-4 text-gray-600 whitespace-pre-wrap">
+                      {concern.description}
+                    </div>
+                    <div className="mt-4 p-4 bg-indigo-50 rounded-lg">
+                      <p className="text-indigo-700 font-medium">
+                        {concern.highlight}
+                      </p>
+                    </div>
+                  </motion.div>
+                )}
+              </div>
             </motion.div>
           ))}
         </div>

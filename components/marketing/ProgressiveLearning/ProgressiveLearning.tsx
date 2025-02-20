@@ -16,36 +16,86 @@ const levels: LearningLevel[] = [
   {
     title: "The Basics",
     icon: Book,
-    content: "Healthcare sharing is a way for people to share medical costs together.",
-    details: "Think of it like a community pool where everyone contributes to help each other."
+    content: "Health Sharing: Healthcare That Doesn't Suck",
+    details: `Health share plans aren't insurance—they're better for people like you. Think of it as a community-powered way to cover medical costs without the soul-crushing premiums, deductibles, and fine print of traditional insurance. Here's the gist:
+
+1. You're Part of a Crew, Not a Corporation
+Instead of feeding a faceless insurance machine, you join a group of like-minded people who pool their money to help each other out. Your contribution helps real people—not corporate profits.
+
+2. Way Cheaper for the Healthy
+If you're a young, healthy individual or family, this is built for you. Way lower costs than insurance—why pay for a system designed for the sick when you're not?
+
+3. Skip the Insurance Hassle
+Pay providers directly and save big—no insurance nonsense jacking up prices. It's straightforward, the way healthcare should be.
+
+4. Freedom to Choose Your Doc
+Forget "in-network" headaches. See who you want, when you want—your go-to doctor or someone new. No restrictive networks here.
+
+5. It's a Lifestyle Match
+These plans ask you to live smart, stay active, and keep costs fair for everyone. You take care of yourself; the community's got your back.
+
+The Catch? It's not for everyone. Pre-existing conditions might have waiting periods or limits, and it's not a government-backed safety net like insurance. But if you're healthy and hate overpaying, this could be your game-changer.`
   },
   {
     title: "Why This Works",
     icon: ShieldCheck,
-    content: "Healthshare plans can offer lower costs through a different approach to healthcare financing.",
-    details: `Here's how we keep costs lower:
+    content: "Why you end up paying more with insurance and how health share plans flip the script",
+    details: `Why Traditional Insurance Costs Are a Horror Show
 
-1. Direct Member-to-Member Sharing: Without the overhead of traditional insurance, more of your money goes directly to healthcare.
+1. Profit Over Patients
+Insurance companies aren't charities; they're businesses built to maximize profits. Back in the '90s, McKinsey handed them the playbook: pay out less, pocket more. The result? The 'Delay, Deny, Defend' strategy—now an industry standard. Ever had a claim stuck in limbo for months or denied over a technicality? That's not a glitch; it's the system working exactly as designed—to protect their bottom line, not your health.
 
-2. Community Guidelines: Members agree to healthy lifestyle choices and cost-conscious healthcare decisions, reducing overall expenses.
+2. The In-Network Price Gouging Game
+"In-network" sounds like a VIP perk, but it's a rigged game. Insurers haggle discounts with providers (think doctors and hospitals), who jack up rates to compensate. It's a vicious cycle: insurers push for more discounts, providers hike prices again, and the dance continues—leaving you paying Ferrari prices for a flu shot that should cost peanuts.
 
-3. Price Transparency: We negotiate directly with providers and empower members to make cost-conscious choices.
+3. Your Health Doesn't Affect Your Premium
+The Affordable Care Act aimed to make healthcare accessible, but it flattened the playing field, sometimes too flat. Insurers can't tweak premiums based on your health, so if you're a fitness buff, you're still paying the same as someone with a laundry list of ailments. Got a high-deductible plan? You might shell out more out-of-pocket than the guy with three specialists on speed dial. It's like splitting a bar tab with a friend who ordered the lobster while you stuck to water.
 
-4. No Shareholder Profits: As a community-based organization, we don't have to generate profits for shareholders.
+4. Corporate Bloat Costs You Big
+Health insurance giants are like massive cruise ships—thousands of employees, layers of middle management, and executive bonuses that could fund a small country. The bigger they get, the more crew they need to run the ship. Coverage doesn't improve, but your premiums keep climbing—because you're the one paying for the crew's salaries.
 
-5. Efficient Technology: Modern digital platforms reduce administrative costs compared to traditional insurance bureaucracy.`
+How Health Share Plans Flip the Script (and Save Your Wallet)
+
+1. Direct Sharing, No Middleman
+Health share plans are like a community piggy bank: your money goes straight to helping members with their medical bills. Imagine your contribution covering a neighbor's surgery instead of padding a CEO's bonus—no corporate fat cats skimming the top, just pure member-to-member cost sharing. Less overhead, more healthcare.
+
+2. Healthy Vibes, Lower Costs
+Members sign up for a deal: live smart, spend wisely by finding providers with fair prices, keep costs down for everyone. Think of it as a health-conscious squad rooting for each other. Waiting periods for pre-existing conditions make these plans perfect for healthy folks.
+
+3. Cash Is King (and Cheaper)
+With health share plans, you pay providers in cold, hard cash. Providers can slash their prices without the insurance red tape, no billing department nightmares—think farmers' market prices instead of department store markups.
+
+4. Incentives Aligned With Members' Health
+Most health share plans non-profit orgs. They're community-driven, not shareholder-driven. Your money stays focused on care, not Wall Street. The exception? Crowd Health—they charge a modest $55/month per member to help you negotiate down big bills, claims processing, and whatever is left over is their profit. They charge a second fee per month that is locked in a claims-only vault.`
   },
   {
     title: "How It Works",
     icon: Lightbulb,
-    content: "Members contribute monthly and share eligible medical expenses.",
-    details: "When someone has a medical need, the community's contributions help cover the costs."
-  },
-  {
-    title: "The Details",
-    icon: Target,
-    content: "Specific guidelines determine what can be shared.",
-    details: "Guidelines typically cover things like accidents, illnesses, and preventive care."
+    content: "From Signup to Safety Net: Here's the Playbook",
+    details: `From Signup to Safety Net: Here's the Playbook
+
+Health share plans are simple to use—here's how it all works, step-by-step, so you know exactly what to expect.
+
+1. Join the Community
+Choose a plan through our marketplace (we'll compare options for you)—a bare-bones catastrophic plan or a premium one with preventative care included. Costs depend on your age, family size, and needs. Sign up, and you're in.
+
+2. Small Stuff's on You
+For routine stuff like a sprained wrist from pickup basketball or a kid's runny nose, you cover the first chunk—your Initial Unshared Amount, set between $500 and $5,000. Then the community steps in for anything over that.
+
+3. Big Bills? The Crowd Steps Up
+Need surgery or hit the ER? You pay your Initial Unshared Amount, submit the rest for reimbursement, and get paid back in 7-14 days or less.
+
+4. Shop Like a Pro
+Pay providers with cash. Use our discount tools—get 25-85% off X-rays, surgeries, whatever. Your advocate can even negotiate big bills down before the community chips in.
+
+5. No Fine Print Traps
+It's clear-cut: emergencies, surgeries, even virtual therapy are in. Pre-existing stuff might wait a year or two. You'll know what's covered—no "denied claim" surprises.
+
+Real-World Example:
+You're 30, twist your ankle hiking. Virtual doc says "sprain" (free w/ most health share plans), ortho visit ($300), four sessions of physical therapy ($800) and you're back to normal. Total: $1100. Your IUA is $500, so you pay the first $500, submit $600, and are reimbursed in days. Insurance? You'd be stuck with sky high premiums and an $8500 deductible—you'd have to sprain it another 7.5x before they'd help.
+
+The Bottom Line:
+It's healthcare your way—fast, fair, and wallet-friendly. You're not just saving cash; you're part of a smarter system.`
   }
 ];
 
@@ -59,10 +109,17 @@ export function ProgressiveLearning() {
   };
 
   const toggleSection = (index: number) => {
-    setExpandedSections(prev => ({
-      ...prev,
-      [index]: !prev[index]
-    }));
+    setExpandedSections(prev => {
+      // Close all other sections when opening a new one
+      const newState = Object.keys(prev).reduce((acc, key) => {
+        acc[parseInt(key)] = false;
+        return acc;
+      }, {} as Record<number, boolean>);
+      
+      // Toggle the clicked section
+      newState[index] = !prev[index];
+      return newState;
+    });
   };
 
   return (
@@ -144,6 +201,7 @@ export function ProgressiveLearning() {
                     "hover:bg-gray-50 hover:border-[#6366F1]/20 transition-all"
                   )}
                   onClick={() => toggleSection(index)}
+                  id={`section-${index}`}
                 >
                   <h3 className="text-xl font-semibold flex items-center">
                     <level.icon className="w-6 h-6 mr-3 text-[#6366F1]" />
@@ -159,19 +217,79 @@ export function ProgressiveLearning() {
                   </div>
                 </motion.div>
                 
-                <div className="mt-3 text-gray-700 pl-4">
-                  {level.content}
-                </div>
-                
                 {expandedSections[index] && (
                   <motion.div
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: "auto" }}
                     exit={{ opacity: 0, height: 0 }}
                     transition={{ duration: 0.3 }}
-                    className="mt-4 pl-9 text-gray-600 bg-gray-50 p-6 rounded-xl whitespace-pre-line"
+                    className="mt-4 pl-9 text-gray-600 bg-gray-50/50 p-8 rounded-xl"
                   >
-                    {level.details}
+                    <div className="prose prose-gray max-w-none">
+                      {level.details.split('\n\n').map((paragraph, idx) => {
+                        // Check if this is a heading
+                        if (paragraph.startsWith('Why Traditional') || 
+                            paragraph.startsWith('How Health Share') ||
+                            paragraph.startsWith('From Signup to Safety Net')) {
+                          return (
+                            <h3 key={idx} className="text-xl font-semibold text-gray-800 mb-6 mt-8 first:mt-0">
+                              {paragraph}
+                            </h3>
+                          );
+                        }
+                        // Check if this is a numbered point
+                        if (/^\d+\./.test(paragraph)) {
+                          const [title, ...content] = paragraph.split('\n');
+                          return (
+                            <div key={idx} className="mb-6">
+                              <h4 className="text-lg font-medium text-gray-800 mb-2">{title}</h4>
+                              <div className="text-gray-600 leading-relaxed">
+                                {content.join('\n')}
+                              </div>
+                            </div>
+                          );
+                        }
+                        // Check if this is a section header (Real-World Example or The Bottom Line)
+                        if (paragraph.startsWith('Real-World Example:') || paragraph.startsWith('The Bottom Line:')) {
+                          const [title, ...content] = paragraph.split('\n');
+                          return (
+                            <div key={idx} className="mb-6">
+                              <h4 className="text-lg font-semibold text-gray-800 mb-2">{title}</h4>
+                              <div className="text-gray-600 leading-relaxed">
+                                {content.join('\n')}
+                              </div>
+                            </div>
+                          );
+                        }
+                        // Regular paragraph
+                        return (
+                          <p key={idx} className="text-gray-600 mb-4 leading-relaxed">
+                            {paragraph}
+                          </p>
+                        );
+                      })}
+                    </div>
+                    
+                    {/* Minimize Button */}
+                    <div className="mt-8 flex justify-center">
+                      <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleSection(index);
+                          // Scroll to the section header
+                          document.getElementById(`section-${index}`)?.scrollIntoView({ 
+                            behavior: 'smooth',
+                            block: 'center'
+                          });
+                        }}
+                        className="flex items-center gap-2 text-[#6366F1] hover:text-[#6366F1]/80 font-medium px-4 py-2 rounded-lg hover:bg-[#6366F1]/5 transition-colors"
+                      >
+                        <Minus className="w-4 h-4" />
+                        <span>Minimize section</span>
+                      </motion.button>
+                    </div>
                   </motion.div>
                 )}
               </motion.div>
