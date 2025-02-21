@@ -3,25 +3,13 @@ export const steps = [
     id: 'basic-info',
     title: 'Basic Information',
     description: 'Tell us about yourself',
-    fields: ['age', 'coverage_type']
-  },
-  {
-    id: 'location',
-    title: 'Location',
-    description: 'Tell us about your location',
-    fields: ['state', 'zip_code']
+    fields: ['age', 'coverage_type', 'zip_code']
   },
   {
     id: 'health-status',
     title: 'Health Status',
     description: 'Tell us about your health status',
-    fields: ['pre_existing', 'medical_conditions']
-  },
-  {
-    id: 'pregnancy',
-    title: 'Pregnancy',
-    description: 'Tell us about your pregnancy',
-    fields: ['pregnancy', 'pregnancy_planning']
+    fields: ['pre_existing', 'pregnancy', 'pregnancy_planning']
   },
   {
     id: 'visit-frequency',

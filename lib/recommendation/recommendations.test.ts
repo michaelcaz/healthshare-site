@@ -11,7 +11,6 @@ describe('Recommendation Engine', () => {
     iua_preference: '1000' as const,
     pregnancy: false,
     pre_existing: false,
-    state: 'TX',
     zip_code: '75001',
     expense_preference: 'lower_monthly' as const,
     pregnancy_planning: 'no' as const,

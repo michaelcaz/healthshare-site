@@ -43,10 +43,10 @@ export interface QuestionnaireResponse {
   iua_preference: '1000' | '2500' | '5000'
   pregnancy: boolean
   pre_existing: boolean
-  state: string
+  state?: string
   expense_preference: 'lower_monthly' | 'balanced' | 'higher_monthly'
   pregnancy_planning: 'yes' | 'no' | 'maybe'
-  medical_conditions: string[]
+  medical_conditions?: string[]
   zip_code: string
   visit_frequency: 'just_checkups' | 'few_months' | 'monthly_plus'
 }

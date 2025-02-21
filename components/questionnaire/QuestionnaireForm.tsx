@@ -31,7 +31,9 @@ const COOKIE_OPTIONS = {
 
 const formSchema = z.object({
   age: z.coerce.number().min(18, "You must be at least 18 years old").max(120, "Please enter a valid age"),
-  coverage_type: z.enum(['just_me', 'family']),
+  coverage_type: z.enum(['just_me', 'me_spouse', 'me_kids', 'family'], {
+    errorMap: () => ({ message: "Please select who needs coverage" })
+  }),
   iua_preference: z.enum(['1000', '2500', '5000'], {
     errorMap: () => ({ message: "Please select an IUA preference" })
   }),
@@ -65,7 +67,7 @@ const formSchema = z.object({
 
 const questionLabels: Record<keyof z.infer<typeof formSchema>, string> = {
   age: "What is your age?",
-  coverage_type: "What type of coverage are you looking for?",
+  coverage_type: "Who needs coverage?",
   iua_preference: "Choose your Initial Unshared Amount (IUA)",
   pregnancy: "Are you currently pregnant?",
   pre_existing: "Do you have any pre-existing conditions?",
@@ -77,10 +79,13 @@ const questionLabels: Record<keyof z.infer<typeof formSchema>, string> = {
   visit_frequency: "How often do you expect to visit the doctor?"
 }
 
-const getFieldLabel = (field: keyof z.infer<typeof formSchema>, watchFields?: Record<string, any>): string => {
-  if (field === 'visit_frequency' && watchFields?.coverage_type) {
-    const options = getVisitFrequencyOptions(watchFields.coverage_type);
-    return options.just_checkups.question;
+const getFieldLabel = (field: keyof z.infer<typeof formSchema>, form: UseFormReturn<FormValues>): string => {
+  if (field === 'visit_frequency') {
+    const coverage_type = form.watch('coverage_type');
+    if (coverage_type) {
+      const options = getVisitFrequencyOptions(coverage_type);
+      return options.just_checkups.question;
+    }
   }
   return questionLabels[field] || field;
 }
@@ -91,7 +96,7 @@ const ForwardedSelect = forwardRef((props: any, ref) => (
 ));
 ForwardedSelect.displayName = 'ForwardedSelect';
 
-const renderFormControl = (fieldName: string, field: any, watchFields?: Record<string, any>) => {
+const renderFormControl = (fieldName: string, field: any, form: UseFormReturn<FormValues>) => {
   const fieldId = `form-field-${fieldName}`;
   
   switch (fieldName) {
@@ -105,11 +110,13 @@ const renderFormControl = (fieldName: string, field: any, watchFields?: Record<s
             onValueChange={field.onChange}
           >
             <SelectTrigger className="w-full bg-white">
-              <SelectValue placeholder="Select who needs coverage" />
+              <SelectValue placeholder="" />
             </SelectTrigger>
             <SelectContent className="z-50 bg-white" position="popper" sideOffset={5}>
-              <SelectItem value="just_me">Just me</SelectItem>
-              <SelectItem value="family">Family</SelectItem>
+              <SelectItem value="just_me" className="data-[state=checked]:bg-cyan-500 data-[state=checked]:text-white hover:bg-cyan-500 hover:text-white">Just me</SelectItem>
+              <SelectItem value="me_spouse" className="data-[state=checked]:bg-cyan-500 data-[state=checked]:text-white hover:bg-cyan-500 hover:text-white">Me + Spouse</SelectItem>
+              <SelectItem value="me_kids" className="data-[state=checked]:bg-cyan-500 data-[state=checked]:text-white hover:bg-cyan-500 hover:text-white">Me + Kids</SelectItem>
+              <SelectItem value="family" className="data-[state=checked]:bg-cyan-500 data-[state=checked]:text-white hover:bg-cyan-500 hover:text-white">Family</SelectItem>
             </SelectContent>
           </ForwardedSelect>
         </div>
@@ -153,7 +160,12 @@ const renderFormControl = (fieldName: string, field: any, watchFields?: Record<s
             {...field}
             id={fieldId}
             name={fieldName}
-            onValueChange={field.onChange}
+            onValueChange={(value: string) => {
+              field.onChange(value);
+              if (value === 'true') {
+                form.setValue('pregnancy_planning', 'no');
+              }
+            }}
           >
             <SelectTrigger className="w-full bg-white">
               <SelectValue placeholder="Select an option" />
@@ -166,6 +178,9 @@ const renderFormControl = (fieldName: string, field: any, watchFields?: Record<s
         </div>
       )
     case 'pregnancy_planning':
+      if (form.watch('pregnancy') === true) {
+        return null;
+      }
       return (
         <div className="relative">
           <ForwardedSelect 
@@ -236,8 +251,9 @@ const renderFormControl = (fieldName: string, field: any, watchFields?: Record<s
         </div>
       )
     case 'visit_frequency':
-      if (!watchFields?.coverage_type) return null;
-      const visitOptions = getVisitFrequencyOptions(watchFields.coverage_type);
+      const coverage_type = form.watch('coverage_type');
+      if (!coverage_type) return null;
+      const visitOptions = getVisitFrequencyOptions(coverage_type);
       
       return (
         <div className="relative">
@@ -286,7 +302,6 @@ export const QuestionnaireForm = () => {
   const form = useForm<FormValues>({
     defaultValues: {
       age: 30,
-      coverage_type: 'just_me' as const,
       iua_preference: '1000',
       pregnancy: false,
       pre_existing: false,
@@ -294,13 +309,13 @@ export const QuestionnaireForm = () => {
       zip_code: '',
       expense_preference: 'lower_monthly',
       pregnancy_planning: 'no',
-      medical_conditions: [],
       visit_frequency: 'just_checkups'
     },
     mode: 'onBlur'
   });
 
   const watchPregnancy = form.watch('pregnancy');
+  const watchCoverageType = form.watch('coverage_type');
   
   const router = useRouter();
   const { toast } = useToast();
@@ -466,7 +481,8 @@ export const QuestionnaireForm = () => {
               <p className="text-gray-600">{step.description}</p>
               
               {step.fields.map(field => {
-                if (field === 'pregnancy_planning' && form.watch('pregnancy') === true) {
+                // Skip pregnancy_planning if currently pregnant
+                if (field === 'pregnancy_planning' && watchPregnancy === true) {
                   return null;
                 }
                 
@@ -480,19 +496,16 @@ export const QuestionnaireForm = () => {
                     render={({ field: formField }) => (
                       <FormItem className="space-y-2">
                         <FormLabel htmlFor={fieldId} className="text-base">
-                          {getFieldLabel(field as keyof z.infer<typeof formSchema>, { coverage_type: form.watch('coverage_type') })}
+                          {getFieldLabel(field as keyof z.infer<typeof formSchema>, form)}
                         </FormLabel>
                         <FormControl>
-                          {renderFormControl(field, formField, { 
-                            pregnancy: form.watch('pregnancy'),
-                            coverage_type: form.watch('coverage_type')
-                          })}
+                          {renderFormControl(field, formField, form)}
                         </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-                )
+                );
               })}
             </div>
             
