@@ -176,7 +176,7 @@ export async function calculatePlanScore(
   }
 
   // Add maternity scoring
-  if (questionnaire.pregnancy || questionnaire.pregnancy_planning === 'yes') {
+  if (questionnaire.pregnancy === 'true' || questionnaire.pregnancy_planning === 'yes') {
     const fullPlan = healthshareProviders[plan.id.split('-')[0]]?.plans
       .find(p => p.id === plan.id);
     

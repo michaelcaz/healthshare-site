@@ -2,6 +2,8 @@
 
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
+import { useState } from 'react'
+import { useToast } from '@/components/ui/toast'
 
 function clearAllStorage() {
   if (typeof window === 'undefined') return
@@ -36,18 +38,37 @@ function clearAllStorage() {
 
 export default function DebugClearPage() {
   const router = useRouter()
+  const { toast } = useToast()
+  const [isClearing, setIsClearing] = useState(false)
 
   const clearAll = async () => {
     try {
+      setIsClearing(true)
+      
       // Clear client-side storage
       clearAllStorage()
-      console.log('✓ All storage cleared')
-
-      // Redirect to home page
-      router.push('/')
+      
+      // Show success message
+      toast({
+        title: 'Success',
+        description: 'All data cleared successfully',
+        variant: 'default'
+      })
+      
+      // Wait for 1 second to show the success message
+      await new Promise(resolve => setTimeout(resolve, 1000))
+      
+      // Refresh and redirect
       router.refresh()
+      router.push('/')
     } catch (error) {
       console.error('Error clearing data:', error)
+      toast({
+        title: 'Error',
+        description: 'Failed to clear data',
+        variant: 'destructive'
+      })
+      setIsClearing(false)
     }
   }
 
@@ -65,9 +86,10 @@ export default function DebugClearPage() {
         <div className="mt-8 space-y-6">
           <Button
             onClick={clearAll}
+            disabled={isClearing}
             className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
           >
-            Clear All Data & Reload
+            {isClearing ? 'Clearing...' : 'Clear All Data & Reload'}
           </Button>
         </div>
       </div>

@@ -89,22 +89,22 @@ export default function CoveragePage() {
       // 4. Build response object with explicit type checking
       const response: QuestionnaireResponse = {
         age: parseInt(basicInfo.oldestAge),
-        household_size: basicInfo.coverage_type === 'just_me' ? 1 : 2,
         coverage_type: basicInfo.coverage_type,
         zip_code: basicInfo.zipCode,
         iua_preference: data.iua_preference || '1000',
-        pregnancy: false,
-        pre_existing: false,
+        pregnancy: 'false' as const,
+        pre_existing: 'false' as const,
         state: '',
         expense_preference: data.expense_preference || 'lower_monthly',
         pregnancy_planning: 'no',
-        medical_conditions: []
+        medical_conditions: [],
+        visit_frequency: 'just_checkups'
       };
 
       // 5. Update with health data if available
       if (parsedHealthData?.health) {
-        response.pregnancy = parsedHealthData.health.currentlyPregnant === 'yes';
-        response.pre_existing = parsedHealthData.health.preExistingConditions === 'yes';
+        response.pregnancy = parsedHealthData.health.currentlyPregnant === 'yes' ? 'true' : 'false';
+        response.pre_existing = parsedHealthData.health.preExistingConditions === 'yes' ? 'true' : 'false';
         response.pregnancy_planning = parsedHealthData.health.planningPregnancy as 'yes' | 'no' | 'maybe' || 'no';
       }
 

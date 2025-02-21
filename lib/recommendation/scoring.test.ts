@@ -225,8 +225,8 @@ describe('Plan Scoring', () => {
     age: 30,
     coverage_type: 'just_me' as const,
     iua_preference: '1000' as const,
-    pregnancy: false,
-    pre_existing: false,
+    pregnancy: 'false' as const,
+    pre_existing: 'false' as const,
     zip_code: '75001',
     expense_preference: 'lower_monthly' as const,
     pregnancy_planning: 'no' as const,
@@ -246,12 +246,25 @@ describe('Plan Scoring', () => {
   it('handles pregnancy correctly', async () => {
     const pregnancyResponse: QuestionnaireResponse = {
       ...sampleResponse,
-      pregnancy: true,
+      pregnancy: 'true' as const,
       pregnancy_planning: 'yes' as const
     };
 
     const scores = await Promise.all(
       providerPlans.map(plan => calculatePlanScore(plan, pregnancyResponse))
+    );
+
+    expect(scores.some(score => score.total_score > 0)).toBe(true);
+  });
+
+  it('handles pre-existing conditions correctly', async () => {
+    const preExistingResponse: QuestionnaireResponse = {
+      ...sampleResponse,
+      pre_existing: 'true' as const
+    };
+
+    const scores = await Promise.all(
+      providerPlans.map(plan => calculatePlanScore(plan, preExistingResponse))
     );
 
     expect(scores.some(score => score.total_score > 0)).toBe(true);

@@ -41,11 +41,11 @@ export interface QuestionnaireResponse {
   age: number
   coverage_type: 'just_me' | 'me_spouse' | 'me_kids' | 'family'
   iua_preference: '1000' | '2500' | '5000'
-  pregnancy: boolean
-  pre_existing: boolean
+  pregnancy: 'true' | 'false'
+  pre_existing: 'true' | 'false'
   state?: string
-  expense_preference: 'lower_monthly' | 'balanced' | 'higher_monthly'
-  pregnancy_planning: 'yes' | 'no' | 'maybe'
+  expense_preference: 'lower_monthly' | 'higher_monthly'
+  pregnancy_planning?: 'yes' | 'no' | 'maybe'
   medical_conditions?: string[]
   zip_code: string
   visit_frequency: 'just_checkups' | 'few_months' | 'monthly_plus'

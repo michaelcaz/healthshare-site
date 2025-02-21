@@ -6,8 +6,8 @@ export const questionnaireSchema = z.object({
     errorMap: () => ({ message: "Please select who needs coverage" })
   }),
   iua_preference: z.enum(['1000', '2500', '5000']).default('1000'),
-  pregnancy: z.boolean().default(false),
-  pre_existing: z.boolean().default(false),
+  pregnancy: z.enum(['true', 'false']).default('false'),
+  pre_existing: z.enum(['true', 'false']).default('false'),
   state: z.string().optional(),
   zip_code: z.string().min(5, "Please enter a valid ZIP code"),
   expense_preference: z.enum(['lower_monthly', 'higher_monthly']).default('lower_monthly'),

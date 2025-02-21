@@ -39,10 +39,10 @@ const formSchema = z.object({
   }),
   pregnancy: z.enum(['true', 'false'], {
     errorMap: () => ({ message: "Please indicate if you are currently pregnant" })
-  }).transform(val => val === 'true'),
+  }),
   pre_existing: z.enum(['true', 'false'], {
     errorMap: () => ({ message: "Please indicate if you have pre-existing conditions" })
-  }).transform(val => val === 'true'),
+  }),
   state: z.string().min(1, "Please enter your state"),
   zip_code: z.string().min(5, "Please enter a valid ZIP code"),
   expense_preference: z.enum(['lower_monthly', 'higher_monthly'], {
@@ -50,7 +50,7 @@ const formSchema = z.object({
   }),
   pregnancy_planning: z.enum(['yes', 'no', 'maybe'], {
     errorMap: () => ({ message: "Please indicate your pregnancy plans" })
-  }),
+  }).optional(),
   medical_conditions: z.union([
     z.string(),
     z.array(z.string())
@@ -144,7 +144,7 @@ const renderFormControl = (fieldName: string, field: any, form: UseFormReturn<Fo
             onValueChange={field.onChange}
           >
             <SelectTrigger className="w-full bg-white">
-              <SelectValue placeholder="Select an option" />
+              <SelectValue placeholder="" />
             </SelectTrigger>
             <SelectContent className="z-50 bg-white" position="popper" sideOffset={5}>
               <SelectItem value="false">No</SelectItem>
@@ -163,12 +163,12 @@ const renderFormControl = (fieldName: string, field: any, form: UseFormReturn<Fo
             onValueChange={(value: string) => {
               field.onChange(value);
               if (value === 'true') {
-                form.setValue('pregnancy_planning', 'no');
+                form.resetField('pregnancy_planning');
               }
             }}
           >
             <SelectTrigger className="w-full bg-white">
-              <SelectValue placeholder="Select an option" />
+              <SelectValue placeholder="" />
             </SelectTrigger>
             <SelectContent className="z-50 bg-white" position="popper" sideOffset={5}>
               <SelectItem value="false">No</SelectItem>
@@ -178,9 +178,6 @@ const renderFormControl = (fieldName: string, field: any, form: UseFormReturn<Fo
         </div>
       )
     case 'pregnancy_planning':
-      if (form.watch('pregnancy') === true) {
-        return null;
-      }
       return (
         <div className="relative">
           <ForwardedSelect 
@@ -190,11 +187,11 @@ const renderFormControl = (fieldName: string, field: any, form: UseFormReturn<Fo
             onValueChange={field.onChange}
           >
             <SelectTrigger className="w-full bg-white">
-              <SelectValue placeholder="Select an option" />
+              <SelectValue placeholder="" />
             </SelectTrigger>
             <SelectContent className="z-50 bg-white" position="popper" sideOffset={5}>
-              <SelectItem value="no">No</SelectItem>
               <SelectItem value="yes">Yes</SelectItem>
+              <SelectItem value="no">No</SelectItem>
               <SelectItem value="maybe">Maybe</SelectItem>
             </SelectContent>
           </ForwardedSelect>
@@ -303,13 +300,11 @@ export const QuestionnaireForm = () => {
     defaultValues: {
       age: 30,
       iua_preference: '1000',
-      pregnancy: false,
-      pre_existing: false,
       state: '',
       zip_code: '',
       expense_preference: 'lower_monthly',
-      pregnancy_planning: 'no',
       visit_frequency: 'just_checkups'
+      // pregnancy and pre_existing intentionally omitted to start blank
     },
     mode: 'onBlur'
   });
@@ -481,8 +476,8 @@ export const QuestionnaireForm = () => {
               <p className="text-gray-600">{step.description}</p>
               
               {step.fields.map(field => {
-                // Skip pregnancy_planning if currently pregnant
-                if (field === 'pregnancy_planning' && watchPregnancy === true) {
+                // Skip pregnancy_planning if pregnancy is not explicitly 'false'
+                if (field === 'pregnancy_planning' && form.watch('pregnancy') !== 'false') {
                   return null;
                 }
                 

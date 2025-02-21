@@ -6,7 +6,7 @@ import { z } from 'zod';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { ProgressIndicator } from '@/components/questionnaire/progress-indicator';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { InfoIcon } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
 import { QuestionnaireData } from '@/lib/types';
@@ -35,6 +35,7 @@ export default function HealthPage() {
   const router = useRouter();
   const [showPreExistingInfo, setShowPreExistingInfo] = useState(false);
   const [showPregnancyInfo, setShowPregnancyInfo] = useState(false);
+  const [showPlanningQuestion, setShowPlanningQuestion] = useState(false);
   
   const form = useForm<HealthData>({
     resolver: zodResolver(healthSchema),
@@ -42,8 +43,19 @@ export default function HealthPage() {
       preExistingConditions: undefined,
       currentlyPregnant: undefined,
       planningPregnancy: undefined
-    }
+    },
+    shouldUnregister: true
   });
+
+  // Watch for changes to currentlyPregnant
+  useEffect(() => {
+    const subscription = form.watch((value, { name }) => {
+      if (name === 'currentlyPregnant') {
+        setShowPlanningQuestion(value.currentlyPregnant === 'no');
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [form.watch]);
 
   const onSubmit = async (data: HealthData) => {
     try {
@@ -147,7 +159,7 @@ export default function HealthPage() {
                         "text-gray-900"
                       )}
                     >
-                      <option value="" className="text-gray-500">Select an option</option>
+                      <option value="">Select an option</option>
                       <option value="no">No</option>
                       <option value="yes">Yes</option>
                     </select>
@@ -168,7 +180,7 @@ export default function HealthPage() {
               </div>
 
               {/* Planning Pregnancy - Only show if currentlyPregnant is "no" */}
-              {form.watch('currentlyPregnant') === 'no' && (
+              {showPlanningQuestion && (
                 <div className="space-y-2">
                   <div className="flex items-start space-x-2">
                     <div className="flex-grow">
