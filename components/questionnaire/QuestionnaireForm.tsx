@@ -1,6 +1,6 @@
 'use client';
 
-import { useForm, UseFormReturn } from 'react-hook-form';
+import { useForm, UseFormReturn, ControllerRenderProps, ControllerFieldState, UseFormStateReturn } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useEffect, useState, forwardRef } from 'react';
@@ -301,7 +301,11 @@ export const QuestionnaireForm = () => {
       state: '',
       zip_code: ''
     },
-    mode: 'onBlur'
+    resolver: zodResolver(formSchema),
+    mode: 'onChange',
+    delayError: 500,
+    shouldFocusError: true,
+    criteriaMode: 'firstError'
   });
 
   const watchPregnancy = form.watch('pregnancy');
@@ -482,16 +486,22 @@ export const QuestionnaireForm = () => {
                   <FormField
                     key={field}
                     control={form.control}
-                    name={field}
-                    render={({ field: formField }) => (
+                    name={field as keyof FormValues}
+                    render={({ 
+                      field: formField, 
+                      fieldState 
+                    }: {
+                      field: ControllerRenderProps<FormValues>;
+                      fieldState: ControllerFieldState;
+                    }) => (
                       <FormItem className="space-y-2">
-                        <FormLabel htmlFor={fieldId} className="text-base">
-                          {getFieldLabel(field as keyof z.infer<typeof formSchema>, form)}
+                        <FormLabel htmlFor={`form-field-${field}`} className="text-base">
+                          {getFieldLabel(field as keyof FormValues, form)}
                         </FormLabel>
                         <FormControl>
                           {renderFormControl(field, formField, form)}
                         </FormControl>
-                        <FormMessage />
+                        {fieldState.isTouched && <FormMessage />}
                       </FormItem>
                     )}
                   />

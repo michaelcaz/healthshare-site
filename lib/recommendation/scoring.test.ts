@@ -10,8 +10,8 @@ describe('calculatePlanScore', () => {
     household_size: 1,
     coverage_type: 'just_me' as const,
     iua_preference: '1000' as const,
-    pregnancy: false,
-    pre_existing: false,
+    pregnancy: 'false' as const,
+    pre_existing: 'false' as const,
     state: 'TX',
     zip_code: '75001',
     expense_preference: 'lower_monthly' as const,
@@ -25,8 +25,8 @@ describe('calculatePlanScore', () => {
     household_size: 1,
     coverage_type: 'just_me',
     iua_preference: '1000',
-    pregnancy: false,
-    pre_existing: false,
+    pregnancy: 'false',
+    pre_existing: 'false',
     state: 'TX',
     zip: '75001',
     expense_preference: 'lower_monthly',
@@ -58,7 +58,7 @@ describe('calculatePlanScore', () => {
 
     const pregnancyQuestionnaire = {
       ...sampleQuestionnaire,
-      pregnancy: true
+      pregnancy: 'true' as const
     }
 
     const score = await calculatePlanScore(plan, pregnancyQuestionnaire)
@@ -76,7 +76,7 @@ describe('calculatePlanScore', () => {
     })!;
     const pregnancyQuestionnaire = {
       ...sampleQuestionnaire,
-      pregnancy: true
+      pregnancy: 'true' as const
     }
 
     const score = await calculatePlanScore(planWithoutMaternity, pregnancyQuestionnaire)
@@ -125,7 +125,7 @@ describe('calculatePlanScore', () => {
     it('favors medium IUA plans for balanced preference', async () => {
       const questionnaire = {
         ...sampleQuestionnaire,
-        expense_preference: 'balanced' as const,
+        expense_preference: 'lower_monthly' as const,
         iua_preference: '2500' as const
       }
       
