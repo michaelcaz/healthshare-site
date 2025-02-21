@@ -6,18 +6,17 @@ import { providerPlans } from '@/data/provider-plans';
 
 describe('Plan Recommendations Integration', () => {
   const sampleQuestionnaire: QuestionnaireResponse = {
-    age: 35,
-    household_size: 1,
-    coverage_type: 'just_me',
-    iua_preference: '1000',
+    age: 30,
+    coverage_type: 'just_me' as const,
+    iua_preference: '1000' as const,
     pregnancy: false,
     pre_existing: false,
     state: 'TX',
     zip_code: '75001',
-    expense_preference: 'lower_monthly',
-    pregnancy_planning: 'no',
+    expense_preference: 'lower_monthly' as const,
+    pregnancy_planning: 'no' as const,
     medical_conditions: [],
-    visit_frequency: 'just_checkups'
+    visit_frequency: 'just_checkups' as const
   }
 
   const planMatcher = new PlanMatchingService(providerPlans);
@@ -47,14 +46,14 @@ describe('Plan Recommendations Integration', () => {
 
   it('correctly filters by household size', () => {
     // Single member
-    const singleResponse = { ...sampleQuestionnaire, age: 30, household_size: 1, coverage_type: 'just_me' as const };
+    const singleResponse = { ...sampleQuestionnaire, age: 30, coverage_type: 'just_me' as const };
     const singlePlans = planMatcher.findEligiblePlans(singleResponse);
     expect(singlePlans.every(p => 
       p.eligiblePrices.length > 0
     )).toBeTruthy();
 
     // Family
-    const familyResponse = { ...sampleQuestionnaire, age: 30, household_size: 4, coverage_type: 'family' as const };
+    const familyResponse = { ...sampleQuestionnaire, age: 30, coverage_type: 'family' as const };
     const familyPlans = planMatcher.findEligiblePlans(familyResponse);
     const crowdHealthFamily = familyPlans.find(p => p.id === 'crowdhealth-basic');
     expect(crowdHealthFamily?.eligiblePrices[0].monthlyPremium).toEqual(640); // CrowdHealth family rate
@@ -64,7 +63,6 @@ describe('Plan Recommendations Integration', () => {
     const response = { 
       ...sampleQuestionnaire, 
       age: 30, 
-      household_size: 1,
       coverage_type: 'just_me' as const,
       iua_preference: '1000' as '1000' | '2500' | '5000'
     };

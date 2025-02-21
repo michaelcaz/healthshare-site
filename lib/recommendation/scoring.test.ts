@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { calculatePlanScore } from './scoring'
 import { providerPlans } from '@/data/provider-plans'
 import { healthshareProviders } from '@/types/provider-plans'
+import { QuestionnaireResponse } from '@/types/questionnaire'
 
 describe('calculatePlanScore', () => {
   const sampleQuestionnaire = {
@@ -217,4 +218,43 @@ describe('calculatePlanScore', () => {
       expect(annualCostFactor?.score).toBeDefined()
     })
   })
-}) 
+})
+
+describe('Plan Scoring', () => {
+  const sampleResponse: QuestionnaireResponse = {
+    age: 30,
+    coverage_type: 'just_me' as const,
+    iua_preference: '1000' as const,
+    pregnancy: false,
+    pre_existing: false,
+    state: 'TX',
+    zip_code: '75001',
+    expense_preference: 'lower_monthly' as const,
+    pregnancy_planning: 'no' as const,
+    medical_conditions: [],
+    visit_frequency: 'just_checkups' as const
+  };
+
+  it('scores plans correctly', async () => {
+    const scores = await Promise.all(
+      providerPlans.map(plan => calculatePlanScore(plan, sampleResponse))
+    );
+    
+    expect(scores.length).toBeGreaterThan(0);
+    expect(scores.every(score => score.total_score >= 0 && score.total_score <= 100)).toBe(true);
+  });
+
+  it('handles pregnancy correctly', async () => {
+    const pregnancyResponse: QuestionnaireResponse = {
+      ...sampleResponse,
+      pregnancy: true,
+      pregnancy_planning: 'yes' as const
+    };
+
+    const scores = await Promise.all(
+      providerPlans.map(plan => calculatePlanScore(plan, pregnancyResponse))
+    );
+
+    expect(scores.some(score => score.total_score > 0)).toBe(true);
+  });
+}); 

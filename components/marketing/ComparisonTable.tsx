@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { Info, DollarSign, Building2, Calendar, CheckSquare } from 'lucide-react';
 import { Alert, AlertDescription } from '../ui/alert';
+import { useRouter } from 'next/navigation';
 
 const features = [
   {
@@ -38,6 +39,7 @@ const features = [
 ];
 
 export function ComparisonTable() {
+  const router = useRouter();
   const [hoveredFeature, setHoveredFeature] = useState<number | null>(null);
   const [ref, inView] = useInView({
     triggerOnce: true,
@@ -169,6 +171,7 @@ export function ComparisonTable() {
           className="mt-16 text-center px-4 sm:px-0"
         >
           <button 
+            onClick={() => router.push('/questionnaire')}
             className="group relative w-full sm:w-[200px] h-12 bg-emerald-500 text-white px-8 py-3 rounded-xl 
                      text-lg font-bold hover:bg-emerald-600 transition-all duration-300 
                      hover:scale-105 hover:shadow-lg border border-emerald-400"

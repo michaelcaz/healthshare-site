@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Scissors, Stethoscope, Activity, ArrowRight, Info } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import { useRouter } from 'next/navigation';
 
 // Helper function to highlight savings amounts
 const formatPrices = (text: string) => {
@@ -44,6 +45,7 @@ const cards = [
 ];
 
 export function SafetyNet() {
+  const router = useRouter();
   const fadeInUpVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 },
@@ -140,6 +142,7 @@ export function SafetyNet() {
             Join a crew of savvy, healthy folks who've got your back—save more, together!
           </p>
           <motion.button
+            onClick={() => router.push('/questionnaire')}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             className={cn(

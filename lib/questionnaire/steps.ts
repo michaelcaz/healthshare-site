@@ -2,8 +2,8 @@ export const steps = [
   {
     id: 'basic-info',
     title: 'Basic Information',
-    description: 'Let\'s start with the basics',
-    fields: ['age', 'household_size', 'coverage_type']
+    description: 'Tell us about yourself',
+    fields: ['age', 'coverage_type']
   },
   {
     id: 'location',

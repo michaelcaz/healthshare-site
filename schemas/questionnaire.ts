@@ -2,8 +2,7 @@ import { z } from 'zod'
 
 export const questionnaireSchema = z.object({
   age: z.number(),
-  household_size: z.number(),
-  coverage_type: z.enum(['just_me', 'me_spouse', 'me_kids', 'family']),
+  coverage_type: z.enum(['just_me', 'family']),
   iua_preference: z.enum(['1000', '2500', '5000']).default('1000'),
   pregnancy: z.boolean().default(false),
   pre_existing: z.boolean().default(false),

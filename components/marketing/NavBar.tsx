@@ -4,8 +4,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { cn } from '@/lib/utils';
 
 export function NavBar() {
+  const router = useRouter();
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -58,11 +61,32 @@ export function NavBar() {
               What's a Healthshare?
             </Link>
             <motion.button
+              onClick={() => router.push('/questionnaire')}
               whileHover={{ scale: 1.02, y: -1 }}
               whileTap={{ scale: 0.98 }}
-              className="btn-primary btn-arrow"
+              className={cn(
+                "bg-gradient-to-r from-indigo-600 to-indigo-700",
+                "text-white px-6 py-2 rounded-lg font-medium",
+                "hover:from-indigo-700 hover:to-indigo-800",
+                "shadow-md transition-all",
+                "flex items-center gap-2",
+                "relative group"
+              )}
             >
               Get Started
+              <svg 
+                className="w-4 h-4 transition-transform group-hover:translate-x-1" 
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth={2} 
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
             </motion.button>
           </div>
             

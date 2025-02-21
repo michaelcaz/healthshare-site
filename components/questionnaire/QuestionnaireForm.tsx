@@ -26,15 +26,12 @@ const COOKIE_KEY = 'questionnaire-form-data';
 const COOKIE_OPTIONS = {
   expires: 1, // 1 day
   path: '/',
-  sameSite: 'lax'
+  sameSite: 'Lax' as const
 };
 
 const formSchema = z.object({
-  age: z.coerce.number().min(18, "Age must be at least 18").max(120, "Age must be 120 or less"),
-  household_size: z.coerce.number().min(1, "Household size must be at least 1").max(10, "Household size must be 10 or less"),
-  coverage_type: z.enum(['just_me', 'me_spouse', 'me_kids', 'family'], {
-    errorMap: () => ({ message: "Please select who needs coverage" })
-  }),
+  age: z.coerce.number().min(18, "You must be at least 18 years old").max(120, "Please enter a valid age"),
+  coverage_type: z.enum(['just_me', 'family']),
   iua_preference: z.enum(['1000', '2500', '5000'], {
     errorMap: () => ({ message: "Please select an IUA preference" })
   }),
@@ -68,8 +65,7 @@ const formSchema = z.object({
 
 const questionLabels: Record<keyof z.infer<typeof formSchema>, string> = {
   age: "What is your age?",
-  household_size: "How many people are in your household?",
-  coverage_type: "Who needs coverage?",
+  coverage_type: "What type of coverage are you looking for?",
   iua_preference: "Choose your Initial Unshared Amount (IUA)",
   pregnancy: "Are you currently pregnant?",
   pre_existing: "Do you have any pre-existing conditions?",
@@ -113,8 +109,6 @@ const renderFormControl = (fieldName: string, field: any, watchFields?: Record<s
             </SelectTrigger>
             <SelectContent className="z-50 bg-white" position="popper" sideOffset={5}>
               <SelectItem value="just_me">Just me</SelectItem>
-              <SelectItem value="me_spouse">Me + Spouse/Partner</SelectItem>
-              <SelectItem value="me_kids">Me + Kids</SelectItem>
               <SelectItem value="family">Family</SelectItem>
             </SelectContent>
           </ForwardedSelect>
@@ -291,9 +285,8 @@ export const QuestionnaireForm = () => {
   
   const form = useForm<FormValues>({
     defaultValues: {
-      age: 0,
-      household_size: 1,
-      coverage_type: 'just_me',
+      age: 30,
+      coverage_type: 'just_me' as const,
       iua_preference: '1000',
       pregnancy: false,
       pre_existing: false,
