@@ -2,9 +2,17 @@ import {withSentryConfig} from '@sentry/nextjs';
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: [
-      'cdn.sanity.io', // For Sanity.io hosted images
-      'lrwewkxwfgmzkvhozdin.supabase.co', // For Supabase hosted images
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'cdn.sanity.io',
+        pathname: '**'
+      },
+      {
+        protocol: 'https',
+        hostname: 'lrwewkxwfgmzkvhozdin.supabase.co',
+        pathname: '**'
+      }
     ],
     formats: ['image/avif', 'image/webp'],
     dangerouslyAllowSVG: true,
