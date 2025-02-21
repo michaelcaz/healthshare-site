@@ -207,7 +207,7 @@ const renderFormControl = (fieldName: string, field: any, form: UseFormReturn<Fo
             onValueChange={field.onChange}
           >
             <SelectTrigger className="w-full bg-white">
-              <SelectValue placeholder="Select your preference" />
+              <SelectValue placeholder="" />
             </SelectTrigger>
             <SelectContent className="z-50 bg-white" position="popper" sideOffset={5}>
               <SelectItem value="lower_monthly">Lower monthly cost, higher out-of-pocket</SelectItem>
@@ -237,7 +237,7 @@ const renderFormControl = (fieldName: string, field: any, form: UseFormReturn<Fo
             onValueChange={field.onChange}
           >
             <SelectTrigger className="w-full bg-white">
-              <SelectValue placeholder="Select your IUA preference" />
+              <SelectValue placeholder="" />
             </SelectTrigger>
             <SelectContent className="z-50 bg-white" position="popper" sideOffset={5}>
               <SelectItem value="1000">$1,000 IUA</SelectItem>
@@ -261,7 +261,7 @@ const renderFormControl = (fieldName: string, field: any, form: UseFormReturn<Fo
             onValueChange={field.onChange}
           >
             <SelectTrigger className="w-full bg-white">
-              <SelectValue placeholder="Select visit frequency" />
+              <SelectValue placeholder="" />
             </SelectTrigger>
             <SelectContent className="z-50 bg-white" position="popper" sideOffset={5}>
               {Object.entries(visitOptions).map(([key, option]) => (
@@ -298,13 +298,8 @@ export const QuestionnaireForm = () => {
   
   const form = useForm<FormValues>({
     defaultValues: {
-      age: 30,
-      iua_preference: '1000',
       state: '',
-      zip_code: '',
-      expense_preference: 'lower_monthly',
-      visit_frequency: 'just_checkups'
-      // pregnancy and pre_existing intentionally omitted to start blank
+      zip_code: ''
     },
     mode: 'onBlur'
   });
