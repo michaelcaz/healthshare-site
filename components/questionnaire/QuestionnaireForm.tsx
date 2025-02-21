@@ -30,7 +30,9 @@ const COOKIE_OPTIONS = {
 };
 
 const formSchema = z.object({
-  age: z.coerce.number().min(18, "You must be at least 18 years old").max(120, "Please enter a valid age"),
+  age: z.number()
+    .min(18, "You must be at least 18 years old")
+    .max(120, "Please enter a valid age"),
   coverage_type: z.enum(['just_me', 'me_spouse', 'me_kids', 'family'], {
     errorMap: () => ({ message: "Please select who needs coverage" })
   }),
@@ -43,7 +45,7 @@ const formSchema = z.object({
   pre_existing: z.enum(['true', 'false'], {
     errorMap: () => ({ message: "Please indicate if you have pre-existing conditions" })
   }),
-  state: z.string().min(1, "Please enter your state"),
+  state: z.string().min(1, "Please enter your state").optional(),
   zip_code: z.string().min(5, "Please enter a valid ZIP code"),
   expense_preference: z.enum(['lower_monthly', 'higher_monthly'], {
     errorMap: () => ({ message: "Please select your cost preference" })
@@ -127,11 +129,24 @@ const renderFormControl = (fieldName: string, field: any, form: UseFormReturn<Fo
           {...field} 
           id={fieldId}
           name={fieldName}
-          type="number" 
-          min="18" 
-          max="120" 
+          type="number"
+          min={18}
+          max={120}
           placeholder="Enter age"
           className="bg-white"
+          value={field.value ?? ''}
+          onChange={(e) => {
+            const val = e.target.value;
+            if (val === '') {
+              field.onChange(undefined);
+            } else {
+              const num = parseInt(val, 10);
+              if (!isNaN(num)) {
+                field.onChange(num);
+              }
+            }
+          }}
+          onBlur={field.onBlur}
         />
       )
     case 'pre_existing':
@@ -298,11 +313,20 @@ export const QuestionnaireForm = () => {
   
   const form = useForm<FormValues>({
     defaultValues: {
+      age: undefined,
+      coverage_type: undefined,
+      iua_preference: undefined,
+      pregnancy: undefined,
+      pre_existing: undefined,
       state: '',
-      zip_code: ''
+      zip_code: '',
+      expense_preference: undefined,
+      pregnancy_planning: undefined,
+      medical_conditions: [],
+      visit_frequency: undefined
     },
     resolver: zodResolver(formSchema),
-    mode: 'onChange',
+    mode: 'onTouched',
     delayError: 500,
     shouldFocusError: true,
     criteriaMode: 'firstError'
@@ -325,11 +349,18 @@ export const QuestionnaireForm = () => {
         if (savedData) {
           try {
             const parsedData = JSON.parse(savedData);
-            Object.entries(parsedData).forEach(([key, value]) => {
+            // Reset form before setting values
+            await form.reset();
+            // Set each field individually with validation
+            for (const [key, value] of Object.entries(parsedData)) {
               if (key in form.getValues()) {
-                form.setValue(key as keyof FormValues, value as any);
+                await form.setValue(key as keyof FormValues, value as any, {
+                  shouldValidate: true,
+                  shouldDirty: true,
+                  shouldTouch: true
+                });
               }
-            });
+            }
           } catch (parseError) {
             console.warn('Could not parse saved form data:', parseError);
           }
@@ -422,10 +453,28 @@ export const QuestionnaireForm = () => {
         throw new Error(errorMessage);
       }
 
-      const transformedData = finalValidation.data;
+      // Transform data to match QuestionnaireResponse type
+      const transformedData: QuestionnaireResponse = {
+        age: finalValidation.data.age,
+        coverage_type: finalValidation.data.coverage_type,
+        iua_preference: finalValidation.data.iua_preference,
+        pregnancy: finalValidation.data.pregnancy,
+        pre_existing: finalValidation.data.pre_existing,
+        state: finalValidation.data.state,
+        zip_code: finalValidation.data.zip_code,
+        expense_preference: finalValidation.data.expense_preference,
+        pregnancy_planning: finalValidation.data.pregnancy_planning,
+        medical_conditions: finalValidation.data.medical_conditions,
+        visit_frequency: finalValidation.data.visit_frequency
+      };
+
+      console.log('Submitting form data:', transformedData);
+      
       const response = await saveQuestionnaireResponse(transformedData);
+      console.log('Server response:', response);
       
       if (!response.success) {
+        console.error('Submission failed:', response.error, response.details);
         throw new Error(response.error || 'Failed to save questionnaire');
       }
       
@@ -435,6 +484,7 @@ export const QuestionnaireForm = () => {
       });
       
       setIsComplete(true);
+      await new Promise(resolve => setTimeout(resolve, 100));
       router.push('/recommendations');
     } catch (error) {
       setFormError(getErrorMessage(error));
@@ -488,11 +538,7 @@ export const QuestionnaireForm = () => {
                     control={form.control}
                     name={field as keyof FormValues}
                     render={({ 
-                      field: formField, 
-                      fieldState 
-                    }: {
-                      field: ControllerRenderProps<FormValues>;
-                      fieldState: ControllerFieldState;
+                      field: formField 
                     }) => (
                       <FormItem className="space-y-2">
                         <FormLabel htmlFor={`form-field-${field}`} className="text-base">
@@ -501,7 +547,7 @@ export const QuestionnaireForm = () => {
                         <FormControl>
                           {renderFormControl(field, formField, form)}
                         </FormControl>
-                        {fieldState.isTouched && <FormMessage />}
+                        <FormMessage />
                       </FormItem>
                     )}
                   />
