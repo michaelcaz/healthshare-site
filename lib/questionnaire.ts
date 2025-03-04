@@ -49,8 +49,26 @@ export { clearQuestionnaireResponse } from './actions/questionnaire'
 export { recoverPartialResponse } from './utils/storage'
 
 export function findEligiblePlans(response: QuestionnaireResponse): EligiblePlan[] {
-  const householdType = getHouseholdType(response.household_size);
-
+  console.log('QuestionnaireResponse received:', JSON.stringify(response, null, 2));
+  
+  // Map coverage_type to household_size
+  let household_size = 1; // Default to 1
+  
+  if (response.coverage_type === 'just_me') {
+    household_size = 1;
+  } else if (response.coverage_type === 'me_spouse') {
+    household_size = 2;
+  } else if (response.coverage_type === 'me_kids') {
+    household_size = 3; // Assuming at least one child
+  } else if (response.coverage_type === 'family') {
+    household_size = 4; // Assuming spouse + at least one child
+  }
+  
+  console.log('Derived household_size:', household_size);
+  
+  const householdType = getHouseholdType(household_size);
+  console.log('Household type:', householdType);
+  
   return providerPlans.map(plan => {
     const ageBracket = getAgeBracket(response.age, plan.ageRules);
     if (!ageBracket) return null;

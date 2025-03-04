@@ -33,11 +33,12 @@ export function NavBar() {
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center">
             <Image
-              src="/images/logo.svg"
+              src="/images/logo.svg?v=2"
               alt="Riff"
-              width={96}
-              height={32}
+              width={216}
+              height={72}
               priority
+              className="max-h-18"
             />
           </Link>
 

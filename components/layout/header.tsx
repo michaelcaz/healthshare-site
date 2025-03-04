@@ -29,12 +29,11 @@ export function Header() {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center">
-            <Image
-              src="/images/logo.svg"
-              alt="Riff"
-              width={192}
-              height={64}
-              priority
+            {/* Using direct img tag which works based on the screenshot */}
+            <img 
+              src="/images/logo.svg" 
+              alt="ShareWell" 
+              className="h-60 w-auto"
             />
           </Link>
 

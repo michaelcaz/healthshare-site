@@ -1,4 +1,7 @@
+'use client'
+
 import Image from 'next/image';
+import { useState, useEffect } from 'react';
 
 export function Header() {
   return (
@@ -7,12 +10,11 @@ export function Header() {
         <div className="flex items-center">
           {/* Logo/Brand */}
           <a href="/" className="flex items-center">
-            <Image 
+            {/* Using direct img tag which works based on the screenshot */}
+            <img 
               src="/images/logo.svg" 
-              alt="Riff" 
-              width={96} 
-              height={32} 
-              priority
+              alt="ShareWell" 
+              className="h-60 w-auto"
             />
           </a>
         </div>

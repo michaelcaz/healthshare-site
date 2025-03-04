@@ -8,12 +8,10 @@ export function Footer() {
           {/* Company Info */}
           <div>
             <div className="mb-4">
-              <Image 
+              <img 
                 src="/images/logo.svg" 
-                alt="Riff" 
-                width={96} 
-                height={32} 
-                priority
+                alt="ShareWell" 
+                className="h-14 w-auto"
               />
             </div>
             <p className="text-sm text-gray-600">

@@ -40,7 +40,24 @@ export class PlanScoringService {
     });
 
     // Expected annual healthcare spend impact
-    const annualScore = this.scoreAnnualCosts(plan, response.annual_healthcare_spend);
+    console.log('QuestionnaireResponse in plan-scoring:', JSON.stringify(response, null, 2));
+    
+    // Derive annual_healthcare_spend from visit_frequency if available
+    let annual_healthcare_spend = 'less_1000'; // Default to low spend
+    
+    if (response.visit_frequency) {
+      if (response.visit_frequency === 'just_checkups') {
+        annual_healthcare_spend = 'less_1000';
+      } else if (response.visit_frequency === 'few_months') {
+        annual_healthcare_spend = '1000_5000';
+      } else if (response.visit_frequency === 'monthly_plus') {
+        annual_healthcare_spend = 'more_5000';
+      }
+    }
+    
+    console.log('Derived annual_healthcare_spend:', annual_healthcare_spend);
+    
+    const annualScore = this.scoreAnnualCosts(plan, annual_healthcare_spend);
     factors.push({
       factor: 'Expected Annual Costs',
       score: annualScore,
