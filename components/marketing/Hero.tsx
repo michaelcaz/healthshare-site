@@ -58,7 +58,7 @@ export function Hero() {
             </p>
             <motion.form 
               onSubmit={handleSubmit} 
-              className="flex w-full max-w-[600px] h-16 p-1.5 bg-white rounded-full border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200"
+              className="flex w-full max-w-[600px] h-16 p-1.5 bg-white rounded-full border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200 mb-4"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}

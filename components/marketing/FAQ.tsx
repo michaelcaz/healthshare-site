@@ -3,8 +3,10 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
+import { useRouter } from 'next/navigation';
 
 export function FAQ() {
+  const router = useRouter();
   const [ref, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1
@@ -84,6 +86,21 @@ export function FAQ() {
             </motion.div>
           ))}
         </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ delay: faqs.length * 0.1 + 0.2, duration: 0.8 }}
+          className="mt-12 text-center"
+        >
+          <p className="mb-6 text-gray-600">Ready to find the perfect healthshare plan for your needs?</p>
+          <button
+            onClick={() => router.push('/questionnaire')}
+            className="px-8 py-3 bg-[#6366F1] hover:bg-[#4F46E5] text-white font-semibold rounded-xl transition-all duration-200 hover:shadow-lg"
+          >
+            Get Started
+          </button>
+        </motion.div>
       </div>
     </section>
   );

@@ -1,51 +1,96 @@
-import { createBrowserClient, createServerClient } from '@supabase/ssr'
+import { createBrowserClient } from '@supabase/ssr'
 import { createClient } from '@supabase/supabase-js'
-import { cookies } from 'next/headers'
 import type { Database } from '@/types/supabase'
 
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+// Environment variables - with better error handling
+const getEnvVariable = (key: string): string => {
+  const value = process.env[key]
+  if (!value) {
+    console.error(`Missing environment variable: ${key}`)
+    // Return empty string instead of throwing to allow graceful fallback
+    return ''
+  }
+  return value
+}
+
+const SUPABASE_URL = getEnvVariable('NEXT_PUBLIC_SUPABASE_URL')
+const SUPABASE_ANON_KEY = getEnvVariable('NEXT_PUBLIC_SUPABASE_ANON_KEY')
 
 // Client-side singleton
 let clientInstance: ReturnType<typeof createBrowserClient<Database>> | null = null
 
 export function getClientInstance() {
-  if (!clientInstance) {
-    clientInstance = createBrowserClient<Database>(
-      SUPABASE_URL,
-      SUPABASE_ANON_KEY
+  if (typeof window === 'undefined') {
+    console.warn('getClientInstance called on the server side - this should only be used in client components')
+    // Return a dummy client for SSR that will be replaced on the client
+    return createBrowserClient<Database>(
+      SUPABASE_URL || '',
+      SUPABASE_ANON_KEY || ''
     )
+  }
+
+  if (!clientInstance) {
+    console.log('Creating new Supabase browser client instance')
+    
+    // Check if environment variables are available
+    if (!SUPABASE_URL) {
+      console.error('Missing NEXT_PUBLIC_SUPABASE_URL environment variable')
+      throw new Error('Supabase URL is required')
+    }
+    
+    if (!SUPABASE_ANON_KEY) {
+      console.error('Missing NEXT_PUBLIC_SUPABASE_ANON_KEY environment variable')
+      throw new Error('Supabase key is required')
+    }
+    
+    try {
+      console.log('Supabase URL:', SUPABASE_URL.substring(0, 15) + '...')
+      console.log('Supabase ANON KEY available (length):', SUPABASE_ANON_KEY.length)
+      
+      clientInstance = createBrowserClient<Database>(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+      )
+      console.log('Supabase browser client created successfully')
+    } catch (error) {
+      console.error('Error creating Supabase browser client:', error)
+      throw error
+    }
   }
   return clientInstance
 }
 
-// Server-side client (creates new instance per-request)
-export function getServerClient() {
-  const cookieStore = cookies()
-  return createServerClient<Database>(
-    SUPABASE_URL,
-    SUPABASE_ANON_KEY,
-    {
-      cookies: {
-        get(name: string) {
-          return cookieStore.get(name)?.value
-        },
-      },
-    }
-  )
-}
+// Admin client for background jobs - only create if service role key is available
+let adminClientInstance: ReturnType<typeof createClient<Database>> | null = null
 
-// Admin client for background jobs
-export const adminClient = createClient<Database>(
-  SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY ?? '',
-  {
-    auth: {
-      autoRefreshToken: true,
-      persistSession: false
+export function getAdminClient() {
+  if (!adminClientInstance) {
+    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+    
+    if (!serviceRoleKey) {
+      console.error('Missing SUPABASE_SERVICE_ROLE_KEY environment variable')
+      throw new Error('Supabase service role key is required for admin operations')
     }
+    
+    if (!SUPABASE_URL) {
+      console.error('Missing NEXT_PUBLIC_SUPABASE_URL environment variable')
+      throw new Error('Supabase URL is required')
+    }
+    
+    adminClientInstance = createClient<Database>(
+      SUPABASE_URL,
+      serviceRoleKey,
+      {
+        auth: {
+          autoRefreshToken: true,
+          persistSession: false
+        }
+      }
+    )
   }
-)
+  
+  return adminClientInstance
+}
 
 // Error handling wrapper
 export async function withErrorHandling<T>(

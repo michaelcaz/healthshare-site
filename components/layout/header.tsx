@@ -2,11 +2,14 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 
 export function Header() {
+  const router = useRouter()
   const [isScrolled, setIsScrolled] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -57,6 +60,7 @@ export function Header() {
               What's a Healthshare?
             </Link>
             <motion.button
+              onClick={() => router.push('/questionnaire')}
               whileHover={{ scale: 1.02, y: -1 }}
               whileTap={{ scale: 0.98 }}
               className="btn-primary btn-arrow py-2 px-6"
@@ -65,7 +69,10 @@ export function Header() {
             </motion.button>
           </div>
             
-          <button className="md:hidden p-2 rounded-lg hover:bg-gray-100/80">
+          <button 
+            className="md:hidden p-2 rounded-lg hover:bg-gray-100/80"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
             <svg
               className="w-6 h-6 text-gray-warm"
               fill="none"
@@ -76,12 +83,60 @@ export function Header() {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M4 6h16M4 12h16M4 18h16"
+                d={isMobileMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}
               />
             </svg>
           </button>
         </div>
       </div>
+
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3 }}
+            className="md:hidden bg-white shadow-lg"
+          >
+            <div className="container mx-auto px-4 py-4 flex flex-col space-y-4">
+              <Link 
+                href="/about"
+                className="text-base font-medium text-gray-warm/90 hover:text-gray-warm transition-colors py-2"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                About
+              </Link>
+              <Link 
+                href="/blog"
+                className="text-base font-medium text-gray-warm/90 hover:text-gray-warm transition-colors py-2"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Blog
+              </Link>
+              <Link 
+                href="/what-is-healthshare"
+                className="text-base font-medium text-gray-warm/90 hover:text-gray-warm transition-colors py-2"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                What's a Healthshare?
+              </Link>
+              <motion.button
+                onClick={() => {
+                  router.push('/questionnaire')
+                  setIsMobileMenuOpen(false)
+                }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="btn-primary btn-arrow py-2 px-6 self-start"
+              >
+                Get Started
+              </motion.button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.header>
   )
 }

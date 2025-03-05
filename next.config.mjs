@@ -34,6 +34,10 @@ const nextConfig = {
         {
           key: 'Cross-Origin-Opener-Policy',
           value: 'same-origin'
+        },
+        {
+          key: 'Content-Security-Policy',
+          value: "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://cdn.sanity.io https://lrwewkxwfgmzkvhozdin.supabase.co; connect-src 'self' https://vitals.vercel-insights.com;"
         }
       ],
     },
