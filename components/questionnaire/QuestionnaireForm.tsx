@@ -30,9 +30,17 @@ const COOKIE_OPTIONS = {
 };
 
 const formSchema = z.object({
-  age: z.number()
-    .min(18, "You must be at least 18 years old")
-    .max(120, "Please enter a valid age"),
+  age: z.string()
+    .min(1, "Age is required")
+    .transform((val) => {
+      const parsed = parseInt(val, 10);
+      if (isNaN(parsed)) {
+        throw new Error("Age must be a number");
+      }
+      return parsed;
+    })
+    .refine((val) => val >= 18, "You must be at least 18 years old")
+    .refine((val) => val <= 120, "Please enter a valid age"),
   coverage_type: z.enum(['just_me', 'me_spouse', 'me_kids', 'family'], {
     errorMap: () => ({ message: "Please select who needs coverage" })
   }),
@@ -83,11 +91,7 @@ const questionLabels: Record<keyof z.infer<typeof formSchema>, string> = {
 
 const getFieldLabel = (field: keyof z.infer<typeof formSchema>, form: UseFormReturn<FormValues>): string => {
   if (field === 'visit_frequency') {
-    const coverage_type = form.watch('coverage_type');
-    if (coverage_type) {
-      const options = getVisitFrequencyOptions(coverage_type);
-      return options.just_checkups.question;
-    }
+    return "How often do you expect to visit the doctor?";
   }
   return questionLabels[field] || field;
 }
@@ -98,207 +102,201 @@ const ForwardedSelect = forwardRef((props: any, ref) => (
 ));
 ForwardedSelect.displayName = 'ForwardedSelect';
 
-const renderFormControl = (fieldName: string, field: any, form: UseFormReturn<FormValues>) => {
-  const fieldId = `form-field-${fieldName}`;
-  console.log(`Rendering field ${fieldName} with ID ${fieldId}`, field);
-  
+// Helper functions for form field rendering
+const getFieldType = (fieldName: keyof z.infer<typeof formSchema>): 'text' | 'number' | 'select' | 'radio' => {
+  switch (fieldName) {
+    case 'age':
+      return 'number';
+    case 'coverage_type':
+    case 'iua_preference':
+    case 'pregnancy':
+    case 'pre_existing':
+    case 'expense_preference':
+    case 'pregnancy_planning':
+    case 'visit_frequency':
+      return 'radio';
+    default:
+      return 'text';
+  }
+};
+
+const getPlaceholder = (fieldName: keyof z.infer<typeof formSchema>): string => {
+  switch (fieldName) {
+    case 'age':
+      return 'Enter your age';
+    case 'zip_code':
+      return 'Enter your ZIP code';
+    case 'medical_conditions':
+      return 'Enter medical conditions, separated by commas';
+    default:
+      return `Enter ${fieldName.replace('_', ' ')}`;
+  }
+};
+
+interface SelectOption {
+  value: string;
+  label: string;
+  description?: string;
+}
+
+const getSelectOptions = (fieldName: keyof z.infer<typeof formSchema>, form: UseFormReturn<FormValues>): SelectOption[] => {
   switch (fieldName) {
     case 'coverage_type':
-      return (
-        <div className="relative">
-          <ForwardedSelect 
-            {...field}
-            id={fieldId}
-            name={fieldName}
-            onValueChange={field.onChange}
-          >
-            <SelectTrigger className="w-full bg-white" id={`${fieldId}-trigger`}>
-              <SelectValue placeholder="" />
-            </SelectTrigger>
-            <SelectContent className="z-50 bg-white" position="popper" sideOffset={5}>
-              <SelectItem value="just_me" id={`${fieldId}-just_me`} className="data-[state=checked]:bg-cyan-500 data-[state=checked]:text-white hover:bg-cyan-500 hover:text-white">Just me</SelectItem>
-              <SelectItem value="me_spouse" id={`${fieldId}-me_spouse`} className="data-[state=checked]:bg-cyan-500 data-[state=checked]:text-white hover:bg-cyan-500 hover:text-white">Me + Spouse</SelectItem>
-              <SelectItem value="me_kids" id={`${fieldId}-me_kids`} className="data-[state=checked]:bg-cyan-500 data-[state=checked]:text-white hover:bg-cyan-500 hover:text-white">Me + Kids</SelectItem>
-              <SelectItem value="family" id={`${fieldId}-family`} className="data-[state=checked]:bg-cyan-500 data-[state=checked]:text-white hover:bg-cyan-500 hover:text-white">Family</SelectItem>
-            </SelectContent>
-          </ForwardedSelect>
-        </div>
-      )
-    case 'age':
-      return (
-        <Input 
-          {...field} 
-          id={fieldId}
-          name={fieldName}
-          type="number"
-          min={18}
-          max={120}
-          placeholder="Enter age"
-          className="bg-white"
-          value={field.value ?? ''}
-          onChange={(e) => {
-            const val = e.target.value;
-            if (val === '') {
-              field.onChange(undefined);
-            } else {
-              const num = parseInt(val, 10);
-              if (!isNaN(num)) {
-                field.onChange(num);
-              }
-            }
-          }}
-          onBlur={field.onBlur}
-        />
-      )
-    case 'pre_existing':
-      return (
-        <div className="relative">
-          <ForwardedSelect 
-            {...field}
-            id={fieldId}
-            name={fieldName}
-            onValueChange={field.onChange}
-          >
-            <SelectTrigger className="w-full bg-white" id={`${fieldId}-trigger`}>
-              <SelectValue placeholder="" />
-            </SelectTrigger>
-            <SelectContent className="z-50 bg-white" position="popper" sideOffset={5}>
-              <SelectItem value="false" id={`${fieldId}-false`}>No</SelectItem>
-              <SelectItem value="true" id={`${fieldId}-true`}>Yes</SelectItem>
-            </SelectContent>
-          </ForwardedSelect>
-        </div>
-      )
-    case 'pregnancy':
-      return (
-        <div className="relative">
-          <ForwardedSelect 
-            {...field}
-            id={fieldId}
-            name={fieldName}
-            onValueChange={(value: string) => {
-              field.onChange(value);
-              if (value === 'true') {
-                form.resetField('pregnancy_planning');
-              }
-            }}
-          >
-            <SelectTrigger className="w-full bg-white" id={`${fieldId}-trigger`}>
-              <SelectValue placeholder="" />
-            </SelectTrigger>
-            <SelectContent className="z-50 bg-white" position="popper" sideOffset={5}>
-              <SelectItem value="false" id={`${fieldId}-false`}>No</SelectItem>
-              <SelectItem value="true" id={`${fieldId}-true`}>Yes</SelectItem>
-            </SelectContent>
-          </ForwardedSelect>
-        </div>
-      )
-    case 'pregnancy_planning':
-      return (
-        <div className="relative">
-          <ForwardedSelect 
-            {...field}
-            id={fieldId}
-            name={fieldName}
-            onValueChange={field.onChange}
-          >
-            <SelectTrigger className="w-full bg-white" id={`${fieldId}-trigger`}>
-              <SelectValue placeholder="" />
-            </SelectTrigger>
-            <SelectContent className="z-50 bg-white" position="popper" sideOffset={5}>
-              <SelectItem value="yes" id={`${fieldId}-yes`}>Yes</SelectItem>
-              <SelectItem value="no" id={`${fieldId}-no`}>No</SelectItem>
-              <SelectItem value="maybe" id={`${fieldId}-maybe`}>Maybe</SelectItem>
-            </SelectContent>
-          </ForwardedSelect>
-        </div>
-      )
-    case 'expense_preference':
-      return (
-        <div className="relative">
-          <ForwardedSelect 
-            {...field}
-            id={fieldId}
-            name={fieldName}
-            onValueChange={field.onChange}
-          >
-            <SelectTrigger className="w-full bg-white" id={`${fieldId}-trigger`}>
-              <SelectValue placeholder="" />
-            </SelectTrigger>
-            <SelectContent className="z-50 bg-white" position="popper" sideOffset={5}>
-              <SelectItem value="lower_monthly" id={`${fieldId}-lower_monthly`}>Lower monthly cost, higher out-of-pocket</SelectItem>
-              <SelectItem value="higher_monthly" id={`${fieldId}-higher_monthly`}>Higher monthly cost, lower out-of-pocket</SelectItem>
-            </SelectContent>
-          </ForwardedSelect>
-        </div>
-      )
-    case 'medical_conditions':
-      return (
-        <Input 
-          {...field}
-          id={fieldId}
-          name={fieldName}
-          type="text"
-          placeholder="Enter medical conditions"
-          className="bg-white"
-        />
-      )
+      return [
+        { value: 'just_me', label: 'Just me' },
+        { value: 'me_spouse', label: 'Me + Spouse' },
+        { value: 'me_kids', label: 'Me + Kids' },
+        { value: 'family', label: 'Family' }
+      ];
     case 'iua_preference':
-      return (
-        <div className="relative">
-          <ForwardedSelect 
-            {...field}
-            id={fieldId}
-            name={fieldName}
-            onValueChange={field.onChange}
-          >
-            <SelectTrigger className="w-full bg-white" id={`${fieldId}-trigger`}>
-              <SelectValue placeholder="" />
-            </SelectTrigger>
-            <SelectContent className="z-50 bg-white" position="popper" sideOffset={5}>
-              <SelectItem value="1000" id={`${fieldId}-1000`}>$1,000</SelectItem>
-              <SelectItem value="2500" id={`${fieldId}-2500`}>$2,500</SelectItem>
-              <SelectItem value="5000" id={`${fieldId}-5000`}>$5,000</SelectItem>
-            </SelectContent>
-          </ForwardedSelect>
-        </div>
-      )
+      return [
+        { value: '1000', label: '$1,000' },
+        { value: '2500', label: '$2,500' },
+        { value: '5000', label: '$5,000' }
+      ];
+    case 'pregnancy':
+      return [
+        { value: 'false', label: 'No' },
+        { value: 'true', label: 'Yes' }
+      ];
+    case 'pre_existing':
+      return [
+        { value: 'false', label: 'No' },
+        { value: 'true', label: 'Yes' }
+      ];
+    case 'expense_preference':
+      return [
+        { value: 'lower_monthly', label: 'Lower monthly cost', description: 'Higher out-of-pocket when you need care' },
+        { value: 'higher_monthly', label: 'Higher monthly cost', description: 'Lower out-of-pocket when you need care' }
+      ];
+    case 'pregnancy_planning':
+      return [
+        { value: 'yes', label: 'Yes' },
+        { value: 'no', label: 'No' },
+        { value: 'maybe', label: 'Maybe' }
+      ];
     case 'visit_frequency':
-      const coverage_type = form.watch('coverage_type');
-      if (!coverage_type) return null;
-      const visitOptions = getVisitFrequencyOptions(coverage_type);
-      
-      return (
-        <div className="relative">
-          <ForwardedSelect 
-            {...field}
-            id={fieldId}
-            name={fieldName}
-            onValueChange={field.onChange}
-          >
-            <SelectTrigger className="w-full bg-white" id={`${fieldId}-trigger`}>
-              <SelectValue placeholder="" />
-            </SelectTrigger>
-            <SelectContent className="z-50 bg-white" position="popper" sideOffset={5}>
-              <SelectItem value="just_checkups" id={`${fieldId}-just_checkups`}>Just annual checkups</SelectItem>
-              <SelectItem value="few_months" id={`${fieldId}-few_months`}>Every few months</SelectItem>
-              <SelectItem value="monthly_plus" id={`${fieldId}-monthly_plus`}>Monthly or more</SelectItem>
-            </SelectContent>
-          </ForwardedSelect>
-        </div>
-      )
+      return [
+        { value: 'just_checkups', label: 'Just annual checkups', description: 'Only for preventive care' },
+        { value: 'few_months', label: 'Every few months', description: 'Occasional doctor visits' },
+        { value: 'monthly_plus', label: 'Monthly or more', description: 'Regular medical attention' }
+      ];
     default:
-      return (
-        <Input 
-          {...field}
-          id={fieldId}
-          name={fieldName}
-          placeholder={`Enter ${fieldName}`}
-          className="bg-white"
-        />
-      )
+      return [];
   }
-}
+};
+
+const getRadioOptions = getSelectOptions;
+
+const renderFormControl = (fieldName: string, field: any, form: UseFormReturn<FormValues>) => {
+  const fieldType = getFieldType(fieldName as keyof FormValues);
+  const fieldLabel = getFieldLabel(fieldName as keyof FormValues, form);
+  
+  return (
+    <div className="questionnaire-form-group fade-in" style={{ animationDelay: `${parseInt(fieldName.split('_')[0] || '0') * 0.05}s` }}>
+      <label htmlFor={fieldName} className="questionnaire-label">
+        {fieldLabel}
+      </label>
+      
+      {fieldType === 'select' && (
+        <div className="relative">
+          <select
+            id={fieldName}
+            {...field}
+            className="questionnaire-select focus:ring-2 focus:ring-primary/20 transition-all"
+          >
+            {getSelectOptions(fieldName as keyof FormValues, form).map((option: SelectOption) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+          <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none text-gray-500">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </div>
+        </div>
+      )}
+      
+      {fieldType === 'text' && (
+        <input
+          id={fieldName}
+          type="text"
+          {...field}
+          className="questionnaire-input focus:ring-2 focus:ring-primary/20 transition-all"
+          placeholder={getPlaceholder(fieldName as keyof FormValues)}
+        />
+      )}
+      
+      {fieldType === 'number' && (
+        <input
+          id={fieldName}
+          type={fieldName === 'age' ? 'text' : 'number'}
+          inputMode={fieldName === 'age' ? 'numeric' : 'decimal'}
+          pattern={fieldName === 'age' ? '[0-9]*' : undefined}
+          {...field}
+          className="questionnaire-input focus:ring-2 focus:ring-primary/20 transition-all"
+          placeholder={getPlaceholder(fieldName as keyof FormValues)}
+        />
+      )}
+      
+      {fieldType === 'radio' && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
+          {getRadioOptions(fieldName as keyof FormValues, form).map((option: SelectOption) => (
+            <label
+              key={option.value}
+              className={`
+                flex items-center p-4 rounded-xl border-2 cursor-pointer transition-all
+                ${field.value === option.value 
+                  ? 'border-primary bg-primary/5 shadow-sm' 
+                  : 'border-gray-200 hover:border-gray-300'
+                }
+              `}
+            >
+              <input
+                type="radio"
+                value={option.value}
+                checked={field.value === option.value}
+                onChange={() => field.onChange(option.value)}
+                className="sr-only"
+              />
+              <div className={`w-5 h-5 rounded-full border-2 mr-3 flex items-center justify-center ${field.value === option.value ? 'border-primary' : 'border-gray-300'}`}>
+                {field.value === option.value && (
+                  <div className="w-3 h-3 rounded-full bg-primary"></div>
+                )}
+              </div>
+              <div>
+                <div className="font-medium">{option.label}</div>
+                {option.description && (
+                  <div className="text-sm text-gray-500">{option.description}</div>
+                )}
+              </div>
+            </label>
+          ))}
+        </div>
+      )}
+      
+      {form.formState.errors[fieldName as keyof FormValues] && (
+        <div className="questionnaire-error">
+          {form.formState.errors[fieldName as keyof FormValues]?.message as string}
+        </div>
+      )}
+    </div>
+  );
+};
+
+// Helper function to render form fields
+const renderFormField = (fieldName: keyof FormValues, form: UseFormReturn<FormValues>) => {
+  return (
+    <FormField
+      key={fieldName}
+      control={form.control}
+      name={fieldName}
+      render={({ field }) => renderFormControl(fieldName, field, form)}
+    />
+  );
+};
 
 type FormValues = z.infer<typeof formSchema>;
 
@@ -541,211 +539,37 @@ export const QuestionnaireForm = () => {
   }
 
   return (
-    <section className="relative py-24" style={{ background: 'var(--color-cream-bg)' }}>
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className={cn(
-          "bg-white backdrop-blur-sm rounded-2xl p-8 shadow-sm",
-          "transition-all duration-200"
-        )}>
-          {formError && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-600" role="alert">
-              {formError}
-            </div>
-          )}
+    <div className="questionnaire-container">
+      <div className="questionnaire-card">
+        <h1 className="questionnaire-step-title">Basic Information</h1>
+        <p className="questionnaire-step-description">
+          Let's start with some basic information to find the right healthshare plan for you.
+        </p>
+        
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          {/* Form fields with animation */}
+          <div className="space-y-6 transition-all duration-300">
+            {renderFormField('age', form)}
+            {renderFormField('coverage_type', form)}
+            {renderFormField('zip_code', form)}
+          </div>
           
-          <form 
-            onSubmit={(e) => {
-              e.preventDefault();
-              console.log('Form submit event triggered');
-              if (currentStep === steps.length - 1) {
-                form.handleSubmit(onSubmit)(e);
-              } else {
-                // For non-final steps, just prevent default and let the button handle it
-                console.log('Non-final step form submission, letting button handle it');
-              }
-            }} 
-            className="space-y-6"
-            noValidate
-          >
-            <div className="space-y-4">
-              <h2 className="text-2xl font-semibold">{step.title}</h2>
-              <p className="text-gray-600">{step.description}</p>
-              
-              {step.fields.map(field => {
-                // Skip pregnancy_planning if pregnancy is not explicitly 'false'
-                if (field === 'pregnancy_planning' && form.watch('pregnancy') !== 'false') {
-                  return null;
-                }
-                
-                const fieldId = `form-field-${field}`;
-                
-                return (
-                  <FormField
-                    key={field}
-                    control={form.control}
-                    name={field as keyof FormValues}
-                    render={({ 
-                      field: formField 
-                    }) => (
-                      <FormItem className="space-y-2">
-                        <FormLabel htmlFor={fieldId} className="text-base">
-                          {getFieldLabel(field as keyof FormValues, form)}
-                        </FormLabel>
-                        <FormControl>
-                          {renderFormControl(field, formField, form)}
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                );
-              })}
-            </div>
-            
-            <div className="flex justify-between mt-8">
-              {currentStep > 0 && (
-                <Button 
-                  type="button"
-                  onClick={() => setCurrentStep(prev => prev - 1)} 
-                  variant="outline"
-                  id="previous-button"
-                >
-                  Previous
-                </Button>
-              )}
-              
-              <Button 
-                type="button"
-                onClick={() => {
-                  console.log('Next/Submit button clicked');
-                  console.log('Current step:', currentStep, 'Total steps:', steps.length);
-                  
-                  if (currentStep === steps.length - 1) {
-                    console.log('Final step detected, attempting form submission');
-                    // Log the current form values
-                    console.log('Form values before submission:', form.getValues());
-                    
-                    // Check if all required fields are present
-                    const missingFields = Object.entries(formSchema.shape).filter(([key, schema]) => {
-                      // @ts-ignore - Checking if field is required
-                      const isRequired = !schema.isOptional?.();
-                      return isRequired && !form.getValues(key as any);
-                    }).map(([key]) => key);
-                    
-                    console.log('Missing required fields:', missingFields);
-                    
-                    // Use a different approach for final submission
-                    try {
-                      console.log('Preparing data for direct submission');
-                      const formData = form.getValues();
-                      
-                      // Set a default state value if it's not provided
-                      if (!formData.state) {
-                        console.log('Setting default state value from ZIP code');
-                        // Extract state from ZIP code or set a default
-                        formData.state = formData.zip_code ? 'TX' : '';
-                        form.setValue('state', formData.state);
-                      }
-                      
-                      // Manually validate the data
-                      const validationResult = formSchema.safeParse(formData);
-                      console.log('Manual validation result:', validationResult);
-                      
-                      if (validationResult.success) {
-                        console.log('Manual validation successful, calling onSubmit directly');
-                        // Call onSubmit directly instead of through form.handleSubmit
-                        onSubmit(validationResult.data).catch(err => {
-                          console.error('Direct onSubmit promise rejection:', err);
-                        });
-                      } else {
-                        console.error('Manual validation failed:', validationResult.error);
-                        toast({
-                          title: 'Validation Error',
-                          description: 'Please check all required fields',
-                          variant: 'destructive'
-                        });
-                        
-                        // Set errors on the form
-                        validationResult.error.errors.forEach(err => {
-                          form.setError(err.path[0] as any, {
-                            type: 'manual',
-                            message: err.message
-                          });
-                        });
-                      }
-                    } catch (error) {
-                      console.error('Error during manual form submission:', error);
-                    }
-                  } else {
-                    // For non-final steps, validate current step fields
-                    const currentStepFields = step.fields as unknown as Array<keyof FormValues>;
-                    const currentStepData = Object.fromEntries(
-                      Object.entries(form.getValues()).filter(([key]) => 
-                        currentStepFields.includes(key as keyof FormValues)
-                      )
-                    );
-                    
-                    console.log('Validating current step data:', currentStepData);
-                    
-                    // Create a schema for just this step's fields
-                    const stepSchema = formSchema.pick(
-                      currentStepFields.reduce((acc, field) => ({
-                        ...acc,
-                        [field]: true
-                      }), {}) as Record<keyof FormValues, true>
-                    );
-                    
-                    const validationResult = stepSchema.safeParse(currentStepData);
-                    console.log('Step validation result:', validationResult);
-                    
-                    if (validationResult.success) {
-                      // Additional check for coverage_type since it's a common issue
-                      if (currentStepFields.includes('coverage_type' as keyof FormValues) && 
-                          !form.getValues('coverage_type')) {
-                        console.error('Coverage type is required but not selected');
-                        form.setError('coverage_type', {
-                          type: 'manual',
-                          message: 'Please select who needs coverage'
-                        });
-                        
-                        toast({
-                          title: 'Missing Information',
-                          description: 'Please select who needs coverage',
-                          variant: 'destructive'
-                        });
-                        return;
-                      }
-                      
-                      console.log('Advancing to next step');
-                      setCurrentStep(prev => prev + 1);
-                    } else {
-                      // Show validation errors
-                      validationResult.error.errors.forEach(err => {
-                        form.setError(err.path[0] as any, {
-                          type: 'manual',
-                          message: err.message
-                        });
-                      });
-                      
-                      console.error('Validation failed:', validationResult.error);
-                      toast({
-                        title: 'Validation Error',
-                        description: 'Please check the form for errors',
-                        variant: 'destructive'
-                      });
-                    }
-                  }
-                }}
-                className="ml-auto"
-                disabled={isSubmitting}
-                id={currentStep === steps.length - 1 ? "submit-button" : "next-button"}
-              >
-                {isSubmitting ? 'Submitting...' : currentStep === steps.length - 1 ? 'Submit' : 'Next'}
-              </Button>
-            </div>
-          </form>
-        </div>
+          <div className="questionnaire-navigation">
+            <div></div> {/* Empty div for flex spacing */}
+            <button 
+              type="submit" 
+              className="questionnaire-button questionnaire-button-primary"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'Submitting...' : 'Next'}
+            </button>
+          </div>
+        </form>
       </div>
-    </section>
+      
+      <div className="mt-8 text-center text-sm text-gray-500">
+        <p>Your information is secure and will never be shared without your permission.</p>
+      </div>
+    </div>
   );
 } 
