@@ -103,7 +103,7 @@ export default function SavingsPage() {
         />
 
         <div className={cn(
-          "bg-white/90 backdrop-blur-sm rounded-2xl p-8 shadow-sm",
+          "bg-white backdrop-blur-sm rounded-2xl p-8 shadow-sm",
           "transition-all duration-200"
         )}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -117,7 +117,7 @@ export default function SavingsPage() {
                   Roughly how much is your monthly health insurance premium (monthly payment)?
                 </label>
                 <div className="flex items-center space-x-4">
-                  <div className="relative flex-grow">
+                  <div className="relative">
                     <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
                     <input
                       {...form.register('currentPremium')}

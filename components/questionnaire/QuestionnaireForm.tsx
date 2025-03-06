@@ -544,7 +544,7 @@ export const QuestionnaireForm = () => {
     <section className="relative py-24" style={{ background: 'var(--color-cream-bg)' }}>
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className={cn(
-          "bg-white/90 backdrop-blur-sm rounded-2xl p-8 shadow-sm",
+          "bg-white backdrop-blur-sm rounded-2xl p-8 shadow-sm",
           "transition-all duration-200"
         )}>
           {formError && (

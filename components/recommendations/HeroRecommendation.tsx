@@ -34,27 +34,27 @@ export function HeroRecommendation({
     {
       text: `Maximum Coverage: ${plan.maxCoverage}`,
       isPositive: true,
-      icon: <Shield className="text-blue-500" />
+      icon: <Shield className="text-primary" />
     },
     {
       text: `Annual Unshared Amount: ${plan.annualUnsharedAmount}`,
       isPositive: true,
-      icon: <DollarSign className="text-blue-500" />
+      icon: <DollarSign className="text-primary" />
     }
   ]
 
   return (
     <div className="max-w-3xl mx-auto">
-      <div className="relative bg-white rounded-xl p-8 shadow-lg border border-blue-100 overflow-hidden">
+      <div className="hero-results-card">
         {/* Match Score Badge - More prominent */}
-        <div className="absolute top-6 right-6 flex items-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-3 rounded-full transform hover:scale-105 transition-transform">
+        <div className="absolute top-6 right-6 flex items-center gap-2 bg-gradient-primary text-white px-6 py-3 rounded-full transform hover:scale-105 transition-transform">
           <Star className="w-5 h-5" />
           <span className="font-semibold">{badges.matchScore}% Match</span>
         </div>
 
         {/* Plan Name and Provider */}
         <div className="mb-6">
-          <h2 className="text-2xl font-bold text-gray-900">{plan.planName}</h2>
+          <h2 className="text-2xl font-bold text-gray-warm">{plan.planName}</h2>
           <p className="text-lg text-gray-600">{plan.providerName}</p>
         </div>
 
@@ -63,14 +63,14 @@ export function HeroRecommendation({
           <div className="bg-gray-50 p-4 rounded-lg">
             <div className="text-sm text-gray-600 mb-1">Monthly Cost</div>
             <div className="flex items-baseline">
-              <span className="text-3xl font-bold text-gray-900">${costs.monthlyPremium}</span>
+              <span className="text-3xl font-bold text-gray-warm">${costs.monthlyPremium}</span>
               <span className="text-gray-600 ml-1">/mo</span>
             </div>
           </div>
           <div className="bg-gray-50 p-4 rounded-lg">
             <div className="text-sm text-gray-600 mb-1">Initial Unshared Amount</div>
             <div className="flex items-baseline">
-              <span className="text-3xl font-bold text-gray-900">${costs.initialUnsharedAmount}</span>
+              <span className="text-3xl font-bold text-gray-warm">${costs.initialUnsharedAmount}</span>
               <span className="text-gray-600 ml-1">/year</span>
             </div>
           </div>
@@ -96,24 +96,26 @@ export function HeroRecommendation({
           <Button
             onClick={onGetPlan}
             disabled={isLoading}
-            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+            variant="primary"
+            showArrow
+            className="flex-1"
           >
             Get This Plan
           </Button>
           <Button
             onClick={onViewDetails}
-            variant="outline"
+            disabled={isLoading}
+            variant="secondary"
             className="flex-1"
           >
             View Details
           </Button>
         </div>
 
-        {/* Social Proof */}
-        <div className="mt-6 text-center">
-          <p className="text-sm text-gray-600">
-            🔥 <span className="font-medium">2,453 members</span> enrolled this month
-          </p>
+        {/* Top Reason Badge */}
+        <div className="mt-6 inline-flex items-center gap-2 bg-primary-light bg-opacity-10 text-primary px-4 py-2 rounded-full">
+          <CheckCircle className="w-4 h-4" />
+          <span className="font-medium">{badges.topReason}</span>
         </div>
       </div>
     </div>

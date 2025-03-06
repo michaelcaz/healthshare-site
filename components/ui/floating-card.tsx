@@ -54,13 +54,13 @@ export function NotificationCard({
     <FloatingCard {...props}>
       <div className="flex items-center gap-3">
         {icon ? (
-          <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+          <div className="w-8 h-8 rounded-full bg-primary bg-opacity-10 flex items-center justify-center">
             {icon}
           </div>
         ) : null}
         <div>
-          <p className="text-sm font-medium text-gray-warm">{title}</p>
-          <p className="text-xs text-gray-warm/60">{subtitle}</p>
+          <h4 className="text-sm font-medium">{title}</h4>
+          <p className="text-xs text-gray-warm text-opacity-60">{subtitle}</p>
         </div>
       </div>
     </FloatingCard>
@@ -84,19 +84,15 @@ export function StatCard({
 }: StatCardProps) {
   return (
     <FloatingCard {...props}>
-      <div className="flex flex-col gap-1">
-        <div className="flex items-center gap-2">
-          <span className="text-lg font-bold text-gray-warm">{value}</span>
-          {trend && (
-            <span className={`text-xs font-medium ${
-              trend.direction === 'up' ? 'text-green-500' : 'text-red-500'
-            }`}>
-              {trend.direction === 'up' ? '↑' : '↓'} {trend.value}
-            </span>
-          )}
-        </div>
-        <p className="text-xs text-gray-warm/60">{label}</p>
+      <div className="text-2xl font-bold flex items-center">
+        {value}
+        {trend && (
+          <span className={`ml-2 text-sm ${trend.direction === 'up' ? 'text-green-500' : 'text-red-500'}`}>
+            {trend.direction === 'up' ? '↑' : '↓'} {trend.value}
+          </span>
+        )}
       </div>
+      <p className="text-xs text-gray-warm text-opacity-60">{label}</p>
     </FloatingCard>
   );
 } 

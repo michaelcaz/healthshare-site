@@ -146,7 +146,7 @@ export default function CoveragePage() {
         />
 
         <div className={cn(
-          "bg-white/90 backdrop-blur-sm rounded-2xl p-8 shadow-sm",
+          "bg-white backdrop-blur-sm rounded-2xl p-8 shadow-sm",
           "transition-all duration-200"
         )}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
