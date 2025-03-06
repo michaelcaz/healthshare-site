@@ -9,7 +9,7 @@ interface ProgressIndicatorProps {
   }>
 }
 
-export function ProgressIndicator({ currentPage, totalPages = 4, steps }: ProgressIndicatorProps) {
+export function ProgressIndicator({ currentPage, totalPages = 3, steps }: ProgressIndicatorProps) {
   const percentage = ((currentPage - 1) / (totalPages - 1)) * 100
 
   return (

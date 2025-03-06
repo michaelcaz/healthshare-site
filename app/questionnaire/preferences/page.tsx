@@ -25,9 +25,8 @@ type PreferencesData = z.infer<typeof preferencesSchema>;
 
 const steps = [
   { label: 'Basic Info', route: '/questionnaire' },
-  { label: 'Savings', route: '/questionnaire/savings' },
   { label: 'Health Status', route: '/questionnaire/health' },
-  { label: 'Coverage Needs', route: '/questionnaire/coverage' }
+  { label: 'Preferences', route: '/questionnaire/preferences' }
 ];
 
 export default function PreferencesPage() {
@@ -59,8 +58,8 @@ export default function PreferencesPage() {
     <section className="relative py-24" style={{ background: 'var(--color-cream-bg)' }}>
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <ProgressIndicator 
-          currentPage={4}
-          totalPages={steps.length}
+          currentPage={3}
+          totalPages={3}
           steps={steps}
         />
 
@@ -169,7 +168,7 @@ export default function PreferencesPage() {
             <div className="flex justify-between pt-6">
               <button
                 type="button"
-                onClick={() => router.push('/questionnaire/coverage')}
+                onClick={() => router.push('/questionnaire/health')}
                 className={cn(
                   "px-6 py-2 rounded-full",
                   "border border-gray-300 text-gray-600",

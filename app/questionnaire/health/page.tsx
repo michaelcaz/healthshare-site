@@ -26,9 +26,8 @@ type HealthData = z.infer<typeof healthSchema>;
 
 const steps = [
   { label: 'Basic Info', route: '/questionnaire' },
-  { label: 'Savings', route: '/questionnaire/savings' },
   { label: 'Health Status', route: '/questionnaire/health' },
-  { label: 'Coverage Needs', route: '/questionnaire/coverage' }
+  { label: 'Preferences', route: '/questionnaire/preferences' }
 ];
 
 export default function HealthPage() {
@@ -79,7 +78,7 @@ export default function HealthPage() {
       // Save updated data
       localStorage.setItem('questionnaire-data', JSON.stringify(questionnaireData));
       
-      router.push('/questionnaire/coverage');
+      router.push('/questionnaire/preferences');
     } catch (error) {
       console.error('Error submitting form:', error);
       toast({
@@ -94,8 +93,8 @@ export default function HealthPage() {
     <section className="relative py-24" style={{ background: 'var(--color-cream-bg)' }}>
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <ProgressIndicator 
-          currentPage={3}
-          totalPages={4}
+          currentPage={2}
+          totalPages={3}
           steps={steps}
         />
 
