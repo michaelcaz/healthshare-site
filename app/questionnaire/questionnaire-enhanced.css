@@ -125,17 +125,19 @@
 
 .number-input {
   width: 100%;
-  padding: 12px 40px;
+  padding: 12px 48px; /* Increased horizontal padding to make room for the numbers */
   border: 2px solid #E5E7EB;
   border-radius: 12px;
   font-size: 16px;
   transition: all 200ms ease;
+  text-align: center; /* Center the text to ensure it's visible */
+  min-height: 48px; /* Ensure consistent height */
 }
 
 .number-input:focus {
   outline: none;
-  border-color: #7B68EE;
-  box-shadow: 0 0 0 3px rgba(123, 104, 238, 0.15);
+  border-color: var(--sharewell-purple);
+  box-shadow: 0 0 0 3px var(--sharewell-purple-light);
 }
 
 .number-control {
@@ -143,13 +145,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 36px; /* Slightly larger buttons */
+  height: 36px;
   background-color: #F9FAFB;
   border-radius: 8px;
   cursor: pointer;
   user-select: none;
   transition: all 200ms ease;
+  z-index: 1; /* Ensure controls are above the input */
 }
 
 .number-control:hover {
@@ -157,11 +160,11 @@
 }
 
 .number-decrement {
-  left: 8px;
+  left: 6px; /* Adjusted position */
 }
 
 .number-increment {
-  right: 8px;
+  right: 6px; /* Adjusted position */
 }
 
 .input-error {
@@ -175,7 +178,7 @@
 }
 
 .input-success {
-  border-color: #10B981 !important;
+  border-color: var(--sharewell-purple) !important;
 }
 
 .helper-message {
@@ -278,12 +281,27 @@
   background-color: var(--sharewell-purple);
   color: white;
   border: none;
+  position: relative; /* Required for absolute positioning of the arrow */
+  padding-right: 48px; /* Increased padding to make room for the arrow */
+}
+
+/* Add arrow icon to primary button */
+.questionnaire-button-primary::after {
+  content: "→";
+  position: absolute;
+  right: 20px; /* Increased spacing from the right edge */
+  font-size: 1.25rem;
+  transition: transform 0.2s ease;
 }
 
 .questionnaire-button-primary:hover {
   background-color: var(--sharewell-purple-dark);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(123, 104, 238, 0.25);
+}
+
+.questionnaire-button-primary:hover::after {
+  transform: translateX(4px);
 }
 
 .questionnaire-button-primary:focus {
@@ -321,4 +339,9 @@
 
 .fade-in {
   animation: fadeIn 0.3s ease-out forwards;
+}
+
+/* Remove the line above the progress indicator */
+.step-navigation::before {
+  display: none; /* Hide the line */
 } 

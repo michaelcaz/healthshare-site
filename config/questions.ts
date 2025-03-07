@@ -31,7 +31,7 @@ export const questions: Question[] = [
   {
     id: 'age',
     type: 'number',
-    text: 'What is your age?',
+    text: "What's the age of the oldest person needing coverage?",
     required: true,
     validation: {
       min: 0,

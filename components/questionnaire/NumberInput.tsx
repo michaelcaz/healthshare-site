@@ -101,6 +101,7 @@ export const NumberInput: React.FC<NumberInputProps> = ({
           min={min}
           max={max}
           placeholder={placeholder}
+          style={{ textAlign: 'center' }}
           className={cn(
             "number-input",
             error && "input-error",

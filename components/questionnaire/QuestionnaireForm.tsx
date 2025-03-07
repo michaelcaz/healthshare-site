@@ -70,7 +70,7 @@ const formSchema = z.object({
 });
 
 const questionLabels: Record<keyof z.infer<typeof formSchema>, string> = {
-  age: "What is your age?",
+  age: "What's the age of the oldest person needing coverage?",
   coverage_type: "Who needs coverage?",
   iua_preference: "Choose your Initial Unshared Amount (IUA)",
   pregnancy: "Are you currently pregnant?",
@@ -198,7 +198,9 @@ const renderFormControl = (fieldName: string, field: any, form: UseFormReturn<Fo
           label={fieldLabel}
           error={form.formState.errors[fieldName as keyof FormValues]?.message?.toString()}
           isValid={field.value && !form.formState.errors[fieldName as keyof FormValues]}
-          tooltipText={fieldName === 'age' ? "We need your age to determine eligibility and pricing for health sharing plans." : undefined}
+          tooltipText={fieldName === 'age' ? undefined : fieldName === 'iua_preference' ? 
+            "IUA (Initial Unshared Amount) is similar to a deductible - the amount you pay before sharing begins." : 
+            undefined}
         />
       )}
       
