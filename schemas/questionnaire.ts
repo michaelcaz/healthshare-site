@@ -1,11 +1,11 @@
 import { z } from 'zod'
 
 export const questionnaireSchema = z.object({
-  age: z.number(),
+  age: z.number().min(18, "You must be at least 18 years old").max(120, "Please enter a valid age"),
   coverage_type: z.enum(['just_me', 'me_spouse', 'me_kids', 'family'], {
     errorMap: () => ({ message: "Please select who needs coverage" })
   }),
-  iua_preference: z.enum(['1000', '2500', '5000']),
+  iua_preference: z.enum(['500', '1000', '2500', '5000']),
   pregnancy: z.enum(['true', 'false']),
   pre_existing: z.enum(['true', 'false']),
   state: z.string().optional(),

@@ -40,7 +40,7 @@ export enum AnnualHealthcareSpend {
 export interface QuestionnaireResponse {
   age: number
   coverage_type: 'just_me' | 'me_spouse' | 'me_kids' | 'family'
-  iua_preference: '1000' | '2500' | '5000'
+  iua_preference: '500' | '1000' | '2500' | '5000'
   pregnancy: 'true' | 'false'
   pre_existing: 'true' | 'false'
   state?: string

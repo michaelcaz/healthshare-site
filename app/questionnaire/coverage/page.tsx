@@ -17,8 +17,11 @@ const formSchema = z.object({
   expense_preference: z.enum(['lower_monthly', 'higher_monthly']).optional().refine(val => val !== undefined, {
     message: 'Please select your expense preference'
   }),
-  iua_preference: z.enum(['1000', '2500', '5000']).optional().refine(val => val !== undefined, {
-    message: 'Please select your IUA preference'
+  iua_preference: z.enum(['500', '1000', '2500', '5000']).optional().refine(val => val !== undefined, {
+    message: 'Please select your preferred Initial Unshared Amount (IUA)'
+  }),
+  visit_frequency: z.enum(['just_checkups', 'few_months', 'monthly_plus']).optional().refine(val => val !== undefined, {
+    message: "Please select your expected visit frequency"
   })
 });
 
@@ -98,7 +101,7 @@ export default function CoveragePage() {
         expense_preference: data.expense_preference || 'lower_monthly',
         pregnancy_planning: 'no',
         medical_conditions: [],
-        visit_frequency: 'just_checkups'
+        visit_frequency: data.visit_frequency || 'just_checkups'
       };
 
       // 5. Update with health data if available
@@ -201,6 +204,7 @@ export default function CoveragePage() {
                   )}
                 >
                   <option value="" className="text-gray-500">Select an option</option>
+                  <option value="500">Less than $500</option>
                   <option value="1000">Less than $1,000</option>
                   <option value="2500">$1,000 - $2,500</option>
                   <option value="5000">More than $5,000</option>

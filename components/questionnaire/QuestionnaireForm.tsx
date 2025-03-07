@@ -49,8 +49,8 @@ const formSchema = z.object({
   }),
   zip_code: z.string().min(5, "Please enter a valid ZIP code"),
   iua_preference: z.union([
-    z.enum(['1000', '2500', '5000']),
-    z.number().transform(val => String(val) as '1000' | '2500' | '5000')
+    z.enum(['500', '1000', '2500', '5000']),
+    z.number().transform(val => String(val) as '500' | '1000' | '2500' | '5000')
   ]).optional(),
   pregnancy: z.enum(['true', 'false'], {
     errorMap: () => ({ message: "Please indicate if you are currently pregnant" })
@@ -90,7 +90,7 @@ const questionLabels: Record<keyof z.infer<typeof formSchema>, string> = {
   expense_preference: "Which approach do you prefer regarding your healthcare costs?",
   pregnancy_planning: "Are you planning to become pregnant in the next year?",
   visit_frequency: "How often do you expect to visit the doctor?",
-  financial_capacity: "In the event of an unexpected medical emergency, what is the maximum amount you could comfortably pay out-of-pocket before cost-sharing begins?",
+  financial_capacity: "In the event of an unexpected medical emergency, what's the maximum amount you could comfortably pay out-of-pocket before cost-sharing begins?",
   risk_preference: "Which approach do you prefer regarding your healthcare costs and risk tolerance?",
   pre_existing_approach: "Understanding that your pre-existing conditions won't be covered in the first year, which approach do you prefer for your healthshare membership?"
 }
@@ -179,7 +179,7 @@ const getSelectOptions = (fieldName: keyof z.infer<typeof formSchema>): SelectOp
         { value: '500', label: 'I could manage up to $500 out-of-pocket' },
         { value: '1000', label: 'I could manage up to $1,000 out-of-pocket' },
         { value: '2500', label: 'I could manage up to $2,500 out-of-pocket' },
-        { value: '5000', label: 'I could manage up to $5,000 out-of-pocket' }
+        { value: '5000', label: 'I could manage $5,000 out-of-pocket or more' }
       ];
     case 'risk_preference':
       return [
@@ -349,7 +349,7 @@ const renderFormField = (fieldName: keyof FormValues, form: UseFormReturn<FormVa
               <span className="tooltip ml-2">
                 <InfoIcon className="tooltip-icon" />
                 <div className="tooltip-content">
-                  Your expected frequency of doctor visits helps us recommend plans that provide appropriate coverage for your healthcare needs. More frequent visits may benefit from plans with lower Initial Unshared Amounts (IUAs).
+                  Your expected frequency of doctor visits helps us recommend plans that provide appropriate coverage for your healthcare needs. It also helps us calculate your expected annual healthcare costs.
                 </div>
               </span>
             )}
@@ -384,7 +384,7 @@ const renderFormField = (fieldName: keyof FormValues, form: UseFormReturn<FormVa
 interface FormValues {
   age: string;  // Changed from number to string to match our schema
   coverage_type: 'just_me' | 'me_spouse' | 'me_kids' | 'family' | undefined;
-  iua_preference: '1000' | '2500' | '5000' | undefined;
+  iua_preference: '500' | '1000' | '2500' | '5000' | undefined;
   pregnancy: 'true' | 'false' | undefined;
   pre_existing: 'true' | 'false' | undefined;
   state?: string;
@@ -450,7 +450,7 @@ export const QuestionnaireForm = () => {
     {
       title: "Preferences",
       description: "Help us understand your preferences for cost and coverage.",
-      fields: ['financial_capacity', 'risk_preference', 'visit_frequency', 'iua_preference'],
+      fields: ['financial_capacity', 'risk_preference', 'visit_frequency'],
       label: 'Preferences'
     }
   ];
@@ -492,14 +492,18 @@ export const QuestionnaireForm = () => {
   const getCurrentStepFields = () => {
     if (currentStep === 1) {
       // For the Health Status step, conditionally include pregnancy_planning and pre_existing_approach
-      const fields = ['pre_existing', 'pregnancy'];
-      if (watchPregnancy === 'false') {
-        fields.push('pregnancy_planning');
-      }
+      let fields = ['pre_existing'];
       
-      // Add pre_existing_approach if user has pre-existing conditions
+      // Add pre_existing_approach immediately after pre_existing if user has pre-existing conditions
       if (watchPreExisting === 'true') {
         fields.push('pre_existing_approach');
+      }
+      
+      // Add pregnancy and pregnancy_planning fields after the pre-existing fields
+      fields.push('pregnancy');
+      
+      if (watchPregnancy === 'false') {
+        fields.push('pregnancy_planning');
       }
       
       return fields;
@@ -692,6 +696,15 @@ export const QuestionnaireForm = () => {
       // Log the data after conversions
       console.log("Data after type conversions:", data);
       
+      // Set iua_preference equal to financial_capacity
+      if (data.financial_capacity) {
+        console.log("Setting iua_preference based on financial_capacity:", data.financial_capacity);
+        data.iua_preference = data.financial_capacity as any;
+      } else {
+        // Default to 1000 if financial_capacity is not provided
+        data.iua_preference = '1000' as any;
+      }
+      
       // Manually validate the data
       const validationResult = formSchema.safeParse(data);
       console.log("Final validation result:", validationResult);
@@ -703,7 +716,7 @@ export const QuestionnaireForm = () => {
         const transformedData = {
           age: validationResult.data.age,
           coverage_type: validationResult.data.coverage_type,
-          iua_preference: validationResult.data.iua_preference || '1000', // Default value
+          iua_preference: validationResult.data.financial_capacity || '1000', // Use financial_capacity as iua_preference
           pregnancy: validationResult.data.pregnancy || 'false', // Default value
           pre_existing: validationResult.data.pre_existing || 'false', // Default value
           state: validationResult.data.state || 'TX', // Default to TX if not provided
