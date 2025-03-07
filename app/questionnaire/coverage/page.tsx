@@ -179,9 +179,17 @@ export default function CoveragePage() {
 
             <div className="space-y-6">
               <div className="space-y-2">
-                <label className="block text-gray-800 font-medium mb-2">
-                  What is your typical annual healthcare spending?
-                </label>
+                <div className="flex items-center">
+                  <label className="block text-gray-800 font-medium mb-2">
+                    What is your typical annual healthcare spending?
+                  </label>
+                  <span className="tooltip ml-2">
+                    <InfoIcon className="w-5 h-5 text-gray-400" />
+                    <div className="tooltip-content">
+                      IUA (Initial Unshared Amount) is the amount you pay during an accident, emergency, prognosis, etc. before sharing begins.
+                    </div>
+                  </span>
+                </div>
                 <select
                   {...form.register('iua_preference')}
                   className={cn(

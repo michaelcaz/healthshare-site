@@ -24,6 +24,7 @@ import Cookies from 'js-cookie';
 import { ProgressIndicator } from '@/components/questionnaire/progress-indicator';
 import { NumberInput } from '@/components/questionnaire/NumberInput';
 import { OptionCardGroup } from '@/components/questionnaire/OptionCard';
+import { InfoIcon } from 'lucide-react';
 
 const COOKIE_KEY = 'questionnaire-form-data';
 const COOKIE_OPTIONS = {
@@ -151,8 +152,8 @@ const getSelectOptions = (fieldName: keyof z.infer<typeof formSchema>, form: Use
       ];
     case 'expense_preference':
       return [
-        { value: 'lower_monthly', label: 'Lower monthly cost', description: 'Higher out-of-pocket when you need care' },
-        { value: 'higher_monthly', label: 'Higher monthly cost', description: 'Lower out-of-pocket when you need care' }
+        { value: 'lower_monthly', label: 'Lower monthly cost', description: 'Higher out-of-pocket costs on a rainy day' },
+        { value: 'higher_monthly', label: 'Higher monthly cost', description: 'Lower out-of-pocket costs on a rainy day' }
       ];
     case 'pregnancy_planning':
       return [
@@ -198,9 +199,7 @@ const renderFormControl = (fieldName: string, field: any, form: UseFormReturn<Fo
           label={fieldLabel}
           error={form.formState.errors[fieldName as keyof FormValues]?.message?.toString()}
           isValid={field.value && !form.formState.errors[fieldName as keyof FormValues]}
-          tooltipText={fieldName === 'age' ? undefined : fieldName === 'iua_preference' ? 
-            "IUA (Initial Unshared Amount) is similar to a deductible - the amount you pay before sharing begins." : 
-            undefined}
+          tooltipText={undefined}
         />
       )}
       
@@ -233,6 +232,14 @@ const renderFormControl = (fieldName: string, field: any, form: UseFormReturn<Fo
         <div className="space-y-3">
           <h2 className="question-text">
             {fieldLabel}
+            {fieldName === 'iua_preference' && (
+              <span className="tooltip ml-2">
+                <InfoIcon className="tooltip-icon" />
+                <div className="tooltip-content">
+                  IUA (Initial Unshared Amount) is the amount you pay during an accident, emergency, prognosis, etc. before sharing begins.
+                </div>
+              </span>
+            )}
           </h2>
           
           <OptionCardGroup
@@ -241,9 +248,7 @@ const renderFormControl = (fieldName: string, field: any, form: UseFormReturn<Fo
               value: option.value,
               label: option.label,
               description: option.description,
-              tooltipText: fieldName === 'iua_preference' ? 
-                "IUA (Initial Unshared Amount) is similar to a deductible - the amount you pay before sharing begins." : 
-                undefined
+              tooltipText: undefined // Remove tooltips from answer options
             }))}
             value={field.value || ''}
             onChange={(value) => field.onChange(value)}
@@ -654,7 +659,7 @@ export const QuestionnaireForm = () => {
         
         <form onSubmit={handleNextClick} className="space-y-6">
           {/* Form fields with animation */}
-          <div className="space-y-6 transition-all duration-300">
+          <div className="space-y-12 transition-all duration-300">
             {getCurrentStepFields().map(fieldName => 
               renderFormField(fieldName as keyof FormValues, form)
             )}

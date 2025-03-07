@@ -8,7 +8,7 @@
 }
 
 .questionnaire-section {
-  margin-bottom: 48px; /* Increased vertical spacing between sections */
+  margin-bottom: 0; /* Remove bottom margin as we're using space-y-12 in the parent container */
 }
 
 .questionnaire-card {
