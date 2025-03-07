@@ -6,7 +6,7 @@ import { z } from 'zod';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { ProgressIndicator } from '@/components/questionnaire/progress-indicator';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { InfoIcon } from 'lucide-react';
 import { OptionCardGroup } from '@/components/questionnaire/OptionCard';
 
@@ -34,6 +34,11 @@ export default function PreferencesPage() {
   const router = useRouter();
   const [showLifestyleInfo, setShowLifestyleInfo] = useState(false);
   
+  // Scroll to top when the page loads
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+  
   const form = useForm<PreferencesData>({
     resolver: zodResolver(preferencesSchema),
     defaultValues: {
@@ -49,6 +54,10 @@ export default function PreferencesPage() {
       const questionnaireData = existingData ? JSON.parse(existingData) : {};
       questionnaireData.preferences = data;
       localStorage.setItem('questionnaire-data', JSON.stringify(questionnaireData));
+      
+      // Scroll to top before navigation
+      window.scrollTo(0, 0);
+      
       router.push('/questionnaire/review');
     } catch (error) {
       console.error('Error submitting form:', error);
@@ -202,7 +211,11 @@ export default function PreferencesPage() {
             <div className="flex justify-between pt-6">
               <button
                 type="button"
-                onClick={() => router.push('/questionnaire/health')}
+                onClick={() => {
+                  // Scroll to top before navigation
+                  window.scrollTo(0, 0);
+                  router.push('/questionnaire/health');
+                }}
                 className="questionnaire-button questionnaire-button-secondary"
               >
                 Back

@@ -37,6 +37,11 @@ export default function HealthPage() {
   const [showPregnancyInfo, setShowPregnancyInfo] = useState(false);
   const [showPlanningQuestion, setShowPlanningQuestion] = useState(false);
   
+  // Scroll to top when the page loads
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+  
   const form = useForm<HealthData>({
     resolver: zodResolver(healthSchema),
     defaultValues: {
@@ -78,6 +83,9 @@ export default function HealthPage() {
 
       // Save updated data
       localStorage.setItem('questionnaire-data', JSON.stringify(questionnaireData));
+      
+      // Scroll to top before navigation
+      window.scrollTo(0, 0);
       
       router.push('/questionnaire/preferences');
     } catch (error) {
@@ -208,7 +216,11 @@ export default function HealthPage() {
             <div className="flex justify-between pt-6">
               <button
                 type="button"
-                onClick={() => router.push('/questionnaire')}
+                onClick={() => {
+                  // Scroll to top before navigation
+                  window.scrollTo(0, 0);
+                  router.push('/questionnaire');
+                }}
                 className="questionnaire-button questionnaire-button-secondary"
               >
                 Back

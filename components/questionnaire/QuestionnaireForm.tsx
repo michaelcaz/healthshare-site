@@ -322,6 +322,11 @@ export const QuestionnaireForm = () => {
   const router = useRouter();
   const { toast } = useToast();
   
+  // Scroll to top when the component loads
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+  
   // Define the steps for the questionnaire
   const steps = [
     {
@@ -431,6 +436,8 @@ export const QuestionnaireForm = () => {
         
         if (validationResult.success) {
           console.log("First step is valid, proceeding to next step");
+          // Scroll to top before changing step
+          window.scrollTo(0, 0);
           setCurrentStep(1);
         } else {
           console.log("First step validation errors:", validationResult.error.format());
@@ -482,6 +489,8 @@ export const QuestionnaireForm = () => {
         console.log("Current step is valid, proceeding...");
         
         if (currentStep < steps.length - 1) {
+          // Scroll to top before changing step
+          window.scrollTo(0, 0);
           // Move to the next step
           setCurrentStep(currentStep + 1);
         } else {
