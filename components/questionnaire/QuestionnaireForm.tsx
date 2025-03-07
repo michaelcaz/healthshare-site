@@ -31,24 +31,24 @@ const COOKIE_OPTIONS = {
 };
 
 const formSchema = z.object({
-  age: z.string()
-    .min(1, "Age is required")
-    .transform((val) => {
+  age: z.union([
+    z.string().min(1, "Age is required").transform(val => {
       const parsed = parseInt(val, 10);
       if (isNaN(parsed)) {
         throw new Error("Age must be a number");
       }
       return parsed;
-    })
-    .refine((val) => val >= 18, "You must be at least 18 years old")
-    .refine((val) => val <= 120, "Please enter a valid age"),
+    }),
+    z.number().min(18, "You must be at least 18 years old").max(120, "Please enter a valid age")
+  ]),
   coverage_type: z.enum(['just_me', 'me_spouse', 'me_kids', 'family'], {
     errorMap: () => ({ message: "Please select who needs coverage" })
   }),
   zip_code: z.string().min(5, "Please enter a valid ZIP code"),
-  iua_preference: z.enum(['1000', '2500', '5000'], {
-    errorMap: () => ({ message: "Please select an IUA preference" })
-  }).optional(),
+  iua_preference: z.union([
+    z.enum(['1000', '2500', '5000']),
+    z.number().transform(val => String(val) as '1000' | '2500' | '5000')
+  ]).optional(),
   pregnancy: z.enum(['true', 'false'], {
     errorMap: () => ({ message: "Please indicate if you are currently pregnant" })
   }).optional(),
@@ -332,17 +332,16 @@ interface FormValues {
 
 // Create a schema for just the first step
 const firstStepSchema = z.object({
-  age: z.string()
-    .min(1, "Age is required")
-    .transform((val) => {
+  age: z.union([
+    z.string().min(1, "Age is required").transform(val => {
       const parsed = parseInt(val, 10);
       if (isNaN(parsed)) {
         throw new Error("Age must be a number");
       }
       return parsed;
-    })
-    .refine((val) => val >= 18, "You must be at least 18 years old")
-    .refine((val) => val <= 120, "Please enter a valid age"),
+    }),
+    z.number().min(18, "You must be at least 18 years old").max(120, "Please enter a valid age")
+  ]),
   coverage_type: z.enum(['just_me', 'me_spouse', 'me_kids', 'family'], {
     errorMap: () => ({ message: "Please select who needs coverage" })
   }),
@@ -543,94 +542,99 @@ export const QuestionnaireForm = () => {
 
   const onSubmit = async (data: FormValues) => {
     console.log("Form submission triggered with data:", data);
+    console.log("onSubmit function called with data:", data);
+    
     if (isSubmitting) {
       console.log('Already submitting, ignoring duplicate submission');
       return;
     }
     
-    console.log('onSubmit function called with data:', data);
-    setIsSubmitting(true);
-    setFormError(null);
-    
-    console.log('Form submission started', { data, currentStep, isComplete });
-    
     try {
-      // For the final step, validate the entire form
-      console.log('Validating entire form data');
+      console.log("Form submission started", data);
+      setIsSubmitting(true);
+      setFormError(null);
       
-      // Ensure state has a value if not provided
+      // Log each field's type to identify the issue
+      Object.entries(data).forEach(([key, value]) => {
+        console.log(`Field ${key}: value = ${value}, type = ${typeof value}`);
+      });
+      
+      console.log("Validating entire form data");
+      
+      // If state is not provided, set a default value
       if (!data.state) {
-        console.log('Setting default state value in onSubmit');
+        console.log("Setting default state value in onSubmit");
         data.state = data.zip_code ? 'TX' : '';
       }
       
-      const finalValidation = formSchema.safeParse(data);
-      console.log('Final validation result:', finalValidation);
-
-      if (!finalValidation.success) {
-        const errorMessage = finalValidation.error.errors
-          .map(err => err.message)
-          .join('. ');
-        console.error('Validation failed:', errorMessage);
-        throw new Error(errorMessage);
+      // Convert any numeric strings to actual strings before validation
+      if (typeof data.iua_preference === 'number') {
+        console.log("Converting iua_preference from number to string");
+        data.iua_preference = String(data.iua_preference) as any;
       }
-
-      // Transform data to match QuestionnaireResponse type
-      const transformedData: QuestionnaireResponse = {
-        age: finalValidation.data.age,
-        coverage_type: finalValidation.data.coverage_type,
-        iua_preference: finalValidation.data.iua_preference || '1000', // Default value
-        pregnancy: finalValidation.data.pregnancy || 'false', // Default value
-        pre_existing: finalValidation.data.pre_existing || 'false', // Default value
-        state: finalValidation.data.state || 'TX', // Default to TX if not provided
-        zip_code: finalValidation.data.zip_code,
-        expense_preference: finalValidation.data.expense_preference || 'lower_monthly', // Default value
-        pregnancy_planning: finalValidation.data.pregnancy_planning,
-        medical_conditions: finalValidation.data.medical_conditions || [],
-        visit_frequency: finalValidation.data.visit_frequency || 'just_checkups' // Default value
-      };
-
-      console.log('Submitting form data:', transformedData);
       
-      try {
-        console.log('Calling saveQuestionnaireResponse');
+      // Convert age back to string if it's a number
+      if (typeof data.age === 'number') {
+        console.log("Converting age from number to string");
+        data.age = String(data.age);
+      }
+      
+      // Log the data after conversions
+      console.log("Data after type conversions:", data);
+      
+      // Manually validate the data
+      const validationResult = formSchema.safeParse(data);
+      console.log("Final validation result:", validationResult);
+      
+      if (validationResult.success) {
+        console.log("Validation successful, proceeding with submission");
+        
+        // Transform data to match QuestionnaireResponse type
+        const transformedData = {
+          age: validationResult.data.age,
+          coverage_type: validationResult.data.coverage_type,
+          iua_preference: validationResult.data.iua_preference || '1000', // Default value
+          pregnancy: validationResult.data.pregnancy || 'false', // Default value
+          pre_existing: validationResult.data.pre_existing || 'false', // Default value
+          state: validationResult.data.state || 'TX', // Default to TX if not provided
+          zip_code: validationResult.data.zip_code,
+          expense_preference: validationResult.data.expense_preference || 'lower_monthly', // Default value
+          pregnancy_planning: validationResult.data.pregnancy_planning || 'no', // Default value
+          medical_conditions: validationResult.data.medical_conditions || [],
+          visit_frequency: validationResult.data.visit_frequency || 'just_checkups' // Default value
+        };
+        
+        // Save the response to the database
         const response = await saveQuestionnaireResponse(transformedData);
-        console.log('Server response:', response);
+        console.log("Response saved successfully:", response);
         
-        if (!response.success) {
-          console.error('Submission failed:', response.error, response.details);
-          throw new Error(response.error || 'Failed to save questionnaire');
-        }
-        
-        console.log('Tracking questionnaire completion');
-        trackQuestionnaireStep('QUESTIONNAIRE_COMPLETE', {
-          stepNumber: steps.length,
-          stepName: 'Complete',
-        });
-        
+        // Set completion flag
         setIsComplete(true);
         
-        // Wait a moment before redirecting
-        console.log('Submission successful, preparing to redirect...');
-        await new Promise(resolve => setTimeout(resolve, 500));
-        
         // Redirect to results page
-        console.log('Redirecting to results page');
         router.push('/questionnaire/results');
-      } catch (submitError) {
-        console.error('Error during submission:', submitError);
-        throw submitError;
+      } else {
+        console.error("Validation failed:", validationResult.error);
+        
+        // Log detailed validation errors
+        validationResult.error.errors.forEach(err => {
+          console.error(`Validation error for path ${err.path.join('.')}: ${err.message}`);
+          console.error(`Error code: ${err.code}, received: ${JSON.stringify(err)}`);
+        });
+        
+        throw new Error(validationResult.error.message);
       }
     } catch (error) {
-      console.error('Form submission error:', error);
-      setFormError(getErrorMessage(error));
+      console.error("Form submission error:", error);
+      setFormError(error instanceof Error ? error.message : 'An unknown error occurred');
+      
       toast({
         title: 'Error',
-        description: getErrorMessage(error),
+        description: error instanceof Error ? error.message : 'Failed to submit questionnaire',
         variant: 'destructive'
       });
     } finally {
-      console.log('Setting isSubmitting to false');
+      console.log("Setting isSubmitting to false");
       setIsSubmitting(false);
     }
   };
