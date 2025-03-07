@@ -21,6 +21,7 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { getVisitFrequencyOptions } from '@/lib/utils/visit-calculator';
 import Cookies from 'js-cookie';
+import { ProgressIndicator } from '@/components/questionnaire/progress-indicator';
 
 const COOKIE_KEY = 'questionnaire-form-data';
 const COOKIE_OPTIONS = {
@@ -366,17 +367,20 @@ export const QuestionnaireForm = () => {
     {
       title: "Basic Information",
       description: "Let's start with some basic information to find the right healthshare plan for you.",
-      fields: ['age', 'coverage_type', 'zip_code']
+      fields: ['age', 'coverage_type', 'zip_code'],
+      label: 'Basic Info'
     },
     {
       title: "Health Status",
       description: "Tell us about your health to find plans that meet your needs.",
-      fields: ['pre_existing', 'pregnancy', 'pregnancy_planning', 'medical_conditions']
+      fields: ['pre_existing', 'pregnancy', 'pregnancy_planning', 'medical_conditions'],
+      label: 'Health Status'
     },
     {
       title: "Preferences",
       description: "Help us understand your preferences for cost and coverage.",
-      fields: ['iua_preference', 'expense_preference', 'visit_frequency']
+      fields: ['iua_preference', 'expense_preference', 'visit_frequency'],
+      label: 'Preferences'
     }
   ];
   
@@ -423,6 +427,7 @@ export const QuestionnaireForm = () => {
     console.log("Next button clicked");
     console.log("Current form values:", form.getValues());
     console.log("Form state:", form.formState);
+    console.log("Current step before validation:", currentStep);
     
     // Get only the fields for the current step
     const currentStepFields = steps[currentStep].fields;
@@ -531,6 +536,11 @@ export const QuestionnaireForm = () => {
     }
   };
 
+  // Add effect to log current step changes
+  useEffect(() => {
+    console.log("Current step changed to:", currentStep);
+  }, [currentStep]);
+
   const onSubmit = async (data: FormValues) => {
     console.log("Form submission triggered with data:", data);
     if (isSubmitting) {
@@ -635,6 +645,12 @@ export const QuestionnaireForm = () => {
 
   return (
     <div className="questionnaire-container">
+      <ProgressIndicator 
+        currentPage={currentStep + 1}
+        totalPages={steps.length}
+        steps={steps.map(step => ({ label: step.label }))}
+      />
+      
       <div className="questionnaire-card">
         <h1 className="questionnaire-step-title">{steps[currentStep].title}</h1>
         <p className="questionnaire-step-description">

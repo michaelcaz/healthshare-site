@@ -12,6 +12,8 @@ interface ProgressIndicatorProps {
 export function ProgressIndicator({ currentPage, totalPages = 3, steps }: ProgressIndicatorProps) {
   const percentage = ((currentPage - 1) / (totalPages - 1)) * 100
 
+  console.log("ProgressIndicator rendering with currentPage:", currentPage);
+
   return (
     <div className="mb-8 fade-in">
       {/* Step navigation - Updated with connected steps and active indicators */}
@@ -20,7 +22,7 @@ export function ProgressIndicator({ currentPage, totalPages = 3, steps }: Progre
           <div key={index} className="step-item">
             <div 
               className={`step-indicator ${
-                index < currentPage ? 'completed' : 
+                index < currentPage - 1 ? 'completed' : 
                 index === currentPage - 1 ? 'active' : ''
               }`}
             >
