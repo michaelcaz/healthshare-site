@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils';
 import { ProgressIndicator } from '@/components/questionnaire/progress-indicator';
 import { useState } from 'react';
 import { InfoIcon } from 'lucide-react';
+import { OptionCardGroup } from '@/components/questionnaire/OptionCard';
 
 const preferencesSchema = z.object({
   lifestyle_preference: z.enum(['traditional', 'alternative', 'both']).optional().refine(val => val !== undefined, {
@@ -63,97 +64,130 @@ export default function PreferencesPage() {
           steps={steps}
         />
 
-        <div className={cn(
-          "bg-white backdrop-blur-sm rounded-2xl p-8 shadow-sm",
-          "transition-all duration-200"
-        )}>
+        <div className="questionnaire-card">
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <div className="space-y-6">
               {/* Healthcare Style Preference */}
-              <div className="space-y-2">
-                <div className="flex items-start space-x-2">
-                  <div className="flex-grow">
-                    <label className="block text-gray-700 mb-2">
-                      What type of healthcare do you prefer?
-                    </label>
-                    <select
-                      {...form.register('lifestyle_preference')}
-                      className={cn(
-                        "w-full p-3 rounded-lg",
-                        "border border-gray-200",
-                        "focus:outline-none focus:ring-2 focus:ring-blue-500",
-                        "transition duration-200"
-                      )}
-                    >
-                      <option value="">Select an option</option>
-                      <option value="traditional">Traditional medical care (hospitals, standard physicians)</option>
-                      <option value="alternative">Alternative care (naturopaths, chiropractors)</option>
-                      <option value="both">Both traditional and alternative care</option>
-                    </select>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setShowLifestyleInfo(!showLifestyleInfo)}
-                    className="text-gray-400 hover:text-gray-600 mt-2"
-                  >
-                    <InfoIcon className="w-5 h-5" />
-                  </button>
-                </div>
-                {showLifestyleInfo && (
-                  <div className="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">
-                    Some health sharing ministries have different levels of coverage for alternative care providers.
+              <div className="questionnaire-section">
+                <h2 className="question-text">
+                  What type of healthcare do you prefer?
+                </h2>
+                <p className="helper-text">
+                  Some health sharing ministries have different levels of coverage for alternative care providers.
+                </p>
+                
+                <OptionCardGroup
+                  name="lifestyle_preference"
+                  options={[
+                    { 
+                      value: 'traditional', 
+                      label: 'Traditional medical care', 
+                      description: 'Hospitals, standard physicians'
+                    },
+                    { 
+                      value: 'alternative', 
+                      label: 'Alternative care', 
+                      description: 'Naturopaths, chiropractors',
+                      tooltipText: "Some health sharing ministries have different levels of coverage for alternative care providers."
+                    },
+                    { 
+                      value: 'both', 
+                      label: 'Both traditional and alternative care', 
+                      description: 'A mix of both approaches'
+                    }
+                  ]}
+                  value={form.watch('lifestyle_preference') || ''}
+                  onChange={(value) => form.setValue('lifestyle_preference', value as 'traditional' | 'alternative' | 'both', { shouldValidate: true })}
+                  layout="grid"
+                />
+                
+                {form.formState.errors.lifestyle_preference && (
+                  <div className="error-message">
+                    {form.formState.errors.lifestyle_preference.message}
                   </div>
                 )}
               </div>
 
+              <div className="questionnaire-divider" />
+
               {/* Price Importance */}
-              <div className="space-y-2">
-                <div className="flex items-start space-x-2">
-                  <div className="flex-grow">
-                    <label className="block text-gray-700 mb-2">
-                      How important is price in your decision?
-                    </label>
-                    <select
-                      {...form.register('price_importance')}
-                      className={cn(
-                        "w-full p-3 rounded-lg",
-                        "border border-gray-200",
-                        "focus:outline-none focus:ring-2 focus:ring-blue-500",
-                        "transition duration-200"
-                      )}
-                    >
-                      <option value="">Select an option</option>
-                      <option value="most_important">Most important factor</option>
-                      <option value="very_important">Very important, but not the only factor</option>
-                      <option value="somewhat_important">Somewhat important</option>
-                    </select>
+              <div className="questionnaire-section">
+                <h2 className="question-text">
+                  How important is price in your decision?
+                </h2>
+                <p className="helper-text">
+                  This helps us prioritize plans that match your budget priorities.
+                </p>
+                
+                <OptionCardGroup
+                  name="price_importance"
+                  options={[
+                    { 
+                      value: 'most_important', 
+                      label: 'Most important factor', 
+                      description: 'I need the most affordable option'
+                    },
+                    { 
+                      value: 'very_important', 
+                      label: 'Very important, but not the only factor', 
+                      description: 'I want a balance of price and features'
+                    },
+                    { 
+                      value: 'somewhat_important', 
+                      label: 'Somewhat important', 
+                      description: 'I prioritize coverage over price'
+                    }
+                  ]}
+                  value={form.watch('price_importance') || ''}
+                  onChange={(value) => form.setValue('price_importance', value as 'most_important' | 'very_important' | 'somewhat_important', { shouldValidate: true })}
+                />
+                
+                {form.formState.errors.price_importance && (
+                  <div className="error-message">
+                    {form.formState.errors.price_importance.message}
                   </div>
-                </div>
+                )}
               </div>
 
+              <div className="questionnaire-divider" />
+
               {/* Doctor Preference */}
-              <div className="space-y-2">
-                <div className="flex items-start space-x-2">
-                  <div className="flex-grow">
-                    <label className="block text-gray-700 mb-2">
-                      What's your preference regarding doctors?
-                    </label>
-                    <select
-                      {...form.register('doctor_preference')}
-                      className={cn(
-                        "w-full p-3 rounded-lg",
-                        "border border-gray-200",
-                        "focus:outline-none focus:ring-2 focus:ring-blue-500",
-                        "transition duration-200"
-                      )}
-                    >
-                      <option value="">Select an option</option>
-                      <option value="keep_current">I want to keep my current doctors</option>
-                      <option value="willing_to_switch">I'm willing to switch doctors</option>
-                      <option value="no_regular_doctor">I don't have regular doctors</option>
-                    </select>
+              <div className="questionnaire-section">
+                <h2 className="question-text">
+                  What's your preference regarding doctors?
+                </h2>
+                <p className="helper-text">
+                  Some plans have specific networks while others allow more flexibility.
+                </p>
+                
+                <OptionCardGroup
+                  name="doctor_preference"
+                  options={[
+                    { 
+                      value: 'keep_current', 
+                      label: 'I want to keep my current doctors', 
+                      description: 'Network flexibility is important to me'
+                    },
+                    { 
+                      value: 'willing_to_switch', 
+                      label: "I'm willing to switch doctors", 
+                      description: 'I can adapt to a new network'
+                    },
+                    { 
+                      value: 'no_regular_doctor', 
+                      label: "I don't have regular doctors", 
+                      description: "I'm flexible with providers"
+                    }
+                  ]}
+                  value={form.watch('doctor_preference') || ''}
+                  onChange={(value) => form.setValue('doctor_preference', value as 'keep_current' | 'willing_to_switch' | 'no_regular_doctor', { shouldValidate: true })}
+                />
+                
+                {form.formState.errors.doctor_preference && (
+                  <div className="error-message">
+                    {form.formState.errors.doctor_preference.message}
                   </div>
-                </div>
+                )}
               </div>
             </div>
 
@@ -169,22 +203,13 @@ export default function PreferencesPage() {
               <button
                 type="button"
                 onClick={() => router.push('/questionnaire/health')}
-                className={cn(
-                  "px-6 py-2 rounded-full",
-                  "border border-gray-300 text-gray-600",
-                  "hover:bg-gray-50",
-                  "transition-colors duration-200"
-                )}
+                className="questionnaire-button questionnaire-button-secondary"
               >
                 Back
               </button>
               <button
                 type="submit"
-                className={cn(
-                  "px-6 py-2 rounded-full text-white",
-                  "transition-colors duration-200"
-                )}
-                style={{ background: 'var(--color-coral-primary)' }}
+                className="questionnaire-button questionnaire-button-primary"
               >
                 Continue
               </button>

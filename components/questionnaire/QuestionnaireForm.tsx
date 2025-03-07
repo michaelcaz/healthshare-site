@@ -22,6 +22,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { getVisitFrequencyOptions } from '@/lib/utils/visit-calculator';
 import Cookies from 'js-cookie';
 import { ProgressIndicator } from '@/components/questionnaire/progress-indicator';
+import { NumberInput } from '@/components/questionnaire/NumberInput';
+import { OptionCardGroup } from '@/components/questionnaire/OptionCard';
 
 const COOKIE_KEY = 'questionnaire-form-data';
 const COOKIE_OPTIONS = {
@@ -184,97 +186,73 @@ const renderFormControl = (fieldName: string, field: any, form: UseFormReturn<Fo
   });
   
   return (
-    <div className="questionnaire-form-group fade-in" style={{ animationDelay: `${parseInt(fieldName.split('_')[0] || '0') * 0.05}s` }}>
-      <label htmlFor={fieldName} className="questionnaire-label">
-        {fieldLabel}
-      </label>
-      
-      {fieldType === 'select' && (
-        <div className="relative">
-          <select
-            id={fieldName}
-            {...field}
-            value={field.value || ''}  // Ensure value is never undefined
-            className="questionnaire-select focus:ring-2 focus:ring-primary/20 transition-all"
-          >
-            <option value="" disabled>Select an option</option>
-            {getSelectOptions(fieldName as keyof FormValues, form).map((option: SelectOption) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-          <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none text-gray-500">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="6 9 12 15 18 9"></polyline>
-            </svg>
-          </div>
-        </div>
+    <div className="questionnaire-section fade-in" style={{ animationDelay: `${parseInt(fieldName.split('_')[0] || '0') * 0.05}s` }}>
+      {fieldType === 'number' && (
+        <NumberInput
+          id={fieldName}
+          name={field.name}
+          value={field.value || ''}
+          onChange={(value) => field.onChange(value)}
+          min={fieldName === 'age' ? 18 : 0}
+          max={fieldName === 'age' ? 120 : 999}
+          label={fieldLabel}
+          error={form.formState.errors[fieldName as keyof FormValues]?.message?.toString()}
+          isValid={field.value && !form.formState.errors[fieldName as keyof FormValues]}
+          tooltipText={fieldName === 'age' ? "We need your age to determine eligibility and pricing for health sharing plans." : undefined}
+        />
       )}
       
       {fieldType === 'text' && (
-        <input
-          id={fieldName}
-          type="text"
-          {...field}
-          value={field.value || ''}  // Ensure value is never undefined
-          className="questionnaire-input focus:ring-2 focus:ring-primary/20 transition-all"
-          placeholder={getPlaceholder(fieldName as keyof FormValues)}
-        />
-      )}
-      
-      {fieldType === 'number' && (
-        <input
-          id={fieldName}
-          type={fieldName === 'age' ? 'text' : 'number'}
-          inputMode={fieldName === 'age' ? 'numeric' : 'decimal'}
-          pattern={fieldName === 'age' ? '[0-9]*' : undefined}
-          {...field}
-          value={field.value || ''}  // Ensure value is never undefined
-          className="questionnaire-input focus:ring-2 focus:ring-primary/20 transition-all"
-          placeholder={getPlaceholder(fieldName as keyof FormValues)}
-        />
-      )}
-      
-      {fieldType === 'radio' && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
-          {getRadioOptions(fieldName as keyof FormValues, form).map((option: SelectOption) => (
-            <label
-              key={option.value}
-              className={`
-                flex items-center p-4 rounded-xl border-2 cursor-pointer transition-all
-                ${field.value === option.value 
-                  ? 'border-primary bg-primary/5 shadow-sm' 
-                  : 'border-gray-200 hover:border-gray-300'
-                }
-              `}
-            >
-              <input
-                type="radio"
-                value={option.value}
-                checked={field.value === option.value}
-                onChange={() => field.onChange(option.value)}
-                className="sr-only"
-              />
-              <div className={`w-5 h-5 rounded-full border-2 mr-3 flex items-center justify-center ${field.value === option.value ? 'border-primary' : 'border-gray-300'}`}>
-                {field.value === option.value && (
-                  <div className="w-3 h-3 rounded-full bg-primary"></div>
-                )}
-              </div>
-              <div>
-                <div className="font-medium">{option.label}</div>
-                {option.description && (
-                  <div className="text-sm text-gray-500">{option.description}</div>
-                )}
-              </div>
-            </label>
-          ))}
+        <div className="space-y-2">
+          <label htmlFor={fieldName} className="question-text">
+            {fieldLabel}
+          </label>
+          <input
+            id={fieldName}
+            type="text"
+            {...field}
+            value={field.value || ''}
+            className={cn(
+              "number-input",
+              form.formState.errors[fieldName as keyof FormValues] && "input-error",
+              field.value && !form.formState.errors[fieldName as keyof FormValues] && "input-success"
+            )}
+            placeholder={getPlaceholder(fieldName as keyof FormValues)}
+          />
+          {form.formState.errors[fieldName as keyof FormValues] && (
+            <div className="error-message">
+              {form.formState.errors[fieldName as keyof FormValues]?.message?.toString()}
+            </div>
+          )}
         </div>
       )}
       
-      {form.formState.errors[fieldName as keyof FormValues] && (
-        <div className="questionnaire-error">
-          {form.formState.errors[fieldName as keyof FormValues]?.message as string}
+      {fieldType === 'radio' && (
+        <div className="space-y-3">
+          <h2 className="question-text">
+            {fieldLabel}
+          </h2>
+          
+          <OptionCardGroup
+            name={fieldName}
+            options={getRadioOptions(fieldName as keyof FormValues, form).map(option => ({
+              value: option.value,
+              label: option.label,
+              description: option.description,
+              tooltipText: fieldName === 'iua_preference' ? 
+                "IUA (Initial Unshared Amount) is similar to a deductible - the amount you pay before sharing begins." : 
+                undefined
+            }))}
+            value={field.value || ''}
+            onChange={(value) => field.onChange(value)}
+            layout={fieldName === 'coverage_type' || fieldName === 'iua_preference' ? 'grid' : 'vertical'}
+          />
+          
+          {form.formState.errors[fieldName as keyof FormValues] && (
+            <div className="error-message">
+              {form.formState.errors[fieldName as keyof FormValues]?.message?.toString()}
+            </div>
+          )}
         </div>
       )}
     </div>
@@ -671,7 +649,7 @@ export const QuestionnaireForm = () => {
             )}
           </div>
           
-          <div className="questionnaire-navigation">
+          <div className="flex justify-between pt-6">
             {currentStep > 0 && (
               <button
                 type="button"
@@ -681,18 +659,22 @@ export const QuestionnaireForm = () => {
                 Back
               </button>
             )}
-            <button 
-              type="submit"
-              className="questionnaire-button questionnaire-button-primary"
-              disabled={form.formState.isSubmitting}
-            >
-              {form.formState.isSubmitting 
-                ? 'Submitting...' 
-                : currentStep === steps.length - 1 
-                  ? 'Submit' 
-                  : 'Next'
-              }
-            </button>
+            {currentStep < steps.length - 1 ? (
+              <button
+                type="button"
+                onClick={handleNextClick}
+                className="questionnaire-button questionnaire-button-primary"
+              >
+                Continue
+              </button>
+            ) : (
+              <button
+                type="submit"
+                className="questionnaire-button questionnaire-button-primary"
+              >
+                Get My Recommendations
+              </button>
+            )}
           </div>
         </form>
       </div>

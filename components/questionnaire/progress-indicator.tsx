@@ -5,6 +5,7 @@ interface ProgressIndicatorProps {
   totalPages: number
   steps: Array<{
     label: string
+    route?: string
     description?: string
   }>
 }
@@ -16,7 +17,19 @@ export function ProgressIndicator({ currentPage, totalPages = 3, steps }: Progre
 
   return (
     <div className="mb-8 fade-in">
-      {/* Step navigation - Updated with connected steps and active indicators */}
+      {/* Progress bar */}
+      <div className="questionnaire-progress mb-6">
+        <div 
+          className="questionnaire-progress-bar" 
+          style={{ width: `${percentage}%` }}
+          role="progressbar"
+          aria-valuenow={percentage}
+          aria-valuemin={0}
+          aria-valuemax={100}
+        ></div>
+      </div>
+      
+      {/* Step navigation */}
       <div className="step-navigation">
         {steps.map((step, index) => (
           <div key={index} className="step-item">

@@ -1,4 +1,5 @@
 import './questionnaire.css'
+import './questionnaire-enhanced.css'
 
 export default function QuestionnaireLayout({
   children,
