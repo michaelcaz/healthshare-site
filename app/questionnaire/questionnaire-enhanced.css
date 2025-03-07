@@ -275,6 +275,7 @@
   font-size: 16px;
   transition: all 200ms ease;
   min-height: 48px;
+  min-width: 140px; /* Ensure minimum width for the button */
 }
 
 .questionnaire-button-primary {
@@ -282,16 +283,11 @@
   color: white;
   border: none;
   position: relative; /* Required for absolute positioning of the arrow */
-  padding-right: 48px; /* Increased padding to make room for the arrow */
 }
 
-/* Add arrow icon to primary button */
+/* Remove the general arrow styling from primary button */
 .questionnaire-button-primary::after {
-  content: "→";
-  position: absolute;
-  right: 20px; /* Increased spacing from the right edge */
-  font-size: 1.25rem;
-  transition: transform 0.2s ease;
+  content: none;
 }
 
 .questionnaire-button-primary:hover {
@@ -301,7 +297,7 @@
 }
 
 .questionnaire-button-primary:hover::after {
-  transform: translateX(4px);
+  transform: none;
 }
 
 .questionnaire-button-primary:focus {
@@ -344,4 +340,21 @@
 /* Remove the line above the progress indicator */
 .step-navigation::before {
   display: none; /* Hide the line */
+}
+
+/* Specific styling for the Continue button with arrow */
+.questionnaire-button-with-arrow {
+  padding-right: 48px; /* Extra padding on the right for the arrow */
+}
+
+.questionnaire-button-with-arrow::after {
+  content: "→";
+  position: absolute;
+  right: 20px;
+  font-size: 1.25rem;
+  transition: transform 0.2s ease;
+}
+
+.questionnaire-button-with-arrow:hover::after {
+  transform: translateX(4px);
 } 

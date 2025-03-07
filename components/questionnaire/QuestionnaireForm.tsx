@@ -665,7 +665,7 @@ export const QuestionnaireForm = () => {
               <button
                 type="button"
                 onClick={handleNextClick}
-                className="questionnaire-button questionnaire-button-primary"
+                className="questionnaire-button questionnaire-button-primary questionnaire-button-with-arrow"
               >
                 Continue
               </button>
