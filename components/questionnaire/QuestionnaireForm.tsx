@@ -44,20 +44,20 @@ const formSchema = z.object({
   coverage_type: z.enum(['just_me', 'me_spouse', 'me_kids', 'family'], {
     errorMap: () => ({ message: "Please select who needs coverage" })
   }),
+  zip_code: z.string().min(5, "Please enter a valid ZIP code"),
   iua_preference: z.enum(['1000', '2500', '5000'], {
     errorMap: () => ({ message: "Please select an IUA preference" })
-  }),
+  }).optional(),
   pregnancy: z.enum(['true', 'false'], {
     errorMap: () => ({ message: "Please indicate if you are currently pregnant" })
-  }),
+  }).optional(),
   pre_existing: z.enum(['true', 'false'], {
     errorMap: () => ({ message: "Please indicate if you have pre-existing conditions" })
-  }),
+  }).optional(),
   state: z.string().optional(),
-  zip_code: z.string().min(5, "Please enter a valid ZIP code"),
   expense_preference: z.enum(['lower_monthly', 'higher_monthly'], {
     errorMap: () => ({ message: "Please select your cost preference" })
-  }),
+  }).optional(),
   pregnancy_planning: z.enum(['yes', 'no', 'maybe'], {
     errorMap: () => ({ message: "Please indicate your pregnancy plans" })
   }).optional(),
@@ -72,7 +72,7 @@ const formSchema = z.object({
   }),
   visit_frequency: z.enum(['just_checkups', 'few_months', 'monthly_plus'], {
     errorMap: () => ({ message: "Please select your expected visit frequency" })
-  })
+  }).optional()
 });
 
 const questionLabels: Record<keyof z.infer<typeof formSchema>, string> = {
@@ -192,6 +192,14 @@ const renderFormControl = (fieldName: string, field: any, form: UseFormReturn<Fo
   const fieldType = getFieldType(fieldName as keyof FormValues);
   const fieldLabel = getFieldLabel(fieldName as keyof FormValues, form);
   
+  // Log the field value and onChange handler
+  console.log(`Rendering control for ${fieldName}:`, {
+    value: field.value,
+    onChange: !!field.onChange,
+    onBlur: !!field.onBlur,
+    name: field.name
+  });
+  
   return (
     <div className="questionnaire-form-group fade-in" style={{ animationDelay: `${parseInt(fieldName.split('_')[0] || '0') * 0.05}s` }}>
       <label htmlFor={fieldName} className="questionnaire-label">
@@ -203,8 +211,10 @@ const renderFormControl = (fieldName: string, field: any, form: UseFormReturn<Fo
           <select
             id={fieldName}
             {...field}
+            value={field.value || ''}  // Ensure value is never undefined
             className="questionnaire-select focus:ring-2 focus:ring-primary/20 transition-all"
           >
+            <option value="" disabled>Select an option</option>
             {getSelectOptions(fieldName as keyof FormValues, form).map((option: SelectOption) => (
               <option key={option.value} value={option.value}>
                 {option.label}
@@ -224,6 +234,7 @@ const renderFormControl = (fieldName: string, field: any, form: UseFormReturn<Fo
           id={fieldName}
           type="text"
           {...field}
+          value={field.value || ''}  // Ensure value is never undefined
           className="questionnaire-input focus:ring-2 focus:ring-primary/20 transition-all"
           placeholder={getPlaceholder(fieldName as keyof FormValues)}
         />
@@ -236,6 +247,7 @@ const renderFormControl = (fieldName: string, field: any, form: UseFormReturn<Fo
           inputMode={fieldName === 'age' ? 'numeric' : 'decimal'}
           pattern={fieldName === 'age' ? '[0-9]*' : undefined}
           {...field}
+          value={field.value || ''}  // Ensure value is never undefined
           className="questionnaire-input focus:ring-2 focus:ring-primary/20 transition-all"
           placeholder={getPlaceholder(fieldName as keyof FormValues)}
         />
@@ -288,156 +300,239 @@ const renderFormControl = (fieldName: string, field: any, form: UseFormReturn<Fo
 
 // Helper function to render form fields
 const renderFormField = (fieldName: keyof FormValues, form: UseFormReturn<FormValues>) => {
+  console.log(`Rendering field ${fieldName} with value:`, form.getValues(fieldName));
   return (
     <FormField
       key={fieldName}
       control={form.control}
       name={fieldName}
-      render={({ field }) => renderFormControl(fieldName, field, form)}
+      render={({ field }) => {
+        console.log(`Field ${fieldName} props:`, field);
+        return renderFormControl(fieldName, field, form);
+      }}
     />
   );
 };
 
-type FormValues = z.infer<typeof formSchema>;
+// Define FormValues interface explicitly to match our schema changes
+interface FormValues {
+  age: string;  // Changed from number to string to match our schema
+  coverage_type: 'just_me' | 'me_spouse' | 'me_kids' | 'family' | undefined;
+  iua_preference: '1000' | '2500' | '5000' | undefined;
+  pregnancy: 'true' | 'false' | undefined;
+  pre_existing: 'true' | 'false' | undefined;
+  state?: string;
+  zip_code: string;
+  expense_preference: 'lower_monthly' | 'higher_monthly' | undefined;
+  pregnancy_planning?: 'yes' | 'no' | 'maybe';
+  medical_conditions?: string[];
+  visit_frequency: 'just_checkups' | 'few_months' | 'monthly_plus' | undefined;
+}
+
+// Create a schema for just the first step
+const firstStepSchema = z.object({
+  age: z.string()
+    .min(1, "Age is required")
+    .transform((val) => {
+      const parsed = parseInt(val, 10);
+      if (isNaN(parsed)) {
+        throw new Error("Age must be a number");
+      }
+      return parsed;
+    })
+    .refine((val) => val >= 18, "You must be at least 18 years old")
+    .refine((val) => val <= 120, "Please enter a valid age"),
+  coverage_type: z.enum(['just_me', 'me_spouse', 'me_kids', 'family'], {
+    errorMap: () => ({ message: "Please select who needs coverage" })
+  }),
+  zip_code: z.string().min(5, "Please enter a valid ZIP code"),
+});
 
 export const QuestionnaireForm = () => {
+  // Add console logs to debug form initialization
+  console.log("QuestionnaireForm initializing");
+  
   const [startTime] = useState(Date.now());
   const [isComplete, setIsComplete] = useState(false);
-  const [currentStep, setCurrentStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const [formError, setFormError] = useState<string | null>(null);
+  const [currentStep, setCurrentStep] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+  const { toast } = useToast();
+  
+  // Define the steps for the questionnaire
+  const steps = [
+    {
+      title: "Basic Information",
+      description: "Let's start with some basic information to find the right healthshare plan for you.",
+      fields: ['age', 'coverage_type', 'zip_code']
+    },
+    {
+      title: "Health Status",
+      description: "Tell us about your health to find plans that meet your needs.",
+      fields: ['pre_existing', 'pregnancy', 'pregnancy_planning', 'medical_conditions']
+    },
+    {
+      title: "Preferences",
+      description: "Help us understand your preferences for cost and coverage.",
+      fields: ['iua_preference', 'expense_preference', 'visit_frequency']
+    }
+  ];
   
   const form = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
-      age: undefined,
+      age: '',  // Initialize with empty string instead of undefined
       coverage_type: undefined,
+      zip_code: '',
       iua_preference: undefined,
       pregnancy: undefined,
       pre_existing: undefined,
       state: '',
-      zip_code: '',
       expense_preference: undefined,
       pregnancy_planning: undefined,
       medical_conditions: [],
-      visit_frequency: undefined
+      visit_frequency: undefined,
     },
-    resolver: zodResolver(formSchema),
-    mode: 'onTouched',
-    delayError: 500,
-    shouldFocusError: true,
-    criteriaMode: 'firstError'
+    mode: 'onSubmit', // Change to onSubmit to prevent premature validation
   });
-
-  const watchPregnancy = form.watch('pregnancy');
-  const watchCoverageType = form.watch('coverage_type');
   
-  const router = useRouter();
-  const { toast } = useToast();
-
-  const step = steps[currentStep];
-
-  // Load saved form data
+  // Log default values
+  console.log("Form default values:", form.getValues());
+  
+  // Log detailed form information
   useEffect(() => {
-    const loadSavedData = async () => {
-      setIsLoading(true);
+    console.log("Form initialized with values:", form.getValues());
+    console.log("Steps configuration:", steps);
+    console.log("Form schema shape:", Object.keys(formSchema.shape));
+    
+    // Add event listener for form changes
+    const subscription = form.watch((value, { name, type }) => {
+      if (name) {
+        console.log(`Form field "${name}" changed:`, value, type);
+      }
+    });
+    
+    return () => subscription.unsubscribe();
+  }, [form]);
+  
+  // Add debugging for form validation
+  const handleNextClick = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log("Next button clicked");
+    console.log("Current form values:", form.getValues());
+    console.log("Form state:", form.formState);
+    
+    // Get only the fields for the current step
+    const currentStepFields = steps[currentStep].fields;
+    console.log("Current step fields:", currentStepFields);
+    
+    // Get current values
+    const currentValues = form.getValues();
+    const currentStepValues = Object.fromEntries(
+      currentStepFields.map(field => [field, currentValues[field as keyof FormValues]])
+    );
+    
+    console.log("Validating current step values:", currentStepValues);
+    
+    // For the first step, use the dedicated schema
+    if (currentStep === 0) {
       try {
-        const savedData = Cookies.get(COOKIE_KEY);
-        if (savedData) {
-          try {
-            const parsedData = JSON.parse(savedData);
-            // Reset form before setting values
-            await form.reset();
-            // Set each field individually with validation
-            for (const [key, value] of Object.entries(parsedData)) {
-              if (key in form.getValues()) {
-                await form.setValue(key as keyof FormValues, value as any, {
-                  shouldValidate: true,
-                  shouldDirty: true,
-                  shouldTouch: true
-                });
-              }
+        const validationResult = firstStepSchema.safeParse(currentStepValues);
+        console.log("First step validation result:", validationResult);
+        
+        if (validationResult.success) {
+          console.log("First step is valid, proceeding to next step");
+          setCurrentStep(1);
+        } else {
+          console.log("First step validation errors:", validationResult.error.format());
+          
+          // Set form errors
+          validationResult.error.errors.forEach(err => {
+            if (err.path.length > 0) {
+              const fieldName = err.path[0].toString();
+              form.setError(fieldName as any, {
+                type: 'manual',
+                message: err.message
+              });
             }
-          } catch (parseError) {
-            console.warn('Could not parse saved form data:', parseError);
-          }
+          });
+          
+          toast({
+            title: "Please check your information",
+            description: "There are some issues with your form entries.",
+            variant: "destructive"
+          });
         }
       } catch (error) {
-        console.warn('Error loading form data:', error);
-      } finally {
-        setIsLoading(false);
+        console.error("Error during first step validation:", error);
       }
-    };
-
-    loadSavedData();
+      return;
+    }
     
-    const startTime = Date.now();
-    trackQuestionnaireStep('QUESTIONNAIRE_START', {
-      stepNumber: currentStep + 1,
-      stepName: 'Start',
-    });
-
-    return () => {
-      if (!isComplete) {
-        trackAbandonment(currentStep, Date.now() - startTime);
+    // For other steps, use the existing logic
+    try {
+      // This is a simplified approach for debugging
+      let isValid = true;
+      const errors: any[] = [];
+      
+      // Simple validation for other steps
+      currentStepFields.forEach(field => {
+        const value = currentValues[field as keyof FormValues];
+        if (field === 'pre_existing' || field === 'pregnancy' || field === 'expense_preference') {
+          if (!value) {
+            isValid = false;
+            errors.push({
+              path: [field],
+              message: `Please select an option for ${field.replace('_', ' ')}`
+            });
+          }
+        }
+      });
+      
+      if (isValid) {
+        console.log("Current step is valid, proceeding...");
+        
+        if (currentStep < steps.length - 1) {
+          // Move to the next step
+          setCurrentStep(currentStep + 1);
+        } else {
+          // Submit the form on the last step
+          form.handleSubmit(onSubmit)();
+        }
+      } else {
+        console.log("Validation errors:", errors);
+        
+        // Set form errors
+        errors.forEach(err => {
+          if (err.path.length > 0) {
+            const fieldName = err.path[0].toString();
+            form.setError(fieldName as any, {
+              type: 'manual',
+              message: err.message
+            });
+          }
+        });
+        
+        toast({
+          title: "Please check your information",
+          description: "There are some issues with your form entries.",
+          variant: "destructive"
+        });
       }
-    };
-  }, [currentStep, isComplete, startTime]);
-
-  // Add debugging for form state
-  useEffect(() => {
-    console.log('Form initialized with values:', form.getValues());
-    
-    // Log the steps configuration to see if state field is included
-    console.log('Steps configuration:', steps);
-    
-    // Log the schema shape to see required fields
-    console.log('Form schema shape:', Object.entries(formSchema.shape).map(([key, schema]) => {
-      // @ts-ignore - Checking if field is required
-      const isRequired = !schema.isOptional?.();
-      return { field: key, required: isRequired };
-    }));
-    
-    const subscription = form.watch((value, { name, type }) => {
-      console.log(`Form field "${name}" changed:`, value, type);
-    });
-    
-    return () => subscription.unsubscribe();
-  }, [form]);
-
-  // Save form data when it changes
-  useEffect(() => {
-    const saveFormData = async () => {
-      try {
-        const formData = form.getValues();
-        Cookies.set(COOKIE_KEY, JSON.stringify(formData), COOKIE_OPTIONS);
-      } catch (error) {
-        console.warn('Could not save form data:', error);
-      }
-    };
-
-    const subscription = form.watch(() => {
-      saveFormData();
-    });
-
-    return () => subscription.unsubscribe();
-  }, [form]);
-
-  // Track questionnaire progress
-  useEffect(() => {
-    trackQuestionnaireStep('QUESTIONNAIRE_START', {
-      stepNumber: 1,
-      stepName: 'Start',
-    });
-
-    return () => {
-      if (!isComplete) {
-        trackAbandonment(currentStep, Date.now() - startTime);
-      }
-    };
-  }, [currentStep, isComplete, startTime]);
+    } catch (error) {
+      console.error("Error during validation:", error);
+      toast({
+        title: "Validation Error",
+        description: "There was a problem validating your information.",
+        variant: "destructive"
+      });
+    }
+  };
 
   const onSubmit = async (data: FormValues) => {
+    console.log("Form submission triggered with data:", data);
     if (isSubmitting) {
       console.log('Already submitting, ignoring duplicate submission');
       return;
@@ -541,27 +636,40 @@ export const QuestionnaireForm = () => {
   return (
     <div className="questionnaire-container">
       <div className="questionnaire-card">
-        <h1 className="questionnaire-step-title">Basic Information</h1>
+        <h1 className="questionnaire-step-title">{steps[currentStep].title}</h1>
         <p className="questionnaire-step-description">
-          Let's start with some basic information to find the right healthshare plan for you.
+          {steps[currentStep].description}
         </p>
         
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={handleNextClick} className="space-y-6">
           {/* Form fields with animation */}
           <div className="space-y-6 transition-all duration-300">
-            {renderFormField('age', form)}
-            {renderFormField('coverage_type', form)}
-            {renderFormField('zip_code', form)}
+            {steps[currentStep].fields.map(fieldName => 
+              renderFormField(fieldName as keyof FormValues, form)
+            )}
           </div>
           
           <div className="questionnaire-navigation">
-            <div></div> {/* Empty div for flex spacing */}
+            {currentStep > 0 && (
+              <button
+                type="button"
+                onClick={() => setCurrentStep(currentStep - 1)}
+                className="questionnaire-button questionnaire-button-secondary"
+              >
+                Back
+              </button>
+            )}
             <button 
-              type="submit" 
+              type="submit"
               className="questionnaire-button questionnaire-button-primary"
-              disabled={isSubmitting}
+              disabled={form.formState.isSubmitting}
             >
-              {isSubmitting ? 'Submitting...' : 'Next'}
+              {form.formState.isSubmitting 
+                ? 'Submitting...' 
+                : currentStep === steps.length - 1 
+                  ? 'Submit' 
+                  : 'Next'
+              }
             </button>
           </div>
         </form>
