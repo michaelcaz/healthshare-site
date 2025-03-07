@@ -658,108 +658,123 @@ export const QuestionnaireForm = () => {
     console.log("Form submission triggered with data:", data);
     console.log("onSubmit function called with data:", data);
     
-    if (isSubmitting) {
-      console.log('Already submitting, ignoring duplicate submission');
-      return;
-    }
-    
     try {
-      console.log("Form submission started", data);
       setIsSubmitting(true);
       setFormError(null);
       
-      // Log each field's type to identify the issue
+      console.log("Form submission started", data);
+      
+      // Log the type of each field for debugging
       Object.entries(data).forEach(([key, value]) => {
         console.log(`Field ${key}: value = ${value}, type = ${typeof value}`);
       });
       
+      // Set default state value in onSubmit
+      if (!data.state || data.state.trim() === '') {
+        data.state = 'TX'; // Default to Texas if no state is provided
+      }
+      
+      // Create a copy of the data to avoid modifying the original
+      const submissionData = { ...data };
+      
+      // Convert age from string to number for internal processing
+      const age = typeof submissionData.age === 'string' 
+        ? parseInt(submissionData.age, 10) 
+        : submissionData.age;
+      
+      console.log("Data after type conversions:", submissionData);
+      
+      // Setting iua_preference based on financial_capacity
+      const iua_preference = submissionData.financial_capacity || '1000';
+      
+      // Set expense_preference based on financial_capacity and risk_preference
+      let expense_preference: 'lower_monthly' | 'higher_monthly' = 'lower_monthly';
+      
+      if (submissionData.financial_capacity === '500' || submissionData.financial_capacity === '1000') {
+        // Lower financial capacity indicates preference for higher monthly premiums with lower IUAs
+        console.log('Setting expense_preference to "higher_monthly" for low financial capacity');
+        expense_preference = 'higher_monthly';
+      } else if (submissionData.financial_capacity === '2500' || submissionData.financial_capacity === '5000') {
+        // Higher financial capacity indicates preference for lower monthly premiums with higher IUAs
+        console.log('Setting expense_preference to "lower_monthly" for high financial capacity');
+        expense_preference = 'lower_monthly';
+      }
+      
+      // Further adjust expense_preference based on risk_preference
+      if (submissionData.risk_preference === 'lower_risk' && expense_preference !== 'higher_monthly') {
+        console.log('Adjusting expense_preference to "higher_monthly" for lower_risk preference');
+        expense_preference = 'higher_monthly';
+      } else if (submissionData.risk_preference === 'higher_risk' && expense_preference !== 'lower_monthly') {
+        console.log('Adjusting expense_preference to "lower_monthly" for higher_risk preference');
+        expense_preference = 'lower_monthly';
+      }
+      
+      // Create the base data object with required fields
+      const finalData: Record<string, any> = {
+        age: age,
+        coverage_type: submissionData.coverage_type || 'just_me',
+        iua_preference: iua_preference as '500' | '1000' | '2500' | '5000',
+        pregnancy: submissionData.pregnancy || 'false',
+        pre_existing: submissionData.pre_existing || 'false',
+        state: submissionData.state || 'TX',
+        zip_code: submissionData.zip_code,
+        expense_preference: expense_preference,
+        pregnancy_planning: submissionData.pregnancy_planning || 'no',
+        visit_frequency: submissionData.visit_frequency || 'just_checkups'
+      };
+      
+      // Add optional fields if they exist
+      if (submissionData.financial_capacity) {
+        finalData.financial_capacity = submissionData.financial_capacity;
+      }
+      
+      if (submissionData.risk_preference) {
+        finalData.risk_preference = submissionData.risk_preference;
+      }
+      
+      if (submissionData.pre_existing_approach) {
+        finalData.pre_existing_approach = submissionData.pre_existing_approach;
+      }
+      
+      console.log("Final data before validation:", finalData);
+      
+      // Validate the entire form data
       console.log("Validating entire form data");
+      const validationResult = formSchema.safeParse(finalData);
       
-      // If state is not provided, set a default value
-      if (!data.state) {
-        console.log("Setting default state value in onSubmit");
-        data.state = data.zip_code ? 'TX' : '';
-      }
-      
-      // Convert any numeric strings to actual strings before validation
-      if (typeof data.iua_preference === 'number') {
-        console.log("Converting iua_preference from number to string");
-        data.iua_preference = String(data.iua_preference) as any;
-      }
-      
-      // Convert age back to string if it's a number
-      if (typeof data.age === 'number') {
-        console.log("Converting age from number to string");
-        data.age = String(data.age);
-      }
-      
-      // Log the data after conversions
-      console.log("Data after type conversions:", data);
-      
-      // Set iua_preference equal to financial_capacity
-      if (data.financial_capacity) {
-        console.log("Setting iua_preference based on financial_capacity:", data.financial_capacity);
-        data.iua_preference = data.financial_capacity as any;
-      } else {
-        // Default to 1000 if financial_capacity is not provided
-        data.iua_preference = '1000' as any;
-      }
-      
-      // Manually validate the data
-      const validationResult = formSchema.safeParse(data);
       console.log("Final validation result:", validationResult);
       
       if (validationResult.success) {
         console.log("Validation successful, proceeding with submission");
         
-        // Transform data to match QuestionnaireResponse type
-        const transformedData = {
-          age: validationResult.data.age,
-          coverage_type: validationResult.data.coverage_type,
-          iua_preference: validationResult.data.financial_capacity || '1000', // Use financial_capacity as iua_preference
-          pregnancy: validationResult.data.pregnancy || 'false', // Default value
-          pre_existing: validationResult.data.pre_existing || 'false', // Default value
-          state: validationResult.data.state || 'TX', // Default to TX if not provided
-          zip_code: validationResult.data.zip_code,
-          expense_preference: validationResult.data.expense_preference || 'lower_monthly', // Default value
-          pregnancy_planning: validationResult.data.pregnancy === 'false' ? (validationResult.data.pregnancy_planning || 'no') : 'no', // Only include if pregnancy is false
-          visit_frequency: validationResult.data.visit_frequency || 'just_checkups', // Default value
-          financial_capacity: validationResult.data.financial_capacity || '1000', // Default value
-          risk_preference: validationResult.data.risk_preference || 'lower_risk', // Default value
-          pre_existing_approach: validationResult.data.pre_existing_approach || 'balanced' // Default value
-        };
-        
-        // Save the response to the database
-        const response = await saveQuestionnaireResponse(transformedData);
+        // Save the response
+        const response = await saveQuestionnaireResponse(validationResult.data as QuestionnaireResponse);
         console.log("Response saved successfully:", response);
         
-        // Set completion flag
-        setIsComplete(true);
+        // Save to localStorage as well for redundancy
+        localStorage.setItem('questionnaire-data', JSON.stringify({
+          response: validationResult.data,
+          timestamp: new Date().toISOString()
+        }));
         
-        // Scroll to top before redirecting
-        window.scrollTo(0, 0);
-        
-        // Redirect to results page
-        router.push('/questionnaire/results');
+        // Redirect to recommendations page
+        router.push('/recommendations');
       } else {
         console.error("Validation failed:", validationResult.error);
-        
-        // Log detailed validation errors
-        validationResult.error.errors.forEach(err => {
-          console.error(`Validation error for path ${err.path.join('.')}: ${err.message}`);
-          console.error(`Error code: ${err.code}, received: ${JSON.stringify(err)}`);
+        setFormError("Please check your answers and try again.");
+        toast({
+          title: "Error",
+          description: "Please check your answers and try again.",
+          variant: "destructive"
         });
-        
-        throw new Error(validationResult.error.message);
       }
     } catch (error) {
-      console.error("Form submission error:", error);
-      setFormError(error instanceof Error ? error.message : 'An unknown error occurred');
-      
+      console.error("Error submitting form:", error);
+      setFormError("An error occurred. Please try again.");
       toast({
-        title: 'Error',
-        description: error instanceof Error ? error.message : 'Failed to submit questionnaire',
-        variant: 'destructive'
+        title: "Error",
+        description: "An error occurred. Please try again.",
+        variant: "destructive"
       });
     } finally {
       console.log("Setting isSubmitting to false");

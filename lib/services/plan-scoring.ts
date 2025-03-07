@@ -13,98 +13,128 @@ interface ScoredPlan extends EligiblePlan {
 
 export class PlanScoringService {
   scorePlans(plans: EligiblePlan[], response: QuestionnaireResponse): ScoredPlan[] {
-    return plans
-      .map(plan => this.calculateScore(plan, response))
+    console.log('PlanScoringService.scorePlans called with', plans.length, 'plans');
+    console.log('Questionnaire response:', JSON.stringify(response, null, 2));
+    
+    const scoredPlans = plans
+      .map(plan => {
+        const scoredPlan = this.calculateScore(plan, response);
+        console.log(`Plan ${plan.id} scored ${scoredPlan.score.toFixed(2)}`);
+        console.log(`Factors:`, JSON.stringify(scoredPlan.factors, null, 2));
+        return scoredPlan;
+      })
       .sort((a, b) => b.score - a.score);
+    
+    console.log('Top 3 plans:');
+    scoredPlans.slice(0, 3).forEach((plan, index) => {
+      console.log(`${index + 1}. ${plan.id} - Score: ${plan.score.toFixed(2)}`);
+    });
+    
+    return scoredPlans;
   }
 
   private calculateScore(plan: EligiblePlan, response: QuestionnaireResponse): ScoredPlan {
     const factors = [];
     
-    // Monthly cost scoring
+    // 1. Monthly cost scoring
     const monthlyPremium = plan.eligiblePrices[0].monthlyPremium;
-    const monthlyScore = this.scoreMonthlyPremium(monthlyPremium);
+    // Score based on a scale from 10-100, with lower premiums getting higher scores
+    let monthlyScore = 0;
+    if (monthlyPremium < 200) monthlyScore = 100;
+    else if (monthlyPremium < 300) monthlyScore = 85;
+    else if (monthlyPremium < 400) monthlyScore = 70;
+    else if (monthlyPremium < 500) monthlyScore = 55;
+    else if (monthlyPremium < 600) monthlyScore = 40;
+    else if (monthlyPremium < 800) monthlyScore = 25;
+    else monthlyScore = 10;
+    
     factors.push({
       factor: 'Monthly Cost',
       score: monthlyScore,
       explanation: `Monthly premium: $${monthlyPremium}`
     });
 
-    // Initial Unshared Amount scoring
+    // 2. Initial Unshared Amount (IUA) scoring
     const iua = plan.eligiblePrices[0].initialUnsharedAmount;
-    const iuaScore = this.scoreIUA(iua, response.expense_preference);
+    // Base score with bonus for very low IUAs
+    let iuaScore = 0;
+    if (iua <= 500) iuaScore = 100; // Significant bonus for extremely low IUA
+    else if (iua <= 1000) iuaScore = 85;
+    else if (iua <= 1500) iuaScore = 70;
+    else if (iua <= 2500) iuaScore = 55;
+    else if (iua <= 5000) iuaScore = 40;
+    else iuaScore = 25;
+    
+    // Check if IUA exceeds financial capacity
+    if (response.financial_capacity && iua > parseInt(response.financial_capacity)) {
+      iuaScore *= 0.5; // Heavily penalize plans with IUAs above stated financial capacity
+    }
+    
     factors.push({
       factor: 'Initial Unshared Amount',
       score: iuaScore,
       explanation: `Initial unshared amount: $${iua}`
     });
 
-    // Expected annual healthcare spend impact
-    console.log('QuestionnaireResponse in plan-scoring:', JSON.stringify(response, null, 2));
-    
-    // Derive annual_healthcare_spend from visit_frequency if available
-    let annual_healthcare_spend = 'less_1000'; // Default to low spend
+    // 3. Expected annual healthcare costs
+    // Derive annual healthcare spend from visit frequency
+    let annualHealthcareSpend = 500; // Default to low spend
     
     if (response.visit_frequency) {
       if (response.visit_frequency === 'just_checkups') {
-        annual_healthcare_spend = 'less_1000';
+        annualHealthcareSpend = 500;
       } else if (response.visit_frequency === 'few_months') {
-        annual_healthcare_spend = '1000_5000';
+        annualHealthcareSpend = 3000;
       } else if (response.visit_frequency === 'monthly_plus') {
-        annual_healthcare_spend = 'more_5000';
+        annualHealthcareSpend = 7500;
       }
     }
     
-    console.log('Derived annual_healthcare_spend:', annual_healthcare_spend);
+    // Calculate total annual cost (premium + expected healthcare spend)
+    const annualPremium = monthlyPremium * 12;
+    const totalAnnualCost = annualPremium + annualHealthcareSpend;
     
-    const annualScore = this.scoreAnnualCosts(plan, annual_healthcare_spend);
+    // Score based on total annual cost
+    let annualScore = 0;
+    if (totalAnnualCost < 3000) annualScore = 100;
+    else if (totalAnnualCost < 5000) annualScore = 85;
+    else if (totalAnnualCost < 7500) annualScore = 70;
+    else if (totalAnnualCost < 10000) annualScore = 55;
+    else if (totalAnnualCost < 15000) annualScore = 40;
+    else annualScore = 25;
+    
     factors.push({
       factor: 'Expected Annual Costs',
       score: annualScore,
-      explanation: `Based on your expected healthcare usage`
+      explanation: `Total annual cost: $${totalAnnualCost} based on your expected healthcare usage`
     });
 
-    const totalScore = factors.reduce((sum, f) => sum + f.score, 0) / factors.length;
+    // 4. Apply preference-based weighting
+    const weights: { [key: string]: number } = {
+      'Monthly Cost': response.expense_preference === 'lower_monthly' ? 1.5 : 0.8,
+      'Initial Unshared Amount': response.expense_preference === 'higher_monthly' ? 1.5 : 0.8,
+      'Expected Annual Costs': 1.2 // Increased weight for annual cost since it incorporates visit frequency
+    };
+    
+    // Apply additional risk preference adjustments
+    if (response.risk_preference === 'higher_risk') {
+      weights['Monthly Cost'] *= 1.2; // Higher risk users care more about monthly costs
+    } else if (response.risk_preference === 'lower_risk') {
+      weights['Initial Unshared Amount'] *= 1.2; // Lower risk users care more about incident costs
+    }
+    
+    // Calculate weighted average score
+    const totalWeight = Object.values(weights).reduce((sum, weight) => sum + weight, 0);
+    const weightedScore = factors.reduce((sum, factor) => {
+      const weight = weights[factor.factor] || 1.0;
+      return sum + (factor.score * weight);
+    }, 0) / totalWeight;
 
     return {
       ...plan,
-      score: totalScore,
+      score: weightedScore,
       explanation: factors.map(f => f.explanation),
       factors
     };
-  }
-
-  private scoreMonthlyPremium(premium: number): number {
-    // Implement scoring logic based on premium ranges
-    if (premium < 200) return 100;
-    if (premium < 400) return 80;
-    if (premium < 600) return 60;
-    if (premium < 800) return 40;
-    return 20;
-  }
-
-  private scoreIUA(iua: number, preference: string): number {
-    // Score based on user's expense preference
-    if (preference === 'lower_monthly') {
-      return iua <= 2500 ? 60 : 100;
-    }
-    return iua >= 2500 ? 100 : 60;
-  }
-
-  private scoreAnnualCosts(plan: EligiblePlan, spend: string): number {
-    const expectedCosts: Record<string, number> = {
-      'less_1000': 500,
-      '1000_5000': 3000,
-      'more_5000': 7500
-    } as const;
-    
-    const annualPremium = plan.eligiblePrices[0].monthlyPremium * 12;
-    const totalCost = annualPremium + (expectedCosts[spend] || 500); // Default to 500 if invalid spend value
-    
-    // Score based on total expected annual costs
-    if (totalCost < 5000) return 100;
-    if (totalCost < 10000) return 80;
-    if (totalCost < 15000) return 60;
-    return 40;
   }
 }

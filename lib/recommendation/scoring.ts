@@ -31,6 +31,9 @@ export async function calculatePlanScore(
   plan: PricingPlan,
   questionnaire: QuestionnaireResponse
 ): Promise<PlanScore> {
+  console.log('calculatePlanScore called for plan:', plan.id);
+  console.log('Questionnaire response:', JSON.stringify(questionnaire, null, 2));
+  
   const factors = []
   let totalScore = 0
 
@@ -49,7 +52,28 @@ export async function calculatePlanScore(
     questionnaire.iua_preference
   )
 
+  // Special handling for CrowdHealth plans which only have a $500 IUA option
+  if (!planCost && plan.id.includes('crowdhealth') && questionnaire.iua_preference !== '500') {
+    console.log(`Attempting to match CrowdHealth plan with IUA=500 instead of ${questionnaire.iua_preference}`);
+    const crowdHealthCost = getPlanCostUtil(
+      plan.id,
+      questionnaire.age,
+      questionnaire.coverage_type,
+      '500'
+    );
+    
+    if (crowdHealthCost) {
+      console.log(`Found CrowdHealth plan cost with IUA=500:`, crowdHealthCost);
+      return calculatePlanScore(plan, { ...questionnaire, iua_preference: '500' });
+    }
+  }
+
   if (!planCost) {
+    console.log(`No valid cost found for plan ${plan.id} with criteria:`, {
+      age: questionnaire.age,
+      coverage_type: questionnaire.coverage_type,
+      iua_preference: questionnaire.iua_preference
+    });
     return {
       plan,
       plan_id: plan.id,
@@ -59,11 +83,16 @@ export async function calculatePlanScore(
     }
   }
 
+  console.log(`Plan ${plan.id} cost:`, planCost);
+
   // Calculate expected annual healthcare costs based on visit frequency
   const expectedAnnualCosts = calculateAnnualHealthcareCosts(
     questionnaire.coverage_type,
     questionnaire.visit_frequency
   )
+  
+  // Note: Visit frequency affects expected annual healthcare costs,
+  // but not how much importance is placed on the IUA, since IUA is per incident/need, not per visit
 
   // Monthly cost scoring (ranked)
   const monthlyRankedPlans = allPlanCosts.sort((a, b) => 
@@ -102,16 +131,6 @@ export async function calculatePlanScore(
   
   // Cap at 100
   incidentScore = Math.min(incidentScore, 100);
-  
-  // Apply visit frequency multiplier
-  const visitFrequencyMultiplier = {
-    'just_checkups': 0.7,    // IUA less important for infrequent users
-    'few_months': 1.0,       // Balanced importance
-    'monthly_plus': 1.5      // IUA very important for frequent users
-  };
-  
-  incidentScore *= visitFrequencyMultiplier[questionnaire.visit_frequency];
-  incidentScore = Math.min(incidentScore, 100); // Cap at 100 again after multiplier
   
   // Check if IUA exceeds financial capacity
   if (questionnaire.financial_capacity && currentIUA > parseInt(questionnaire.financial_capacity)) {
@@ -259,22 +278,34 @@ export async function calculatePlanScore(
 
   // Apply preference-based weighting
   const weights: { [key: string]: number } = {
-    'Monthly Cost': questionnaire.risk_preference === 'higher_risk' ? 1.5 : 0.8,
-    'Incident Cost': questionnaire.risk_preference === 'lower_risk' ? 1.5 : 0.8,
-    'Annual Cost': 1.0,
+    'Monthly Cost': questionnaire.expense_preference === 'lower_monthly' ? 1.5 : 0.8,
+    'Incident Cost': questionnaire.expense_preference === 'higher_monthly' ? 1.5 : 0.8,
+    'Annual Cost': 1.2, // Increased weight for annual cost since it incorporates visit frequency
     'Pre-existing Conditions': questionnaire.pre_existing === 'true' ? 2.0 : 0.5,
     'Maternity Coverage': (questionnaire.pregnancy === 'true' || 
                           questionnaire.pregnancy_planning === 'yes') ? 2.0 : 0.5
   };
   
+  // Apply additional risk preference adjustments
+  if (questionnaire.risk_preference === 'higher_risk') {
+    weights['Monthly Cost'] *= 1.2; // Higher risk users care more about monthly costs
+  } else if (questionnaire.risk_preference === 'lower_risk') {
+    weights['Incident Cost'] *= 1.2; // Lower risk users care more about incident costs
+  }
+  
   totalScore = factors.reduce((sum, f) => sum + (f.score * (weights[f.factor] || 1.0)), 0) / 
                factors.reduce((sum, f) => sum + (weights[f.factor] || 1.0), 0);
 
-  return {
+  const result = {
     plan,
     plan_id: plan.id,
     total_score: totalScore,
     explanation: factors.map(f => f.explanation),
     factors
-  }
+  };
+  
+  console.log(`Plan ${plan.id} final score: ${totalScore.toFixed(2)}`);
+  console.log(`Plan ${plan.id} factors:`, JSON.stringify(factors, null, 2));
+  
+  return result;
 } 

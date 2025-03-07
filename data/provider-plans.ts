@@ -9,7 +9,7 @@ const crowdHealthAgeRules: ProviderAgeRules = {
   type: 'custom',
   customBrackets: {
     ranges: [
-      { min: 18, max: 54, bracket: '18-54' },
+      { min: 18, max: 55, bracket: '18-55' },
       { min: 55, max: 64, bracket: '55-64' }
     ]
   }
@@ -572,8 +572,8 @@ export const providerPlans: PricingPlan[] = [
         "ranges": [
           {
             "min": 18,
-            "max": 54,
-            "bracket": "18-54"
+            "max": 55,
+            "bracket": "18-55"
           },
           {
             "min": 55,
@@ -620,16 +620,6 @@ export const providerPlans: PricingPlan[] = [
         "costs": [
           {
             "monthlyPremium": 640,
-            "initialUnsharedAmount": 500
-          }
-        ]
-      },
-      {
-        "ageBracket": "18-55",
-        "householdType": "Member & Family (5+)",
-        "costs": [
-          {
-            "monthlyPremium": 695,
             "initialUnsharedAmount": 500
           }
         ]
