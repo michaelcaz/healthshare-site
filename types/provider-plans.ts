@@ -22,7 +22,7 @@ export interface PlanMatrix {
 
 export type StandardAgeBracket = '18-29' | '30-39' | '40-49' | '50-64';
 export type CustomAgeBracket = '18-54' | '55-64';
-export type AgeBracket = StandardAgeBracket | CustomAgeBracket;
+export type AgeBracket = string;
 
 export type CoverageType = 'just_me' | 'me_spouse' | 'me_kids' | 'family';
 
@@ -81,7 +81,7 @@ export interface ProviderAgeRules {
     ranges: Array<{
       min: number;
       max: number;
-      bracket: CustomAgeBracket;
+      bracket: string;
     }>;
   };
 }

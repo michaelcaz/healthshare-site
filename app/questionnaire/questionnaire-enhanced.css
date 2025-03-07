@@ -191,6 +191,7 @@
   position: relative;
   display: inline-flex;
   margin-left: 8px;
+  z-index: 5; /* Ensure tooltip is above other elements */
 }
 
 .tooltip-icon {
@@ -205,7 +206,7 @@
   top: calc(100% + 8px);
   left: 50%;
   transform: translateX(-50%);
-  width: 240px;
+  width: 280px; /* Slightly wider for better readability */
   padding: 12px;
   background-color: white;
   border-radius: 8px;
@@ -216,6 +217,14 @@
   opacity: 0;
   visibility: hidden;
   transition: all 200ms ease;
+  text-align: left; /* Ensure text is left-aligned */
+}
+
+/* Add a right-aligned variant for tooltips that might overflow the screen */
+.tooltip.tooltip-right .tooltip-content {
+  left: auto;
+  right: 0;
+  transform: translateX(0);
 }
 
 .tooltip:hover .tooltip-content {

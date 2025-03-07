@@ -26,6 +26,18 @@ export function FAQ() {
     {
       question: "What's the catch?",
       answer: "No catch, but healthshares aren't for everyone. They work best for generally healthy people who want quality care at lower costs. We'll help you decide if it's right for you."
+    },
+    {
+      question: "How is an IUA different from a deductible?",
+      answer: "Unlike a traditional insurance deductible, the Initial Unshared Amount (IUA) applies to each separate medical need rather than accumulating throughout the year. For example, if you have a $1,000 IUA and break your arm, you pay the first $1,000, then the plan shares costs above that amount. If you later get pneumonia (a separate need), you pay another $1,000 before sharing begins."
+    },
+    {
+      question: "What counts as a separate 'medical need'?",
+      answer: "A medical need typically includes all treatment related to a specific illness, injury, or condition. For example, all visits, tests, and procedures related to treating a broken arm would be considered one medical need."
+    },
+    {
+      question: "How do healthshares handle pre-existing conditions?",
+      answer: "Pre-existing conditions are not eligible for cost-sharing during your first year of membership with any healthshare plan. After the first year, coverage for pre-existing conditions will gradually increase based on the specific plan. Most plans offer increasing coverage limits in years 2, 3, and 4 of membership."
     }
   ];
 

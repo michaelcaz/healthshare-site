@@ -1,6 +1,6 @@
 import { QuestionnaireResponse } from '@/types/questionnaire';
 import { PricingPlan, EligiblePlan, HouseholdType, CoverageType } from '@/types/provider-plans';
-import { getAgeBracket } from '../plan-matching/age-brackets';
+import { getAgeBracket, isAgeInBracket } from '../plan-matching/age-brackets';
 
 const COVERAGE_TYPE_MAP: Record<CoverageType, HouseholdType> = {
   'just_me': 'Member Only',
@@ -19,27 +19,37 @@ export class PlanMatchingService {
   }
 
   private matchPlan(plan: PricingPlan, response: QuestionnaireResponse) {
+    // Get the appropriate age bracket based on the plan's age rules
     const ageBracket = getAgeBracket(response.age, plan.ageRules);
-    if (!ageBracket) return null;
-
+    
+    // Get the household type from the coverage type
     const householdType = COVERAGE_TYPE_MAP[response.coverage_type];
     if (!householdType) return null;
 
+    // Find all matching matrix entries
     const eligiblePrices = plan.planMatrix
-      .filter(matrix => 
-        matrix.ageBracket === ageBracket && 
-        matrix.householdType === householdType
-      )
+      .filter(matrix => {
+        // Check if the age bracket matches directly or if the age falls within the bracket range
+        const bracketMatches = matrix.ageBracket === ageBracket || 
+                              isAgeInBracket(response.age, matrix.ageBracket);
+        return bracketMatches && matrix.householdType === householdType;
+      })
       .flatMap(matrix => matrix.costs)
       .filter(cost => {
-        // Special case for CrowdHealth which has a fixed IUA of 500
-        if (plan.id === 'crowdhealth-basic') {
+        // Special case for plans with fixed IUAs
+        if (plan.id.includes('crowdhealth')) {
           return true; // Always include CrowdHealth since it has a fixed IUA
         }
-        // For other plans, filter by IUA preference
-        return cost.initialUnsharedAmount.toString() === response.iua_preference;
+        
+        // For other plans, filter by IUA preference if specified
+        if (response.iua_preference) {
+          return cost.initialUnsharedAmount.toString() === response.iua_preference;
+        }
+        
+        return true; // Include all costs if no IUA preference
       });
     
+    // Return the eligible plan if there are matching prices
     return eligiblePrices.length ? {
       id: plan.id,
       providerName: plan.providerName,

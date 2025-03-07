@@ -93,22 +93,36 @@ export async function calculatePlanScore(
   const percentageAboveLowestIUA = (currentIUA - lowestIUA) / lowestIUA
   let incidentScore = Math.max(100 - (percentageAboveLowestIUA * 100), 50)
   
-  // Adjust score based on expense preference, IUA alignment, and visit frequency
-  switch (questionnaire.expense_preference) {
-    case 'lower_monthly':
-      // Prefer higher IUA (5000) for lower visit frequency
-      if (questionnaire.visit_frequency === 'just_checkups') {
-        if (currentIUA === 5000) incidentScore *= 1.3;
-        else if (currentIUA === 2500) incidentScore *= 1.1;
-      }
-      break;
-    case 'higher_monthly':
-      // Prefer lower IUA (1000) for higher visit frequency
-      if (questionnaire.visit_frequency === 'monthly_plus') {
-        if (currentIUA === 1000) incidentScore *= 1.3;
-        else if (currentIUA === 2500) incidentScore *= 1.1;
-      }
-      break;
+  // Add bonus for very low IUAs
+  if (currentIUA <= 500) {
+    incidentScore += 30; // Significant bonus for extremely low IUA
+  } else if (currentIUA <= 1000) {
+    incidentScore += 15; // Moderate bonus for low IUA
+  }
+  
+  // Cap at 100
+  incidentScore = Math.min(incidentScore, 100);
+  
+  // Apply visit frequency multiplier
+  const visitFrequencyMultiplier = {
+    'just_checkups': 0.7,    // IUA less important for infrequent users
+    'few_months': 1.0,       // Balanced importance
+    'monthly_plus': 1.5      // IUA very important for frequent users
+  };
+  
+  incidentScore *= visitFrequencyMultiplier[questionnaire.visit_frequency];
+  incidentScore = Math.min(incidentScore, 100); // Cap at 100 again after multiplier
+  
+  // Check if IUA exceeds financial capacity
+  if (questionnaire.financial_capacity && currentIUA > parseInt(questionnaire.financial_capacity)) {
+    incidentScore *= 0.5; // Heavily penalize plans with IUAs above stated financial capacity
+  }
+  
+  // Adjust score based on risk preference
+  if (questionnaire.risk_preference === 'lower_risk' && currentIUA <= 1000) {
+    incidentScore *= 1.2; // Bonus for low IUAs when user prefers lower risk
+  } else if (questionnaire.risk_preference === 'higher_risk' && currentIUA >= 2500) {
+    incidentScore *= 1.1; // Slight bonus for high IUAs when user prefers higher risk
   }
 
   factors.push({
@@ -167,6 +181,23 @@ export async function calculatePlanScore(
       conditionScore = 25
       explanation = `${waitingPeriodMonths}-month waiting period for pre-existing conditions`
     }
+    
+    // Adjust score based on pre-existing approach preference
+    if (questionnaire.pre_existing_approach === 'long_term') {
+      // Check long-term coverage tiers
+      const tiers = fullPlan?.preExistingConditions?.tiers || [];
+      const maxTierCoverage = tiers.length > 0 ? 
+        tiers[tiers.length - 1].maximum : 0;
+      
+      if (typeof maxTierCoverage === 'number' && maxTierCoverage >= 100000) {
+        conditionScore *= 1.3; // Significant bonus for high long-term coverage
+      } else if (typeof maxTierCoverage === 'number' && maxTierCoverage >= 50000) {
+        conditionScore *= 1.1; // Moderate bonus for decent long-term coverage
+      }
+    } else if (questionnaire.pre_existing_approach === 'new_needs') {
+      // For users focused on new needs, the pre-existing condition score is less important
+      conditionScore *= 0.7;
+    }
 
     factors.push({
       factor: 'Pre-existing Conditions',
@@ -194,9 +225,22 @@ export async function calculatePlanScore(
     let maternityScore = 100;
     const waitingPeriod = fullPlan.maternity.waitingPeriod.months;
     
-    // Adjust score based on waiting period
-    if (waitingPeriod > 10) maternityScore -= 20;
-    if (waitingPeriod > 12) maternityScore -= 20;
+    // Base score on how close the waiting period is to ideal timing
+    const idealWaitingPeriod = 9; // Most people want coverage sooner
+    const waitingPeriodDifference = Math.abs(waitingPeriod - idealWaitingPeriod);
+
+    if (waitingPeriodDifference <= 1) {
+      maternityScore = 100; // Perfect or near-perfect timing
+    } else if (waitingPeriodDifference <= 3) {
+      maternityScore = 80; // Good timing
+    } else {
+      maternityScore = 60; // Less ideal timing
+    }
+
+    // Bonus for shorter waiting periods
+    if (waitingPeriod < idealWaitingPeriod) {
+      maternityScore += 10; // Bonus for earlier coverage
+    }
 
     // Adjust score based on coverage comprehensiveness
     const services = fullPlan.maternity.coverage.services;
@@ -213,7 +257,18 @@ export async function calculatePlanScore(
     });
   }
 
-  totalScore = factors.reduce((sum, f) => sum + f.score, 0) / factors.length
+  // Apply preference-based weighting
+  const weights: { [key: string]: number } = {
+    'Monthly Cost': questionnaire.risk_preference === 'higher_risk' ? 1.5 : 0.8,
+    'Incident Cost': questionnaire.risk_preference === 'lower_risk' ? 1.5 : 0.8,
+    'Annual Cost': 1.0,
+    'Pre-existing Conditions': questionnaire.pre_existing === 'true' ? 2.0 : 0.5,
+    'Maternity Coverage': (questionnaire.pregnancy === 'true' || 
+                          questionnaire.pregnancy_planning === 'yes') ? 2.0 : 0.5
+  };
+  
+  totalScore = factors.reduce((sum, f) => sum + (f.score * (weights[f.factor] || 1.0)), 0) / 
+               factors.reduce((sum, f) => sum + (weights[f.factor] || 1.0), 0);
 
   return {
     plan,
