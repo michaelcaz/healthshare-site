@@ -24,6 +24,8 @@ interface HeroRecommendationProps {
   onViewDetails: () => void
   onGetPlan: () => void
   isLoading?: boolean
+  showMaternityNotice?: boolean
+  showPreExistingNotice?: boolean
 }
 
 interface KeyCoveragePoint {
@@ -39,7 +41,9 @@ export function HeroRecommendation({
   costs,
   onViewDetails,
   onGetPlan,
-  isLoading = false
+  isLoading = false,
+  showMaternityNotice = false,
+  showPreExistingNotice = false
 }: HeroRecommendationProps) {
   const { plan, score } = recommendation
 
@@ -83,6 +87,32 @@ export function HeroRecommendation({
             <Award className="h-4 w-4 text-white" />
             <span className="text-white font-bold">{badges.matchScore}% Match</span>
           </div>
+
+          {/* Maternity Notice Banner */}
+          {showMaternityNotice && (
+            <div className="bg-amber-50 -mx-8 mt-12 mb-2 py-3 px-8 border-y border-amber-200">
+              <div className="flex items-center gap-2">
+                <Info className="h-5 w-5 text-amber-600" />
+                <p className="text-amber-800 font-medium">
+                  <span className="font-bold">Important:</span> All health sharing plans have waiting periods for maternity coverage. 
+                  Please check the specific waiting period for this plan before enrolling.
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* Pre-existing Conditions Notice Banner */}
+          {showPreExistingNotice && (
+            <div className="bg-amber-50 -mx-8 mt-12 mb-2 py-3 px-8 border-y border-amber-200">
+              <div className="flex items-center gap-2">
+                <Info className="h-5 w-5 text-amber-600" />
+                <p className="text-amber-800 font-medium">
+                  <span className="font-bold">Important:</span> Pre-existing conditions are not eligible for sharing during the first year 
+                  of membership in all health sharing plans. Please review the plan details for more information.
+                </p>
+              </div>
+            </div>
+          )}
 
           {/* Social Proof Banner */}
           <div className="bg-blue-50 -mx-8 mt-12 mb-8 py-3 px-8 flex flex-wrap justify-between items-center">

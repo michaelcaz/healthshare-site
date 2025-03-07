@@ -193,101 +193,58 @@ export async function calculatePlanScore(
     }`
   })
 
-  // Pre-existing Conditions (Score based on waiting period length)
-  if (questionnaire.medical_conditions) {
-    const fullPlan = healthshareProviders[plan.id.split('-')[0]]?.plans
-      .find(p => p.id === plan.id);
-    const waitingPeriodMonths = fullPlan?.preExistingConditions?.waitingPeriod ?? 0;
-    let conditionScore = 0;
-    let explanation = '';
-
-    if (waitingPeriodMonths <= 12) {
-      conditionScore = 100
-      explanation = `12-month waiting period for pre-existing conditions (shortest available)`
-    } else if (waitingPeriodMonths <= 24) {
-      conditionScore = 75
-      explanation = `24-month waiting period for pre-existing conditions`
-    } else if (waitingPeriodMonths <= 36) {
-      conditionScore = 50
-      explanation = `36-month waiting period for pre-existing conditions`
-    } else {
-      conditionScore = 25
-      explanation = `${waitingPeriodMonths}-month waiting period for pre-existing conditions`
-    }
-    
-    // Adjust score based on pre-existing approach preference
-    if (questionnaire.pre_existing_approach === 'long_term') {
-      // Check long-term coverage tiers
-      const tiers = fullPlan?.preExistingConditions?.tiers || [];
-      const maxTierCoverage = tiers.length > 0 ? 
-        tiers[tiers.length - 1].maximum : 0;
-      
-      if (typeof maxTierCoverage === 'number' && maxTierCoverage >= 100000) {
-        conditionScore *= 1.3; // Significant bonus for high long-term coverage
-      } else if (typeof maxTierCoverage === 'number' && maxTierCoverage >= 50000) {
-        conditionScore *= 1.1; // Moderate bonus for decent long-term coverage
-      }
-    } else if (questionnaire.pre_existing_approach === 'new_needs') {
-      // For users focused on new needs, the pre-existing condition score is less important
-      conditionScore *= 0.7;
-    }
-
-    factors.push({
-      factor: 'Pre-existing Conditions',
-      score: conditionScore,
-      explanation
-    })
-  }
+  // No longer scoring pre-existing conditions since all plans have the same details
+  // We'll show a notice to users with pre-existing conditions instead
 
   // Add maternity scoring
   if (questionnaire.pregnancy === 'true' || questionnaire.pregnancy_planning === 'yes') {
     const fullPlan = healthshareProviders[plan.id.split('-')[0]]?.plans
       .find(p => p.id === plan.id);
     
-    if (!fullPlan?.maternity?.coverage?.services?.length) {
-      return {
-        plan,
-        plan_id: plan.id,
-        total_score: 0,
-        explanation: ['Plan does not include maternity coverage'],
-        factors: []
-      };
-    }
-
     // Calculate maternity score based on waiting period and coverage
     let maternityScore = 100;
-    const waitingPeriod = fullPlan.maternity.waitingPeriod.months;
     
-    // Base score on how close the waiting period is to ideal timing
-    const idealWaitingPeriod = 9; // Most people want coverage sooner
-    const waitingPeriodDifference = Math.abs(waitingPeriod - idealWaitingPeriod);
+    if (fullPlan?.maternity?.coverage?.services?.length) {
+      const waitingPeriod = fullPlan.maternity.waitingPeriod.months;
+      
+      // Base score on how close the waiting period is to ideal timing
+      const idealWaitingPeriod = 9; // Most people want coverage sooner
+      const waitingPeriodDifference = Math.abs(waitingPeriod - idealWaitingPeriod);
 
-    if (waitingPeriodDifference <= 1) {
-      maternityScore = 100; // Perfect or near-perfect timing
-    } else if (waitingPeriodDifference <= 3) {
-      maternityScore = 80; // Good timing
+      if (waitingPeriodDifference <= 1) {
+        maternityScore = 100; // Perfect or near-perfect timing
+      } else if (waitingPeriodDifference <= 3) {
+        maternityScore = 80; // Good timing
+      } else {
+        maternityScore = 60; // Less ideal timing
+      }
+
+      // Bonus for shorter waiting periods
+      if (waitingPeriod < idealWaitingPeriod) {
+        maternityScore += 10; // Bonus for earlier coverage
+      }
+
+      // Adjust score based on coverage comprehensiveness
+      const services = fullPlan.maternity.coverage.services;
+      const essentialServices = ['prenatal', 'delivery', 'postnatal'];
+      const hasAllEssential = essentialServices.every(service => 
+        services.some(s => s.toLowerCase().includes(service.toLowerCase()))
+      );
+      if (!hasAllEssential) maternityScore -= 30;
+
+      factors.push({
+        factor: 'Maternity Coverage',
+        score: maternityScore,
+        explanation: `Maternity coverage available with ${waitingPeriod}-month waiting period. Covers: ${services.join(', ')}`
+      });
     } else {
-      maternityScore = 60; // Less ideal timing
+      // Still include the plan but with a lower maternity score
+      factors.push({
+        factor: 'Maternity Coverage',
+        score: 40, // Lower score but not zero
+        explanation: `Limited or no maternity coverage available`
+      });
     }
-
-    // Bonus for shorter waiting periods
-    if (waitingPeriod < idealWaitingPeriod) {
-      maternityScore += 10; // Bonus for earlier coverage
-    }
-
-    // Adjust score based on coverage comprehensiveness
-    const services = fullPlan.maternity.coverage.services;
-    const essentialServices = ['prenatal', 'delivery', 'postnatal'];
-    const hasAllEssential = essentialServices.every(service => 
-      services.some(s => s.toLowerCase().includes(service.toLowerCase()))
-    );
-    if (!hasAllEssential) maternityScore -= 30;
-
-    factors.push({
-      factor: 'Maternity Coverage',
-      score: maternityScore,
-      explanation: `Maternity coverage available with ${waitingPeriod}-month waiting period. Covers: ${services.join(', ')}`
-    });
   }
 
   // Apply preference-based weighting
@@ -295,7 +252,6 @@ export async function calculatePlanScore(
     'Monthly Cost': questionnaire.expense_preference === 'lower_monthly' ? 1.5 : 0.8,
     'Incident Cost': questionnaire.expense_preference === 'higher_monthly' ? 1.5 : 0.8,
     'Annual Cost': 1.2, // Increased weight for annual cost since it incorporates visit frequency
-    'Pre-existing Conditions': questionnaire.pre_existing === 'true' ? 2.0 : 0.5,
     'Maternity Coverage': (questionnaire.pregnancy === 'true' || 
                           questionnaire.pregnancy_planning === 'yes') ? 2.0 : 0.5
   };

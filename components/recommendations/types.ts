@@ -30,4 +30,7 @@ export interface HeroRecommendationProps {
   costs: PlanCosts
   onViewDetails: () => void
   onGetPlan: () => void
+  isLoading?: boolean
+  showMaternityNotice?: boolean
+  showPreExistingNotice?: boolean
 } 
