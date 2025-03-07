@@ -43,44 +43,50 @@
   animation: fadeIn 0.5s ease-out;
 }
 
+/* Enhanced typography for headings */
 .questionnaire-step-title {
-  font-size: 1.5rem;
-  font-weight: 600;
+  font-size: 2.25rem;
+  font-weight: 700;
   color: var(--color-gray-warm);
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
 }
 
 .questionnaire-step-description {
-  font-size: 1rem;
+  font-size: 1.125rem;
   color: var(--color-gray-warm);
-  opacity: 0.8;
-  margin-bottom: 1.5rem;
+  opacity: 0.85;
+  margin-bottom: 2rem;
+  line-height: 1.5;
+  max-width: 90%;
 }
 
 .questionnaire-form-group {
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
   transition: opacity 0.3s ease;
 }
 
-/* Updated label styling */
+/* Enhanced label styling */
 .questionnaire-label {
   display: block;
-  font-size: 1rem;
-  font-weight: 500;
+  font-size: 1.125rem;
+  font-weight: 600;
   color: var(--color-gray-warm);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.01em;
 }
 
 /* Updated input styling to match homepage */
 .questionnaire-input,
 .questionnaire-select {
   width: 100%;
-  padding: 0.875rem 1rem;
+  padding: 1rem 1.25rem;
   border: 1px solid #E5E7EB;
   border-radius: 0.75rem;
   background-color: white;
   color: var(--color-gray-warm);
-  font-size: 1rem;
+  font-size: 1.125rem;
   transition: all 0.2s ease;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
@@ -97,8 +103,9 @@
 }
 
 .questionnaire-error {
-  margin-top: 0.5rem;
+  margin-top: 0.75rem;
   font-size: 0.875rem;
+  font-weight: 500;
   color: #EF4444;
 }
 
@@ -106,7 +113,7 @@
 .questionnaire-navigation {
   display: flex;
   justify-content: space-between;
-  margin-top: 2rem;
+  margin-top: 3rem;
   animation: fadeIn 0.5s ease-out;
 }
 

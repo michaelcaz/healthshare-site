@@ -62,15 +62,6 @@ const formSchema = z.object({
   pregnancy_planning: z.enum(['yes', 'no', 'maybe'], {
     errorMap: () => ({ message: "Please indicate your pregnancy plans" })
   }).optional(),
-  medical_conditions: z.union([
-    z.string(),
-    z.array(z.string())
-  ]).optional().transform(val => {
-    if (typeof val === 'string') {
-      return val.split(',').map(c => c.trim()).filter(Boolean);
-    }
-    return Array.isArray(val) ? val : [];
-  }),
   visit_frequency: z.enum(['just_checkups', 'few_months', 'monthly_plus'], {
     errorMap: () => ({ message: "Please select your expected visit frequency" })
   }).optional()
@@ -86,7 +77,6 @@ const questionLabels: Record<keyof z.infer<typeof formSchema>, string> = {
   zip_code: "What is your ZIP code?",
   expense_preference: "Would you prefer lower monthly payments or lower out-of-pocket costs?",
   pregnancy_planning: "Are you planning to become pregnant in the next year?",
-  medical_conditions: "Select any medical conditions that apply",
   visit_frequency: "How often do you expect to visit the doctor?"
 }
 
@@ -122,16 +112,8 @@ const getFieldType = (fieldName: keyof z.infer<typeof formSchema>): 'text' | 'nu
 };
 
 const getPlaceholder = (fieldName: keyof z.infer<typeof formSchema>): string => {
-  switch (fieldName) {
-    case 'age':
-      return 'Enter your age';
-    case 'zip_code':
-      return 'Enter your ZIP code';
-    case 'medical_conditions':
-      return 'Enter medical conditions, separated by commas';
-    default:
-      return `Enter ${fieldName.replace('_', ' ')}`;
-  }
+  // Return empty strings to remove all placeholder text
+  return '';
 };
 
 interface SelectOption {
@@ -326,7 +308,6 @@ interface FormValues {
   zip_code: string;
   expense_preference: 'lower_monthly' | 'higher_monthly' | undefined;
   pregnancy_planning?: 'yes' | 'no' | 'maybe';
-  medical_conditions?: string[];
   visit_frequency: 'just_checkups' | 'few_months' | 'monthly_plus' | undefined;
 }
 
@@ -372,7 +353,7 @@ export const QuestionnaireForm = () => {
     {
       title: "Health Status",
       description: "Tell us about your health to find plans that meet your needs.",
-      fields: ['pre_existing', 'pregnancy', 'pregnancy_planning', 'medical_conditions'],
+      fields: ['pre_existing', 'pregnancy'],
       label: 'Health Status'
     },
     {
@@ -395,11 +376,33 @@ export const QuestionnaireForm = () => {
       state: '',
       expense_preference: undefined,
       pregnancy_planning: undefined,
-      medical_conditions: [],
       visit_frequency: undefined,
     },
     mode: 'onSubmit', // Change to onSubmit to prevent premature validation
   });
+  
+  // Watch the pregnancy field to conditionally show pregnancy_planning
+  const watchPregnancy = form.watch('pregnancy');
+  
+  // Reset pregnancy_planning when pregnancy changes to 'true'
+  useEffect(() => {
+    if (watchPregnancy === 'true') {
+      form.setValue('pregnancy_planning', undefined);
+    }
+  }, [watchPregnancy, form]);
+  
+  // Dynamically determine fields for the current step
+  const getCurrentStepFields = () => {
+    if (currentStep === 1) {
+      // For the Health Status step, conditionally include pregnancy_planning
+      const fields = ['pre_existing', 'pregnancy'];
+      if (watchPregnancy === 'false') {
+        fields.push('pregnancy_planning');
+      }
+      return fields;
+    }
+    return steps[currentStep].fields;
+  };
   
   // Log default values
   console.log("Form default values:", form.getValues());
@@ -429,7 +432,7 @@ export const QuestionnaireForm = () => {
     console.log("Current step before validation:", currentStep);
     
     // Get only the fields for the current step
-    const currentStepFields = steps[currentStep].fields;
+    const currentStepFields = getCurrentStepFields();
     console.log("Current step fields:", currentStepFields);
     
     // Get current values
@@ -599,8 +602,7 @@ export const QuestionnaireForm = () => {
           state: validationResult.data.state || 'TX', // Default to TX if not provided
           zip_code: validationResult.data.zip_code,
           expense_preference: validationResult.data.expense_preference || 'lower_monthly', // Default value
-          pregnancy_planning: validationResult.data.pregnancy_planning || 'no', // Default value
-          medical_conditions: validationResult.data.medical_conditions || [],
+          pregnancy_planning: validationResult.data.pregnancy === 'false' ? (validationResult.data.pregnancy_planning || 'no') : 'no', // Only include if pregnancy is false
           visit_frequency: validationResult.data.visit_frequency || 'just_checkups' // Default value
         };
         
@@ -664,7 +666,7 @@ export const QuestionnaireForm = () => {
         <form onSubmit={handleNextClick} className="space-y-6">
           {/* Form fields with animation */}
           <div className="space-y-6 transition-all duration-300">
-            {steps[currentStep].fields.map(fieldName => 
+            {getCurrentStepFields().map(fieldName => 
               renderFormField(fieldName as keyof FormValues, form)
             )}
           </div>
