@@ -92,7 +92,12 @@ export class PlanScoringService {
     
     // Calculate total annual cost (premium + expected healthcare spend)
     const annualPremium = monthlyPremium * 12;
-    const totalAnnualCost = annualPremium + annualHealthcareSpend;
+    
+    // Add $2,000 for DPC plans
+    const isDpcPlan = plan.id.includes('dpc') || plan.id.includes('vpc');
+    const dpcCost = isDpcPlan ? 2000 : 0;
+    
+    const totalAnnualCost = annualPremium + annualHealthcareSpend + dpcCost;
     
     // Score based on total annual cost
     let annualScore = 0;
@@ -106,7 +111,7 @@ export class PlanScoringService {
     factors.push({
       factor: 'Expected Annual Costs',
       score: annualScore,
-      explanation: `Total annual cost: $${totalAnnualCost} based on your expected healthcare usage`
+      explanation: `Total annual cost: $${totalAnnualCost} based on your expected healthcare usage${isDpcPlan ? ' (includes $2,000 for DPC membership)' : ''}`
     });
 
     // 4. Apply preference-based weighting

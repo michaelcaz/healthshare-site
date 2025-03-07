@@ -155,24 +155,38 @@ export async function calculatePlanScore(
   })
 
   // Calculate total annual cost for comparison
-  const annualCosts = allPlanCosts.map(p => ({
-    id: p.plan.id,
-    totalCost: (p.cost?.monthlyPremium ?? 0) * 12 + expectedAnnualCosts
-  }))
+  const annualCosts = allPlanCosts.map(p => {
+    const monthlyPremium = p.cost?.monthlyPremium ?? 0;
+    const annualPremium = monthlyPremium * 12;
+    
+    // Add $2,000 for DPC plans
+    const isDpcPlan = p.plan.id.includes('dpc') || p.plan.id.includes('vpc');
+    const dpcCost = isDpcPlan ? 2000 : 0;
+    
+    return {
+      id: p.plan.id,
+      totalCost: annualPremium + expectedAnnualCosts + dpcCost
+    };
+  });
   
   // Sort plans by total annual cost (lowest to highest)
-  const sortedByAnnualCost = annualCosts.sort((a, b) => a.totalCost - b.totalCost)
+  const sortedByAnnualCost = annualCosts.sort((a, b) => a.totalCost - b.totalCost);
   
   // Calculate percentage-based score for annual costs
-  const lowestAnnualCost = sortedByAnnualCost[0].totalCost
-  const currentAnnualCost = (planCost.monthlyPremium * 12) + expectedAnnualCosts
-  const percentageAboveLowestAnnual = (currentAnnualCost - lowestAnnualCost) / lowestAnnualCost
-  const annualScore = Math.max(100 - (percentageAboveLowestAnnual * 100), 50)
+  const lowestAnnualCost = sortedByAnnualCost[0].totalCost;
+  
+  // Add $2,000 for DPC plans when calculating current plan's annual cost
+  const isDpcPlan = plan.id.includes('dpc') || plan.id.includes('vpc');
+  const dpcCost = isDpcPlan ? 2000 : 0;
+  const currentAnnualCost = (planCost.monthlyPremium * 12) + expectedAnnualCosts + dpcCost;
+  
+  const percentageAboveLowestAnnual = (currentAnnualCost - lowestAnnualCost) / lowestAnnualCost;
+  const annualScore = Math.max(100 - (percentageAboveLowestAnnual * 100), 50);
 
   factors.push({
     factor: 'Annual Cost',
     score: annualScore,
-    explanation: `Total annual cost (including expected visits): $${currentAnnualCost}${
+    explanation: `Total annual cost (including expected visits${isDpcPlan ? ' and $2,000 DPC membership' : ''}): $${currentAnnualCost}${
       currentAnnualCost === lowestAnnualCost
         ? ' (lowest available)'
         : ` (${Math.round(percentageAboveLowestAnnual * 100)}% more than lowest option at $${lowestAnnualCost})`

@@ -8,6 +8,19 @@ import { getPlanCost } from '@/lib/utils/plan-costs'
 import { CheckCircle, Award, TrendingUp, Info } from 'lucide-react'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { cn } from '@/lib/utils'
+import { PlanRecommendation as PlanRecommendationType } from '@/lib/recommendation/recommendations'
+import { QuestionnaireResponse } from '@/types/questionnaire'
+import { calculateAnnualHealthcareCosts } from '@/lib/utils/visit-calculator'
+
+// Helper function to format currency
+function formatCurrency(amount: number): string {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+  }).format(amount);
+}
 
 interface ComparisonMetric {
   label: string
@@ -17,23 +30,38 @@ interface ComparisonMetric {
   distinguishing?: boolean
 }
 
+// Helper function to get visit frequency cost
+function getVisitFrequencyCost(visitFrequency?: string): number {
+  if (visitFrequency === 'just_checkups') {
+    return 500; // Annual checkups only
+  } else if (visitFrequency === 'few_months') {
+    return 1500; // Roughly 3 visits per year
+  } else if (visitFrequency === 'monthly_plus') {
+    return 6000; // 12 visits per year (monthly or more)
+  } else {
+    return 500; // Default to annual checkups if not specified
+  }
+}
+
 interface PlanComparisonGridProps {
-  topPlan: PlanRecommendation
-  alternativePlans: PlanRecommendation[]
+  topPlan: PlanRecommendationType
+  alternativePlans: PlanRecommendationType[]
   onPlanSelect: (planId: string) => void
+  questionnaire?: QuestionnaireResponse
 }
 
 export function PlanComparisonGrid({ 
   topPlan, 
   alternativePlans,
-  onPlanSelect 
+  onPlanSelect,
+  questionnaire
 }: PlanComparisonGridProps) {
   const { selectedPlans, togglePlanSelection, canAddMore } = useSelectedPlans()
 
   const isPlanSelected = (planId: string) => 
     selectedPlans.some(p => p.plan.id === planId)
 
-  const renderCompareCheckbox = (plan: PlanRecommendation) => {
+  const renderCompareCheckbox = (plan: PlanRecommendationType) => {
     const isSelected = isPlanSelected(plan.plan.id)
     return (
       <div className="flex items-center space-x-2 mt-4">
@@ -53,7 +81,7 @@ export function PlanComparisonGrid({
     )
   }
 
-  const getComparisonMetrics = (plan: PlanRecommendation, isTopPlan: boolean): ComparisonMetric[] => {
+  const getComparisonMetrics = (plan: PlanRecommendationType, isTopPlan: boolean): ComparisonMetric[] => {
     // Get the lowest cost option from the plan matrix
     const lowestCost = plan.plan.planMatrix
       .flatMap(bracket => bracket.costs)
@@ -62,7 +90,13 @@ export function PlanComparisonGrid({
       );
 
     // Calculate annual cost
-    const annualCost = lowestCost.monthlyPremium * 12 + lowestCost.initialUnsharedAmount;
+    const isDpcPlan = plan.plan.id.includes('dpc') || plan.plan.id.includes('vpc');
+    const dpcCost = isDpcPlan ? 2000 : 0;
+    
+    // Get expected healthcare costs based on questionnaire
+    const visitFrequencyCost = getVisitFrequencyCost(questionnaire?.visit_frequency);
+    
+    const annualCost = lowestCost.monthlyPremium * 12 + visitFrequencyCost + dpcCost;
     
     // Calculate price differential compared to lowest option
     const lowestPlanCost = [topPlan, ...alternativePlans]
@@ -100,8 +134,10 @@ export function PlanComparisonGrid({
       },
       {
         label: 'Est. Annual Cost',
-        value: `$${annualCost}`,
-        tooltip: 'Estimated total yearly cost including monthly payments and IUA',
+        value: formatCurrency(annualCost),
+        tooltip: isDpcPlan 
+          ? 'Includes monthly premiums, expected healthcare costs, and $2,000 for DPC membership'
+          : 'Includes monthly premiums and expected healthcare costs',
         highlight: true
       },
       {
@@ -130,7 +166,7 @@ export function PlanComparisonGrid({
   }
 
   // Helper function to determine distinguishing features for a plan
-  const getDistinguishingFeatures = (plan: PlanRecommendation, isTopPlan: boolean): string[] => {
+  const getDistinguishingFeatures = (plan: PlanRecommendationType, isTopPlan: boolean): string[] => {
     const features = [];
     
     // Add distinguishing features based on plan properties

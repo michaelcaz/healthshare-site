@@ -1,3 +1,5 @@
+import { CoverageType } from '@/types/provider-plans';
+
 const VISIT_COST = 175; // Base cost for a primary care visit
 
 export const getVisitFrequencyOptions = (coverageType: 'just_me' | 'me_spouse' | 'me_kids' | 'family') => {
@@ -99,10 +101,31 @@ export const getVisitFrequencyOptions = (coverageType: 'just_me' | 'me_spouse' |
   }
 };
 
-export const calculateAnnualHealthcareCosts = (
-  coverageType: 'just_me' | 'me_spouse' | 'me_kids' | 'family',
-  visitFrequency: 'just_checkups' | 'few_months' | 'monthly_plus'
-): number => {
-  const options = getVisitFrequencyOptions(coverageType);
-  return options[visitFrequency].annualCost;
-}; 
+/**
+ * Calculates the expected annual healthcare costs based on visit frequency
+ */
+export function calculateAnnualHealthcareCosts(
+  coverageType: CoverageType,
+  visitFrequency?: string
+): number {
+  // Base cost per visit frequency
+  let baseCost = 0;
+  
+  if (visitFrequency === 'just_checkups') {
+    baseCost = 500; // Annual checkups only
+  } else if (visitFrequency === 'few_months') {
+    baseCost = 500 * 3; // Roughly 3 visits per year
+  } else if (visitFrequency === 'monthly_plus') {
+    baseCost = 500 * 12; // 12 visits per year (monthly or more)
+  } else {
+    baseCost = 500; // Default to annual checkups if not specified
+  }
+  
+  // Adjust for coverage type
+  const multiplier = coverageType === 'just_me' ? 1 :
+                    coverageType === 'me_spouse' ? 2 :
+                    coverageType === 'me_kids' ? 2 :
+                    coverageType === 'family' ? 3 : 1;
+  
+  return baseCost * multiplier;
+} 

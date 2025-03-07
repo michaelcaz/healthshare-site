@@ -153,6 +153,7 @@ export function RecommendationsLayout({
             topPlan={topPlan}
             alternativePlans={alternativePlans}
             onPlanSelect={handleViewDetails}
+            questionnaire={questionnaire}
           />
           
           {/* Plan Details Modal */}
