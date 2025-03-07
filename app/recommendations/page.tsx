@@ -18,6 +18,11 @@ export default function RecommendationsPage() {
   const [recommendations, setRecommendations] = useState<any[] | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
+  // Scroll to top when the page loads
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
+
   useEffect(() => {
     const loadData = async () => {
       try {

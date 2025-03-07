@@ -607,6 +607,9 @@ export const QuestionnaireForm = () => {
         // Set completion flag
         setIsComplete(true);
         
+        // Scroll to top before redirecting
+        window.scrollTo(0, 0);
+        
         // Redirect to results page
         router.push('/questionnaire/results');
       } else {

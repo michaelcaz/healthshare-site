@@ -4,13 +4,14 @@ import { type RecommendationsProps, type PlanRecommendation } from './types'
 import { HeroRecommendation } from './HeroRecommendation'
 import { getPlanCost } from '@/lib/utils/plan-costs'
 import { type QuestionnaireResponse } from '@/types/questionnaire'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { toast } from 'sonner'
 import { useSelectedPlans } from './SelectedPlansContext'
 import { PlanComparisonGrid } from './PlanComparisonGrid'
 import { PlanComparisonTable } from './PlanComparisonTable'
 import { PlanDetailsModal } from './PlanDetailsModal'
 import { TrustElements } from './TrustElements'
+import { Separator } from '@/components/ui/separator'
 
 export function RecommendationsLayout({ 
   recommendations, 
@@ -21,9 +22,10 @@ export function RecommendationsLayout({
   const [isLoading, setIsLoading] = useState(false)
   const [detailsPlan, setDetailsPlan] = useState<PlanRecommendation | null>(null)
 
-  // Add debugging
-  console.log('Received recommendations:', recommendations)
-  console.log('First recommendation:', recommendations[0])
+  // Scroll to top when the component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
 
   // Get the top plan (highest scoring)
   const topPlan = recommendations[0]
@@ -114,33 +116,54 @@ export function RecommendationsLayout({
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="space-y-12 py-12">
-        <HeroRecommendation 
-          recommendation={topPlan}
-          badges={{
-            topReason: getTopReason(topPlan),
-            matchScore: Math.round(topPlan.score)
-          }}
-          costs={topPlanCosts()}
-          onViewDetails={() => handleViewDetails(topPlan.plan.id)}
-          onGetPlan={() => handleGetPlan(topPlan.plan.id)}
-          isLoading={isLoading}
-        />
-        <TrustElements recommendation={topPlan} />
-        <PlanComparisonGrid 
-          topPlan={topPlan}
-          alternativePlans={alternativePlans}
-          onPlanSelect={handleViewDetails}
-        />
-        
-        {detailsPlan && (
-          <PlanDetailsModal
-            plan={detailsPlan}
-            isOpen={!!detailsPlan}
-            onClose={() => setDetailsPlan(null)}
+    <div className="bg-gray-50 min-h-screen pb-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="py-12">
+          {/* Header Section */}
+          <div className="text-center mb-12">
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Your Personalized Healthshare Recommendations</h1>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+              Based on your needs, we've found these healthshare plans that best match your situation. 
+              Compare options and choose the one that works for you.
+            </p>
+          </div>
+          
+          {/* Hero Recommendation */}
+          <HeroRecommendation 
+            recommendation={topPlan}
+            badges={{
+              topReason: getTopReason(topPlan),
+              matchScore: Math.round(topPlan.score)
+            }}
+            costs={topPlanCosts()}
+            onViewDetails={() => handleViewDetails(topPlan.plan.id)}
+            onGetPlan={() => handleGetPlan(topPlan.plan.id)}
+            isLoading={isLoading}
           />
-        )}
+          
+          <Separator className="my-16" />
+          
+          {/* Trust Elements */}
+          <TrustElements recommendation={topPlan} />
+          
+          <Separator className="my-16" />
+          
+          {/* Plan Comparison */}
+          <PlanComparisonGrid 
+            topPlan={topPlan}
+            alternativePlans={alternativePlans}
+            onPlanSelect={handleViewDetails}
+          />
+          
+          {/* Plan Details Modal */}
+          {detailsPlan && (
+            <PlanDetailsModal
+              plan={detailsPlan}
+              isOpen={!!detailsPlan}
+              onClose={() => setDetailsPlan(null)}
+            />
+          )}
+        </div>
       </div>
     </div>
   )

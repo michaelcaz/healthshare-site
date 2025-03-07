@@ -4,6 +4,7 @@ import { Header } from '@/components/layout/header'
 import { Toaster } from "@/components/ui/toaster"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { GoogleAnalytics } from '@/components/providers/GoogleAnalytics'
+import { ScrollRestoration } from '@/components/ui/scroll-restoration'
 import { headers } from 'next/headers'
 // import Script from 'next/script'
 
@@ -36,6 +37,7 @@ export default function RootLayout({
       </head>
       <body suppressHydrationWarning className={`${inter.variable} ${montserrat.variable} ${caveat.variable} font-sans`} style={{ background: 'var(--color-cream-bg)' }}>
         <TooltipProvider>
+          <ScrollRestoration />
           <Header />
           <main className="pt-[76px]">
             {children}
