@@ -56,14 +56,25 @@ export class PlanScoringService {
 
     // 2. Initial Unshared Amount (IUA) scoring
     const iua = plan.eligiblePrices[0].initialUnsharedAmount;
-    // Base score with bonus for very low IUAs
+    
+    // Base score using a continuous function instead of discrete thresholds
+    // This creates a more gradual and fair bonus system
     let iuaScore = 0;
-    if (iua <= 500) iuaScore = 100; // Significant bonus for extremely low IUA
-    else if (iua <= 1000) iuaScore = 85;
-    else if (iua <= 1500) iuaScore = 70;
-    else if (iua <= 2500) iuaScore = 55;
-    else if (iua <= 5000) iuaScore = 40;
-    else iuaScore = 25;
+    
+    // Base score inversely proportional to IUA amount (higher IUA = lower base score)
+    if (iua <= 5000) {
+      // Linear scale from 100 (for IUA=0) down to 40 (for IUA=5000)
+      iuaScore = 100 - ((iua / 5000) * 60);
+    } else {
+      iuaScore = 40 - Math.min(((iua - 5000) / 5000) * 15, 15); // Minimum score of 25
+    }
+    
+    // Add continuous bonus for low IUAs
+    const iuaBonus = Math.max(30 - (iua / 100), 0);
+    iuaScore += iuaBonus;
+    
+    // Cap at 100
+    iuaScore = Math.min(iuaScore, 100);
     
     // Check if IUA exceeds financial capacity
     if (response.financial_capacity && iua > parseInt(response.financial_capacity)) {

@@ -88,20 +88,23 @@ export async function calculatePlanScore(
   // Calculate expected annual healthcare costs based on visit frequency
   const expectedAnnualCosts = calculateAnnualHealthcareCosts(
     questionnaire.coverage_type,
-    questionnaire.visit_frequency
+    questionnaire.visit_frequency,
+    questionnaire.age,
+    questionnaire.pre_existing === 'true'
   )
   
   // Note: Visit frequency affects expected annual healthcare costs,
   // but not how much importance is placed on the IUA, since IUA is per incident/need, not per visit
 
-  // Monthly cost scoring (ranked)
+  // Monthly cost scoring (ranked) - OPTIMIZED
   const monthlyRankedPlans = allPlanCosts.sort((a, b) => 
     (a.cost?.monthlyPremium ?? Infinity) - (b.cost?.monthlyPremium ?? Infinity)
   )
   const lowestPremium = monthlyRankedPlans[0].cost?.monthlyPremium ?? 0
   const currentPremium = planCost.monthlyPremium
   const percentageAboveLowest = (currentPremium - lowestPremium) / lowestPremium
-  const monthlyScore = Math.max(50 - (percentageAboveLowest * 100), 10)
+  // Updated formula: less severe penalty and higher minimum score
+  const monthlyScore = Math.max(80 - (percentageAboveLowest * 60), 20)
   
   factors.push({
     factor: 'Monthly Cost',
@@ -113,21 +116,35 @@ export async function calculatePlanScore(
     }`
   })
 
-  // Initial Unshared Amount scoring (percentage-based)
+  // Initial Unshared Amount scoring (percentage-based) - OPTIMIZED
   const incidentRankedPlans = allPlanCosts.sort((a, b) => 
     (a.cost?.initialUnsharedAmount ?? Infinity) - (b.cost?.initialUnsharedAmount ?? Infinity)
   )
   const lowestIUA = incidentRankedPlans[0].cost?.initialUnsharedAmount ?? 0
   const currentIUA = planCost.initialUnsharedAmount
   const percentageAboveLowestIUA = (currentIUA - lowestIUA) / lowestIUA
-  let incidentScore = Math.max(100 - (percentageAboveLowestIUA * 100), 50)
   
-  // Add bonus for very low IUAs
-  if (currentIUA <= 500) {
-    incidentScore += 30; // Significant bonus for extremely low IUA
-  } else if (currentIUA <= 1000) {
-    incidentScore += 15; // Moderate bonus for low IUA
+  // Base score using a continuous function approach
+  // This creates a more gradual and fair scoring system
+  let incidentScore = 0;
+  
+  // Base score inversely proportional to IUA amount (higher IUA = lower base score)
+  if (currentIUA <= 5000) {
+    // Linear scale from 100 (for IUA=0) down to 40 (for IUA=5000)
+    incidentScore = 100 - ((currentIUA / 5000) * 60);
+  } else {
+    incidentScore = 40 - Math.min(((currentIUA - 5000) / 5000) * 15, 15); // Minimum score of 25
   }
+  
+  // Add relative scoring component - reward plans that are close to the lowest available IUA
+  const relativeScore = Math.max(100 - (percentageAboveLowestIUA * 70), 50);
+  
+  // Combine absolute and relative scoring (weighted average)
+  incidentScore = (incidentScore * 0.7) + (relativeScore * 0.3);
+  
+  // Add continuous bonus for low IUAs
+  const iuaBonus = Math.max(30 - (currentIUA / 100), 0);
+  incidentScore += iuaBonus;
   
   // Cap at 100
   incidentScore = Math.min(incidentScore, 100);
@@ -140,8 +157,10 @@ export async function calculatePlanScore(
   // Adjust score based on risk preference
   if (questionnaire.risk_preference === 'lower_risk' && currentIUA <= 1000) {
     incidentScore *= 1.2; // Bonus for low IUAs when user prefers lower risk
+    incidentScore = Math.min(incidentScore, 100); // Cap at 100 after adjustment
   } else if (questionnaire.risk_preference === 'higher_risk' && currentIUA >= 2500) {
     incidentScore *= 1.1; // Slight bonus for high IUAs when user prefers higher risk
+    incidentScore = Math.min(incidentScore, 100); // Cap at 100 after adjustment
   }
 
   factors.push({
@@ -154,7 +173,7 @@ export async function calculatePlanScore(
     }`
   })
 
-  // Calculate total annual cost for comparison
+  // Calculate total annual cost for comparison - OPTIMIZED
   const annualCosts = allPlanCosts.map(p => {
     const monthlyPremium = p.cost?.monthlyPremium ?? 0;
     const annualPremium = monthlyPremium * 12;
@@ -163,9 +182,18 @@ export async function calculatePlanScore(
     const isDpcPlan = p.plan.id.includes('dpc') || p.plan.id.includes('vpc');
     const dpcCost = isDpcPlan ? 2000 : 0;
     
+    // Calculate expected healthcare costs based on plan's IUA and visit frequency
+    const iua = p.cost?.initialUnsharedAmount ?? 0;
+    const visitCosts = expectedAnnualCosts;
+    
+    // Adjust for age-based risk (simplified actuarial adjustment)
+    const ageRiskFactor = questionnaire.age >= 50 ? 1.3 : 
+                          questionnaire.age >= 40 ? 1.15 : 
+                          questionnaire.age >= 30 ? 1.05 : 1.0;
+    
     return {
       id: p.plan.id,
-      totalCost: annualPremium + expectedAnnualCosts + dpcCost
+      totalCost: annualPremium + (visitCosts * ageRiskFactor) + dpcCost
     };
   });
   
@@ -178,18 +206,25 @@ export async function calculatePlanScore(
   // Add $2,000 for DPC plans when calculating current plan's annual cost
   const isDpcPlan = plan.id.includes('dpc') || plan.id.includes('vpc');
   const dpcCost = isDpcPlan ? 2000 : 0;
-  const currentAnnualCost = (planCost.monthlyPremium * 12) + expectedAnnualCosts + dpcCost;
+  
+  // Apply age-based risk factor to current plan too
+  const ageRiskFactor = questionnaire.age >= 50 ? 1.3 : 
+                        questionnaire.age >= 40 ? 1.15 : 
+                        questionnaire.age >= 30 ? 1.05 : 1.0;
+  
+  const currentAnnualCost = (planCost.monthlyPremium * 12) + (expectedAnnualCosts * ageRiskFactor) + dpcCost;
   
   const percentageAboveLowestAnnual = (currentAnnualCost - lowestAnnualCost) / lowestAnnualCost;
-  const annualScore = Math.max(100 - (percentageAboveLowestAnnual * 100), 50);
+  // Updated formula: less severe penalty
+  const annualScore = Math.max(100 - (percentageAboveLowestAnnual * 70), 50);
 
   factors.push({
     factor: 'Annual Cost',
     score: annualScore,
-    explanation: `Total annual cost (including expected visits${isDpcPlan ? ' and $2,000 DPC membership' : ''}): $${currentAnnualCost}${
+    explanation: `Total annual cost (including expected visits${isDpcPlan ? ' and $2,000 DPC membership' : ''}): $${Math.round(currentAnnualCost)}${
       currentAnnualCost === lowestAnnualCost
         ? ' (lowest available)'
-        : ` (${Math.round(percentageAboveLowestAnnual * 100)}% more than lowest option at $${lowestAnnualCost})`
+        : ` (${Math.round(percentageAboveLowestAnnual * 100)}% more than lowest option at $${Math.round(lowestAnnualCost)})`
     }`
   })
 
@@ -238,7 +273,22 @@ export async function calculatePlanScore(
         explanation: `Maternity coverage available with ${waitingPeriod}-month waiting period. Covers: ${services.join(', ')}`
       });
     } else {
-      // Still include the plan but with a lower maternity score
+      // If user is currently pregnant and plan has no maternity coverage, disqualify the plan
+      if (questionnaire.pregnancy === 'true') {
+        return {
+          plan,
+          plan_id: plan.id,
+          total_score: 0,
+          explanation: ['This plan does not offer maternity coverage for your current pregnancy'],
+          factors: [{
+            factor: 'Maternity Coverage',
+            score: 0,
+            explanation: 'No maternity coverage available for current pregnancy'
+          }]
+        };
+      }
+      
+      // For those planning pregnancy but not currently pregnant, still include with low score
       factors.push({
         factor: 'Maternity Coverage',
         score: 40, // Lower score but not zero
@@ -247,7 +297,7 @@ export async function calculatePlanScore(
     }
   }
 
-  // Apply preference-based weighting
+  // Apply preference-based weighting - OPTIMIZED
   const weights: { [key: string]: number } = {
     'Monthly Cost': questionnaire.expense_preference === 'lower_monthly' ? 1.5 : 0.8,
     'Incident Cost': questionnaire.expense_preference === 'higher_monthly' ? 1.5 : 0.8,
@@ -263,8 +313,28 @@ export async function calculatePlanScore(
     weights['Incident Cost'] *= 1.2; // Lower risk users care more about incident costs
   }
   
+  // Apply dynamic weighting based on plan differences
+  const monthlyPremiumVariance = calculateVariance(allPlanCosts.map(p => p.cost?.monthlyPremium ?? 0));
+  const iuaVariance = calculateVariance(allPlanCosts.map(p => p.cost?.initialUnsharedAmount ?? 0));
+  
+  // If there's high variance in one factor but low in another, adjust weights
+  const varianceRatio = monthlyPremiumVariance / iuaVariance;
+  if (varianceRatio > 2) {
+    // Monthly premiums vary a lot more than IUAs
+    weights['Monthly Cost'] *= 1.2;
+  } else if (varianceRatio < 0.5) {
+    // IUAs vary a lot more than monthly premiums
+    weights['Incident Cost'] *= 1.2;
+  }
+  
   totalScore = factors.reduce((sum, f) => sum + (f.score * (weights[f.factor] || 1.0)), 0) / 
                factors.reduce((sum, f) => sum + (weights[f.factor] || 1.0), 0);
+
+  // Apply a small non-linear adjustment to better differentiate close plans
+  if (totalScore > 80) {
+    // Boost high-scoring plans slightly to create more separation at the top
+    totalScore = totalScore + ((100 - totalScore) * 0.2);
+  }
 
   const result = {
     plan,
@@ -278,4 +348,13 @@ export async function calculatePlanScore(
   console.log(`Plan ${plan.id} factors:`, JSON.stringify(factors, null, 2));
   
   return result;
+}
+
+// Helper function to calculate variance of an array of numbers
+function calculateVariance(numbers: number[]): number {
+  if (numbers.length === 0) return 0;
+  
+  const mean = numbers.reduce((sum, val) => sum + val, 0) / numbers.length;
+  const squaredDifferences = numbers.map(val => Math.pow(val - mean, 2));
+  return squaredDifferences.reduce((sum, val) => sum + val, 0) / numbers.length;
 } 
