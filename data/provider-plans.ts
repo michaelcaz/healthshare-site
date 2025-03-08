@@ -1,3 +1,6 @@
+// Add this at the beginning of the file
+console.log('Loading provider-plans.ts');
+
 // Auto-generated on 2025-03-07T15:46:24.399Z
 import { PricingPlan, ProviderAgeRules } from '@/types/provider-plans';
 
@@ -3768,3 +3771,7 @@ export const providerPlans: PricingPlan[] = [
     ]
   }
 ];
+
+// Add this at the end of the file
+console.log(`Loaded ${providerPlans.length} provider plans`);
+console.log('First few plan IDs:', providerPlans.slice(0, 3).map(p => p.id));

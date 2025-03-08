@@ -2,37 +2,78 @@ export type AgeBracket = '18-29' | '30-39' | '40-49'
 export type IUALevel = '1000' | '2500' | '5000'
 export type HouseholdSize = 1 | 2
 
-export interface PlanCost {
-  age_bracket: AgeBracket
-  household_size: HouseholdSize
-  iua_level: IUALevel
-  monthly_cost: number
-  incident_cost: number
+/**
+ * HealthsharePlanCost represents the detailed cost structure for healthshare plans.
+ * This interface is used primarily in UI components for displaying comprehensive plan information.
+ * It includes contextual information about the cost such as age bracket and household size.
+ */
+export interface HealthsharePlanCost {
+  // Using snake_case for backward compatibility
+  age_bracket: AgeBracket;  // The age range this cost applies to
+  household_size: HouseholdSize;  // Whether this is for an individual or family
+  iua_level: IUALevel;  // The specific Initial Unshared Amount tier
+  monthly_cost: number;  // Monthly payment to maintain coverage
+  incident_cost: number;  // Amount paid before sharing begins (per incident)
 }
 
+/**
+ * Utility type that provides camelCase aliases for HealthsharePlanCost properties.
+ * This can be used when you want to access properties in camelCase.
+ */
+export type HealthsharePlanCostCamelCase = HealthsharePlanCost & {
+  ageBracket: AgeBracket;
+  householdSize: HouseholdSize;
+  iuaLevel: IUALevel;
+  monthlyCost: number;
+  incidentCost: number;
+}
+
+/**
+ * HealthsharePlan represents a complete healthshare plan with all its details.
+ * This interface is used for displaying comprehensive plan information in UI components.
+ */
 export interface HealthsharePlan {
-  id: string
-  name: string
-  provider: string
-  monthly_cost: number
-  incident_cost: number
-  annual_maximum: number
-  per_incident_maximum: number
-  lifetime_maximum?: number
-  pre_existing_waiting_period: number
-  maternity_coverage: boolean
-  maternity_waiting_period?: number
-  costs: PlanCost[]
+  id: string;  // Unique identifier for the plan
+  name: string;  // Display name of the plan
+  provider: string;  // The healthshare provider offering this plan
+  monthly_cost: number;  // Base monthly cost
+  incident_cost: number;  // Base incident cost (similar to a deductible)
+  annual_maximum: number;  // Maximum coverage per year
+  per_incident_maximum: number;  // Maximum coverage per incident
+  lifetime_maximum?: number;  // Maximum lifetime coverage (if applicable)
+  pre_existing_waiting_period: number;  // Waiting period for pre-existing conditions (in months)
+  maternity_coverage: boolean;  // Whether maternity is covered
+  maternity_waiting_period?: number;  // Waiting period for maternity coverage (in months)
+  costs: HealthsharePlanCost[];  // Detailed cost structure for different demographics
 }
 
+/**
+ * Utility type that provides camelCase aliases for HealthsharePlan properties.
+ * This can be used when you want to access properties in camelCase.
+ */
+export type HealthsharePlanCamelCase = HealthsharePlan & {
+  monthlyCost: number;
+  incidentCost: number;
+  annualMaximum: number;
+  perIncidentMaximum: number;
+  lifetimeMaximum?: number;
+  preExistingWaitingPeriod: number;
+  maternityCoverage: boolean;
+  maternityWaitingPeriod?: number;
+}
+
+/**
+ * Plan represents a simplified plan structure used in the recommendation engine.
+ * This interface contains only the essential information needed for plan comparison.
+ */
 export interface Plan {
-  id: string
-  maternity_coverage: boolean
-  maternity_waiting_period: number
-  monthly_cost: number
-  incident_cost: number
-  pre_existing_conditions: boolean
-  pre_existing_waiting_period: number
+  id: string;  // Unique identifier for the plan
+  maternity_coverage: boolean;  // Whether maternity is covered
+  maternity_waiting_period: number;  // Waiting period for maternity coverage (in months)
+  monthly_cost: number;  // Monthly payment to maintain coverage
+  incident_cost: number;  // Amount paid before sharing begins (per incident)
+  pre_existing_conditions: boolean;  // Whether pre-existing conditions are covered
+  pre_existing_waiting_period: number;  // Waiting period for pre-existing conditions (in months)
 }
 
 export interface HealthshareCoverage {

@@ -9,9 +9,14 @@ export interface PreExistingTier {
   maximum: number | 'Not Shareable' | 'Fully Shareable'
 }
 
+/**
+ * PlanCost represents the pricing structure used in the recommendation engine.
+ * This interface is focused on the core financial metrics needed for plan comparison and scoring.
+ * It's used primarily for calculations in the recommendation algorithm and pricing displays.
+ */
 export interface PlanCost {
-  monthlyPremium: number;
-  initialUnsharedAmount: number;
+  monthlyPremium: number;  // Monthly payment to maintain coverage
+  initialUnsharedAmount: number;  // Amount paid before sharing begins (similar to a deductible)
 }
 
 export interface PlanMatrix {

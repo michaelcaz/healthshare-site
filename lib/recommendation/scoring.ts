@@ -1,9 +1,23 @@
 import { getAllPlans } from '@/lib/supabase/plans'
 import { type QuestionnaireResponse } from '@/types/questionnaire'
-import { type PlanCost } from '@/types/plans'
 import { getPlanCost as getPlanCostUtil, getAllPlanCosts } from '@/lib/utils/plan-costs'
-import { type PricingPlan, healthshareProviders } from '@/types/provider-plans'
+import { 
+  type PricingPlan, 
+  healthshareProviders, 
+  type CoverageType,
+  type HouseholdType,
+  type PlanCost
+} from '@/types/provider-plans'
 import { calculateAnnualHealthcareCosts } from '@/lib/utils/visit-calculator'
+import { getAgeBracket, isAgeInBracket } from '@/lib/plan-matching/age-brackets'
+
+// Define the coverage type map
+const COVERAGE_TYPE_MAP: Record<CoverageType, HouseholdType> = {
+  'just_me': 'Member Only',
+  'me_spouse': 'Member & Spouse',
+  'me_kids': 'Member & Child(ren)',
+  'family': 'Member & Family'
+} as const;
 
 interface Plan {
   id: string
@@ -43,6 +57,7 @@ export async function calculatePlanScore(
     questionnaire.coverage_type,
     questionnaire.iua_preference
   )
+  console.log(`Retrieved ${allPlanCosts.length} plan costs for comparison`);
 
   // Get this plan's cost
   const planCost = getPlanCostUtil(
@@ -51,6 +66,20 @@ export async function calculatePlanScore(
     questionnaire.coverage_type,
     questionnaire.iua_preference
   )
+  
+  // Log detailed information about the plan cost
+  if (planCost) {
+    console.log(`Plan ${plan.id} cost details:`, {
+      monthlyPremium: planCost.monthlyPremium,
+      initialUnsharedAmount: planCost.initialUnsharedAmount
+    });
+  } else {
+    console.log(`No valid cost found for plan ${plan.id} with criteria:`, {
+      age: questionnaire.age,
+      coverage_type: questionnaire.coverage_type,
+      iua_preference: questionnaire.iua_preference
+    });
+  }
 
   // Special handling for CrowdHealth plans which only have a $500 IUA option
   if (!planCost && plan.id.includes('crowdhealth') && questionnaire.iua_preference !== '500') {
@@ -65,6 +94,56 @@ export async function calculatePlanScore(
     if (crowdHealthCost) {
       console.log(`Found CrowdHealth plan cost with IUA=500:`, crowdHealthCost);
       return calculatePlanScore(plan, { ...questionnaire, iua_preference: '500' });
+    } else {
+      console.log(`Failed to find CrowdHealth plan cost even with IUA=500`);
+    }
+  }
+
+  // Special handling for Knew Health plans
+  if (plan.id.includes('knew-health')) {
+    console.log(`Detailed analysis for Knew Health plan ${plan.id}:`);
+    console.log(`- Age: ${questionnaire.age}`);
+    console.log(`- Coverage type: ${questionnaire.coverage_type}`);
+    console.log(`- IUA preference: ${questionnaire.iua_preference}`);
+    
+    // Get the age bracket
+    const ageBracket = getAgeBracket(questionnaire.age, plan.ageRules);
+    console.log(`- Age bracket: ${ageBracket}`);
+    
+    // Get the household type
+    const householdType = COVERAGE_TYPE_MAP[questionnaire.coverage_type];
+    console.log(`- Household type: ${householdType}`);
+    
+    // Log all available matrices for this plan
+    console.log(`- All available matrices for plan ${plan.id}:`);
+    plan.planMatrix.forEach((matrix, index) => {
+      console.log(`  Matrix ${index + 1}: ${matrix.ageBracket}/${matrix.householdType} with ${matrix.costs.length} cost options`);
+    });
+    
+    // Check all available IUAs for this plan
+    const knewHealthMatrices = plan.planMatrix.filter(matrix => {
+      const bracketMatches = matrix.ageBracket === ageBracket || 
+                            isAgeInBracket(questionnaire.age, matrix.ageBracket);
+      const householdMatches = matrix.householdType === householdType;
+      
+      console.log(`- Matrix ${matrix.ageBracket}/${matrix.householdType}: bracketMatches=${bracketMatches}, householdMatches=${householdMatches}`);
+      
+      return bracketMatches && householdMatches;
+    });
+    
+    if (knewHealthMatrices.length > 0) {
+      const availableIUAs = knewHealthMatrices.flatMap(matrix => 
+        matrix.costs.map(cost => cost.initialUnsharedAmount)
+      );
+      console.log(`- Available IUAs for this age/coverage: ${availableIUAs.join(', ')}`);
+      
+      // If no matching IUA, suggest closest available
+      if (!availableIUAs.includes(parseInt(questionnaire.iua_preference || '0'))) {
+        console.log(`- Selected IUA ${questionnaire.iua_preference} not available for this plan`);
+        console.log(`- Closest available IUAs: ${availableIUAs.join(', ')}`);
+      }
+    } else {
+      console.log(`- No matching matrices found for age ${questionnaire.age} and coverage type ${questionnaire.coverage_type}`);
     }
   }
 

@@ -11,6 +11,19 @@ export const PlanDetails: React.FC<PlanDetailsProps> = ({ plan }) => {
   const representativeCosts = plan.plan.planMatrix
     .find(matrix => matrix.ageBracket === '30-39' && matrix.householdType === 'Member Only')
     ?.costs.find(cost => cost.initialUnsharedAmount === 2500)
+    
+  console.log('PlanDetails rendering for plan:', plan.plan.id);
+  console.log('Plan data:', JSON.stringify(plan.plan, null, 2));
+  console.log('Representative costs:', representativeCosts);
+  
+  // Special logging for CrowdHealth plans
+  if (plan.plan.id.includes('crowdhealth')) {
+    console.log('CrowdHealth plan detected, checking all matrices:');
+    plan.plan.planMatrix.forEach((matrix, i) => {
+      console.log(`Matrix ${i}: ${matrix.ageBracket}/${matrix.householdType}`);
+      console.log('Costs:', matrix.costs);
+    });
+  }
 
   return (
     <div className="space-y-8 p-6">

@@ -1,4 +1,5 @@
-import { ProviderPlan, AgeBracket, HouseholdType, PlanCost, PricingPlan } from '../types/provider-plans';
+import { ProviderPlan, HouseholdType, PlanCost, PricingPlan } from '../types/provider-plans';
+import { HealthsharePlanCost, IUALevel, AgeBracket } from '../types/plans';
 import { providerPlans } from '../data/provider-plans';
 
 function getMatchingAgeBracket(plan: PricingPlan, ageBracket: AgeBracket): string {
@@ -120,4 +121,54 @@ export function getPlanComparison(
   });
 
   return comparison.sort((a, b) => a.annualCost - b.annualCost);
+}
+
+/**
+ * Converts a PlanCost (from provider-plans.ts) to a HealthsharePlanCost (from plans.ts).
+ * This is useful when you need to convert from the recommendation engine format to the UI format.
+ * 
+ * @param planCost The PlanCost to convert
+ * @param ageBracket The age bracket for the cost
+ * @param householdSize The household size for the cost
+ * @returns A HealthsharePlanCost object
+ */
+export function convertToHealthsharePlanCost(
+  planCost: PlanCost,
+  ageBracket: string,
+  householdSize: 1 | 2
+): HealthsharePlanCost {
+  // Convert initialUnsharedAmount to a valid IUALevel
+  let iuaLevel: IUALevel = '1000';
+  if (planCost.initialUnsharedAmount === 2500) {
+    iuaLevel = '2500';
+  } else if (planCost.initialUnsharedAmount === 5000) {
+    iuaLevel = '5000';
+  }
+  
+  // Ensure ageBracket is a valid AgeBracket
+  const validAgeBracket = (ageBracket === '18-29' || ageBracket === '30-39' || ageBracket === '40-49') 
+    ? ageBracket 
+    : '30-39'; // Default to 30-39 if not valid
+  
+  return {
+    age_bracket: validAgeBracket as AgeBracket,
+    household_size: householdSize,
+    iua_level: iuaLevel,
+    monthly_cost: planCost.monthlyPremium,
+    incident_cost: planCost.initialUnsharedAmount
+  };
+}
+
+/**
+ * Converts a HealthsharePlanCost (from plans.ts) to a PlanCost (from provider-plans.ts).
+ * This is useful when you need to convert from the UI format to the recommendation engine format.
+ * 
+ * @param healthsharePlanCost The HealthsharePlanCost to convert
+ * @returns A PlanCost object
+ */
+export function convertToPlanCost(healthsharePlanCost: HealthsharePlanCost): PlanCost {
+  return {
+    monthlyPremium: healthsharePlanCost.monthly_cost,
+    initialUnsharedAmount: healthsharePlanCost.incident_cost
+  };
 } 
