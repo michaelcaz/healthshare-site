@@ -6,18 +6,16 @@ import { QuestionnaireResponse } from '@/types/questionnaire'
 
 describe('calculatePlanScore', () => {
   const sampleQuestionnaire = {
-    age: 35,
-    household_size: 1,
-    coverage_type: 'just_me' as const,
-    iua_preference: '1000' as const,
+    age: 34,
+    coverage_type: 'family' as const,
+    iua_preference: '5000' as const,
+    expense_preference: 'lower_monthly' as const,
+    visit_frequency: 'just_checkups' as const,
+    financial_capacity: '5000' as const,
+    risk_preference: 'higher_risk' as const,
     pregnancy: 'false' as const,
     pre_existing: 'false' as const,
-    state: 'TX',
-    zip_code: '75001',
-    expense_preference: 'lower_monthly' as const,
-    pregnancy_planning: 'no' as const,
-    medical_conditions: [],
-    visit_frequency: 'just_checkups' as const
+    zip_code: '12345'
   }
 
   const mockQuestionnaire = {
@@ -204,6 +202,131 @@ describe('calculatePlanScore', () => {
       expect(annualCostFactor?.score).toBeDefined()
     })
   })
+
+  describe('DPC plan handling', () => {
+    it('correctly adjusts expected costs for DPC plans', async () => {
+      // Find a DPC plan
+      const dpcPlan = providerPlans.find(p => p.id.includes('dpc'));
+      if (!dpcPlan) {
+        console.warn('No DPC plan found, skipping test');
+        return;
+      }
+      
+      // Score the DPC plan
+      const score = await calculatePlanScore(dpcPlan, sampleQuestionnaire);
+      
+      // Check if there's a DPC Value factor
+      const dpcValueFactor = score.factors.find(f => f.factor === 'DPC Value');
+      expect(dpcValueFactor).toBeDefined();
+      
+      // Check if the annual cost explanation mentions DPC membership
+      const annualCostFactor = score.factors.find(f => f.factor === 'Annual Cost');
+      expect(annualCostFactor?.explanation).toContain('DPC membership');
+    });
+    
+    it('values DPC plans differently based on visit frequency', async () => {
+      // Find a DPC plan
+      const dpcPlan = providerPlans.find(p => p.id.includes('dpc'));
+      if (!dpcPlan) {
+        console.warn('No DPC plan found, skipping test');
+        return;
+      }
+      
+      // Score with just_checkups
+      const checkupsScore = await calculatePlanScore(dpcPlan, {
+        ...sampleQuestionnaire,
+        visit_frequency: 'just_checkups'
+      });
+      
+      // Score with monthly_plus
+      const monthlyScore = await calculatePlanScore(dpcPlan, {
+        ...sampleQuestionnaire,
+        visit_frequency: 'monthly_plus'
+      });
+      
+      // Get DPC Value factors
+      const checkupsDpcValue = checkupsScore.factors.find(f => f.factor === 'DPC Value')?.score || 0;
+      const monthlyDpcValue = monthlyScore.factors.find(f => f.factor === 'DPC Value')?.score || 0;
+      
+      // DPC should be valued higher for monthly_plus than for just_checkups
+      expect(monthlyDpcValue).toBeGreaterThan(checkupsDpcValue);
+    });
+  });
+  
+  describe('monthly premium preference', () => {
+    it('heavily weights monthly premium for lower_monthly preference', async () => {
+      // Find a plan with low monthly premium
+      const lowPremiumPlan = providerPlans.find(p => 
+        p.planMatrix.some(m => 
+          m.householdType === 'Member & Family' && 
+          m.costs.some(c => c.initialUnsharedAmount === 5000 && c.monthlyPremium < 300)
+        )
+      );
+      
+      if (!lowPremiumPlan) {
+        console.warn('No low premium plan found, skipping test');
+        return;
+      }
+      
+      // Score with lower_monthly preference
+      const lowerMonthlyScore = await calculatePlanScore(lowPremiumPlan, {
+        ...sampleQuestionnaire,
+        expense_preference: 'lower_monthly'
+      });
+      
+      // Score with higher_monthly preference
+      const higherMonthlyScore = await calculatePlanScore(lowPremiumPlan, {
+        ...sampleQuestionnaire,
+        expense_preference: 'higher_monthly'
+      });
+      
+      // The plan should score higher with lower_monthly preference
+      expect(lowerMonthlyScore.total_score).toBeGreaterThan(higherMonthlyScore.total_score);
+    });
+    
+    it('gives bonus to plans with lowest or near-lowest premium', async () => {
+      // Get all plans with family coverage and $5000 IUA
+      const eligiblePlans = providerPlans.filter(p => 
+        p.planMatrix.some(m => 
+          m.householdType === 'Member & Family' && 
+          m.costs.some(c => c.initialUnsharedAmount === 5000)
+        )
+      );
+      
+      if (eligiblePlans.length < 2) {
+        console.warn('Not enough eligible plans found, skipping test');
+        return;
+      }
+      
+      // Sort by monthly premium
+      const sortedPlans = eligiblePlans.map(p => {
+        const familyMatrix = p.planMatrix.find(m => m.householdType === 'Member & Family');
+        const cost = familyMatrix?.costs.find(c => c.initialUnsharedAmount === 5000);
+        return { plan: p, premium: cost?.monthlyPremium ?? Infinity };
+      }).sort((a, b) => a.premium - b.premium);
+      
+      // Get the lowest premium plan and a higher premium plan
+      const lowestPremiumPlan = sortedPlans[0].plan;
+      const higherPremiumPlan = sortedPlans[sortedPlans.length - 1].plan;
+      
+      // Score both plans
+      const lowestScore = await calculatePlanScore(lowestPremiumPlan, {
+        ...sampleQuestionnaire,
+        expense_preference: 'lower_monthly'
+      });
+      
+      const higherScore = await calculatePlanScore(higherPremiumPlan, {
+        ...sampleQuestionnaire,
+        expense_preference: 'lower_monthly'
+      });
+      
+      // The lowest premium plan should have a higher Monthly Cost score
+      const lowestMonthlyScore = lowestScore.factors.find(f => f.factor === 'Monthly Cost')?.score || 0;
+      const higherMonthlyScore = higherScore.factors.find(f => f.factor === 'Monthly Cost')?.score || 0;
+      
+      expect(lowestMonthlyScore).toBeGreaterThan(higherMonthlyScore);
+    });
+  });
 })
 
 describe('Plan Scoring', () => {

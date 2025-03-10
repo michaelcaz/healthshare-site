@@ -177,13 +177,37 @@ export async function calculatePlanScore(
 
   console.log(`Plan ${plan.id} cost:`, planCost);
 
+  // Check if this is a DPC plan
+  const isDpcPlan = plan.id.includes('dpc') || plan.id.includes('vpc');
+  const dpcCost = isDpcPlan ? 2000 : 0;
+
   // Calculate expected annual healthcare costs based on visit frequency
-  const expectedAnnualCosts = calculateAnnualHealthcareCosts(
+  let expectedAnnualCosts = calculateAnnualHealthcareCosts(
     questionnaire.coverage_type,
     questionnaire.visit_frequency,
     questionnaire.age,
     questionnaire.pre_existing === 'true'
-  )
+  );
+  
+  // For DPC plans, reduce or eliminate primary care costs
+  let dpcCoveredCosts = 0;
+  if (isDpcPlan) {
+    // Estimate what portion of expected costs would be covered by DPC
+    dpcCoveredCosts = estimateDpcCoveredCosts(
+      questionnaire.visit_frequency,
+      questionnaire.coverage_type
+    );
+    
+    // Subtract DPC-covered costs from expected annual costs
+    expectedAnnualCosts = Math.max(0, expectedAnnualCosts - dpcCoveredCosts);
+    
+    console.log(`DPC plan ${plan.id} - Original expected costs: ${calculateAnnualHealthcareCosts(
+      questionnaire.coverage_type,
+      questionnaire.visit_frequency,
+      questionnaire.age,
+      questionnaire.pre_existing === 'true'
+    )}, DPC covered costs: ${dpcCoveredCosts}, Adjusted costs: ${expectedAnnualCosts}`);
+  }
   
   // Note: Visit frequency affects expected annual healthcare costs,
   // but not how much importance is placed on the IUA, since IUA is per incident/need, not per visit
@@ -197,7 +221,21 @@ export async function calculatePlanScore(
   const percentageAboveLowest = (currentPremium - lowestPremium) / lowestPremium
   
   // Updated formula: Use 0-100 scale for consistency with other factors
-  const monthlyScore = Math.max(100 - (percentageAboveLowest * 70), 20)
+  // More aggressive penalty for higher premiums when user prefers lower monthly costs
+  let monthlyScore = 0;
+  if (questionnaire.expense_preference === 'lower_monthly') {
+    // More aggressive penalty for higher premiums
+    monthlyScore = Math.max(100 - (percentageAboveLowest * 90), 20);
+  } else {
+    // Standard penalty
+    monthlyScore = Math.max(100 - (percentageAboveLowest * 70), 20);
+  }
+  
+  // Give bonus to plans with the lowest or near-lowest premium when user prefers lower monthly costs
+  if (questionnaire.expense_preference === 'lower_monthly' && currentPremium <= lowestPremium * 1.1) {
+    monthlyScore = Math.min(monthlyScore * 1.15, 100); // 15% bonus for being within 10% of lowest premium
+    console.log(`Plan ${plan.id} received low premium bonus, adjusted score: ${monthlyScore}`);
+  }
   
   factors.push({
     factor: 'Monthly Cost',
@@ -265,13 +303,27 @@ export async function calculatePlanScore(
     const monthlyPremium = p.cost?.monthlyPremium ?? 0;
     const annualPremium = monthlyPremium * 12;
     
-    // Add $2,000 for DPC plans
-    const isDpcPlan = p.plan.id.includes('dpc') || p.plan.id.includes('vpc');
-    const dpcCost = isDpcPlan ? 2000 : 0;
+    // Check if this is a DPC plan
+    const isPlanDpc = p.plan.id.includes('dpc') || p.plan.id.includes('vpc');
+    const planDpcCost = isPlanDpc ? 2000 : 0;
     
     // Calculate expected healthcare costs based on plan's IUA and visit frequency
     const iua = p.cost?.initialUnsharedAmount ?? 0;
-    const visitCosts = expectedAnnualCosts;
+    let planVisitCosts = calculateAnnualHealthcareCosts(
+      questionnaire.coverage_type,
+      questionnaire.visit_frequency,
+      questionnaire.age,
+      questionnaire.pre_existing === 'true'
+    );
+    
+    // For DPC plans, reduce or eliminate primary care costs
+    if (isPlanDpc) {
+      const planDpcCoveredCosts = estimateDpcCoveredCosts(
+        questionnaire.visit_frequency,
+        questionnaire.coverage_type
+      );
+      planVisitCosts = Math.max(0, planVisitCosts - planDpcCoveredCosts);
+    }
     
     // Adjust for age-based risk (simplified actuarial adjustment)
     const ageRiskFactor = questionnaire.age >= 50 ? 1.3 : 
@@ -280,7 +332,7 @@ export async function calculatePlanScore(
     
     return {
       id: p.plan.id,
-      totalCost: annualPremium + (visitCosts * ageRiskFactor) + dpcCost
+      totalCost: annualPremium + (planVisitCosts * ageRiskFactor) + planDpcCost
     };
   });
   
@@ -289,10 +341,6 @@ export async function calculatePlanScore(
   
   // Calculate percentage-based score for annual costs
   const lowestAnnualCost = sortedByAnnualCost[0].totalCost;
-  
-  // Add $2,000 for DPC plans when calculating current plan's annual cost
-  const isDpcPlan = plan.id.includes('dpc') || plan.id.includes('vpc');
-  const dpcCost = isDpcPlan ? 2000 : 0;
   
   // Apply age-based risk factor to current plan too
   const ageRiskFactor = questionnaire.age >= 50 ? 1.3 : 
@@ -314,6 +362,31 @@ export async function calculatePlanScore(
         : ` (${Math.round(percentageAboveLowestAnnual * 100)}% more than lowest option at $${Math.round(lowestAnnualCost)})`
     }`
   })
+
+  // Add DPC value factor for plans with DPC
+  if (isDpcPlan) {
+    let dpcValueScore = 0;
+    
+    // Calculate DPC value based on visit frequency
+    if (questionnaire.visit_frequency === 'just_checkups') {
+      // For just checkups, DPC has moderate value
+      dpcValueScore = 60;
+    } else if (questionnaire.visit_frequency === 'few_months') {
+      // For few months, DPC has high value
+      dpcValueScore = 80;
+    } else if (questionnaire.visit_frequency === 'monthly_plus') {
+      // For monthly plus, DPC has very high value
+      dpcValueScore = 95;
+    }
+    
+    factors.push({
+      factor: 'DPC Value',
+      score: dpcValueScore,
+      explanation: `Direct Primary Care membership provides unlimited primary care visits with no additional cost. ${
+        dpcCoveredCosts > 0 ? `This saves approximately $${Math.round(dpcCoveredCosts)} in annual healthcare costs based on your expected usage.` : ''
+      }`
+    });
+  }
 
   // No longer scoring pre-existing conditions since all plans have the same details
   // We'll show a notice to users with pre-existing conditions instead
@@ -401,13 +474,14 @@ export async function calculatePlanScore(
     'Annual Cost': questionnaire.visit_frequency === 'just_checkups' ? 1.0 :
                    questionnaire.visit_frequency === 'few_months' ? 1.2 : 1.5,
     'Maternity Coverage': questionnaire.pregnancy_planning === 'yes' ? 2.0 : 0,
-    'Maternity Note': 0 // Always zero weight for the informational note
+    'Maternity Note': 0, // Always zero weight for the informational note
+    'DPC Value': 1.0 // Base weight for DPC value
   };
 
   // Apply expense preference adjustments
   if (questionnaire.expense_preference === 'lower_monthly') {
-    weights['Monthly Cost'] *= 2.0; // Strong preference for lower monthly costs
-    weights['Incident Cost'] *= 0.7; // Willing to accept higher incident costs
+    weights['Monthly Cost'] *= 2.5; // Increased from 2.0 for stronger preference
+    weights['Incident Cost'] *= 0.6; // Reduced from 0.7 to further emphasize monthly cost
   } else if (questionnaire.expense_preference === 'higher_monthly') {
     weights['Incident Cost'] *= 1.7; // Strong preference for lower incident costs
     weights['Monthly Cost'] *= 0.8; // Willing to accept higher monthly costs
@@ -420,6 +494,15 @@ export async function calculatePlanScore(
   } else if (questionnaire.risk_preference === 'lower_risk') {
     weights['Incident Cost'] *= 1.4; // Lower risk users strongly prefer predictable costs
     weights['Monthly Cost'] *= 0.7; // Less concerned about monthly premiums
+  }
+  
+  // Adjust DPC value weight based on visit frequency
+  if (isDpcPlan) {
+    if (questionnaire.visit_frequency === 'monthly_plus') {
+      weights['DPC Value'] *= 1.5; // Higher weight for frequent users
+    } else if (questionnaire.visit_frequency === 'just_checkups') {
+      weights['DPC Value'] *= 0.7; // Lower weight for infrequent users
+    }
   }
   
   // Remove variance analysis as requested
@@ -439,8 +522,58 @@ export async function calculatePlanScore(
   
   console.log(`Plan ${plan.id} final score: ${totalScore.toFixed(2)}`);
   console.log(`Plan ${plan.id} factors:`, JSON.stringify(factors, null, 2));
+  console.log(`Plan ${plan.id} weights:`, JSON.stringify(weights, null, 2));
   
   return result;
+}
+
+// Helper function to estimate costs covered by DPC
+function estimateDpcCoveredCosts(
+  visitFrequency?: string,
+  coverageType?: string
+): number {
+  // Base primary care costs by visit frequency
+  let primaryCareCosts = 0;
+  
+  // Get the number of people based on coverage type
+  const peopleCount = 
+    coverageType === 'just_me' ? 1 :
+    coverageType === 'me_spouse' ? 2 :
+    coverageType === 'me_kids' ? 3 :
+    coverageType === 'family' ? 4 : 1;
+  
+  if (visitFrequency === 'just_checkups') {
+    // For "just checkups", DPC would cover nearly all expected costs
+    // Estimate annual checkup costs (around $175 per visit)
+    primaryCareCosts = 175 * peopleCount;
+    
+    // Add basic lab tests typically done during checkups
+    const labCosts = 100 * peopleCount;
+    
+    return primaryCareCosts + labCosts;
+  } 
+  else if (visitFrequency === 'few_months') {
+    // For "few months", DPC would cover a significant portion
+    // Estimate 3 visits per person per year
+    primaryCareCosts = 175 * 3 * peopleCount;
+    
+    // Add lab tests
+    const labCosts = 100 * 2 * peopleCount;
+    
+    return primaryCareCosts + labCosts;
+  }
+  else if (visitFrequency === 'monthly_plus') {
+    // For "monthly plus", DPC would cover a substantial amount
+    // Estimate 12 visits per person per year
+    primaryCareCosts = 175 * 12 * peopleCount;
+    
+    // Add lab tests
+    const labCosts = 100 * 4 * peopleCount;
+    
+    return primaryCareCosts + labCosts;
+  }
+  
+  return primaryCareCosts;
 }
 
 // Helper function to calculate variance of an array of numbers
@@ -448,6 +581,6 @@ function calculateVariance(numbers: number[]): number {
   if (numbers.length === 0) return 0;
   
   const mean = numbers.reduce((sum, val) => sum + val, 0) / numbers.length;
-  const squaredDifferences = numbers.map(val => Math.pow(val - mean, 2));
-  return squaredDifferences.reduce((sum, val) => sum + val, 0) / numbers.length;
+  
+  return numbers.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / numbers.length;
 } 

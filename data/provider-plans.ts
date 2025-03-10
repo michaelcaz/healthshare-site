@@ -1,7 +1,4 @@
-// Add this at the beginning of the file
-console.log('Loading provider-plans.ts');
-
-// Auto-generated on 2025-03-07T15:46:24.399Z
+// Auto-generated on 2025-03-10T18:50:49.035Z
 import { PricingPlan, ProviderAgeRules } from '@/types/provider-plans';
 
 const standardAgeRules: ProviderAgeRules = {
@@ -12,7 +9,7 @@ const crowdHealthAgeRules: ProviderAgeRules = {
   type: 'custom',
   customBrackets: {
     ranges: [
-      { min: 18, max: 55, bracket: '18-55' },
+      { min: 18, max: 54, bracket: '18-54' },
       { min: 55, max: 64, bracket: '55-64' }
     ]
   }
@@ -402,20 +399,7 @@ export const providerPlans: PricingPlan[] = [
             "initialUnsharedAmount": 5000
           }
         ]
-      }
-    ]
-  },
-  {
-    "id": "zion-healthshare-essential-membership-(basic,-no-additional-services)",
-    "providerName": "Zion Healthshare",
-    "planName": "Essential Membership \n (Basic, no additional services)",
-    "maxCoverage": "no limit",
-    "annualUnsharedAmount": "Total of paid three IUAs in 12 months",
-    "sourceUrl": "",
-    "ageRules": {
-      "type": "standard"
-    },
-    "planMatrix": [
+      },
       {
         "ageBracket": "30-49",
         "householdType": "Member Only",
@@ -575,8 +559,8 @@ export const providerPlans: PricingPlan[] = [
         "ranges": [
           {
             "min": 18,
-            "max": 55,
-            "bracket": "18-55"
+            "max": 54,
+            "bracket": "18-54"
           },
           {
             "min": 55,
@@ -623,6 +607,16 @@ export const providerPlans: PricingPlan[] = [
         "costs": [
           {
             "monthlyPremium": 640,
+            "initialUnsharedAmount": 500
+          }
+        ]
+      },
+      {
+        "ageBracket": "18-55",
+        "householdType": "Member & Family (5+)",
+        "costs": [
+          {
+            "monthlyPremium": 695,
             "initialUnsharedAmount": 500
           }
         ]
@@ -3771,7 +3765,3 @@ export const providerPlans: PricingPlan[] = [
     ]
   }
 ];
-
-// Add this at the end of the file
-console.log(`Loaded ${providerPlans.length} provider plans`);
-console.log('First few plan IDs:', providerPlans.slice(0, 3).map(p => p.id));

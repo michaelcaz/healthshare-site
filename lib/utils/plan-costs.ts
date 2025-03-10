@@ -5,7 +5,7 @@ import {
   type PlanCost
 } from '@/types/provider-plans'
 import { providerPlans } from '@/data/provider-plans'
-import { getAgeBracket } from '@/lib/plan-matching/age-brackets'
+import { getAgeBracket, isAgeInBracket } from '@/lib/plan-matching/age-brackets'
 
 // Add debug logging at the top of the file
 console.log(`plan-costs.ts: Loaded providerPlans with ${providerPlans.length} plans`);
@@ -108,9 +108,34 @@ export function getPlanCost(
   console.log(`Using household type ${householdType} for coverage type ${coverageType}`);
   
   // Find all matching matrices
-  const matchingMatrices = plan.planMatrix.filter(
+  // Modified to handle non-standard age brackets like "30-49" for Zion Essential plans
+  let matchingMatrices = plan.planMatrix.filter(
     matrix => matrix.ageBracket === ageBracket && matrix.householdType === householdType
   );
+  
+  // Special handling for Zion Essential plans with non-standard age brackets
+  if (matchingMatrices.length === 0 && planId.includes('essential')) {
+    console.log(`No exact age bracket match for ${planId}, checking for alternative brackets...`);
+    
+    // Try to find matrices with age brackets that include the current age
+    matchingMatrices = plan.planMatrix.filter(matrix => {
+      // Check if this is a non-standard age bracket like "30-49"
+      if (matrix.householdType === householdType) {
+        const bracketParts = matrix.ageBracket.split('-');
+        if (bracketParts.length === 2) {
+          const minAge = parseInt(bracketParts[0]);
+          const maxAge = parseInt(bracketParts[1]);
+          const ageMatches = age >= minAge && age <= maxAge;
+          
+          if (ageMatches) {
+            console.log(`Found alternative age bracket ${matrix.ageBracket} that includes age ${age}`);
+            return true;
+          }
+        }
+      }
+      return false;
+    });
+  }
   
   console.log(`Found ${matchingMatrices.length} matching matrices for plan ${planId}`);
   
