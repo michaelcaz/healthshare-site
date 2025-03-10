@@ -21,6 +21,7 @@ export function RecommendationsLayout({
   const { selectedPlans, removePlan } = useSelectedPlans()
   const [isLoading, setIsLoading] = useState(false)
   const [detailsPlan, setDetailsPlan] = useState<PlanRecommendation | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   // Scroll to top when the component mounts
   useEffect(() => {
@@ -66,13 +67,57 @@ export function RecommendationsLayout({
     }
 
     try {
+      // First try to get costs using the getPlanCost function
       const costs = getPlanCost(
         topPlan.plan.id,
         questionnaire.age,
         questionnaire.coverage_type,
         questionnaire.iua_preference
       )
-      return costs || { monthlyPremium: 0, initialUnsharedAmount: 0 }
+      
+      // If we got valid costs, return them
+      if (costs && costs.monthlyPremium > 0) {
+        console.log('Found valid costs from getPlanCost:', costs);
+        return costs;
+      }
+      
+      console.log('No valid costs from getPlanCost, trying fallback mechanisms');
+      
+      // Fallback 1: Try to find representative costs from the plan matrix
+      const representativeCosts = topPlan.plan.planMatrix
+        .find(matrix => matrix.ageBracket === '30-39' && matrix.householdType === 'Member Only')
+        ?.costs.find(cost => cost.initialUnsharedAmount === 2500);
+        
+      if (representativeCosts) {
+        console.log('Using representative costs from plan matrix:', representativeCosts);
+        return representativeCosts;
+      }
+      
+      // Fallback 2: Try to find any costs from the plan matrix
+      if (topPlan.plan.planMatrix.length > 0) {
+        const firstMatrix = topPlan.plan.planMatrix[0];
+        if (firstMatrix?.costs?.length > 0) {
+          const fallbackCosts = firstMatrix.costs[0];
+          console.log('Using fallback costs from first available matrix:', fallbackCosts);
+          return fallbackCosts;
+        }
+      }
+      
+      // Fallback 3: Try to use factor-based estimates
+      const factorMonthlyPremium = topPlan.factors.find(f => f.factor.toLowerCase().includes('monthly'))?.impact;
+      const factorIUA = topPlan.factors.find(f => f.factor.toLowerCase().includes('incident'))?.impact;
+      
+      if (factorMonthlyPremium && factorIUA) {
+        console.log('Using factor-based estimates:', { monthlyPremium: factorMonthlyPremium, initialUnsharedAmount: factorIUA });
+        return { 
+          monthlyPremium: Math.round(factorMonthlyPremium), 
+          initialUnsharedAmount: Math.round(factorIUA) 
+        };
+      }
+      
+      // Last resort: Return zeros
+      console.log('All fallback mechanisms failed, returning zeros');
+      return { monthlyPremium: 0, initialUnsharedAmount: 0 }
     } catch (error) {
       console.error('Error getting plan costs:', error)
       return { monthlyPremium: 0, initialUnsharedAmount: 0 }
@@ -85,6 +130,7 @@ export function RecommendationsLayout({
     const plan = recommendations.find(r => r.plan.id === planId)
     if (plan) {
       setDetailsPlan(plan)
+      setIsModalOpen(true)
     }
   }
 
@@ -116,58 +162,65 @@ export function RecommendationsLayout({
   }
 
   return (
-    <div className="bg-gray-50 min-h-screen pb-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="py-12">
-          {/* Header Section */}
-          <div className="text-center mb-12">
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Your Personalized Healthshare Recommendations</h1>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Based on your needs, we've found these healthshare plans that best match your situation. 
-              Compare options and choose the one that works for you.
-            </p>
-          </div>
-          
-          {/* Hero Recommendation */}
-          <HeroRecommendation 
-            recommendation={topPlan}
-            badges={{
-              topReason: getTopReason(topPlan),
-              matchScore: Math.round(topPlan.score)
-            }}
-            costs={topPlanCosts()}
-            onViewDetails={() => handleViewDetails(topPlan.plan.id)}
-            onGetPlan={() => handleGetPlan(topPlan.plan.id)}
-            isLoading={isLoading}
-            showMaternityNotice={questionnaire.pregnancy === 'true' || questionnaire.pregnancy_planning === 'yes'}
-            showPreExistingNotice={questionnaire.pre_existing === 'true' || (questionnaire.medical_conditions && questionnaire.medical_conditions.length > 0)}
-          />
-          
-          <Separator className="my-16" />
-          
-          {/* Trust Elements */}
-          <TrustElements recommendation={topPlan} />
-          
-          <Separator className="my-16" />
-          
-          {/* Plan Comparison */}
-          <PlanComparisonGrid 
-            topPlan={topPlan}
-            alternativePlans={alternativePlans}
-            onPlanSelect={handleViewDetails}
-            questionnaire={questionnaire}
-          />
-          
-          {/* Plan Details Modal */}
-          {detailsPlan && (
-            <PlanDetailsModal
-              plan={detailsPlan}
-              isOpen={!!detailsPlan}
-              onClose={() => setDetailsPlan(null)}
+    <>
+      {/* Plan Details Modal */}
+      {detailsPlan && (
+        <PlanDetailsModal 
+          plan={detailsPlan} 
+          isOpen={isModalOpen} 
+          onClose={() => {
+            setIsModalOpen(false)
+            setDetailsPlan(null)
+          }}
+          questionnaire={questionnaire}
+        />
+      )}
+      
+      {/* Main Content */}
+      <div className="bg-gray-50 min-h-screen pb-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="py-12">
+            {/* Header Section */}
+            <div className="text-center mb-12">
+              <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Your Personalized Healthshare Recommendations</h1>
+              <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+                Based on your needs, we've found these healthshare plans that best match your situation. 
+                Compare options and choose the one that works for you.
+              </p>
+            </div>
+            
+            {/* Hero Recommendation */}
+            <HeroRecommendation 
+              recommendation={topPlan}
+              badges={{
+                topReason: getTopReason(topPlan),
+                matchScore: Math.round(topPlan.score)
+              }}
+              costs={topPlanCosts()}
+              onViewDetails={() => handleViewDetails(topPlan.plan.id)}
+              onGetPlan={() => handleGetPlan(topPlan.plan.id)}
+              isLoading={isLoading}
+              showMaternityNotice={questionnaire.pregnancy === 'true' || questionnaire.pregnancy_planning === 'yes'}
+              showPreExistingNotice={questionnaire.pre_existing === 'true' || (questionnaire.medical_conditions && questionnaire.medical_conditions.length > 0)}
             />
-          )}
+            
+            <Separator className="my-16" />
+            
+            {/* Trust Elements */}
+            <TrustElements recommendation={topPlan} />
+            
+            <Separator className="my-16" />
+            
+            {/* Plan Comparison */}
+            <PlanComparisonGrid 
+              topPlan={topPlan}
+              alternativePlans={alternativePlans}
+              onPlanSelect={handleViewDetails}
+              questionnaire={questionnaire}
+            />
+          </div>
         </div>
       </div>
-    </div>
+    </>
   )
 } 
