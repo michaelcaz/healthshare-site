@@ -318,98 +318,116 @@ export async function calculatePlanScore(
   // No longer scoring pre-existing conditions since all plans have the same details
   // We'll show a notice to users with pre-existing conditions instead
 
+  // Add maternity scoring
+  if (questionnaire.pregnancy === 'true') {
+    // For currently pregnant users, maternity coverage shouldn't impact scoring
+    // since no plan will cover a current pregnancy
+    console.log(`User is currently pregnant. Maternity coverage won't impact scoring since no plan covers current pregnancies.`);
+    // Don't add any maternity factor for currently pregnant users
+    
+    // Add a note to the explanation that will be displayed to the user
+    factors.push({
+      factor: 'Maternity Note',
+      score: 0, // Zero score so it doesn't affect the total
+      explanation: `Note: Your current pregnancy will not be covered by any health sharing plan due to waiting periods. This has not affected the scoring.`
+    });
+  } 
   // For users planning pregnancy, evaluate waiting periods
   else if (questionnaire.pregnancy_planning === 'yes') {
     const fullPlan = healthshareProviders[plan.id.split('-')[0]]?.plans
       .find(p => p.id === plan.id);
     
-    // All plans have maternity coverage, so we don't need to check if it exists
-    const waitingPeriod = fullPlan.maternity.waitingPeriod.months;
-    
-    // Get all available plans with maternity coverage
-    const allPlansWithMaternity = Object.values(healthshareProviders)
-      .flatMap(provider => provider.plans);
-    
-    // Find the shortest waiting period among all plans
-    const shortestWaitingPeriod = Math.min(
-      ...allPlansWithMaternity.map(p => p.maternity.waitingPeriod.months)
-    );
-    
-    // Find the longest waiting period among all plans
-    const longestWaitingPeriod = Math.max(
-      ...allPlansWithMaternity.map(p => p.maternity.waitingPeriod.months)
-    );
-    
-    // Calculate score based on waiting period - relative to the range of available periods
-    let maternityScore = 0;
-    
-    if (waitingPeriod === shortestWaitingPeriod) {
-      // The plan with the shortest waiting period gets 100 points
-      maternityScore = 100;
-    } else if (longestWaitingPeriod === shortestWaitingPeriod) {
-      // If all plans have the same waiting period, they all get 100 points
-      maternityScore = 100;
-    } else {
-      // Otherwise, score on a scale from 100 (shortest) to 40 (longest)
-      const waitingPeriodRange = longestWaitingPeriod - shortestWaitingPeriod;
-      const relativePosition = (waitingPeriod - shortestWaitingPeriod) / waitingPeriodRange;
-      maternityScore = Math.round(100 - (relativePosition * 60));
+    // Make sure the plan exists before accessing its properties
+    if (fullPlan && fullPlan.maternity) {
+      // All plans have maternity coverage, so we don't need to check if it exists
+      const waitingPeriod = fullPlan.maternity.waitingPeriod.months;
+      
+      // Get all available plans with maternity coverage
+      const allPlansWithMaternity = Object.values(healthshareProviders)
+        .flatMap(provider => provider.plans)
+        .filter(p => p.maternity); // Filter to ensure we only include plans with maternity
+      
+      // Find the shortest waiting period among all plans
+      const shortestWaitingPeriod = Math.min(
+        ...allPlansWithMaternity.map(p => p.maternity.waitingPeriod.months)
+      );
+      
+      // Find the longest waiting period among all plans
+      const longestWaitingPeriod = Math.max(
+        ...allPlansWithMaternity.map(p => p.maternity.waitingPeriod.months)
+      );
+      
+      // Calculate score based on waiting period - relative to the range of available periods
+      let maternityScore = 0;
+      
+      if (waitingPeriod === shortestWaitingPeriod) {
+        // The plan with the shortest waiting period gets 100 points
+        maternityScore = 100;
+      } else if (longestWaitingPeriod === shortestWaitingPeriod) {
+        // If all plans have the same waiting period, they all get 100 points
+        maternityScore = 100;
+      } else {
+        // Otherwise, score on a scale from 100 (shortest) to 40 (longest)
+        const waitingPeriodRange = longestWaitingPeriod - shortestWaitingPeriod;
+        const relativePosition = (waitingPeriod - shortestWaitingPeriod) / waitingPeriodRange;
+        maternityScore = Math.round(100 - (relativePosition * 60));
+      }
+
+      // Adjust score based on coverage comprehensiveness
+      const services = fullPlan.maternity.coverage.services;
+      const essentialServices = ['prenatal', 'delivery', 'postnatal'];
+      const hasAllEssential = essentialServices.every(service => 
+        services.some(s => s.toLowerCase().includes(service.toLowerCase()))
+      );
+      if (!hasAllEssential) maternityScore -= 30;
+
+      factors.push({
+        factor: 'Maternity Coverage',
+        score: maternityScore,
+        explanation: `Maternity coverage available with ${waitingPeriod}-month waiting period${
+          waitingPeriod === shortestWaitingPeriod 
+            ? ' (shortest available waiting period)' 
+            : ''
+        }. Covers: ${services.join(', ')}`
+      });
     }
-
-    // Adjust score based on coverage comprehensiveness
-    const services = fullPlan.maternity.coverage.services;
-    const essentialServices = ['prenatal', 'delivery', 'postnatal'];
-    const hasAllEssential = essentialServices.every(service => 
-      services.some(s => s.toLowerCase().includes(service.toLowerCase()))
-    );
-    if (!hasAllEssential) maternityScore -= 30;
-
-    factors.push({
-      factor: 'Maternity Coverage',
-      score: maternityScore,
-      explanation: `Maternity coverage available with ${waitingPeriod}-month waiting period${
-        waitingPeriod === shortestWaitingPeriod 
-          ? ' (shortest available waiting period)' 
-          : ''
-      }. Covers: ${services.join(', ')}`
-    });
   }
   // For users not planning pregnancy, don't include maternity as a factor at all
 
-  // Apply preference-based weighting - OPTIMIZED
+  // Apply preference-based weighting - REFINED BASED ON CONSUMER BEHAVIOR
   const weights: { [key: string]: number } = {
-    'Monthly Cost': questionnaire.expense_preference === 'lower_monthly' ? 1.8 : 1.2, // Increased base weight
-    'Incident Cost': questionnaire.expense_preference === 'higher_monthly' ? 1.5 : 0.8,
-    'Annual Cost': 1.4, // Increased weight for annual cost
-    'Maternity Coverage': questionnaire.pregnancy_planning === 'yes' ? 2.0 : 0, // Only consider maternity for those planning pregnancy
+    'Monthly Cost': 1.0, // Base weight
+    'Incident Cost': 1.0, // Base weight
+    'Annual Cost': questionnaire.visit_frequency === 'just_checkups' ? 1.0 :
+                   questionnaire.visit_frequency === 'few_months' ? 1.2 : 1.5,
+    'Maternity Coverage': questionnaire.pregnancy_planning === 'yes' ? 2.0 : 0,
     'Maternity Note': 0 // Always zero weight for the informational note
   };
-  
-  // Apply additional risk preference adjustments
+
+  // Apply expense preference adjustments
+  if (questionnaire.expense_preference === 'lower_monthly') {
+    weights['Monthly Cost'] *= 2.0; // Strong preference for lower monthly costs
+    weights['Incident Cost'] *= 0.7; // Willing to accept higher incident costs
+  } else if (questionnaire.expense_preference === 'higher_monthly') {
+    weights['Incident Cost'] *= 1.7; // Strong preference for lower incident costs
+    weights['Monthly Cost'] *= 0.8; // Willing to accept higher monthly costs
+  }
+
+  // Apply risk preference adjustments
   if (questionnaire.risk_preference === 'higher_risk') {
-    weights['Monthly Cost'] *= 1.3; // Higher risk users care more about monthly costs (increased)
-    weights['Incident Cost'] *= 0.8; // Reduce importance of IUA for higher risk users
+    weights['Monthly Cost'] *= 1.3; // Higher risk users care more about monthly costs
+    weights['Incident Cost'] *= 0.7; // Less concerned about incident costs
   } else if (questionnaire.risk_preference === 'lower_risk') {
-    weights['Incident Cost'] *= 1.2; // Lower risk users care more about incident costs
-    weights['Monthly Cost'] *= 0.9; // Slightly reduce monthly cost importance for lower risk users
+    weights['Incident Cost'] *= 1.4; // Lower risk users strongly prefer predictable costs
+    weights['Monthly Cost'] *= 0.7; // Less concerned about monthly premiums
   }
   
-  // Apply dynamic weighting based on plan differences
-  const monthlyPremiumVariance = calculateVariance(allPlanCosts.map(p => p.cost?.monthlyPremium ?? 0));
-  const iuaVariance = calculateVariance(allPlanCosts.map(p => p.cost?.initialUnsharedAmount ?? 0));
-  
-  // If there's high variance in one factor but low in another, adjust weights
-  const varianceRatio = monthlyPremiumVariance / iuaVariance;
-  if (varianceRatio > 2) {
-    // Monthly premiums vary a lot more than IUAs
-    weights['Monthly Cost'] *= 1.2;
-  } else if (varianceRatio < 0.5) {
-    // IUAs vary a lot more than monthly premiums
-    weights['Incident Cost'] *= 1.2;
-  }
+  // Remove variance analysis as requested
   
   totalScore = factors.reduce((sum, f) => sum + (f.score * (weights[f.factor] || 1.0)), 0) / 
                factors.reduce((sum, f) => sum + (weights[f.factor] || 1.0), 0);
+
+  // Remove non-linear boosting as requested
 
   const result = {
     plan,
