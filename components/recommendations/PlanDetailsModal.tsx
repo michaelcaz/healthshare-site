@@ -1,14 +1,13 @@
 'use client'
 
 import { type PlanRecommendation } from './types'
-import { CostBreakdown } from './CostBreakdown'
-import { MedicalServices } from './MedicalServices'
-import { CoverageTimeline } from './CoverageTimeline'
-import { PlanDetails } from './PlanDetails'
 import { X, Star } from 'lucide-react'
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import { type QuestionnaireResponse } from '@/types/questionnaire'
+import { Overview } from './tabs/Overview'
+import { CoverageDetails } from './tabs/CoverageDetails'
+import { MedicalServices } from './tabs/MedicalServices'
 
 interface PlanDetailsModalProps {
   plan: PlanRecommendation
@@ -23,7 +22,7 @@ export function PlanDetailsModal({
   onClose,
   questionnaire
 }: PlanDetailsModalProps) {
-  const [activeTab, setActiveTab] = useState('costs')
+  const [activeTab, setActiveTab] = useState('overview')
   
   if (!isOpen) return null
   
@@ -61,10 +60,9 @@ export function PlanDetailsModal({
         
         <div className="flex border-b px-6 sticky top-[88px] bg-white z-10">
           {[
-            { id: 'costs', label: 'Costs & Coverage' },
-            { id: 'medical', label: 'Medical Services' },
-            { id: 'timeline', label: 'Coverage Timeline' },
-            { id: 'details', label: 'Plan Details' }
+            { id: 'overview', label: 'Overview' },
+            { id: 'coverage', label: 'Coverage Details' },
+            { id: 'medical', label: 'Medical Services' }
           ].map((tab) => (
             <button
               key={tab.id}
@@ -82,10 +80,9 @@ export function PlanDetailsModal({
         </div>
         
         <div className="p-6 overflow-y-auto">
-          {activeTab === 'costs' && <CostBreakdown plan={plan} age={age} coverageType={coverageType} iuaPreference={iuaPreference} />}
+          {activeTab === 'overview' && <Overview plan={plan} age={age} coverageType={coverageType} iuaPreference={iuaPreference} />}
+          {activeTab === 'coverage' && <CoverageDetails plan={plan} age={age} coverageType={coverageType} iuaPreference={iuaPreference} />}
           {activeTab === 'medical' && <MedicalServices plan={plan} />}
-          {activeTab === 'timeline' && <CoverageTimeline plan={plan} />}
-          {activeTab === 'details' && <PlanDetails plan={plan} age={age} coverageType={coverageType} iuaPreference={iuaPreference} />}
         </div>
       </div>
     </div>

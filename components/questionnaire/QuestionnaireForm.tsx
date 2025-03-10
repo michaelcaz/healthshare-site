@@ -25,6 +25,7 @@ import { ProgressIndicator } from '@/components/questionnaire/progress-indicator
 import { NumberInput } from '@/components/questionnaire/NumberInput';
 import { OptionCardGroup } from '@/components/questionnaire/OptionCard';
 import { InfoIcon } from 'lucide-react';
+import { PregnancyQuestion } from './PregnancyQuestion';
 
 const COOKIE_KEY = 'questionnaire-form-data';
 const COOKIE_OPTIONS = {
@@ -199,175 +200,146 @@ const getSelectOptions = (fieldName: keyof z.infer<typeof formSchema>): SelectOp
 
 const getRadioOptions = getSelectOptions;
 
+// Add a function to get tooltips for fields
+const getTooltip = (fieldName: keyof z.infer<typeof formSchema>): string | null => {
+  const tooltips: Partial<Record<keyof z.infer<typeof formSchema>, string>> = {
+    iua_preference: "Unlike a traditional insurance deductible, the IUA applies to each separate medical need rather than accumulating throughout the year. For example, if you have a $1,000 IUA and break your arm, you pay the first $1,000, then the plan shares costs above that amount. If you later get pneumonia (a separate need), you pay another $1,000 before sharing begins.",
+    financial_capacity: "This helps us recommend plans with Initial Unshared Amounts (IUAs) that align with your financial situation. We won't recommend plans with IUAs higher than what you can comfortably afford.",
+    pre_existing: "Pre-existing conditions are not eligible for cost-sharing during your first year of membership with any healthshare plan. After the first year, coverage for pre-existing conditions will gradually increase based on the specific plan.",
+    expense_preference: "This preference helps us recommend plans that align with your financial priorities. Lower monthly costs typically mean higher out-of-pocket expenses when you need care, while higher monthly costs usually mean lower out-of-pocket expenses.",
+    visit_frequency: "Your expected frequency of doctor visits helps us recommend plans that provide appropriate coverage for your healthcare needs. It also helps us calculate your expected annual healthcare costs.",
+    risk_preference: "Your risk tolerance affects how we recommend plans. Lower risk preference means prioritizing plans with more predictable costs, while higher risk preference means accepting more potential out-of-pocket costs in exchange for lower monthly contributions.",
+    pre_existing_approach: "This helps us prioritize plans based on how you want to manage your pre-existing conditions. Some plans offer better long-term coverage after waiting periods, while others may be more suitable for immediate coverage of new medical needs."
+  };
+  
+  return tooltips[fieldName] || null;
+};
+
 const renderFormControl = (fieldName: string, field: any, form: UseFormReturn<FormValues>) => {
   const fieldType = getFieldType(fieldName as keyof FormValues);
-  const fieldLabel = getFieldLabel(fieldName as keyof FormValues);
   
-  // Log the field value and onChange handler
-  console.log(`Rendering control for ${fieldName}:`, {
-    value: field.value,
-    onChange: !!field.onChange,
-    onBlur: !!field.onBlur,
-    name: field.name
-  });
+  if (fieldType === 'number') {
+    return (
+      <NumberInput
+        id={fieldName}
+        name={field.name}
+        value={field.value || ''}
+        onChange={(value) => field.onChange(value)}
+        min={fieldName === 'age' ? 18 : 0}
+        max={fieldName === 'age' ? 120 : 999}
+        label={undefined}
+        error={form.formState.errors[fieldName as keyof FormValues]?.message?.toString()}
+        isValid={field.value && !form.formState.errors[fieldName as keyof FormValues]}
+        tooltipText={undefined}
+      />
+    );
+  }
   
-  return (
-    <div className="questionnaire-section fade-in" style={{ animationDelay: `${parseInt(fieldName.split('_')[0] || '0') * 0.05}s` }}>
-      {fieldType === 'number' && (
-        <NumberInput
+  if (fieldType === 'text') {
+    return (
+      <div className="space-y-2">
+        <input
           id={fieldName}
-          name={field.name}
+          type="text"
+          {...field}
+          value={field.value || ''}
+          className={cn(
+            "number-input",
+            form.formState.errors[fieldName as keyof FormValues] && "input-error",
+            field.value && !form.formState.errors[fieldName as keyof FormValues] && "input-success"
+          )}
+          placeholder={getPlaceholder(fieldName as keyof FormValues)}
+        />
+        {form.formState.errors[fieldName as keyof FormValues] && (
+          <div className="error-message">
+            {form.formState.errors[fieldName as keyof FormValues]?.message?.toString()}
+          </div>
+        )}
+      </div>
+    );
+  }
+  
+  if (fieldType === 'radio') {
+    return (
+      <div className="space-y-3">
+        <OptionCardGroup
+          name={fieldName}
+          options={getRadioOptions(fieldName as keyof FormValues).map(option => ({
+            value: option.value,
+            label: option.label,
+            description: undefined,
+            tooltipText: undefined
+          }))}
           value={field.value || ''}
           onChange={(value) => field.onChange(value)}
-          min={fieldName === 'age' ? 18 : 0}
-          max={fieldName === 'age' ? 120 : 999}
-          label={undefined}
-          error={form.formState.errors[fieldName as keyof FormValues]?.message?.toString()}
-          isValid={field.value && !form.formState.errors[fieldName as keyof FormValues]}
-          tooltipText={undefined}
+          layout={fieldName === 'coverage_type' || fieldName === 'iua_preference' ? 'grid' : 'vertical'}
         />
-      )}
-      
-      {fieldType === 'text' && (
-        <div className="space-y-2">
-          <input
-            id={fieldName}
-            type="text"
-            {...field}
-            value={field.value || ''}
-            className={cn(
-              "number-input",
-              form.formState.errors[fieldName as keyof FormValues] && "input-error",
-              field.value && !form.formState.errors[fieldName as keyof FormValues] && "input-success"
-            )}
-            placeholder={getPlaceholder(fieldName as keyof FormValues)}
-          />
-          {form.formState.errors[fieldName as keyof FormValues] && (
-            <div className="error-message">
-              {form.formState.errors[fieldName as keyof FormValues]?.message?.toString()}
-            </div>
-          )}
-        </div>
-      )}
-      
-      {fieldType === 'radio' && (
-        <div className="space-y-3">
-          <div className="flex items-center">
-            {/* Tooltips have been moved to the FormLabel component */}
+        
+        {fieldName === 'iua_preference' && (
+          <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+            <p className="text-sm text-blue-800">
+              <strong>Remember:</strong> The Initial Unshared Amount (IUA) applies to each separate medical need rather than accumulating throughout the year.
+            </p>
           </div>
-          
-          <OptionCardGroup
-            name={fieldName}
-            options={getRadioOptions(fieldName as keyof FormValues).map(option => ({
-              value: option.value,
-              label: option.label,
-              description: undefined,
-              tooltipText: undefined // Remove tooltips from answer options
-            }))}
-            value={field.value || ''}
-            onChange={(value) => field.onChange(value)}
-            layout={fieldName === 'coverage_type' || fieldName === 'iua_preference' ? 'grid' : 'vertical'}
-          />
-          
-          {fieldName === 'iua_preference' && (
-            <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-              <p className="text-sm text-blue-800">
-                <strong>Remember:</strong> The Initial Unshared Amount (IUA) applies to each separate medical need rather than accumulating throughout the year. For example, if you have a $1,000 IUA and break your arm, you pay the first $1,000, then the plan shares costs above that amount. If you later get pneumonia (a separate need), you pay another $1,000 before sharing begins.
-              </p>
-            </div>
-          )}
-          
-          {fieldName === 'pre_existing' && field.value === 'true' && (
-            <div className="mt-4 p-4 bg-amber-50 border border-amber-200 rounded-lg">
-              <p className="text-sm text-amber-800">
-                <strong>Important:</strong> Pre-existing conditions are not eligible for cost-sharing during your first year of membership with any healthshare plan. After the first year, coverage for pre-existing conditions will gradually increase based on the specific plan.
-              </p>
-            </div>
-          )}
-          
-          {fieldName === 'pre_existing_approach' && (
-            <div className="mt-2 text-sm text-gray-500">
-              This helps us recommend plans that best align with your priorities for managing pre-existing conditions.
-            </div>
-          )}
-          
-          {form.formState.errors[fieldName as keyof FormValues] && (
-            <div className="error-message">
-              {form.formState.errors[fieldName as keyof FormValues]?.message?.toString()}
-            </div>
-          )}
-        </div>
-      )}
+        )}
+        
+        {fieldName === 'pre_existing' && field.value === 'true' && (
+          <div className="mt-4 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+            <p className="text-sm text-amber-800">
+              <strong>Important:</strong> Pre-existing conditions are not eligible for cost-sharing during your first year of membership with any healthshare plan.
+            </p>
+          </div>
+        )}
+        
+        {form.formState.errors[fieldName as keyof FormValues] && (
+          <div className="error-message">
+            {form.formState.errors[fieldName as keyof FormValues]?.message?.toString()}
+          </div>
+        )}
+      </div>
+    );
+  }
+  
+  // Default case
+  return (
+    <div className="questionnaire-section fade-in">
+      <input
+        id={fieldName}
+        type="text"
+        {...field}
+        className="questionnaire-input"
+      />
     </div>
   );
 };
 
 // Helper function to render form fields
 const renderFormField = (fieldName: keyof FormValues, form: UseFormReturn<FormValues>) => {
+  // Special handling for pregnancy field
+  if (fieldName === 'pregnancy') {
+    return <PregnancyQuestion key={fieldName} form={form} fieldName={fieldName} />;
+  }
+  
+  // Regular handling for other fields
   return (
     <FormField
       key={fieldName}
       control={form.control}
       name={fieldName}
       render={({ field }) => (
-        <FormItem>
-          <div className="flex items-center">
-            <FormLabel className="question-text">{getFieldLabel(fieldName)}</FormLabel>
-            {fieldName === 'iua_preference' && (
-              <span className="tooltip ml-2">
-                <InfoIcon className="tooltip-icon" />
-                <div className="tooltip-content">
-                  Unlike a traditional insurance deductible, the IUA applies to each separate medical need rather than accumulating throughout the year. For example, if you have a $1,000 IUA and break your arm, you pay the first $1,000, then the plan shares costs above that amount. If you later get pneumonia (a separate need), you pay another $1,000 before sharing begins.
+        <FormItem className="mb-6">
+          <div className="flex justify-between items-start">
+            <FormLabel className="text-lg font-medium text-gray-900 mb-2">
+              {getFieldLabel(fieldName)}
+            </FormLabel>
+            {/* Add tooltip if available */}
+            {getTooltip(fieldName as keyof z.infer<typeof formSchema>) && (
+              <div className="relative group">
+                <InfoIcon className="h-5 w-5 text-gray-400 cursor-help" />
+                <div className="absolute right-0 w-64 p-2 mt-2 text-xs text-white bg-gray-800 rounded-md opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                  {getTooltip(fieldName as keyof z.infer<typeof formSchema>)}
                 </div>
-              </span>
-            )}
-            {fieldName === 'financial_capacity' && (
-              <span className="tooltip ml-2">
-                <InfoIcon className="tooltip-icon" />
-                <div className="tooltip-content">
-                  This helps us recommend plans with Initial Unshared Amounts (IUAs) that align with your financial situation. We won't recommend plans with IUAs higher than what you can comfortably afford.
-                </div>
-              </span>
-            )}
-            {fieldName === 'pre_existing' && (
-              <span className="tooltip ml-2">
-                <InfoIcon className="tooltip-icon" />
-                <div className="tooltip-content">
-                  Pre-existing conditions are not eligible for cost-sharing during your first year of membership with any healthshare plan. After the first year, coverage for pre-existing conditions will gradually increase based on the specific plan.
-                </div>
-              </span>
-            )}
-            {fieldName === 'expense_preference' && (
-              <span className="tooltip tooltip-right ml-2">
-                <InfoIcon className="tooltip-icon" />
-                <div className="tooltip-content">
-                  This preference helps us recommend plans that align with your financial priorities. Lower monthly costs typically mean higher out-of-pocket expenses when you need care, while higher monthly costs usually mean lower out-of-pocket expenses.
-                </div>
-              </span>
-            )}
-            {fieldName === 'visit_frequency' && (
-              <span className="tooltip ml-2">
-                <InfoIcon className="tooltip-icon" />
-                <div className="tooltip-content">
-                  Your expected frequency of doctor visits helps us recommend plans that provide appropriate coverage for your healthcare needs. It also helps us calculate your expected annual healthcare costs.
-                </div>
-              </span>
-            )}
-            {fieldName === 'risk_preference' && (
-              <span className="tooltip tooltip-right ml-2">
-                <InfoIcon className="tooltip-icon" />
-                <div className="tooltip-content">
-                  Your risk tolerance affects how we recommend plans. Lower risk preference means prioritizing plans with more predictable costs, while higher risk preference means accepting more potential out-of-pocket costs in exchange for lower monthly contributions.
-                </div>
-              </span>
-            )}
-            {fieldName === 'pre_existing_approach' && (
-              <span className="tooltip tooltip-right ml-2">
-                <InfoIcon className="tooltip-icon" />
-                <div className="tooltip-content">
-                  This helps us prioritize plans based on how you want to manage your pre-existing conditions. Some plans offer better long-term coverage after waiting periods, while others may be more suitable for immediate coverage of new medical needs.
-                </div>
-              </span>
+              </div>
             )}
           </div>
           <FormControl>
@@ -427,6 +399,7 @@ export const QuestionnaireForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { toast } = useToast();
+  const [formData, setFormData] = useState<Partial<FormValues>>({});
   
   // Scroll to top when the component loads
   useEffect(() => {

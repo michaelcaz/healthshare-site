@@ -12,6 +12,7 @@ import { PlanComparisonTable } from './PlanComparisonTable'
 import { PlanDetailsModal } from './PlanDetailsModal'
 import { TrustElements } from './TrustElements'
 import { Separator } from '@/components/ui/separator'
+import { PregnancyAlert } from './PregnancyAlert'
 
 export function RecommendationsLayout({ 
   recommendations, 
@@ -188,6 +189,9 @@ export function RecommendationsLayout({
                 Compare options and choose the one that works for you.
               </p>
             </div>
+            
+            {/* Add the PregnancyAlert component */}
+            <PregnancyAlert isPregnant={questionnaire.pregnancy === 'true'} />
             
             {/* Hero Recommendation */}
             <HeroRecommendation 

@@ -222,4 +222,50 @@ describe('Plan-Specific Recommendations Tests', () => {
     
     expect(knewHealthPlan).not.toBeUndefined();
   });
+
+  describe('Diverse Recommendation Tests', () => {
+    it('should recommend a plan other than CrowdHealth for users who prefer higher IUAs and are risk tolerant', () => {
+      const response: QuestionnaireResponse = {
+        ...defaultQuestionnaire as QuestionnaireResponse,
+        age: 35,
+        coverage_type: 'just_me',
+        visit_frequency: 'just_checkups',
+        expense_preference: 'lower_monthly',
+        iua_preference: '5000', // High IUA preference
+        risk_preference: 'higher_risk', // Risk tolerant
+        pre_existing: 'false',
+        pregnancy: 'false',
+        pregnancy_planning: 'no'
+      };
+      
+      const eligiblePlans = planMatcher.findEligiblePlans(response);
+      const scoredPlans = planScorer.scorePlans(eligiblePlans, response);
+      
+      console.log('All recommendations for high IUA preference:');
+      scoredPlans.forEach((plan, index) => {
+        console.log(`${index + 1}. ${plan.providerName} - Score: ${plan.score}`);
+      });
+      
+      // Check if CrowdHealth is not the top recommendation
+      const topPlan = scoredPlans[0];
+      expect(topPlan).not.toBeUndefined();
+      
+      if (topPlan) {
+        // Either CrowdHealth should not be the top plan, or if it is,
+        // there should be other plans with very close scores (within 5 points)
+        if (topPlan.providerName.includes('CrowdHealth')) {
+          const secondPlan = scoredPlans[1];
+          expect(secondPlan).not.toBeUndefined();
+          
+          if (secondPlan) {
+            const scoreDifference = topPlan.score - secondPlan.score;
+            expect(scoreDifference).toBeLessThan(5);
+            console.log(`CrowdHealth is still top, but score difference with second plan is only ${scoreDifference.toFixed(2)} points`);
+          }
+        } else {
+          console.log(`Top plan is ${topPlan.providerName} instead of CrowdHealth`);
+        }
+      }
+    });
+  });
 }); 

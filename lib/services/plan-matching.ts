@@ -124,8 +124,9 @@ export class PlanMatchingService {
         return null;
       }
       
-      // Get all costs from matching matrices - for CrowdHealth, we ignore IUA preference
-      // since it only offers a single IUA option of 500
+      // Get all costs from matching matrices
+      // For CrowdHealth, we'll include it in the results even if the IUA preference doesn't match,
+      // but we'll let the scoring logic handle the penalty
       const eligiblePrices = matchingMatrices.flatMap(matrix => matrix.costs);
       console.log(`Found ${eligiblePrices.length} eligible prices for CrowdHealth plan:`, JSON.stringify(eligiblePrices));
       
@@ -134,13 +135,18 @@ export class PlanMatchingService {
         return null;
       }
       
+      // Check if the user's IUA preference matches CrowdHealth's $500 IUA
+      const iuaMatches = response.iua_preference === '500';
+      console.log(`CrowdHealth IUA matches user preference: ${iuaMatches}`);
+      
       // Return the eligible plan
       const result = {
         id: plan.id,
         providerName: plan.providerName,
         planName: plan.planName,
         maxCoverage: plan.maxCoverage,
-        eligiblePrices
+        eligiblePrices,
+        iuaMatchesPreference: iuaMatches
       };
       
       console.log(`Successfully matched CrowdHealth plan ${plan.id}`);

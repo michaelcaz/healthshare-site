@@ -108,6 +108,7 @@ export interface EligiblePlan {
   planName: string;
   maxCoverage: string;
   eligiblePrices: PlanCost[];
+  iuaMatchesPreference?: boolean;
 }
 
 // Update the providerPlans array type
