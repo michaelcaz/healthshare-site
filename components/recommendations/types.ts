@@ -33,4 +33,5 @@ export interface HeroRecommendationProps {
   isLoading?: boolean
   showMaternityNotice?: boolean
   showPreExistingNotice?: boolean
+  isDpcCompatible?: boolean
 } 

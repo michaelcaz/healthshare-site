@@ -204,8 +204,12 @@ export function RecommendationsLayout({
               onViewDetails={() => handleViewDetails(topPlan.plan.id)}
               onGetPlan={() => handleGetPlan(topPlan.plan.id)}
               isLoading={isLoading}
-              showMaternityNotice={questionnaire.pregnancy === 'true' || questionnaire.pregnancy_planning === 'yes'}
               showPreExistingNotice={questionnaire.pre_existing === 'true' || (questionnaire.medical_conditions && questionnaire.medical_conditions.length > 0)}
+              isDpcCompatible={
+                topPlan.plan.id.includes('zion-essential') || 
+                topPlan.plan.id.includes('sedera-access') || 
+                topPlan.plan.id.includes('mpb-access')
+              }
             />
             
             <Separator className="my-16" />

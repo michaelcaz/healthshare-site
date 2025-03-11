@@ -3,19 +3,19 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { 
-  Shield, 
   Star, 
-  Clock, 
-  DollarSign, 
   CheckCircle, 
   Info, 
   Users, 
   TrendingUp,
   Calendar,
-  Award
+  Award,
+  Building
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import Image from 'next/image'
+import { ProviderLogo } from './ProviderLogo'
 
 interface HeroRecommendationProps {
   recommendation: PlanRecommendation
@@ -24,16 +24,12 @@ interface HeroRecommendationProps {
   onViewDetails: () => void
   onGetPlan: () => void
   isLoading?: boolean
-  showMaternityNotice?: boolean
   showPreExistingNotice?: boolean
+  isDpcCompatible?: boolean
 }
 
-interface KeyCoveragePoint {
-  icon: React.ReactNode
-  text: string
-  isPositive: boolean
-  tooltip?: string
-}
+// Add this CSS class for the dotted underline tooltips
+const tooltipStyle = "border-b border-dotted border-gray-600 cursor-help";
 
 export function HeroRecommendation({ 
   recommendation, 
@@ -42,44 +38,38 @@ export function HeroRecommendation({
   onViewDetails,
   onGetPlan,
   isLoading = false,
-  showMaternityNotice = false,
-  showPreExistingNotice = false
+  showPreExistingNotice = false,
+  isDpcCompatible = false
 }: HeroRecommendationProps) {
   const { plan, score } = recommendation
-
-  const keyCoveragePoints: KeyCoveragePoint[] = [
-    {
-      text: `Maximum Coverage: ${plan.maxCoverage}`,
-      isPositive: true,
-      icon: <Shield className="text-primary" />,
-      tooltip: "The maximum amount that can be shared for eligible medical expenses"
-    },
-    {
-      text: `Annual Unshared Amount: ${plan.annualUnsharedAmount}`,
-      isPositive: true,
-      icon: <DollarSign className="text-primary" />,
-      tooltip: "The amount you're responsible for before the community begins sharing your eligible medical expenses"
-    },
-    {
-      text: "Processing time: 3-5 business days",
-      isPositive: true,
-      icon: <Clock className="text-primary" />,
-      tooltip: "Average time to process eligible medical expenses for sharing"
-    }
-  ]
 
   // Calculate estimated savings vs traditional insurance
   const traditionalInsuranceCost = costs.monthlyPremium * 1.65; // Estimated 65% higher
   const monthlySavings = traditionalInsuranceCost - costs.monthlyPremium;
   const annualSavings = monthlySavings * 12;
+  const annualCost = costs.monthlyPremium * 12;
+
+  // Determine if this plan has the lowest monthly payment
+  const hasLowestMonthlyPayment = badges.topReason === "Monthly Cost";
+  
+  // Determine if this plan has the lowest out-of-pocket in case of emergency
+  const hasLowestOutOfPocket = badges.topReason === "Incident Cost";
 
   return (
     <TooltipProvider>
       <div className="max-w-4xl mx-auto fade-in">
         <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 relative overflow-hidden">
-          {/* Top Reason Badge */}
-          <div className="absolute top-4 left-4 bg-primary-light/10 text-primary-dark px-4 py-2 rounded-full text-sm font-medium">
-            {badges.topReason}
+          {/* Top Recommendation Banner - Redesigned */}
+          <div className="absolute left-0 top-6 z-10">
+            <div className="bg-primary text-white font-medium py-1.5 px-4 rounded-r-md flex items-center">
+              <Award className="h-3.5 w-3.5 mr-1.5" />
+              <span>Top Recommendation</span>
+            </div>
+            <div className="mt-1 bg-primary-light text-primary-dark py-1.5 px-4 rounded-r-md text-xs font-medium">
+              {hasLowestMonthlyPayment 
+                ? "Lowest Monthly Payment" 
+                : "Lowest Out of Pocket in Case of Emergency"}
+            </div>
           </div>
           
           {/* Match Score Badge - More prominent */}
@@ -87,19 +77,6 @@ export function HeroRecommendation({
             <Award className="h-4 w-4 text-white" />
             <span className="text-white font-bold">{badges.matchScore}% Match</span>
           </div>
-
-          {/* Maternity Notice Banner */}
-          {showMaternityNotice && (
-            <div className="bg-amber-50 -mx-8 mt-12 mb-2 py-3 px-8 border-y border-amber-200">
-              <div className="flex items-center gap-2">
-                <Info className="h-5 w-5 text-amber-600" />
-                <p className="text-amber-800 font-medium">
-                  <span className="font-bold">Important:</span> All health sharing plans have waiting periods for maternity coverage. 
-                  Please check the specific waiting period for this plan before enrolling.
-                </p>
-              </div>
-            </div>
-          )}
 
           {/* Pre-existing Conditions Notice Banner */}
           {showPreExistingNotice && (
@@ -142,10 +119,33 @@ export function HeroRecommendation({
             </div>
           </div>
 
-          {/* Plan Name and Provider */}
-          <div className="mb-8">
-            <h2 className="text-2xl font-bold text-gray-900">{plan.planName}</h2>
-            <p className="text-lg text-gray-600">{plan.providerName}</p>
+          {/* Plan Logo, Name and Provider */}
+          <div className="mb-8 flex items-center">
+            <div className="mr-4 flex-shrink-0">
+              <ProviderLogo providerName={plan.providerName} size="lg" />
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900">
+                {plan.providerName} {plan.planName}
+              </h2>
+              
+              {/* Feature badges */}
+              <div className="flex flex-wrap gap-2 mt-2">
+                <div className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                  <span className={tooltipStyle} title="You can see any provider you want. These plans encourage you to seek providers with fair prices to keep costs reasonable for everyone.">
+                    No Network
+                  </span>
+                </div>
+                
+                {isDpcCompatible && (
+                  <div className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                    <span className={tooltipStyle} title="This plan works well with Direct Primary Care memberships, which provide unlimited access to a primary care doctor for a low monthly fee.">
+                      DPC Compatible
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
 
           {/* Cost Information */}
@@ -161,14 +161,9 @@ export function HeroRecommendation({
             <div className="bg-gray-50 p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow">
               <div className="flex items-center gap-1 text-sm text-gray-600 mb-2">
                 <span>Initial Unshared Amount (IUA)</span>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <Info className="h-3.5 w-3.5 text-gray-400" />
-                  </TooltipTrigger>
-                  <TooltipContent className="max-w-xs">
-                    <p>The Initial Unshared Amount (IUA) is similar to a deductible in traditional insurance. It's the amount you pay before the community begins sharing your eligible medical expenses.</p>
-                  </TooltipContent>
-                </Tooltip>
+                <span className={tooltipStyle} title="The Initial Unshared Amount (IUA) is similar to a deductible in traditional insurance. It's the amount you pay before the community begins sharing your eligible medical expenses.">
+                  <Info className="h-3.5 w-3.5 text-gray-400" />
+                </span>
               </div>
               <div className="flex items-baseline">
                 <span className="text-4xl font-bold text-primary-dark">${costs.initialUnsharedAmount}</span>
@@ -177,43 +172,13 @@ export function HeroRecommendation({
             </div>
             
             <div className="bg-green-50 p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow border border-green-100">
-              <div className="text-sm text-green-700 mb-2">Estimated Annual Savings</div>
+              <div className="text-sm text-green-700 mb-2">Your Estimated Annual Cost</div>
               <div className="flex items-baseline">
-                <span className="text-4xl font-bold text-green-600">${annualSavings.toFixed(0)}</span>
+                <span className="text-4xl font-bold text-green-600">${annualCost.toFixed(0)}</span>
                 <span className="text-green-700 ml-2">/year</span>
               </div>
-              <p className="text-xs text-green-600 mt-1">vs. traditional insurance</p>
+              <p className="text-xs text-green-600 mt-1">Save ${annualSavings.toFixed(0)} vs. traditional insurance</p>
             </div>
-          </div>
-
-          {/* Key Coverage Points */}
-          <div className="space-y-5 mb-8 bg-white p-6 rounded-xl border border-gray-100">
-            <h3 className="font-semibold text-lg text-gray-900 mb-4">Key Plan Features</h3>
-            {keyCoveragePoints.map((point, index) => (
-              <div key={index} className="flex items-center gap-4 group">
-                <div className="p-2 rounded-full bg-primary-light/10 group-hover:bg-primary-light/20 transition-colors">
-                  {point.icon}
-                </div>
-                <div className="flex items-center gap-1">
-                  <span className={cn(
-                    "text-gray-700 font-medium",
-                    point.isPositive ? "text-gray-800" : "text-gray-700"
-                  )}>
-                    {point.text}
-                  </span>
-                  {point.tooltip && (
-                    <Tooltip>
-                      <TooltipTrigger>
-                        <Info className="h-3.5 w-3.5 text-gray-400" />
-                      </TooltipTrigger>
-                      <TooltipContent className="max-w-xs">
-                        <p>{point.tooltip}</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  )}
-                </div>
-              </div>
-            ))}
           </div>
 
           {/* Member Satisfaction */}
