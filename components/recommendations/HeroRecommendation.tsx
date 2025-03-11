@@ -18,6 +18,7 @@ import {
 import { cn } from '@/lib/utils'
 import Image from 'next/image'
 import { ProviderLogo } from './ProviderLogo'
+import { useEffect, useRef, useState } from 'react'
 
 interface HeroRecommendationProps {
   recommendation: PlanRecommendation
@@ -220,13 +221,8 @@ export function HeroRecommendation({
                   style={{ width: `${Math.min(100, (annualSavings / (annualCost + annualSavings)) * 100)}%` }}
                 ></div>
               </div>
-              <p className="text-xs font-medium text-gray-700 group relative">
-                <span className={tooltipUnderlineStyle}>
-                  Save ${annualSavings.toFixed(0)} vs. traditional insurance
-                </span>
-                <span className="invisible group-hover:visible absolute left-0 bottom-full mb-2 w-64 bg-white p-3 rounded-md shadow-lg border border-gray-200 text-sm text-gray-700 z-50">
-                  This is how much you could save compared to a traditional insurance plan with similar coverage. Traditional insurance typically costs 40-65% more than healthshare plans.
-                </span>
+              <p className="text-xs font-medium text-gray-700">
+                Save ${annualSavings.toFixed(0)} vs. traditional insurance
               </p>
             </div>
           </div>
