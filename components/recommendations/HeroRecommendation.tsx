@@ -10,13 +10,14 @@ import {
   TrendingUp,
   Calendar,
   Award,
-  Building
+  Building,
+  ChevronRight,
+  ArrowRight,
+  Sparkles
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import Image from 'next/image'
 import { ProviderLogo } from './ProviderLogo'
-import { useState } from 'react'
 
 interface HeroRecommendationProps {
   recommendation: PlanRecommendation
@@ -43,7 +44,6 @@ export function HeroRecommendation({
   isDpcCompatible = false
 }: HeroRecommendationProps) {
   const { plan, score } = recommendation
-  const [tooltipOpen, setTooltipOpen] = useState<string | null>(null);
 
   // Calculate estimated savings vs traditional insurance
   const traditionalInsuranceCost = costs.monthlyPremium * 1.65; // Estimated 65% higher
@@ -67,196 +67,213 @@ export function HeroRecommendation({
     trigger: React.ReactNode; 
     content: React.ReactNode 
   }) => (
-    <Tooltip 
-      open={tooltipOpen === id} 
-      onOpenChange={(open) => setTooltipOpen(open ? id : null)}
-    >
-      <TooltipTrigger asChild onClick={() => setTooltipOpen(tooltipOpen === id ? null : id)}>
-        <span className={tooltipUnderlineStyle}>{trigger}</span>
-      </TooltipTrigger>
-      <TooltipContent 
-        side="top" 
-        className="bg-white p-4 rounded-md shadow-lg border border-gray-200 max-w-xs"
-      >
-        <div className="text-sm text-gray-700">{content}</div>
-      </TooltipContent>
-    </Tooltip>
+    <span className="group relative inline-block">
+      <span className={tooltipUnderlineStyle}>{trigger}</span>
+      <span className="invisible group-hover:visible absolute left-0 bottom-full mb-2 w-64 bg-white p-3 rounded-md shadow-lg border border-gray-200 text-sm text-gray-700 z-50">
+        {content}
+      </span>
+    </span>
   );
 
   return (
-    <TooltipProvider>
-      <div className="max-w-4xl mx-auto fade-in">
-        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 relative overflow-hidden">
-          {/* Top Recommendation Banner - Completely Redesigned */}
-          <div className="flex flex-wrap items-center gap-2 mb-6">
-            <div className="flex items-center bg-primary/10 text-primary rounded-full px-3 py-1.5">
-              <Award className="h-3.5 w-3.5 mr-1.5" />
-              <span className="text-sm font-medium">Top Recommendation</span>
-            </div>
-            <div className="text-xs font-medium text-gray-600 bg-gray-100 rounded-full px-3 py-1.5 flex items-center">
-              <span>
-                {hasLowestMonthlyPayment 
-                  ? "Lowest Monthly Payment" 
-                  : "Lowest Out of Pocket in Case of Emergency"}
-              </span>
-            </div>
-            <div className="sm:ml-auto mt-2 sm:mt-0 flex items-center bg-primary rounded-full px-3 py-1.5">
-              <Award className="h-3.5 w-3.5 mr-1.5 text-white" />
-              <span className="text-sm font-medium text-white">{badges.matchScore}% Match</span>
-            </div>
+    <div className="max-w-4xl mx-auto fade-in">
+      <div className="bg-gradient-to-br from-white to-[#F9F7FF] rounded-2xl shadow-lg border border-gray-100/80 p-8 relative overflow-hidden plan-card">
+        {/* Top Recommendation Banner - Completely Redesigned */}
+        <div className="flex flex-wrap items-center gap-3 mb-8">
+          <div className="bg-gradient-to-r from-[#6366F1]/90 to-[#5A51E5]/90 text-white rounded-full px-3 py-1.5 flex items-center gap-1.5">
+            <Sparkles className="h-4 w-4 text-white/90" />
+            <span className="text-sm font-semibold">Top Recommendation</span>
           </div>
-          
-          {/* Pre-existing Conditions Notice Banner */}
-          {showPreExistingNotice && (
-            <div className="bg-amber-50 -mx-8 mb-6 py-3 px-8 border-y border-amber-200">
-              <div className="flex items-center gap-2">
-                <Info className="h-5 w-5 text-amber-600" />
-                <p className="text-amber-800 font-medium">
-                  <span className="font-bold">Important:</span> Pre-existing conditions are not eligible for sharing during the first year 
+          <div className="text-xs font-medium text-gray-700 bg-gray-100/80 rounded-full px-3 py-1.5 flex items-center">
+            <span>
+              {hasLowestMonthlyPayment 
+                ? "Lowest Monthly Payment" 
+                : "Lowest Out of Pocket in Case of Emergency"}
+            </span>
+          </div>
+          <div className="sm:ml-auto mt-2 sm:mt-0 flex items-center bg-[#EEF0FF] text-[#4F46E5] rounded-full px-3 py-1.5">
+            <Award className="h-3.5 w-3.5 mr-1.5" />
+            <span className="text-sm font-semibold">{badges.matchScore}% Match</span>
+          </div>
+        </div>
+        
+        {/* Pre-existing Conditions Notice Banner */}
+        {showPreExistingNotice && (
+          <div className="bg-[#FEF9F1] -mx-6 mb-8 py-6 px-10 rounded-md shadow-[0_2px_8px_rgba(0,0,0,0.02)] border border-amber-100/70 mx-2">
+            <div className="flex items-start gap-3.5">
+              <div className="flex-shrink-0 mt-0.5 w-4 h-4 rounded-full border border-amber-400/60 flex items-center justify-center">
+                <span className="text-amber-500/80 text-xs font-medium">!</span>
+              </div>
+              <div>
+                <p className="text-amber-900/90 text-[15px] leading-6">
+                  <span className="font-semibold">Important:</span> Pre-existing conditions are not eligible for sharing during the first year 
                   of membership in all health sharing plans. Please review the plan details for more information.
                 </p>
               </div>
             </div>
-          )}
-
-          {/* Social Proof Banner */}
-          <div className="bg-blue-50 -mx-8 mb-8 py-3 px-8 flex flex-wrap justify-between items-center">
-            <div className="flex items-center gap-2">
-              <div className="flex">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <Star 
-                    key={star}
-                    className="h-4 w-4 text-yellow-400"
-                    fill="currentColor"
-                  />
-                ))}
-              </div>
-              <span className="font-medium text-sm">4.8/5</span>
-              <span className="text-sm text-gray-600">(246 reviews)</span>
-            </div>
           </div>
+        )}
 
-          {/* Plan Logo, Name and Provider */}
-          <div className="mb-8 flex items-center">
-            <div className="mr-4 flex-shrink-0">
-              <ProviderLogo providerName={plan.providerName} size="lg" />
+        {/* Social Proof Banner */}
+        <div className="bg-gradient-to-r from-[#F0F4FF] to-[#F5F7FF] -mx-8 mb-10 py-5 px-8 flex flex-wrap justify-between items-center border-y border-blue-100/30">
+          <div className="flex items-center gap-3">
+            <div className="flex">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <Star 
+                  key={star}
+                  className="h-5 w-5 text-[#F0B03F]"
+                  fill="currentColor"
+                />
+              ))}
             </div>
-            <div>
-              <h2 className="text-2xl font-bold text-gray-900">
-                {plan.providerName} {plan.planName}
-              </h2>
+            <span className="font-semibold text-sm text-gray-800">4.8/5</span>
+            <span className="text-sm text-gray-600">(246 reviews)</span>
+          </div>
+        </div>
+
+        {/* Plan Logo, Name and Provider */}
+        <div className="mb-10 flex items-center">
+          <div className="mr-5 flex-shrink-0">
+            <ProviderLogo providerName={plan.providerName} size="lg" />
+          </div>
+          <div>
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">
+              {plan.providerName} {plan.planName}
+            </h2>
+            
+            {/* Feature badges */}
+            <div className="flex flex-wrap gap-3 mt-3">
+              <div className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-[#EEF2FF] text-[#4338CA]">
+                <CustomTooltip 
+                  id="no-network"
+                  trigger="No Network"
+                  content="You can see any provider you want. These plans encourage you to seek providers with fair prices to keep costs reasonable for everyone."
+                />
+              </div>
               
-              {/* Feature badges */}
-              <div className="flex flex-wrap gap-2 mt-2">
-                <div className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+              {isDpcCompatible && (
+                <div className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-[#ECFDF5] text-[#047857]">
                   <CustomTooltip 
-                    id="no-network"
-                    trigger="No Network"
-                    content="You can see any provider you want. These plans encourage you to seek providers with fair prices to keep costs reasonable for everyone."
+                    id="dpc-compatible"
+                    trigger="DPC Compatible"
+                    content="This plan works well with Direct Primary Care memberships, which provide unlimited access to a primary care doctor for a low monthly fee."
                   />
                 </div>
-                
-                {isDpcCompatible && (
-                  <div className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                    <CustomTooltip 
-                      id="dpc-compatible"
-                      trigger="DPC Compatible"
-                      content="This plan works well with Direct Primary Care memberships, which provide unlimited access to a primary care doctor for a low monthly fee."
-                    />
-                  </div>
-                )}
-              </div>
+              )}
             </div>
           </div>
+        </div>
 
-          {/* Cost Information */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div className="bg-gray-50 p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow">
-              <div className="text-sm text-gray-600 mb-2">Monthly Cost</div>
-              <div className="flex items-baseline">
-                <span className="text-4xl font-bold text-primary-dark">${costs.monthlyPremium}</span>
-              </div>
+        {/* Cost Information */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+          <div className="cost-display">
+            <div className="text-sm font-medium text-gray-600 mb-2">Monthly Cost</div>
+            <div className="flex items-baseline">
+              <span className="cost-amount">${costs.monthlyPremium}</span>
             </div>
-            
-            <div className="bg-gray-50 p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow">
-              <div className="flex items-center gap-1 text-sm text-gray-600 mb-2">
-                <CustomTooltip 
-                  id="iua-tooltip"
-                  trigger="Initial Unshared Amount (IUA)"
-                  content="The amount you're responsible for before the community begins sharing your eligible medical expenses. Similar to a deductible in traditional insurance."
-                />
+            {hasLowestMonthlyPayment && (
+              <div className="mt-2">
+                <span className="savings-indicator">
+                  <TrendingUp className="h-3.5 w-3.5" />
+                  Lowest Available
+                </span>
               </div>
-              <div className="flex items-baseline">
-                <span className="text-4xl font-bold text-primary-dark">${costs.initialUnsharedAmount}</span>
-              </div>
+            )}
+          </div>
+          
+          <div className="cost-display">
+            <div className="flex items-center gap-1 text-sm font-medium text-gray-600 mb-2">
+              <CustomTooltip 
+                id="iua-tooltip"
+                trigger="Initial Unshared Amount (IUA)"
+                content="The amount you're responsible for before the community begins sharing your eligible medical expenses. Similar to a deductible in traditional insurance."
+              />
             </div>
-            
-            <div className="bg-green-50 p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow border border-green-100">
-              <div className="text-sm text-green-700 mb-2">
-                <CustomTooltip 
-                  id="annual-cost-tooltip"
-                  trigger="Your Estimated Annual Cost"
-                  content="This is your total annual cost based on your monthly payment. It does not include any medical expenses you might share through the plan."
-                />
+            <div className="flex items-baseline">
+              <span className="cost-amount">${costs.initialUnsharedAmount}</span>
+            </div>
+            {hasLowestOutOfPocket && (
+              <div className="mt-2">
+                <span className="savings-indicator">
+                  <TrendingUp className="h-3.5 w-3.5" />
+                  Lowest Available
+                </span>
               </div>
-              <div className="flex items-baseline">
-                <span className="text-4xl font-bold text-green-600">${annualCost.toFixed(0)}</span>
+            )}
+          </div>
+          
+          <div className="cost-display bg-green-50/50 border border-green-100/70">
+            <div className="text-sm font-medium text-gray-700 mb-2">
+              <CustomTooltip 
+                id="annual-cost-tooltip"
+                trigger="Your Estimated Annual Cost"
+                content="This is your total annual cost based on your monthly payment. It does not include any medical expenses you might share through the plan."
+              />
+            </div>
+            <div className="flex items-baseline">
+              <span className="text-3xl font-bold text-green-600">${annualCost.toFixed(0)}</span>
+            </div>
+            <div className="mt-2 flex items-center gap-2">
+              <div className="w-24 h-2 bg-gray-200 rounded-full overflow-hidden">
+                <div 
+                  className="h-full bg-green-500 rounded-full"
+                  style={{ width: `${Math.min(100, (annualSavings / (annualCost + annualSavings)) * 100)}%` }}
+                ></div>
               </div>
-              <p className="text-xs text-green-600 mt-1">
-                <CustomTooltip 
-                  id="savings-tooltip"
-                  trigger={`Save $${annualSavings.toFixed(0)} vs. traditional insurance`}
-                  content="This is how much you could save compared to a traditional insurance plan with similar coverage. Traditional insurance typically costs 40-65% more than healthshare plans."
-                />
+              <p className="text-xs font-medium text-gray-700 group relative">
+                <span className={tooltipUnderlineStyle}>
+                  Save ${annualSavings.toFixed(0)} vs. traditional insurance
+                </span>
+                <span className="invisible group-hover:visible absolute left-0 bottom-full mb-2 w-64 bg-white p-3 rounded-md shadow-lg border border-gray-200 text-sm text-gray-700 z-50">
+                  This is how much you could save compared to a traditional insurance plan with similar coverage. Traditional insurance typically costs 40-65% more than healthshare plans.
+                </span>
               </p>
             </div>
           </div>
+        </div>
 
-          {/* Member Satisfaction */}
-          <div className="mb-8 p-4 bg-blue-50 rounded-lg border border-blue-100">
-            <div className="flex flex-wrap items-center justify-between">
+        {/* Member Satisfaction */}
+        <div className="mb-10 p-5 bg-gradient-to-r from-[#F5F7FF] to-[#F0F4FF] rounded-xl border border-[#D1D5F5]/30">
+          <div className="flex flex-wrap items-center justify-between">
+            <div className="flex items-center gap-3">
+              <CheckCircle className="h-5 w-5 text-[#10B981]/90" />
+              <span className="text-sm font-medium text-gray-700">98% Member Satisfaction</span>
+            </div>
+            
+            <div className="flex items-center gap-6 mt-2 sm:mt-0">
               <div className="flex items-center gap-2">
-                <CheckCircle className="h-5 w-5 text-green-500" />
-                <span className="text-sm font-medium text-gray-700">98% Member Satisfaction</span>
+                <Users className="h-4 w-4 text-[#4F46E5]/80" />
+                <span className="text-sm font-medium">2M+ Active Members</span>
+                <TrendingUp className="h-3 w-3 text-[#10B981]/80" />
               </div>
               
-              <div className="flex items-center gap-4 mt-2 sm:mt-0">
-                <div className="flex items-center gap-2">
-                  <Users className="h-4 w-4 text-blue-600" />
-                  <span className="text-sm font-medium">2M+ Active Members</span>
-                  <TrendingUp className="h-3 w-3 text-green-500" />
-                </div>
-                
-                <div className="flex items-center gap-2">
-                  <Calendar className="h-4 w-4 text-blue-600" />
-                  <span className="text-sm">Est. 2010</span>
-                </div>
+              <div className="flex items-center gap-2">
+                <Calendar className="h-4 w-4 text-[#4F46E5]/80" />
+                <span className="text-sm">Est. 2010</span>
               </div>
             </div>
           </div>
+        </div>
 
-          {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Button
-              onClick={onGetPlan}
-              disabled={isLoading}
-              variant="primary"
-              size="lg"
-              className="rounded-full shadow-md hover:shadow-lg transition-all duration-200 w-full sm:w-auto text-base"
-            >
-              Get This Plan
-            </Button>
-            <Button
-              onClick={onViewDetails}
-              disabled={isLoading}
-              className="bg-white hover:bg-gray-50 text-primary border border-primary font-medium py-3 px-6 rounded-lg transition-colors w-full sm:w-auto text-base"
-              variant="outline"
-            >
-              View Details
-            </Button>
-          </div>
+        {/* Action Buttons */}
+        <div className="flex flex-col sm:flex-row gap-4">
+          <button
+            onClick={onGetPlan}
+            disabled={isLoading}
+            className="cta-button"
+          >
+            Get This Plan
+            <ArrowRight className="h-4 w-4 ml-2 inline" />
+          </button>
+          <button
+            onClick={onViewDetails}
+            className="details-button"
+          >
+            View Plan Details
+            <ChevronRight className="h-4 w-4 ml-1 inline" />
+          </button>
         </div>
       </div>
-    </TooltipProvider>
+    </div>
   )
 } 

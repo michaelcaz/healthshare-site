@@ -178,13 +178,13 @@ export function RecommendationsLayout({
       )}
       
       {/* Main Content */}
-      <div className="bg-gray-50 min-h-screen pb-16">
+      <div className="bg-gray-50 min-h-screen pb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="py-12">
+          <div className="py-16">
             {/* Header Section */}
-            <div className="text-center mb-12">
-              <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Your Personalized Healthshare Recommendations</h1>
-              <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            <div className="text-center mb-16">
+              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">Your Personalized Healthshare Recommendations</h1>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
                 Based on your needs, we've found these healthshare plans that best match your situation. 
                 Compare options and choose the one that works for you.
               </p>
@@ -212,12 +212,12 @@ export function RecommendationsLayout({
               }
             />
             
-            <Separator className="my-16" />
+            <Separator className="my-20" />
             
             {/* Trust Elements */}
             <TrustElements recommendation={topPlan} />
             
-            <Separator className="my-16" />
+            <Separator className="my-20" />
             
             {/* Plan Comparison */}
             <PlanComparisonGrid 

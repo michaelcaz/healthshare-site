@@ -5,7 +5,7 @@ import { Checkbox } from '../ui/checkbox'
 import { useSelectedPlans } from './SelectedPlansContext'
 import { type PlanRecommendation } from './types'
 import { getPlanCost } from '@/lib/utils/plan-costs'
-import { CheckCircle, Award, TrendingUp, Info } from 'lucide-react'
+import { CheckCircle, Award, TrendingUp, Info, ArrowRight, ChevronRight, Sparkles } from 'lucide-react'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { cn } from '@/lib/utils'
 import { PlanRecommendation as PlanRecommendationType } from '@/lib/recommendation/recommendations'
@@ -73,7 +73,7 @@ export function PlanComparisonGrid({
         />
         <label 
           htmlFor={`compare-${plan.plan.id}`}
-          className="text-sm text-gray-600"
+          className="text-sm text-gray-600 cursor-pointer"
         >
           Add to comparison
         </label>
@@ -184,8 +184,8 @@ export function PlanComparisonGrid({
 
   return (
     <TooltipProvider>
-      <div className="mt-12">
-        <div className="flex justify-between items-center mb-6">
+      <div className="mt-16">
+        <div className="flex justify-between items-center mb-8">
           <h2 className="text-2xl font-bold text-gray-900">Compare Alternative Plans</h2>
           {selectedPlans.length > 0 && (
             <p className="text-sm text-gray-600">
@@ -194,16 +194,16 @@ export function PlanComparisonGrid({
           )}
         </div>
         
-        <div className="grid md:grid-cols-4 gap-6">
+        <div className="grid md:grid-cols-4 gap-8">
           {/* Top Plan Column */}
-          <Card className="p-6 border-2 border-primary relative overflow-hidden">
+          <Card className="p-6 border-2 border-primary relative overflow-hidden plan-card">
             <div className="absolute top-0 right-0 w-0 h-0 border-t-[80px] border-t-primary border-l-[80px] border-l-transparent"></div>
             <div className="absolute top-2 right-2 text-white font-bold text-xs rotate-45">BEST MATCH</div>
             
-            <div className="space-y-4">
+            <div className="space-y-5">
               <div className="flex items-center gap-2">
-                <Award className="h-5 w-5 text-primary" />
-                <Badge variant="primary" className="bg-primary">
+                <Sparkles className="h-5 w-5 text-primary" />
+                <Badge variant="primary" className="bg-primary/10 text-primary border-0">
                   Top Recommendation
                 </Badge>
               </div>
@@ -211,13 +211,13 @@ export function PlanComparisonGrid({
               <h3 className="font-semibold text-lg">{topPlan.plan.planName}</h3>
               
               {/* Match Score */}
-              <div className="bg-primary/10 p-3 rounded-lg flex items-center justify-between">
+              <div className="bg-primary/10 p-4 rounded-lg flex items-center justify-between">
                 <span className="text-sm font-medium text-gray-700">Match Score</span>
                 <span className="text-lg font-bold text-primary">{Math.round(topPlan.score)}%</span>
               </div>
               
               {/* Distinguishing Features */}
-              <div className="space-y-2 mb-2">
+              <div className="space-y-3 mb-3">
                 <p className="text-sm font-medium text-gray-700">Key Strengths:</p>
                 {getDistinguishingFeatures(topPlan, true).map((feature, idx) => (
                   <div key={idx} className="flex items-center gap-2">
@@ -228,7 +228,7 @@ export function PlanComparisonGrid({
               </div>
               
               {/* Comparison Metrics */}
-              <div className="space-y-3 mt-4">
+              <div className="space-y-4 mt-5">
                 {getComparisonMetrics(topPlan, true).filter(metric => metric.highlight).map((metric, index) => (
                   <div key={index} className="text-sm">
                     <div className="flex items-center gap-1">
@@ -249,9 +249,9 @@ export function PlanComparisonGrid({
                       metric.distinguishing && "text-green-600"
                     )}>
                       {metric.value}
-                      {metric.distinguishing && metric.label === 'Price Differential' && (
-                        <span className="ml-1 text-xs text-green-600">
-                          <TrendingUp className="h-3 w-3 inline-block" />
+                      {metric.distinguishing && (
+                        <span className="ml-2 text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded-full">
+                          Best
                         </span>
                       )}
                     </p>
@@ -259,37 +259,40 @@ export function PlanComparisonGrid({
                 ))}
               </div>
               
-              <div className="pt-2">
-                <Button 
-                  variant="default" 
-                  className="w-full bg-primary hover:bg-primary-dark"
-                  onClick={() => onPlanSelect(topPlan.plan.id)}
-                >
-                  View Details
-                </Button>
-              </div>
+              {/* Action Button */}
+              <button
+                onClick={() => onPlanSelect(topPlan.plan.id)}
+                className="w-full mt-4 details-button"
+              >
+                View Details
+                <ChevronRight className="h-4 w-4 ml-1 inline" />
+              </button>
               
               {renderCompareCheckbox(topPlan)}
             </div>
           </Card>
-
+          
           {/* Alternative Plans */}
           {alternativePlans.map((plan, index) => (
-            <Card key={plan.plan.id} className="p-6 hover:border-blue-200 transition-colors">
-              <div className="space-y-4">
-                <Badge variant="outline" className="text-blue-500 border-blue-200">
+            <Card 
+              key={plan.plan.id} 
+              className="p-6 border border-gray-200 hover:border-gray-300 plan-card"
+            >
+              <div className="space-y-5">
+                <Badge variant="outline" className="bg-gray-50 text-gray-700 border-gray-200">
                   Alternative {index + 1}
                 </Badge>
+                
                 <h3 className="font-semibold text-lg">{plan.plan.planName}</h3>
                 
                 {/* Match Score */}
-                <div className="bg-gray-50 p-3 rounded-lg flex items-center justify-between">
+                <div className="bg-gray-50 p-4 rounded-lg flex items-center justify-between">
                   <span className="text-sm font-medium text-gray-700">Match Score</span>
-                  <span className="text-lg font-bold text-gray-700">{Math.round(plan.score)}%</span>
+                  <span className="text-lg font-bold text-gray-900">{Math.round(plan.score)}%</span>
                 </div>
                 
                 {/* Distinguishing Features */}
-                <div className="space-y-2 mb-2">
+                <div className="space-y-3 mb-3">
                   <p className="text-sm font-medium text-gray-700">Key Strengths:</p>
                   {getDistinguishingFeatures(plan, false).map((feature, idx) => (
                     <div key={idx} className="flex items-center gap-2">
@@ -300,9 +303,9 @@ export function PlanComparisonGrid({
                 </div>
                 
                 {/* Comparison Metrics */}
-                <div className="space-y-3 mt-4">
-                  {getComparisonMetrics(plan, false).filter(metric => metric.highlight).map((metric, index) => (
-                    <div key={index} className="text-sm">
+                <div className="space-y-4 mt-5">
+                  {getComparisonMetrics(plan, false).filter(metric => metric.highlight).map((metric, idx) => (
+                    <div key={idx} className="text-sm">
                       <div className="flex items-center gap-1">
                         <p className="text-gray-500">{metric.label}</p>
                         {metric.tooltip && (
@@ -321,9 +324,9 @@ export function PlanComparisonGrid({
                         metric.distinguishing && "text-green-600"
                       )}>
                         {metric.value}
-                        {metric.distinguishing && metric.label === 'Price Differential' && (
-                          <span className="ml-1 text-xs text-green-600">
-                            <TrendingUp className="h-3 w-3 inline-block" />
+                        {metric.distinguishing && (
+                          <span className="ml-2 text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded-full">
+                            Best
                           </span>
                         )}
                       </p>
@@ -331,16 +334,16 @@ export function PlanComparisonGrid({
                   ))}
                 </div>
                 
+                {/* Action Button */}
+                <button
+                  onClick={() => onPlanSelect(plan.plan.id)}
+                  className="w-full mt-4 details-button"
+                >
+                  View Details
+                  <ChevronRight className="h-4 w-4 ml-1 inline" />
+                </button>
+                
                 {renderCompareCheckbox(plan)}
-                <div className="mt-4">
-                  <Button 
-                    variant="outline" 
-                    className="w-full"
-                    onClick={() => onPlanSelect(plan.plan.id)}
-                  >
-                    View Details
-                  </Button>
-                </div>
               </div>
             </Card>
           ))}
