@@ -65,18 +65,40 @@ export function PlanComparisonGrid({
     const isSelected = isPlanSelected(plan.plan.id)
     return (
       <div className="flex items-center space-x-2 mt-4">
-        <Checkbox
-          id={`compare-${plan.plan.id}`}
-          checked={isSelected}
-          disabled={!isSelected && !canAddMore}
-          onCheckedChange={() => togglePlanSelection(plan)}
-        />
-        <label 
-          htmlFor={`compare-${plan.plan.id}`}
-          className="text-sm text-gray-600 cursor-pointer"
+        <div 
+          className={cn(
+            "flex items-center w-full py-2 px-4 rounded-md border transition-colors cursor-pointer",
+            isSelected 
+              ? "bg-primary/10 border-primary text-primary" 
+              : !canAddMore && !isSelected
+                ? "bg-gray-100 border-gray-200 text-gray-400 cursor-not-allowed" 
+                : "bg-white border-gray-200 text-gray-700 hover:border-gray-300"
+          )}
+          onClick={() => {
+            if (isSelected || canAddMore) {
+              togglePlanSelection(plan)
+            }
+          }}
         >
-          Add to comparison
-        </label>
+          <div className="flex items-center">
+            <Checkbox
+              id={`compare-${plan.plan.id}`}
+              checked={isSelected}
+              disabled={!isSelected && !canAddMore}
+              onCheckedChange={() => togglePlanSelection(plan)}
+            />
+            <div className="w-2"></div> {/* Spacer */}
+            <label 
+              htmlFor={`compare-${plan.plan.id}`}
+              className={cn(
+                "text-sm cursor-pointer flex-1",
+                isSelected ? "font-medium" : "text-gray-600"
+              )}
+            >
+              {isSelected ? "Remove from comparison" : canAddMore ? "Add to comparison" : "Comparison limit reached"}
+            </label>
+          </div>
+        </div>
       </div>
     )
   }

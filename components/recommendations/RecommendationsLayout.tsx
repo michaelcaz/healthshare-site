@@ -14,6 +14,7 @@ import { TrustElements } from './TrustElements'
 import { Separator } from '@/components/ui/separator'
 import { PregnancyAlert } from './PregnancyAlert'
 import { planDetailsData } from '@/data/plan-details-data'
+import { ComparisonBanner } from './ComparisonBanner'
 
 export function RecommendationsLayout({ 
   recommendations, 
@@ -177,6 +178,9 @@ export function RecommendationsLayout({
           questionnaire={questionnaire}
         />
       )}
+      
+      {/* Comparison Banner */}
+      <ComparisonBanner />
       
       {/* Main Content */}
       <div className="bg-gray-50 min-h-screen pb-20">

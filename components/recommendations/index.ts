@@ -3,6 +3,7 @@ import { type PlanRecommendation } from '@/lib/recommendation/recommendations'
 import { type HealthsharePlan } from '@/types/plans'
 
 export { RecommendationsLayout } from './RecommendationsLayout'
+export { ComparisonBanner } from './ComparisonBanner'
 
 // Main container
 export interface RecommendationsProps {

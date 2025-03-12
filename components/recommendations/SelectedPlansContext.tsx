@@ -2,12 +2,14 @@
 
 import { createContext, useContext, useState } from 'react'
 import { type PlanRecommendation } from './types'
+import { useRouter } from 'next/navigation'
 
 interface SelectedPlansContextType {
   selectedPlans: PlanRecommendation[]
   togglePlanSelection: (plan: PlanRecommendation) => void
   removePlan: (planId: string) => void
   canAddMore: boolean
+  navigateToComparison: () => void
 }
 
 const SelectedPlansContext = createContext<SelectedPlansContextType | undefined>(undefined)
@@ -17,6 +19,7 @@ export function SelectedPlansProvider({ children, maxPlans = 3 }: {
   maxPlans?: number 
 }) {
   const [selectedPlans, setSelectedPlans] = useState<PlanRecommendation[]>([])
+  const router = useRouter()
 
   const togglePlanSelection = (plan: PlanRecommendation) => {
     setSelectedPlans(current => {
@@ -38,12 +41,21 @@ export function SelectedPlansProvider({ children, maxPlans = 3 }: {
     setSelectedPlans(current => current.filter(p => p.plan.id !== planId))
   }
 
+  const navigateToComparison = () => {
+    if (selectedPlans.length > 0) {
+      // Store selected plans in localStorage for the comparison page
+      localStorage.setItem('selected-plans', JSON.stringify(selectedPlans))
+      router.push('/plans/comparison')
+    }
+  }
+
   return (
     <SelectedPlansContext.Provider value={{
       selectedPlans,
       togglePlanSelection,
       removePlan,
-      canAddMore: selectedPlans.length < maxPlans
+      canAddMore: selectedPlans.length < maxPlans,
+      navigateToComparison
     }}>
       {children}
     </SelectedPlansContext.Provider>

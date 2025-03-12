@@ -3,6 +3,7 @@ import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/comp
 import { UseFormReturn } from 'react-hook-form';
 import { cn } from '@/lib/utils';
 import { PregnancyQuestionAlert } from './PregnancyQuestionAlert';
+import { OptionCardGroup } from './OptionCard';
 
 interface PregnancyQuestionProps {
   form: UseFormReturn<any>;
@@ -23,38 +24,19 @@ export function PregnancyQuestion({ form, fieldName }: PregnancyQuestionProps) {
               Are you currently pregnant?
             </FormLabel>
             <FormControl>
-              <div className="grid grid-cols-2 gap-4">
-                <button
-                  type="button"
-                  className={cn(
-                    "flex flex-col items-center justify-center p-4 border rounded-lg transition-colors",
-                    field.value === 'false' 
-                      ? "border-primary bg-primary/10 text-primary" 
-                      : "border-gray-200 hover:border-gray-300"
-                  )}
-                  onClick={() => {
-                    field.onChange('false');
-                    setShowAlert(false);
-                  }}
-                >
-                  <span className="text-lg font-medium">No</span>
-                </button>
-                <button
-                  type="button"
-                  className={cn(
-                    "flex flex-col items-center justify-center p-4 border rounded-lg transition-colors",
-                    field.value === 'true' 
-                      ? "border-primary bg-primary/10 text-primary" 
-                      : "border-gray-200 hover:border-gray-300"
-                  )}
-                  onClick={() => {
-                    field.onChange('true');
-                    setShowAlert(true);
-                  }}
-                >
-                  <span className="text-lg font-medium">Yes</span>
-                </button>
-              </div>
+              <OptionCardGroup
+                name={fieldName}
+                options={[
+                  { value: 'false', label: 'No' },
+                  { value: 'true', label: 'Yes' }
+                ]}
+                value={field.value || ''}
+                onChange={(value) => {
+                  field.onChange(value);
+                  setShowAlert(value === 'true');
+                }}
+                layout="grid"
+              />
             </FormControl>
             <FormMessage />
           </FormItem>
