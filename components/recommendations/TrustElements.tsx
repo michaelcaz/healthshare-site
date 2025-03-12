@@ -7,6 +7,7 @@ import { CheckCircle, Star, Shield, Clock, Users, Award, Calendar, TrendingUp } 
 import { Badge } from '../ui/badge'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import Image from 'next/image'
+import { PlanDetailsData, defaultPlanDetailsData } from '@/types/plan-details'
 
 interface TrustElementsProps {
   recommendation: {
@@ -21,57 +22,34 @@ interface TrustElementsProps {
       impact: number;
     }>;
   }
+  planDetails?: PlanDetailsData;
 }
 
-export function TrustElements({ recommendation }: TrustElementsProps) {
+export function TrustElements({ recommendation, planDetails = defaultPlanDetailsData }: TrustElementsProps) {
   const { plan, score, factors } = recommendation
-
-  // Sample testimonials with membership tenure and photos
-  const testimonials = [
-    {
-      text: "This plan has been perfect for my family. The monthly costs are manageable and we've had great experiences with sharing medical expenses.",
-      author: "Sarah M.",
-      highlight: "Perfect for families",
-      tenure: "Member for 3 years",
-      avatar: "/images/testimonials/avatar-1.jpg",
-      initials: "SM"
-    },
-    {
-      text: "I was skeptical at first, but after being a member for 2 years, I'm convinced this was the right choice. Their customer service is excellent.",
-      author: "John D.", 
-      highlight: "Excellent service",
-      tenure: "Member for 2 years",
-      avatar: "/images/testimonials/avatar-2.jpg",
-      initials: "JD"
-    },
-    {
-      text: "The prescription program alone has saved me thousands. Very happy with my decision to join.",
-      author: "Michael R.",
-      highlight: "Great savings",
-      tenure: "Member for 4 years",
-      avatar: "/images/testimonials/avatar-3.jpg",
-      initials: "MR"
-    }
-  ]
+  
+  // Get provider details and testimonials from planDetails or use defaults
+  const providerDetails = planDetails?.providerDetails || defaultPlanDetailsData.providerDetails!;
+  const planTestimonials = planDetails?.testimonials || defaultPlanDetailsData.testimonials!;
 
   return (
     <TooltipProvider>
-      <div className="space-y-12">
+      <div className="space-y-10">
         <h2 className="text-2xl font-bold text-gray-900">Why Members Trust {plan.providerName}</h2>
         
         {/* Trust Metrics Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* BBB Rating Card */}
           <Card className="p-6 border border-blue-100 hover:shadow-md transition-shadow">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-gray-900">BBB Rating</h3>
-              <div className="h-12 w-12 rounded-full bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center shadow-md">
-                <span className="text-white font-bold text-lg">A+</span>
+              <div className="h-10 w-10 rounded-full bg-blue-600 flex items-center justify-center">
+                <span className="text-white font-bold" dangerouslySetInnerHTML={{ __html: providerDetails.ratings.bbbRating }} />
               </div>
             </div>
-            <div className="space-y-3">
+            <div className="space-y-2">
               <p className="text-sm text-gray-600">BBB Accredited Business</p>
-              <p className="text-sm text-gray-600">Member since 2010</p>
+              <p className="text-sm text-gray-600">Member since {providerDetails.yearEstablished}</p>
               <p className="text-sm text-gray-600">Zero unresolved complaints</p>
             </div>
           </Card>
@@ -80,12 +58,12 @@ export function TrustElements({ recommendation }: TrustElementsProps) {
           <Card className="p-6 border border-green-100 hover:shadow-md transition-shadow">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-gray-900">Fast Processing</h3>
-              <div className="h-12 w-12 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center shadow-md">
-                <Clock className="h-6 w-6 text-white" />
+              <div className="h-10 w-10 rounded-full bg-green-100 flex items-center justify-center">
+                <Clock className="h-5 w-5 text-green-600" />
               </div>
             </div>
-            <div className="space-y-3">
-              <p className="text-sm text-gray-600">3-5 business days average</p>
+            <div className="space-y-2">
+              <p className="text-sm text-gray-600" dangerouslySetInnerHTML={{ __html: providerDetails.processingTime }} />
               <p className="text-sm text-gray-600">Online submission portal</p>
               <p className="text-sm text-gray-600">Real-time status tracking</p>
             </div>
@@ -95,17 +73,17 @@ export function TrustElements({ recommendation }: TrustElementsProps) {
           <Card className="p-6 border border-purple-100 hover:shadow-md transition-shadow">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-gray-900">Member Stats</h3>
-              <div className="h-12 w-12 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center shadow-md">
-                <Users className="h-6 w-6 text-white" />
+              <div className="h-10 w-10 rounded-full bg-purple-100 flex items-center justify-center">
+                <Users className="h-5 w-5 text-purple-600" />
               </div>
             </div>
-            <div className="space-y-3">
+            <div className="space-y-2">
               <div className="flex items-center gap-2">
-                <span className="text-sm text-gray-600">2M+ Active Members</span>
+                <span className="text-sm text-gray-600" dangerouslySetInnerHTML={{ __html: `${providerDetails.memberCount} Active Members` }} />
                 <TrendingUp className="h-3 w-3 text-green-500" />
               </div>
-              <p className="text-sm text-gray-600">98% Member Satisfaction</p>
-              <p className="text-sm text-gray-600">Average tenure: 4.2 years</p>
+              <p className="text-sm text-gray-600">{providerDetails.memberSatisfaction} Member Satisfaction</p>
+              <p className="text-sm text-gray-600">Average tenure: {providerDetails.averageTenure}</p>
             </div>
           </Card>
         </div>
@@ -204,25 +182,25 @@ export function TrustElements({ recommendation }: TrustElementsProps) {
         <div>
           <h3 className="text-xl font-semibold mb-8 text-gray-900">Member Testimonials</h3>
           <div className="grid md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, i) => (
+            {planTestimonials.map((testimonial, i) => (
               <div key={i} className="testimonial-card">
                 <div className="flex items-center gap-4 mb-5">
-                  <div className="testimonial-avatar relative overflow-hidden">
+                  <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center overflow-hidden">
                     {testimonial.avatar ? (
-                      <Image 
-                        src={testimonial.avatar} 
-                        alt={testimonial.author} 
-                        width={48} 
-                        height={48}
-                        className="object-cover w-full h-full"
-                        onError={(e) => {
-                          // Fallback to initials if image fails to load
-                          e.currentTarget.style.display = 'none';
-                          e.currentTarget.nextElementSibling?.classList.remove('hidden');
-                        }}
-                      />
+                      <div className="h-full w-full text-center flex items-center justify-center">
+                        {testimonial.avatar.startsWith('/') ? (
+                          <Image 
+                            src={testimonial.avatar} 
+                            alt={testimonial.author}
+                            width={48}
+                            height={48}
+                            className="h-full w-full object-cover"
+                          />
+                        ) : (
+                          <span className="text-blue-700 font-medium">{testimonial.avatar}</span>
+                        )}
+                      </div>
                     ) : null}
-                    <span className={testimonial.avatar ? 'hidden' : ''}>{testimonial.initials}</span>
                   </div>
                   <div>
                     <p className="font-semibold text-gray-800">{testimonial.author}</p>
@@ -239,7 +217,7 @@ export function TrustElements({ recommendation }: TrustElementsProps) {
                     />
                   ))}
                 </div>
-                <p className="text-gray-600 text-sm">{testimonial.text}</p>
+                <p className="text-gray-600 text-sm" dangerouslySetInnerHTML={{ __html: testimonial.text }} />
               </div>
             ))}
           </div>

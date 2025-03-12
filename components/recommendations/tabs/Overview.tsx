@@ -22,6 +22,13 @@ export const Overview: React.FC<OverviewProps> = ({
   // Get plan-specific details or fall back to default data
   const planData = planDetailsData[plan.plan.id] || defaultPlanDetailsData;
   
+  // Enhanced debug logs
+  console.log('Overview Component - Plan ID:', plan.plan.id);
+  console.log('Overview Component - Provider Name:', plan.plan.providerName);
+  console.log('Overview Component - Plan Name:', plan.plan.planName);
+  console.log('Overview Component - Available Plan Detail Keys:', Object.keys(planDetailsData));
+  console.log('Overview Component - Plan Data Found:', !!planDetailsData[plan.plan.id]);
+  
   // Get costs using the getPlanCost function
   const costs = getPlanCost(
     plan.plan.id,
@@ -68,7 +75,7 @@ export const Overview: React.FC<OverviewProps> = ({
             <div className="text-sm text-gray-700 mt-1">
               <ul className="list-disc pl-5 space-y-2">
                 {planData.overview.whatWeLove.map((item, index) => (
-                  <li key={index}>{item}</li>
+                  <li key={index} dangerouslySetInnerHTML={{ __html: item }} />
                 ))}
               </ul>
             </div>
@@ -87,9 +94,8 @@ export const Overview: React.FC<OverviewProps> = ({
               Plan Name: {plan.plan.planName}
             </div>
             {planData.overview.providerInfo && (
-              <div className="text-sm text-gray-600 mt-2">
-                {planData.overview.providerInfo}
-              </div>
+              <div className="text-sm text-gray-600 mt-2" 
+                   dangerouslySetInnerHTML={{ __html: planData.overview.providerInfo }} />
             )}
             {plan.plan.sourceUrl && (
               <a 

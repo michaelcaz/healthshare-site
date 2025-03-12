@@ -613,7 +613,7 @@ export const providerPlans: PricingPlan[] = [
       },
       {
         "ageBracket": "18-55",
-        "householdType": "Member & Family (5+)",
+        "householdType": "Member & Family",
         "costs": [
           {
             "monthlyPremium": 695,

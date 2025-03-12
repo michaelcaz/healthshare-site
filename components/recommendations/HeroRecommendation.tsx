@@ -19,6 +19,7 @@ import { cn } from '@/lib/utils'
 import Image from 'next/image'
 import { ProviderLogo } from './ProviderLogo'
 import { useEffect, useRef, useState } from 'react'
+import { PlanDetailsData, defaultPlanDetailsData } from '@/types/plan-details'
 
 interface HeroRecommendationProps {
   recommendation: PlanRecommendation
@@ -29,6 +30,7 @@ interface HeroRecommendationProps {
   isLoading?: boolean
   showPreExistingNotice?: boolean
   isDpcCompatible?: boolean
+  planDetails?: PlanDetailsData
 }
 
 // Add this CSS class for the dotted underline tooltips
@@ -42,7 +44,8 @@ export function HeroRecommendation({
   onGetPlan,
   isLoading = false,
   showPreExistingNotice = false,
-  isDpcCompatible = false
+  isDpcCompatible = false,
+  planDetails = defaultPlanDetailsData
 }: HeroRecommendationProps) {
   const { plan, score } = recommendation
 
@@ -57,6 +60,9 @@ export function HeroRecommendation({
   
   // Determine if this plan has the lowest out-of-pocket in case of emergency
   const hasLowestOutOfPocket = badges.topReason === "Incident Cost";
+
+  // Get provider details from planDetails, ensuring it's not undefined
+  const providerDetails = planDetails?.providerDetails || defaultPlanDetailsData.providerDetails!;
 
   // Custom tooltip component that matches Stride's design
   const CustomTooltip = ({ 
@@ -127,8 +133,21 @@ export function HeroRecommendation({
                 />
               ))}
             </div>
-            <span className="font-semibold text-sm text-gray-800">4.8/5</span>
-            <span className="text-sm text-gray-600">(246 reviews)</span>
+            <span className="font-semibold text-sm text-gray-800">{providerDetails.ratings.overall}/5</span>
+            <span className="text-sm text-gray-600">({providerDetails.ratings.reviewCount} reviews)</span>
+          </div>
+          
+          <div className="flex items-center gap-6 mt-2 sm:mt-0">
+            <div className="flex items-center gap-2">
+              <Users className="h-4 w-4 text-blue-600" />
+              <span className="text-sm font-medium" dangerouslySetInnerHTML={{ __html: `${providerDetails.memberCount} Active Members` }} />
+              <TrendingUp className="h-3 w-3 text-green-500" />
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <Calendar className="h-4 w-4 text-blue-600" />
+              <span className="text-sm">Est. {providerDetails.yearEstablished}</span>
+            </div>
           </div>
         </div>
 
@@ -233,19 +252,19 @@ export function HeroRecommendation({
           <div className="flex flex-wrap items-center justify-between">
             <div className="flex items-center gap-3">
               <CheckCircle className="h-5 w-5 text-[#10B981]/90" />
-              <span className="text-sm font-medium text-gray-700">98% Member Satisfaction</span>
+              <span className="text-sm font-medium text-gray-700" dangerouslySetInnerHTML={{ __html: `${providerDetails.memberSatisfaction} Member Satisfaction` }} />
             </div>
             
             <div className="flex items-center gap-6 mt-2 sm:mt-0">
               <div className="flex items-center gap-2">
                 <Users className="h-4 w-4 text-[#4F46E5]/80" />
-                <span className="text-sm font-medium">2M+ Active Members</span>
+                <span className="text-sm font-medium" dangerouslySetInnerHTML={{ __html: `${providerDetails.memberCount} Active Members` }} />
                 <TrendingUp className="h-3 w-3 text-[#10B981]/80" />
               </div>
               
               <div className="flex items-center gap-2">
                 <Calendar className="h-4 w-4 text-[#4F46E5]/80" />
-                <span className="text-sm">Est. 2010</span>
+                <span className="text-sm">Est. {providerDetails.yearEstablished}</span>
               </div>
             </div>
           </div>

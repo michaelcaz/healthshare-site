@@ -13,6 +13,7 @@ import { PlanDetailsModal } from './PlanDetailsModal'
 import { TrustElements } from './TrustElements'
 import { Separator } from '@/components/ui/separator'
 import { PregnancyAlert } from './PregnancyAlert'
+import { planDetailsData } from '@/data/plan-details-data'
 
 export function RecommendationsLayout({ 
   recommendations, 
@@ -210,12 +211,26 @@ export function RecommendationsLayout({
                 topPlan.plan.id.includes('sedera-access') || 
                 topPlan.plan.id.includes('mpb-access')
               }
+              planDetails={planDetailsData[topPlan.plan.id] || undefined}
             />
+            
+            {/* Enhanced debug logs for plan details */}
+            <script dangerouslySetInnerHTML={{ __html: `
+              console.log('Top Plan ID:', ${JSON.stringify(topPlan.plan.id)});
+              console.log('Top Plan Provider Name:', ${JSON.stringify(topPlan.plan.providerName)});
+              console.log('Top Plan Plan Name:', ${JSON.stringify(topPlan.plan.planName)});
+              console.log('Available Plan Detail Keys:', ${JSON.stringify(Object.keys(planDetailsData))});
+              console.log('Plan Details Found:', ${JSON.stringify(!!planDetailsData[topPlan.plan.id])});
+              console.log('Plan Details Data:', ${JSON.stringify(planDetailsData[topPlan.plan.id] ? 'Available' : 'Not Found')});
+            `}} />
             
             <Separator className="my-20" />
             
             {/* Trust Elements */}
-            <TrustElements recommendation={topPlan} />
+            <TrustElements 
+              recommendation={topPlan} 
+              planDetails={planDetailsData[topPlan.plan.id] || undefined}
+            />
             
             <Separator className="my-20" />
             
