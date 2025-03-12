@@ -25,36 +25,34 @@ export function ComparisonBanner() {
         exit={{ y: 100, opacity: 0 }}
         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
       >
-        <div className="container mx-auto px-4 py-4">
+        <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <div className="bg-white/20 text-white p-2 rounded-full mr-3">
                 <Check className="h-5 w-5" />
               </div>
               <div>
-                <span className="font-medium text-white block">
+                <span className="font-medium text-white">
                   {selectedPlans.length} Plan{selectedPlans.length !== 1 ? 's' : ''} Selected
                 </span>
-                <button 
-                  onClick={() => setIsExpanded(!isExpanded)}
-                  className="text-sm text-white/80 hover:text-white hover:underline"
-                >
-                  {isExpanded ? 'Hide details' : 'Show details'}
-                </button>
+                {selectedPlans.length > 0 && (
+                  <button 
+                    onClick={() => setIsExpanded(!isExpanded)}
+                    className="ml-3 text-sm text-white/80 hover:text-white hover:underline"
+                  >
+                    {isExpanded ? 'Hide details' : 'Show details'}
+                  </button>
+                )}
               </div>
             </div>
             
-            <div className="flex items-center gap-3">
-              <span className="text-sm text-white/80">
-                Add {canAddMore ? '1-' + (3 - selectedPlans.length) : '0'} more plans to compare
-              </span>
+            <div className="flex items-center gap-4">
               <Button 
                 onClick={navigateToComparison}
                 className="bg-amber-500 hover:bg-amber-600 text-white px-6 flex items-center"
                 size="lg"
               >
-                Compare Plans
-                <ChevronRight className="ml-1 h-4 w-4 inline-block" />
+                Compare Plans <ChevronRight className="ml-1 h-4 w-4 inline-block" />
               </Button>
             </div>
           </div>

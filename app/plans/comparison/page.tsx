@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { PlanRecommendation } from '@/lib/recommendation/recommendations'
-import { EnhancedPlanComparison } from '@/components/plans'
+import { SimplifiedPlanComparison } from '@/components/plans/simplified-plan-comparison'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft, Loader2 } from 'lucide-react'
 
@@ -61,8 +61,8 @@ export default function PlanComparisonPage() {
 
   return (
     <div className="bg-gray-50 min-h-screen">
-      <div className="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center mb-8">
+      <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center mb-6">
           <Button 
             variant="ghost" 
             onClick={handleBackToRecommendations}
@@ -75,13 +75,13 @@ export default function PlanComparisonPage() {
           <h1 className="text-3xl font-bold text-gray-900">Plan Comparison</h1>
         </div>
         
-        <div className="mb-12">
+        <div className="mb-8">
           <p className="text-xl text-gray-600 max-w-3xl">
             Compare your selected plans side by side to find the best option for your needs.
           </p>
         </div>
         
-        <EnhancedPlanComparison plans={selectedPlans} />
+        <SimplifiedPlanComparison plans={selectedPlans} />
       </div>
     </div>
   )
