@@ -11,6 +11,7 @@ import { cn } from '@/lib/utils'
 import { PlanRecommendation as PlanRecommendationType } from '@/lib/recommendation/recommendations'
 import { QuestionnaireResponse } from '@/types/questionnaire'
 import { calculateAnnualHealthcareCosts } from '@/lib/utils/visit-calculator'
+import { calculateAnnualCost, getVisitFrequencyCost } from '@/utils/plan-utils'
 
 // Helper function to format currency
 function formatCurrency(amount: number): string {
@@ -28,19 +29,6 @@ interface ComparisonMetric {
   tooltip?: string
   highlight?: boolean
   distinguishing?: boolean
-}
-
-// Helper function to get visit frequency cost
-function getVisitFrequencyCost(visitFrequency?: string): number {
-  if (visitFrequency === 'just_checkups') {
-    return 500; // Annual checkups only
-  } else if (visitFrequency === 'few_months') {
-    return 1500; // Roughly 3 visits per year
-  } else if (visitFrequency === 'monthly_plus') {
-    return 6000; // 12 visits per year (monthly or more)
-  } else {
-    return 500; // Default to annual checkups if not specified
-  }
 }
 
 interface PlanComparisonGridProps {
@@ -93,31 +81,109 @@ export function PlanComparisonGrid({
   }
 
   const getComparisonMetrics = (plan: PlanRecommendationType, isTopPlan: boolean): ComparisonMetric[] => {
-    // Get the lowest cost option from the plan matrix
-    const lowestCost = plan.plan.planMatrix
-      .flatMap(bracket => bracket.costs)
-      .reduce((min, cost) => 
-        cost.monthlyPremium < min.monthlyPremium ? cost : min
+    // Instead of finding the lowest cost, use getPlanCost to get costs specific to the user
+    let monthlyPremium = 0;
+    let initialUnsharedAmount = 0;
+    
+    // Check if we have questionnaire data
+    if (questionnaire?.age && questionnaire?.coverage_type && questionnaire?.iua_preference) {
+      // Use getPlanCost to get costs specific to the user
+      const costs = getPlanCost(
+        plan.plan.id,
+        questionnaire.age,
+        questionnaire.coverage_type,
+        questionnaire.iua_preference
       );
+      
+      if (costs) {
+        monthlyPremium = costs.monthlyPremium;
+        initialUnsharedAmount = costs.initialUnsharedAmount;
+        
+        console.log(`PlanComparisonGrid - Using getPlanCost for plan ${plan.plan.id}:`, {
+          monthlyPremium,
+          initialUnsharedAmount,
+          age: questionnaire.age,
+          coverageType: questionnaire.coverage_type,
+          iuaPreference: questionnaire.iua_preference
+        });
+      } else {
+        console.log(`PlanComparisonGrid - getPlanCost returned no costs for plan ${plan.plan.id}, falling back to lowest cost`);
+        // Fallback to finding the lowest cost option if getPlanCost fails
+        const lowestCost = plan.plan.planMatrix
+          .flatMap(bracket => bracket.costs)
+          .reduce((min, cost) => 
+            cost.monthlyPremium < min.monthlyPremium ? cost : min
+          );
+        
+        monthlyPremium = lowestCost.monthlyPremium;
+        initialUnsharedAmount = lowestCost.initialUnsharedAmount;
+      }
+    } else {
+      console.log(`PlanComparisonGrid - Missing questionnaire data, falling back to lowest cost for plan ${plan.plan.id}`);
+      // Fallback to finding the lowest cost option if questionnaire data is missing
+      const lowestCost = plan.plan.planMatrix
+        .flatMap(bracket => bracket.costs)
+        .reduce((min, cost) => 
+          cost.monthlyPremium < min.monthlyPremium ? cost : min
+        );
+      
+      monthlyPremium = lowestCost.monthlyPremium;
+      initialUnsharedAmount = lowestCost.initialUnsharedAmount;
+    }
 
     // Calculate annual cost
     const isDpcPlan = plan.plan.id.includes('dpc') || plan.plan.id.includes('vpc');
-    const dpcCost = isDpcPlan ? 2000 : 0;
     
     // Get expected healthcare costs based on questionnaire
-    const visitFrequencyCost = getVisitFrequencyCost(questionnaire?.visit_frequency);
+    const visitFrequencyCost = getVisitFrequencyCost(questionnaire?.visit_frequency, questionnaire?.coverage_type);
     
-    const annualCost = lowestCost.monthlyPremium * 12 + visitFrequencyCost + dpcCost;
+    // Add detailed logging to debug parameters
+    console.log(`PlanComparisonGrid - Plan ${plan.plan.id} - Parameters:`, {
+      monthlyPremium,
+      initialUnsharedAmount,
+      visitFrequency: questionnaire?.visit_frequency,
+      coverageType: questionnaire?.coverage_type,
+      isDpcPlan,
+      visitFrequencyCost
+    });
+    
+    // Use the centralized calculateAnnualCost function
+    const annualCost = calculateAnnualCost(
+      monthlyPremium,
+      initialUnsharedAmount,
+      questionnaire?.visit_frequency,
+      questionnaire?.coverage_type,
+      isDpcPlan,
+      'PlanComparisonGrid'
+    );
+    
+    // Log the result of the calculation
+    console.log(`PlanComparisonGrid - Plan ${plan.plan.id} - Annual Cost Result:`, annualCost);
     
     // Calculate price differential compared to lowest option
     const lowestPlanCost = [topPlan, ...alternativePlans]
-      .map(p => p.plan.planMatrix
-        .flatMap(bracket => bracket.costs)
-        .reduce((min, cost) => cost.monthlyPremium < min.monthlyPremium ? cost : min)
-      )
+      .map(p => {
+        if (questionnaire?.age && questionnaire?.coverage_type && questionnaire?.iua_preference) {
+          const costs = getPlanCost(
+            p.plan.id,
+            questionnaire.age,
+            questionnaire.coverage_type,
+            questionnaire.iua_preference
+          );
+          
+          if (costs) {
+            return costs;
+          }
+        }
+        
+        // Fallback to finding the lowest cost option
+        return p.plan.planMatrix
+          .flatMap(bracket => bracket.costs)
+          .reduce((min, cost) => cost.monthlyPremium < min.monthlyPremium ? cost : min);
+      })
       .reduce((min, cost) => cost.monthlyPremium < min.monthlyPremium ? cost : min);
     
-    const priceDifferential = ((lowestCost.monthlyPremium - lowestPlanCost.monthlyPremium) / lowestPlanCost.monthlyPremium) * 100;
+    const priceDifferential = ((monthlyPremium - lowestPlanCost.monthlyPremium) / lowestPlanCost.monthlyPremium) * 100;
     
     // Determine distinguishing features
     const distinguishingFeatures = getDistinguishingFeatures(plan, isTopPlan);
@@ -132,23 +198,23 @@ export function PlanComparisonGrid({
       },
       {
         label: 'Monthly Cost',
-        value: `$${lowestCost.monthlyPremium}`,
+        value: `$${monthlyPremium}`,
         tooltip: 'Starting monthly payment to maintain coverage',
         highlight: true,
         distinguishing: priceDifferential <= 0 && priceDifferential > -10
       },
       {
         label: 'Initial Unshared Amount',
-        value: `$${lowestCost.initialUnsharedAmount}`,
+        value: `$${initialUnsharedAmount}`,
         tooltip: 'Amount you pay before sharing begins (similar to a deductible)',
-        distinguishing: lowestCost.initialUnsharedAmount < 2000
+        distinguishing: initialUnsharedAmount < 2000
       },
       {
         label: 'Est. Annual Cost',
         value: formatCurrency(annualCost),
         tooltip: isDpcPlan 
-          ? 'Includes monthly premiums, expected healthcare costs, and $2,000 for DPC membership'
-          : 'Includes monthly premiums and expected healthcare costs',
+          ? `Includes monthly premiums × 12, expected healthcare costs based on visit frequency and family size, and $2,000 for DPC membership`
+          : `Includes monthly premiums × 12 and expected healthcare costs based on visit frequency and family size`,
         highlight: true
       },
       {

@@ -20,6 +20,9 @@ export function RecommendationsLayout({
   recommendations, 
   questionnaire 
 }: RecommendationsProps) {
+  console.log('RecommendationsLayout - Questionnaire:', questionnaire);
+  console.log('RecommendationsLayout - Visit Frequency:', questionnaire?.visit_frequency);
+  console.log('RecommendationsLayout - Coverage Type:', questionnaire?.coverage_type);
   const [selectedPlanId, setSelectedPlanId] = useState<string | undefined>()
   const { selectedPlans, removePlan } = useSelectedPlans()
   const [isLoading, setIsLoading] = useState(false)
@@ -30,6 +33,14 @@ export function RecommendationsLayout({
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
+
+  // Add logging for questionnaire data
+  useEffect(() => {
+    console.log('Before PlanComparisonGrid - Full questionnaire:', questionnaire);
+    console.log('Before PlanComparisonGrid - Visit Frequency:', questionnaire?.visit_frequency);
+    console.log('Before PlanComparisonGrid - Coverage Type:', questionnaire?.coverage_type);
+    console.log('Before PlanComparisonGrid - IUA Preference:', questionnaire?.iua_preference);
+  }, [questionnaire]);
 
   // Get the top plan (highest scoring)
   const topPlan = recommendations[0]
@@ -216,6 +227,7 @@ export function RecommendationsLayout({
                 topPlan.plan.id.includes('mpb-access')
               }
               planDetails={planDetailsData[topPlan.plan.id] || undefined}
+              questionnaire={questionnaire}
             />
             
             {/* Enhanced debug logs for plan details */}

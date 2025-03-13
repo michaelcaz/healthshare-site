@@ -30,18 +30,27 @@ describe('Plan Utilities', () => {
   
   it('calculateAnnualCost computes correctly', () => {
     // Test with different IUA values
-    expect(calculateAnnualCost(100, 1000)).toBe(2200);
-    expect(calculateAnnualCost(100, 2500)).toBe(3700);
-    expect(calculateAnnualCost(100, 5000)).toBe(6200);
+    expect(calculateAnnualCost(100, 1000, 'just_checkups', 'just_me', false, 'test')).toBe(2200);
+    expect(calculateAnnualCost(100, 2500, 'just_checkups', 'just_me', false, 'test')).toBe(3700);
+    expect(calculateAnnualCost(100, 5000, 'just_checkups', 'just_me', false, 'test')).toBe(6200);
   });
   
   it('getPlanComparison returns sorted results', () => {
-    const comparison = getPlanComparison('18-29', 'Member Only');
+    // Test with default visit frequency and coverage type
+    const comparison = getPlanComparison('18-29', 'Member Only', undefined, 'just_checkups', 'just_me');
     expect(comparison.length).toBeGreaterThan(0);
     
     // Check sorting by annual cost
     for (let i = 1; i < comparison.length; i++) {
       expect(comparison[i].annualCost).toBeGreaterThanOrEqual(comparison[i-1].annualCost);
+    }
+    
+    // Test with different visit frequency
+    const comparisonFrequent = getPlanComparison('18-29', 'Member Only', undefined, 'monthly_plus', 'just_me');
+    
+    // Annual costs should be higher with more frequent visits
+    if (comparison.length > 0 && comparisonFrequent.length > 0) {
+      expect(comparisonFrequent[0].annualCost).toBeGreaterThan(comparison[0].annualCost);
     }
   });
   
@@ -67,8 +76,8 @@ describe('Plan Utilities', () => {
     });
     
     it('compares family vs individual plan costs correctly', () => {
-      const individualComparison = getPlanComparison('30-39', 'Member Only');
-      const familyComparison = getPlanComparison('30-39', 'Member & Family');
+      const individualComparison = getPlanComparison('30-39', 'Member Only', undefined, 'just_checkups', 'just_me');
+      const familyComparison = getPlanComparison('30-39', 'Member & Family', undefined, 'just_checkups', 'family');
       
       if (individualComparison.length === 0 || familyComparison.length === 0) {
         console.warn('No plans found for comparison, skipping test');
@@ -82,8 +91,8 @@ describe('Plan Utilities', () => {
   
   describe('Age Bracket Pricing', () => {
     it('verifies age affects pricing as expected', () => {
-      const youngerComparison = getPlanComparison('18-29', 'Member Only');
-      const olderComparison = getPlanComparison('50-64', 'Member Only');
+      const youngerComparison = getPlanComparison('18-29', 'Member Only', undefined, 'just_checkups', 'just_me');
+      const olderComparison = getPlanComparison('50-64', 'Member Only', undefined, 'just_checkups', 'just_me');
       
       // Older age brackets should be more expensive
       if (youngerComparison.length > 0 && olderComparison.length > 0) {
@@ -120,7 +129,7 @@ describe('Plan Utilities', () => {
     });
     
     it('finds cheapest plan across all providers', () => {
-      const comparison = getPlanComparison('18-29', 'Member Only');
+      const comparison = getPlanComparison('18-29', 'Member Only', undefined, 'just_checkups', 'just_me');
       const cheapest = findCheapestPlan('18-29', 'Member Only');
       
       if (comparison.length === 0 || !cheapest) {

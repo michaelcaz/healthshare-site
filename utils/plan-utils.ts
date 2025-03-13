@@ -70,8 +70,75 @@ export function findCheapestPlan(
   return cheapestPlan;
 }
 
-export function calculateAnnualCost(monthlyPremium: number, initialUnsharedAmount: number): number {
-  return (monthlyPremium * 12) + initialUnsharedAmount;
+export function calculateAnnualCost(
+  monthlyPremium: number, 
+  initialUnsharedAmount: number, 
+  visitFrequency?: string, 
+  coverageType?: string, 
+  isDpcPlan: boolean = false,
+  caller: string = 'unknown'
+): number {
+  // Base annual cost (monthly premium × 12)
+  const annualPremium = monthlyPremium * 12;
+  
+  // Calculate visit frequency cost
+  const visitFrequencyCost = getVisitFrequencyCost(visitFrequency, coverageType);
+  
+  // Add DPC cost if applicable
+  const dpcCost = isDpcPlan ? 2000 : 0;
+  
+  // Enhanced logging for debugging
+  console.log(`calculateAnnualCost [${caller}] - DETAILED - Input Parameters:`, {
+    monthlyPremium,
+    initialUnsharedAmount,
+    visitFrequency: visitFrequency || 'undefined',
+    coverageType: coverageType || 'undefined',
+    isDpcPlan,
+  });
+  
+  // Log the calculation components for debugging
+  console.log(`calculateAnnualCost [${caller}] - Components:`, {
+    monthlyPremium,
+    annualPremium,
+    initialUnsharedAmount,
+    visitFrequency,
+    coverageType,
+    visitFrequencyCost,
+    isDpcPlan,
+    dpcCost,
+    totalAnnualCost: annualPremium + visitFrequencyCost + dpcCost
+  });
+  
+  // Return the total annual cost
+  return annualPremium + visitFrequencyCost + dpcCost;
+}
+
+// Helper function to get visit frequency cost - exported so it can be used across components
+export function getVisitFrequencyCost(visitFrequency?: string, coverageType?: string): number {
+  // Get the number of people based on coverage type
+  const peopleCount = 
+    !coverageType || coverageType === 'just_me' ? 1 :
+    coverageType === 'me_spouse' ? 2 :
+    coverageType === 'me_kids' ? 3 :
+    coverageType === 'family' ? 4 : 1;
+  
+  // Base visit cost is now $200 per visit
+  const VISIT_COST = 200;
+  
+  // Calculate costs based on visit frequency and family size
+  if (visitFrequency === 'just_checkups') {
+    // Annual checkups only - 1 visit per person per year
+    return peopleCount * 1 * VISIT_COST;
+  } else if (visitFrequency === 'few_months') {
+    // Every few months - 3 visits per person per year
+    return peopleCount * 3 * VISIT_COST;
+  } else if (visitFrequency === 'monthly_plus') {
+    // Monthly or more - 12 visits per person per year
+    return peopleCount * 12 * VISIT_COST;
+  } else {
+    // Default to annual checkups if not specified
+    return peopleCount * 1 * VISIT_COST;
+  }
 }
 
 export function getAvailableIUALevels(): number[] {
@@ -91,7 +158,9 @@ export function getAvailableIUALevels(): number[] {
 export function getPlanComparison(
   ageBracket: AgeBracket,
   householdType: HouseholdType,
-  maxIUA?: number
+  maxIUA?: number,
+  visitFrequency?: string,
+  coverageType?: string
 ): Array<{
   providerName: string;
   planName: string;
@@ -110,12 +179,22 @@ export function getPlanComparison(
       : costs;
 
     eligibleCosts.forEach(cost => {
+      // Check if this is a DPC plan
+      const isDpcPlan = plan.id.includes('dpc') || plan.id.includes('vpc');
+      
       comparison.push({
         providerName: plan.providerName,
         planName: plan.planName,
         monthlyPremium: cost.monthlyPremium,
         initialUnsharedAmount: cost.initialUnsharedAmount,
-        annualCost: calculateAnnualCost(cost.monthlyPremium, cost.initialUnsharedAmount)
+        annualCost: calculateAnnualCost(
+          cost.monthlyPremium, 
+          cost.initialUnsharedAmount,
+          visitFrequency,
+          coverageType,
+          isDpcPlan,
+          'getPlanComparison'
+        )
       });
     });
   });

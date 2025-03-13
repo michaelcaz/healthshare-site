@@ -20,6 +20,7 @@ import Image from 'next/image'
 import { ProviderLogo } from './ProviderLogo'
 import { useEffect, useRef, useState } from 'react'
 import { PlanDetailsData, defaultPlanDetailsData } from '@/types/plan-details'
+import { calculateAnnualCost, getVisitFrequencyCost } from '@/utils/plan-utils'
 
 interface HeroRecommendationProps {
   recommendation: PlanRecommendation
@@ -31,6 +32,7 @@ interface HeroRecommendationProps {
   showPreExistingNotice?: boolean
   isDpcCompatible?: boolean
   planDetails?: PlanDetailsData
+  questionnaire?: any
 }
 
 // Add this CSS class for the dotted underline tooltips
@@ -45,7 +47,8 @@ export function HeroRecommendation({
   isLoading = false,
   showPreExistingNotice = false,
   isDpcCompatible = false,
-  planDetails = defaultPlanDetailsData
+  planDetails = defaultPlanDetailsData,
+  questionnaire
 }: HeroRecommendationProps) {
   const { plan, score } = recommendation
 
@@ -53,7 +56,37 @@ export function HeroRecommendation({
   const traditionalInsuranceCost = costs.monthlyPremium * 1.65; // Estimated 65% higher
   const monthlySavings = traditionalInsuranceCost - costs.monthlyPremium;
   const annualSavings = monthlySavings * 12;
-  const annualCost = costs.monthlyPremium * 12;
+  
+  // Get expected healthcare costs based on questionnaire
+  console.log('HeroRecommendation - Questionnaire:', questionnaire);
+  console.log('HeroRecommendation - Visit Frequency:', questionnaire?.visit_frequency);
+  console.log('HeroRecommendation - Coverage Type:', questionnaire?.coverage_type);
+  
+  // Calculate annual cost including visit frequency
+  const isDpcPlan = plan.id.includes('dpc') || plan.id.includes('vpc');
+  
+  // Use the centralized calculateAnnualCost function
+  const annualCost = calculateAnnualCost(
+    costs.monthlyPremium,
+    costs.initialUnsharedAmount,
+    questionnaire?.visit_frequency,
+    questionnaire?.coverage_type,
+    isDpcPlan,
+    'HeroRecommendation'
+  );
+  
+  // Log the visit frequency cost separately for debugging
+  const visitFrequencyCost = getVisitFrequencyCost(questionnaire?.visit_frequency, questionnaire?.coverage_type);
+  console.log('HeroRecommendation - Visit Frequency Cost:', visitFrequencyCost);
+  
+  // Log the annual cost components for debugging
+  console.log('HeroRecommendation - Annual Cost Components:', {
+    monthlyPremium: costs.monthlyPremium,
+    annualPremium: costs.monthlyPremium * 12,
+    visitFrequencyCost,
+    dpcCost: isDpcPlan ? 2000 : 0,
+    totalAnnualCost: annualCost
+  });
 
   // Determine if this plan has the lowest monthly payment
   const hasLowestMonthlyPayment = badges.topReason === "Monthly Cost";
@@ -227,7 +260,9 @@ export function HeroRecommendation({
               <CustomTooltip 
                 id="annual-cost-tooltip"
                 trigger="Your Estimated Annual Cost"
-                content="This is your total annual cost based on your monthly payment. It does not include any medical expenses you might share through the plan."
+                content={isDpcPlan 
+                  ? `Includes monthly premiums × 12, expected healthcare costs based on visit frequency and family size, and $2,000 for DPC membership`
+                  : `Includes monthly premiums × 12 and expected healthcare costs based on visit frequency and family size`}
               />
             </div>
             <div className="flex items-baseline">

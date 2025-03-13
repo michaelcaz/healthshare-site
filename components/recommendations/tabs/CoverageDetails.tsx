@@ -4,19 +4,22 @@ import React from 'react'
 import { getPlanCost } from '@/lib/utils/plan-costs'
 import { planDetailsData } from '@/data/plan-details-data'
 import { defaultPlanDetailsData } from '@/types/plan-details'
+import { calculateAnnualCost, getVisitFrequencyCost } from '@/utils/plan-utils'
 
 interface CoverageDetailsProps {
   plan: PlanRecommendation
   age?: number
   coverageType?: string
   iuaPreference?: string
+  visitFrequency?: string
 }
 
 export const CoverageDetails: React.FC<CoverageDetailsProps> = ({ 
   plan,
   age = 35,
   coverageType = 'just_me',
-  iuaPreference = '2500'
+  iuaPreference = '2500',
+  visitFrequency = 'just_checkups'
 }) => {
   // Get plan-specific details or fall back to default data
   const planData = planDetailsData[plan.plan.id] || defaultPlanDetailsData;
@@ -29,7 +32,22 @@ export const CoverageDetails: React.FC<CoverageDetailsProps> = ({
     iuaPreference
   );
   
+  const monthlyPremium = costs?.monthlyPremium || 0;
   const initialUnsharedAmount = costs?.initialUnsharedAmount || 0;
+  
+  // Get expected healthcare costs based on visit frequency and coverage type
+  const visitFrequencyCost = getVisitFrequencyCost(visitFrequency, coverageType);
+  
+  // Calculate annual cost including visit frequency using the centralized function
+  const isDpcPlan = plan.plan.id.includes('dpc') || plan.plan.id.includes('vpc');
+  const estimatedAnnualCost = calculateAnnualCost(
+    monthlyPremium,
+    initialUnsharedAmount,
+    visitFrequency,
+    coverageType,
+    isDpcPlan,
+    'CoverageDetails'
+  );
 
   return (
     <div className="space-y-8">
@@ -100,6 +118,39 @@ export const CoverageDetails: React.FC<CoverageDetailsProps> = ({
               <li key={index}>{feature}</li>
             ))}
           </ul>
+        </div>
+      </section>
+
+      {/* Estimated Annual Cost */}
+      <section>
+        <h3 className="text-xl font-semibold mb-4">Estimated Annual Cost</h3>
+        <div className="flex items-start gap-3 p-4 bg-blue-50 rounded-lg border border-blue-100">
+          <DollarSign className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" />
+          <div>
+            <div className="font-medium">Your Estimated Costs</div>
+            <div className="mt-3 grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="bg-white p-3 rounded-lg shadow-sm">
+                <div className="text-sm text-gray-600">Monthly Premium</div>
+                <div className="text-xl font-bold text-blue-600">${monthlyPremium.toLocaleString()}</div>
+              </div>
+              <div className="bg-white p-3 rounded-lg shadow-sm">
+                <div className="text-sm text-gray-600">Initial Unshared Amount</div>
+                <div className="text-xl font-bold text-blue-600">${initialUnsharedAmount.toLocaleString()}</div>
+              </div>
+              <div className="bg-white p-3 rounded-lg shadow-sm">
+                <div className="text-sm text-gray-600">Estimated Annual Total</div>
+                <div className="text-xl font-bold text-blue-600">${estimatedAnnualCost.toLocaleString()}</div>
+                <div className="text-xs text-gray-500 mt-1">
+                  {isDpcPlan 
+                    ? "Monthly premium × 12 + visit costs + DPC membership"
+                    : "Monthly premium × 12 + visit costs"}
+                </div>
+              </div>
+            </div>
+            <div className="mt-3 text-sm text-gray-600">
+              <p>Based on {age} years old, {coverageType === 'just_me' ? 'individual' : 'family'} coverage with ${initialUnsharedAmount} IUA</p>
+            </div>
+          </div>
         </div>
       </section>
     </div>

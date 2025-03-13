@@ -45,7 +45,24 @@ export function SelectedPlansProvider({ children, maxPlans = 3 }: {
     if (selectedPlans.length > 0) {
       // Store selected plans in localStorage for the comparison page
       localStorage.setItem('selected-plans', JSON.stringify(selectedPlans))
-      router.push('/plans/comparison')
+      
+      // Get the questionnaire data from localStorage
+      const questionnaire = localStorage.getItem('questionnaire-data');
+      let visitFrequency = 'just_checkups';
+      let coverageType = 'just_me';
+      
+      if (questionnaire) {
+        try {
+          const parsedQuestionnaire = JSON.parse(questionnaire);
+          visitFrequency = parsedQuestionnaire.visit_frequency || 'just_checkups';
+          coverageType = parsedQuestionnaire.coverage_type || 'just_me';
+        } catch (error) {
+          console.error('Error parsing questionnaire data:', error);
+        }
+      }
+      
+      // Navigate to the comparison page with query parameters
+      router.push(`/plans/comparison?visitFrequency=${visitFrequency}&coverageType=${coverageType}`)
     }
   }
 

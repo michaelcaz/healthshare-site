@@ -27,9 +27,12 @@ export function PlanDetailsModal({
   if (!isOpen) return null
   
   // Extract relevant questionnaire data for cost calculations
+  console.log('PlanDetailsModal - Questionnaire:', questionnaire);
   const age = questionnaire?.age || 35; // Default to middle of 30-39 range
   const coverageType = questionnaire?.coverage_type || 'just_me'; // Default to single coverage
   const iuaPreference = questionnaire?.iua_preference || '2500'; // Default to middle IUA tier
+  const visitFrequency = questionnaire?.visit_frequency || 'just_checkups'; // Default to annual checkups
+  console.log('PlanDetailsModal - Extracted Data:', { age, coverageType, iuaPreference, visitFrequency });
   
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto pt-10 pb-10">
@@ -80,8 +83,8 @@ export function PlanDetailsModal({
         </div>
         
         <div className="p-6 overflow-y-auto">
-          {activeTab === 'overview' && <Overview plan={plan} age={age} coverageType={coverageType} iuaPreference={iuaPreference} />}
-          {activeTab === 'coverage' && <CoverageDetails plan={plan} age={age} coverageType={coverageType} iuaPreference={iuaPreference} />}
+          {activeTab === 'overview' && <Overview plan={plan} age={age} coverageType={coverageType} iuaPreference={iuaPreference} visitFrequency={visitFrequency} />}
+          {activeTab === 'coverage' && <CoverageDetails plan={plan} age={age} coverageType={coverageType} iuaPreference={iuaPreference} visitFrequency={visitFrequency} />}
           {activeTab === 'medical' && <MedicalServices plan={plan} />}
         </div>
       </div>

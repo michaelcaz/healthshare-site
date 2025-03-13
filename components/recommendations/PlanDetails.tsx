@@ -14,20 +14,22 @@ import {
 } from 'lucide-react'
 import React from 'react'
 import { getPlanCost } from '@/lib/utils/plan-costs'
-import { calculateAnnualCost } from '@/utils/plan-utils'
+import { calculateAnnualCost, getVisitFrequencyCost } from '@/utils/plan-utils'
 
 interface PlanDetailsProps {
   plan: PlanRecommendation
   age?: number
   coverageType?: string
   iuaPreference?: string
+  visitFrequency?: string
 }
 
 export const PlanDetails: React.FC<PlanDetailsProps> = ({ 
   plan,
   age = 35, // Default to middle of 30-39 range
   coverageType = 'just_me', // Default to single coverage
-  iuaPreference = '2500' // Default to middle IUA tier
+  iuaPreference = '2500', // Default to middle IUA tier
+  visitFrequency = 'just_checkups' // Default to annual checkups
 }) => {
   console.log('PlanDetails rendering for plan:', plan.plan.id);
   
@@ -44,7 +46,34 @@ export const PlanDetails: React.FC<PlanDetailsProps> = ({
   // Calculate estimated annual cost
   const monthlyPremium = costs?.monthlyPremium || 0;
   const initialUnsharedAmount = costs?.initialUnsharedAmount || 0;
-  const estimatedAnnualCost = monthlyPremium * 12 + initialUnsharedAmount;
+  
+  // Get expected healthcare costs based on visit frequency and coverage type
+  console.log('PlanDetails - Visit Frequency:', visitFrequency);
+  console.log('PlanDetails - Coverage Type:', coverageType);
+  
+  // Log the visit frequency cost separately for debugging
+  const visitFrequencyCost = getVisitFrequencyCost(visitFrequency, coverageType);
+  console.log('PlanDetails - Visit Frequency Cost:', visitFrequencyCost);
+  
+  // Calculate annual cost including visit frequency using the centralized function
+  const isDpcPlan = plan.plan.id.includes('dpc') || plan.plan.id.includes('vpc');
+  const estimatedAnnualCost = calculateAnnualCost(
+    monthlyPremium,
+    initialUnsharedAmount,
+    visitFrequency,
+    coverageType,
+    isDpcPlan,
+    'PlanDetails'
+  );
+  
+  // Log the annual cost components for debugging
+  console.log('PlanDetails - Annual Cost Components:', {
+    monthlyPremium,
+    annualPremium: monthlyPremium * 12,
+    visitFrequencyCost,
+    dpcCost: isDpcPlan ? 2000 : 0,
+    totalAnnualCost: estimatedAnnualCost
+  });
 
   return (
     <div className="space-y-8">
@@ -255,7 +284,11 @@ export const PlanDetails: React.FC<PlanDetailsProps> = ({
               <div className="bg-white p-3 rounded-lg shadow-sm">
                 <div className="text-sm text-gray-600">Estimated Annual Total</div>
                 <div className="text-xl font-bold text-blue-600">${estimatedAnnualCost.toLocaleString()}</div>
-                <div className="text-xs text-gray-500 mt-1">Monthly premium × 12 + IUA</div>
+                <div className="text-xs text-gray-500 mt-1">
+                  {isDpcPlan 
+                    ? "Monthly premium × 12 + visit costs + DPC membership"
+                    : "Monthly premium × 12 + visit costs"}
+                </div>
               </div>
             </div>
             <div className="mt-3 text-sm text-gray-600">

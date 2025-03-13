@@ -3,17 +3,22 @@ import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '../ui/scroll-area'
+import { calculateAnnualCost } from '@/utils/plan-utils'
 
 interface PlanComparisonTableProps {
   selectedPlans: PlanRecommendation[]
   onClose: (planId: string) => void
   maxPlans?: number
+  visitFrequency?: string
+  coverageType?: string
 }
 
 export function PlanComparisonTable({ 
   selectedPlans,
   onClose,
-  maxPlans = 3 
+  maxPlans = 3,
+  visitFrequency = 'just_checkups',
+  coverageType = 'just_me'
 }: PlanComparisonTableProps) {
   // Get representative costs for each plan (middle tier, single member, 30-39 age bracket)
   const getRepresentativeCosts = (plan: PlanRecommendation) => {
@@ -21,10 +26,21 @@ export function PlanComparisonTable({
       .find(matrix => matrix.ageBracket === '30-39' && matrix.householdType === 'Member Only')
       ?.costs.find(cost => cost.initialUnsharedAmount === 2500)
     
+    // Check if this is a DPC plan
+    const isDpcPlan = plan.plan.id.includes('dpc') || plan.plan.id.includes('vpc');
+    
     return {
       monthlyPremium: costs?.monthlyPremium || 0,
       initialUnsharedAmount: costs?.initialUnsharedAmount || 0,
-      annualCost: (costs?.monthlyPremium || 0) * 12
+      // Use the centralized calculateAnnualCost function
+      annualCost: calculateAnnualCost(
+        costs?.monthlyPremium || 0, 
+        costs?.initialUnsharedAmount || 0,
+        visitFrequency,
+        coverageType,
+        isDpcPlan,
+        'PlanComparisonTable'
+      )
     }
   }
 

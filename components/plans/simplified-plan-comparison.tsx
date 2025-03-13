@@ -5,6 +5,8 @@ import { PlanRecommendation } from '@/lib/recommendation/recommendations'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { X } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
+import { calculateAnnualCost } from '@/utils/plan-utils'
+import { useSearchParams } from 'next/navigation'
 
 interface SimplifiedPlanComparisonProps {
   plans: PlanRecommendation[]
@@ -30,7 +32,7 @@ function formatCurrency(amount: number | string): string {
 }
 
 // Helper function to get representative costs for a plan
-function getRepresentativeCosts(plan: PlanRecommendation) {
+function getRepresentativeCosts(plan: PlanRecommendation, visitFrequency?: string, coverageType?: string) {
   // Try to find costs for a 30-39 year old individual with a mid-tier IUA
   const costs = plan.plan.planMatrix
     .find(matrix => matrix.ageBracket === '30-39' && matrix.householdType === 'Member Only')
@@ -39,10 +41,29 @@ function getRepresentativeCosts(plan: PlanRecommendation) {
   // Fallback to the first cost option if the specific one isn't found
   const fallbackCosts = plan.plan.planMatrix[0]?.costs[0]
   
-  return costs || fallbackCosts || { 
+  const costData = costs || fallbackCosts || { 
     monthlyPremium: 0, 
     initialUnsharedAmount: 0 
-  }
+  };
+  
+  // Check if this is a DPC plan
+  const isDpcPlan = plan.plan.id.includes('dpc') || plan.plan.id.includes('vpc');
+  
+  // Calculate annual cost using the centralized function
+  const annualCost = calculateAnnualCost(
+    costData.monthlyPremium,
+    costData.initialUnsharedAmount,
+    visitFrequency || 'just_checkups',
+    coverageType || 'just_me',
+    isDpcPlan,
+    'SimplifiedPlanComparison'
+  );
+  
+  return {
+    monthlyPremium: costData.monthlyPremium,
+    initialUnsharedAmount: costData.initialUnsharedAmount,
+    annualCost
+  };
 }
 
 // Helper function to safely access plan properties with type conversion
@@ -60,13 +81,17 @@ function getPlanProperty(plan: PlanRecommendation, key: string): string | number
 }
 
 export function SimplifiedPlanComparison({ plans }: SimplifiedPlanComparisonProps) {
+  // Get visit frequency and coverage type from URL query parameters
+  const searchParams = useSearchParams();
+  const visitFrequency = searchParams.get("visitFrequency") || "just_checkups";
+  const coverageType = searchParams.get("coverageType") || "just_me";
   // Find the lowest cost plan for highlighting
   const getLowestCostPlan = () => {
     if (plans.length <= 1) return plans[0]?.plan.id;
     
     return plans.reduce((lowest, current) => {
-      const lowestCost = getRepresentativeCosts(lowest).monthlyPremium;
-      const currentCost = getRepresentativeCosts(current).monthlyPremium;
+      const lowestCost = getRepresentativeCosts(lowest, visitFrequency, coverageType).annualCost;
+      const currentCost = getRepresentativeCosts(current, visitFrequency, coverageType).annualCost;
       return currentCost < lowestCost ? current : lowest;
     }, plans[0]).plan.id;
   }
@@ -81,14 +106,21 @@ export function SimplifiedPlanComparison({ plans }: SimplifiedPlanComparisonProp
       category: 'Highlights',
       label: 'Monthly premium',
       tooltip: 'The monthly amount you pay to maintain your membership',
-      getValue: (plan: PlanRecommendation) => formatCurrency(getRepresentativeCosts(plan).monthlyPremium)
+      getValue: (plan: PlanRecommendation) => formatCurrency(getRepresentativeCosts(plan, visitFrequency, coverageType).monthlyPremium)
     },
     { 
       id: 'deductible',
       category: 'Highlights',
       label: 'Deductible',
       tooltip: 'The amount you pay before sharing begins (Initial Unshared Amount)',
-      getValue: (plan: PlanRecommendation) => formatCurrency(getRepresentativeCosts(plan).initialUnsharedAmount)
+      getValue: (plan: PlanRecommendation) => formatCurrency(getRepresentativeCosts(plan, visitFrequency, coverageType).initialUnsharedAmount)
+    },
+    { 
+      id: 'annual-cost',
+      category: 'Highlights',
+      label: 'Estimated Annual Cost',
+      tooltip: 'The estimated total annual cost including monthly premiums, expected healthcare costs based on visit frequency, and DPC membership if applicable',
+      getValue: (plan: PlanRecommendation) => formatCurrency(getRepresentativeCosts(plan, visitFrequency, coverageType).annualCost)
     },
     { 
       id: 'max-out-of-pocket',
