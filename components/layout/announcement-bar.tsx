@@ -17,10 +17,11 @@ export function AnnouncementBar({
   
   // Check if the announcement was previously dismissed
   useEffect(() => {
-    const isDismissed = localStorage.getItem('announcementDismissed')
-    if (isDismissed) {
-      setIsVisible(false)
-    }
+    // Temporarily disabled to make announcement bar visible again
+    // const isDismissed = localStorage.getItem('announcementDismissed')
+    // if (isDismissed) {
+    //   setIsVisible(false)
+    // }
   }, [])
 
   // Set CSS variable for the announcement bar height
@@ -51,7 +52,7 @@ export function AnnouncementBar({
           <div className="container mx-auto px-4 py-2 flex items-center justify-between">
             <div className="flex-1 text-center">
               <p>
-                Interested? Hop on the phone with a team member now - {phoneNumber} or{' '}
+                Interested? Hop on the phone with a team member now - call us at {phoneNumber} or{' '}
                 <Link 
                   href={calendlyLink}
                   target="_blank"
