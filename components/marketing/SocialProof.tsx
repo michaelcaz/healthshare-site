@@ -14,10 +14,8 @@ interface TestimonialCardProps {
 
 const TestimonialCard = ({ image, name, role, quote, savings }: TestimonialCardProps) => (
   <motion.div 
-    whileHover={{ y: -4 }}
     className={cn(
-      "p-6 rounded-xl border border-gray-100",
-      "hover:shadow-lg hover:border-indigo-100 transition-all"
+      "p-6 rounded-xl border border-gray-100"
     )}
   >
     <div className="flex items-center gap-3 mb-4">
@@ -47,8 +45,7 @@ interface StatisticProps {
 
 const Statistic = ({ value, label, icon: Icon }: StatisticProps) => (
   <motion.div 
-    whileHover={{ y: -2 }}
-    className="text-center p-6 rounded-xl border border-gray-100 bg-white/80 backdrop-blur-sm hover:shadow-md transition-all"
+    className="text-center p-6 rounded-xl border border-gray-100 bg-white/80 backdrop-blur-sm transition-all"
   >
     <div className="flex items-center justify-center gap-2 mb-1">
       <Icon className="w-5 h-5 text-indigo-600" />

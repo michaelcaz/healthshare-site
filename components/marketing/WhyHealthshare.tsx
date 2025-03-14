@@ -11,8 +11,7 @@ interface ValuePropositionProps {
 
 const ValueProposition = ({ icon, title, description }: ValuePropositionProps) => (
   <motion.div
-    whileHover={{ y: -4 }}
-    className="relative p-6 rounded-2xl bg-white shadow-sm hover:shadow-md transition-shadow duration-300 border border-gray-100"
+    className="relative p-6 rounded-2xl bg-white shadow-sm border border-gray-100"
   >
     <div className="flex flex-col gap-4">
       <div className="w-12 h-12 rounded-xl bg-purple-50 flex items-center justify-center text-purple-600">

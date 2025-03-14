@@ -8,16 +8,16 @@ import { useRouter } from 'next/navigation';
 
 // Helper function to highlight savings amounts
 const formatPrices = (text: string) => {
-  // First, mark the "bad" prices with a special token
-  const markedText = text
-    .replace(/\$2,300|\$400|\$32,000/g, '%%$&%%')
-    // Then replace all remaining dollar amounts with green
+  // Replace all dollar amounts with appropriate styling
+  return text
+    .replace(/\$2,300|\$400|\$32,000/g, match => 
+      `<span class="text-rose-600 font-semibold">${match}</span>`
+    )
     .replace(/\$[\d,]+/g, match => 
-      match.includes('%%') 
-        ? `<span class="text-rose-600 font-semibold">${match.replace(/%%/g, '')}</span>`
+      match.includes('class="text-rose-600') 
+        ? match
         : `<span class="text-emerald-600 font-semibold">${match}</span>`
     );
-  return markedText;
 };
 
 const cards = [
@@ -99,8 +99,7 @@ export function SafetyNet() {
               variants={fadeInUpVariants}
             >
               <div className={cn(
-                "bg-white/90 backdrop-blur-sm rounded-xl p-6 transition-all border border-gray-100",
-                "hover:shadow-lg hover:border-indigo-100 group"
+                "bg-white/90 backdrop-blur-sm rounded-xl p-6 transition-all border border-gray-100"
               )}>
                 <div className="mb-4">
                   <card.icon className={cn("w-8 h-8", card.iconColor)} />
@@ -143,8 +142,6 @@ export function SafetyNet() {
           </p>
           <motion.button
             onClick={() => router.push('/questionnaire')}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
             className={cn(
               "bg-gradient-to-r from-indigo-600 to-indigo-700",
               "text-white px-8 py-3 rounded-lg font-medium",
