@@ -1,18 +1,31 @@
 'use client';
 
 import { useState } from 'react';
-import { PricingPlan, AgeBracket, HouseholdType } from '@/types/provider-plans';
+import { PricingPlan, HouseholdType } from '@/types/provider-plans';
+import { AgeBracket } from '@/types/plans';
 import { findPlanCosts, formatCurrency } from '@/utils/plan-utils';
 
 interface PlanDetailsProps {
   plan: PricingPlan;
+  matchScore?: number;
+  isTopRecommendation?: boolean;
 }
 
-export function PlanDetails({ plan }: PlanDetailsProps) {
-  const [ageBracket, setAgeBracket] = useState<AgeBracket>('30-39');
+export function PlanDetails({ 
+  plan, 
+  matchScore = 85, 
+  isTopRecommendation = false 
+}: PlanDetailsProps) {
+  // Use string type to accommodate all possible age brackets
+  const [ageBracket, setAgeBracket] = useState<string>('30-39');
   const [householdType, setHouseholdType] = useState<HouseholdType>('Member Only');
 
-  const costs = findPlanCosts(plan, ageBracket, householdType);
+  // Use a type assertion to convert the string to the expected AgeBracket type
+  const costs = findPlanCosts(
+    plan, 
+    ageBracket as unknown as AgeBracket, 
+    householdType
+  );
 
   return (
     <div className="space-y-6">
@@ -33,10 +46,20 @@ export function PlanDetails({ plan }: PlanDetailsProps) {
           </div>
         </div>
 
+        {/* Match Score - different styling for top recommendation */}
+        <div className="flex items-center justify-between mb-6">
+          <div className="text-sm font-medium text-gray-700">Match Score</div>
+          {isTopRecommendation ? (
+            <div className="text-lg font-bold text-primary">{matchScore}%</div>
+          ) : (
+            <div className="bg-gray-50 px-3 py-1 rounded-md text-lg font-bold text-gray-900">{matchScore}%</div>
+          )}
+        </div>
+
         <div className="flex gap-4 mb-6">
           <select
             value={ageBracket}
-            onChange={(e) => setAgeBracket(e.target.value as AgeBracket)}
+            onChange={(e) => setAgeBracket(e.target.value)}
             className="rounded-md border border-gray-300 px-3 py-2"
           >
             <option value="18-29">18-29</option>

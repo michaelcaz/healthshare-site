@@ -4,19 +4,14 @@ import { Card } from '@/components/ui/card'
 import { Checkbox } from '../ui/checkbox'
 import { useSelectedPlans } from './SelectedPlansContext'
 import { type PlanRecommendation } from './types'
-import { CheckCircle, Info, ChevronRight, Sparkles } from 'lucide-react'
+import { CheckCircle, Info, ChevronRight, Sparkles, Star, StarHalf } from 'lucide-react'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { cn } from '@/lib/utils'
 import { PlanRecommendation as PlanRecommendationType } from '@/lib/recommendation/recommendations'
 import { QuestionnaireResponse } from '@/types/questionnaire'
-
-interface ComparisonMetric {
-  label: string
-  value: string | number
-  tooltip?: string
-  highlight?: boolean
-  distinguishing?: boolean
-}
+import { planDetailsData } from '@/data/plan-details-data'
+import { getPlanCost } from '@/lib/utils/plan-costs'
+import { calculateAnnualCost } from '@/utils/plan-utils'
 
 interface PlanComparisonGridProps {
   topPlan: PlanRecommendationType
@@ -24,6 +19,29 @@ interface PlanComparisonGridProps {
   onPlanSelect: (planId: string) => void
   questionnaire?: QuestionnaireResponse
 }
+
+// Star Rating component
+const StarRating = ({ rating }: { rating: number }) => {
+  const fullStars = Math.floor(rating);
+  const hasHalfStar = rating % 1 >= 0.5;
+  
+  return (
+    <div className="flex items-center">
+      {/* Full stars */}
+      {[...Array(fullStars)].map((_, i) => (
+        <Star key={i} className="w-4 h-4 fill-primary text-primary" style={{ fill: 'currentColor' }} />
+      ))}
+      
+      {/* Half star */}
+      {hasHalfStar && <StarHalf className="w-4 h-4 fill-primary text-primary" style={{ fill: 'currentColor' }} />}
+      
+      {/* Empty stars */}
+      {[...Array(5 - fullStars - (hasHalfStar ? 1 : 0))].map((_, i) => (
+        <Star key={i + fullStars + (hasHalfStar ? 1 : 0)} className="w-4 h-4 text-primary" />
+      ))}
+    </div>
+  );
+};
 
 export function PlanComparisonGrid({ 
   topPlan, 
@@ -67,76 +85,45 @@ export function PlanComparisonGrid({
     )
   }
 
-  const getComparisonMetrics = (plan: PlanRecommendationType, isTopPlan: boolean): ComparisonMetric[] => {
-    // Return only the prescription drug-related rows as shown in the image
-    return [
-      {
-        label: 'Prescription Drugs',
-        value: '',
-        highlight: true,
-        distinguishing: false
-      },
-      {
-        label: 'Generic',
-        value: '$25/fill',
-        tooltip: 'Cost for generic prescription medications',
-        highlight: false
-      },
-      {
-        label: 'Brand',
-        value: 'Full price',
-        tooltip: 'Cost for brand-name prescription medications',
-        highlight: false
-      },
-      {
-        label: 'Preferred brand',
-        value: 'Full price',
-        tooltip: 'Cost for preferred brand-name prescription medications',
-        highlight: false
-      },
-      {
-        label: 'Specialty',
-        value: 'Full price',
-        tooltip: 'Cost for specialty medications',
-        highlight: false
-      },
-      {
-        label: 'Pregnancy',
-        value: '',
-        highlight: true,
-        distinguishing: false
-      },
-      {
-        label: 'Prenatal care',
-        value: 'Full price',
-        tooltip: 'Cost for prenatal care services',
-        highlight: false
-      },
-      {
-        label: 'Delivery',
-        value: 'Full price',
-        tooltip: 'Cost for delivery services',
-        highlight: false
-      }
-    ]
+  // Get plan details and ratings
+  const getPlanDetails = (planId: string) => {
+    return planDetailsData[planId] || null;
   }
-
-  // Helper function to determine distinguishing features for a plan
-  const getDistinguishingFeatures = (plan: PlanRecommendationType, isTopPlan: boolean): string[] => {
-    const features = [];
-    
-    // Add distinguishing features based on plan properties
-    if (plan.score > 90) features.push('Excellent Match');
-    if (plan.plan.maxCoverage.includes('No limit')) features.push('Unlimited Coverage');
-    
-    // Add top reason from factors
-    if (plan.factors && plan.factors.length > 0) {
-      const topFactor = plan.factors.sort((a, b) => b.impact - a.impact)[0];
-      if (topFactor) features.push(topFactor.factor);
+  
+  // Get plan costs
+  const getPlanCosts = (plan: PlanRecommendationType) => {
+    if (!questionnaire) {
+      return { monthlyPremium: 0, initialUnsharedAmount: 0, annualCost: 0 };
     }
     
-    return features;
-  }
+    const planCost = getPlanCost(
+      plan.plan.id,
+      questionnaire.age,
+      questionnaire.coverage_type,
+      questionnaire.iua_preference
+    );
+    
+    // Check if this is a DPC plan
+    const isDpcPlan = plan.plan.id.includes('dpc') || plan.plan.id.includes('vpc');
+    
+    // Calculate annual cost
+    let annualCost = 0;
+    if (planCost) {
+      annualCost = calculateAnnualCost(
+        planCost.monthlyPremium,
+        planCost.initialUnsharedAmount,
+        questionnaire.visit_frequency,
+        questionnaire.coverage_type,
+        isDpcPlan
+      );
+    }
+    
+    return {
+      monthlyPremium: planCost?.monthlyPremium || 0,
+      initialUnsharedAmount: planCost?.initialUnsharedAmount || 0,
+      annualCost
+    };
+  };
 
   return (
     <TooltipProvider>
@@ -156,7 +143,7 @@ export function PlanComparisonGrid({
             <div className="absolute top-0 right-0 w-0 h-0 border-t-[80px] border-t-primary border-l-[80px] border-l-transparent"></div>
             <div className="absolute top-2 right-2 text-white font-bold text-xs rotate-45">BEST MATCH</div>
             
-            <div className="space-y-5">
+            <div className="space-y-5 pt-4">
               <div className="flex items-center gap-2">
                 <Sparkles className="h-5 w-5 text-primary" />
                 <Badge variant="primary" className="bg-primary/10 text-primary border-0">
@@ -164,7 +151,10 @@ export function PlanComparisonGrid({
                 </Badge>
               </div>
               
-              <h3 className="font-semibold text-lg">{topPlan.plan.planName}</h3>
+              <div>
+                <h3 className="font-semibold text-xl text-gray-900">{topPlan.plan.providerName}</h3>
+                <p className="text-sm text-gray-600 mt-1">{topPlan.plan.planName}</p>
+              </div>
               
               {/* Match Score */}
               <div className="bg-primary/10 p-4 rounded-lg flex items-center justify-between">
@@ -172,47 +162,43 @@ export function PlanComparisonGrid({
                 <span className="text-lg font-bold text-primary">{Math.round(topPlan.score)}%</span>
               </div>
               
-              {/* Distinguishing Features */}
-              <div className="space-y-3 mb-3">
-                <p className="text-sm font-medium text-gray-700">Key Strengths:</p>
-                {getDistinguishingFeatures(topPlan, true).map((feature, idx) => (
-                  <div key={idx} className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
-                    <span className="text-sm text-gray-600">{feature}</span>
-                  </div>
-                ))}
-              </div>
-              
-              {/* Comparison Metrics */}
-              <div className="space-y-4 mt-5">
-                {getComparisonMetrics(topPlan, true).filter(metric => metric.highlight).map((metric, index) => (
-                  <div key={index} className="text-sm">
-                    <div className="flex items-center gap-1">
-                      <p className="text-gray-500">{metric.label}</p>
-                      {metric.tooltip && (
-                        <Tooltip>
-                          <TooltipTrigger>
-                            <Info className="h-3.5 w-3.5 text-gray-400" />
-                          </TooltipTrigger>
-                          <TooltipContent className="max-w-xs">
-                            <p>{metric.tooltip}</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      )}
-                    </div>
-                    <p className={cn(
-                      "font-semibold text-gray-900",
-                      metric.distinguishing && "text-green-600"
-                    )}>
-                      {metric.value}
-                      {metric.distinguishing && (
-                        <span className="ml-2 text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded-full">
-                          Best
+              {/* Cost Information */}
+              <div className="space-y-3">
+                {/* Monthly Cost */}
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-700">Monthly Cost</span>
+                  <span className="font-semibold text-gray-900">${getPlanCosts(topPlan).monthlyPremium}</span>
+                </div>
+                
+                {/* IUA */}
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-700">Initial Unshared Amount</span>
+                  <span className="font-semibold text-gray-900">${getPlanCosts(topPlan).initialUnsharedAmount.toLocaleString()}</span>
+                </div>
+                
+                {/* Est. Annual Cost */}
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-700">Est. Annual Cost</span>
+                  <span className="font-semibold text-gray-900">${getPlanCosts(topPlan).annualCost.toLocaleString()}</span>
+                </div>
+                
+                {/* Avg. Reviews */}
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-700">Avg. Reviews</span>
+                  <div className="flex items-center gap-2">
+                    {getPlanDetails(topPlan.plan.id)?.providerDetails?.ratings && (
+                      <>
+                        <StarRating rating={getPlanDetails(topPlan.plan.id)?.providerDetails?.ratings.overall || 0} />
+                        <span className="font-semibold text-gray-900">
+                          {getPlanDetails(topPlan.plan.id)?.providerDetails?.ratings.overall.toFixed(1)}
                         </span>
-                      )}
-                    </p>
+                        <span className="text-xs text-gray-500">
+                          ({getPlanDetails(topPlan.plan.id)?.providerDetails?.ratings.reviewCount})
+                        </span>
+                      </>
+                    )}
                   </div>
-                ))}
+                </div>
               </div>
               
               {/* Action Button */}
@@ -234,12 +220,15 @@ export function PlanComparisonGrid({
               key={plan.plan.id} 
               className="p-6 border border-gray-200 hover:border-gray-300 plan-card"
             >
-              <div className="space-y-5">
+              <div className="space-y-5 pt-4">
                 <Badge variant="outline" className="bg-gray-50 text-gray-700 border-gray-200">
                   Alternative {index + 1}
                 </Badge>
                 
-                <h3 className="font-semibold text-lg">{plan.plan.planName}</h3>
+                <div>
+                  <h3 className="font-semibold text-xl text-gray-900">{plan.plan.providerName}</h3>
+                  <p className="text-sm text-gray-600 mt-1">{plan.plan.planName}</p>
+                </div>
                 
                 {/* Match Score */}
                 <div className="bg-gray-50 p-4 rounded-lg flex items-center justify-between">
@@ -247,47 +236,43 @@ export function PlanComparisonGrid({
                   <span className="text-lg font-bold text-gray-900">{Math.round(plan.score)}%</span>
                 </div>
                 
-                {/* Distinguishing Features */}
-                <div className="space-y-3 mb-3">
-                  <p className="text-sm font-medium text-gray-700">Key Strengths:</p>
-                  {getDistinguishingFeatures(plan, false).map((feature, idx) => (
-                    <div key={idx} className="flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
-                      <span className="text-sm text-gray-600">{feature}</span>
-                    </div>
-                  ))}
-                </div>
-                
-                {/* Comparison Metrics */}
-                <div className="space-y-4 mt-5">
-                  {getComparisonMetrics(plan, false).filter(metric => metric.highlight).map((metric, idx) => (
-                    <div key={idx} className="text-sm">
-                      <div className="flex items-center gap-1">
-                        <p className="text-gray-500">{metric.label}</p>
-                        {metric.tooltip && (
-                          <Tooltip>
-                            <TooltipTrigger>
-                              <Info className="h-3.5 w-3.5 text-gray-400" />
-                            </TooltipTrigger>
-                            <TooltipContent className="max-w-xs">
-                              <p>{metric.tooltip}</p>
-                            </TooltipContent>
-                          </Tooltip>
-                        )}
-                      </div>
-                      <p className={cn(
-                        "font-semibold text-gray-900",
-                        metric.distinguishing && "text-green-600"
-                      )}>
-                        {metric.value}
-                        {metric.distinguishing && (
-                          <span className="ml-2 text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded-full">
-                            Best
+                {/* Cost Information */}
+                <div className="space-y-3">
+                  {/* Monthly Cost */}
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-700">Monthly Cost</span>
+                    <span className="font-semibold text-gray-900">${getPlanCosts(plan).monthlyPremium}</span>
+                  </div>
+                  
+                  {/* IUA */}
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-700">Initial Unshared Amount</span>
+                    <span className="font-semibold text-gray-900">${getPlanCosts(plan).initialUnsharedAmount.toLocaleString()}</span>
+                  </div>
+                  
+                  {/* Est. Annual Cost */}
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-700">Est. Annual Cost</span>
+                    <span className="font-semibold text-gray-900">${getPlanCosts(plan).annualCost.toLocaleString()}</span>
+                  </div>
+                  
+                  {/* Avg. Reviews */}
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-700">Avg. Reviews</span>
+                    <div className="flex items-center gap-2">
+                      {getPlanDetails(plan.plan.id)?.providerDetails?.ratings && (
+                        <>
+                          <StarRating rating={getPlanDetails(plan.plan.id)?.providerDetails?.ratings.overall || 0} />
+                          <span className="font-semibold text-gray-900">
+                            {getPlanDetails(plan.plan.id)?.providerDetails?.ratings.overall.toFixed(1)}
                           </span>
-                        )}
-                      </p>
+                          <span className="text-xs text-gray-500">
+                            ({getPlanDetails(plan.plan.id)?.providerDetails?.ratings.reviewCount})
+                          </span>
+                        </>
+                      )}
                     </div>
-                  ))}
+                  </div>
                 </div>
                 
                 {/* Action Button */}
