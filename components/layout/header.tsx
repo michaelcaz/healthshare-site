@@ -61,6 +61,12 @@ export function Header() {
               >
                 What's a Healthshare?
               </Link>
+              <Link 
+                href="/contact"
+                className="text-base font-medium text-gray-warm/90 hover:text-gray-warm transition-colors"
+              >
+                Contact
+              </Link>
               <motion.button
                 onClick={() => router.push('/questionnaire')}
                 whileHover={{ scale: 1.02, y: -1 }}
@@ -123,6 +129,13 @@ export function Header() {
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   What's a Healthshare?
+                </Link>
+                <Link 
+                  href="/contact"
+                  className="text-base font-medium text-gray-warm/90 hover:text-gray-warm transition-colors py-2"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Contact
                 </Link>
                 <motion.button
                   onClick={() => {
