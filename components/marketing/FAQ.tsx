@@ -102,16 +102,16 @@ export function FAQ() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ delay: faqs.length * 0.1 + 0.2, duration: 0.8 }}
-          className="mt-12 text-center"
+          transition={{ duration: 0.6, delay: 0.4 }}
         >
-          <p className="mb-6 text-gray-600">Ready to find the perfect healthshare plan for your needs?</p>
-          <button
-            onClick={() => router.push('/questionnaire')}
-            className="px-8 py-3 bg-[#6366F1] hover:bg-[#4F46E5] text-white font-semibold rounded-xl transition-all duration-200 hover:shadow-lg"
-          >
-            Get Started
-          </button>
+          <div className="mt-12 text-center">
+            <button 
+              onClick={() => router.push('/questionnaire')}
+              className="bg-primary hover:bg-primary/90 text-white font-medium py-3 px-8 rounded-lg transition-all duration-300"
+            >
+              Find My Plan →
+            </button>
+          </div>
         </motion.div>
       </div>
     </section>

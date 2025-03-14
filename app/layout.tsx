@@ -6,6 +6,8 @@ import { Toaster } from "@/components/ui/toaster"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { GoogleAnalytics } from '@/components/providers/GoogleAnalytics'
 import { ScrollRestoration } from '@/components/ui/scroll-restoration'
+import { FloatingCTA } from '@/components/ui/floating-cta'
+import { ExitIntentPopup } from '@/components/ui/exit-intent-popup'
 import { headers } from 'next/headers'
 // import Script from 'next/script'
 
@@ -47,6 +49,14 @@ export default function RootLayout({
           <main className="pt-[calc(76px+var(--announcement-bar-height,0px))]">
             {children}
           </main>
+          <FloatingCTA 
+            phoneNumber="(225) 718-8977" 
+            calendlyLink="https://calendly.com/michaelcaz/30min" 
+          />
+          <ExitIntentPopup 
+            phoneNumber="(225) 718-8977" 
+            calendlyLink="https://calendly.com/michaelcaz/30min" 
+          />
         </TooltipProvider>
         <Toaster />
       </body>

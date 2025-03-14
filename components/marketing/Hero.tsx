@@ -152,14 +152,14 @@ export function Hero() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.4 }}
-        className="w-full bg-white py-16 mt-24"
+        className="w-full bg-white py-8 mt-12"
       >
         <div className="container mx-auto px-4">
           <div className="flex flex-col items-center">
-            <h2 className="text-base font-medium text-gray-500 tracking-wider mb-12">
+            <h2 className="text-base font-medium text-gray-500 tracking-wider mb-8">
               Our health share plans have been featured in...
             </h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-12 md:gap-16 items-center justify-items-center w-full max-w-6xl mx-auto">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 md:gap-12 items-center justify-items-center w-full max-w-6xl mx-auto">
               <Image
                 src="/images/logos/wsj.svg"
                 alt="Wall Street Journal"
