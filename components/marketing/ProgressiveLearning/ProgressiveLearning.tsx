@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Plus, Minus, Book, Lightbulb, Target, ShieldCheck } from 'lucide-react';
+import { ArrowRight, Plus, Minus, Book, Lightbulb, Target, ShieldCheck, ChevronDown, ChevronUp } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface LearningLevel {
@@ -100,7 +100,8 @@ It's healthcare your way—fast, fair, and wallet-friendly. You're not just savi
 ];
 
 export function ProgressiveLearning() {
-  const [activeLevel, setActiveLevel] = useState(0);
+  // Removing the activeLevel state since we're no longer using it
+  // const [activeLevel, setActiveLevel] = useState(0);
   const [expandedSections, setExpandedSections] = useState<Record<number, boolean>>({});
 
   const fadeInUpVariants = {
@@ -118,6 +119,17 @@ export function ProgressiveLearning() {
       
       // Toggle the clicked section
       newState[index] = !prev[index];
+      
+      // If we're opening this section, scroll to it
+      if (newState[index]) {
+        setTimeout(() => {
+          document.getElementById(`section-${index}`)?.scrollIntoView({ 
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }, 100);
+      }
+      
       return newState;
     });
   };
@@ -125,14 +137,14 @@ export function ProgressiveLearning() {
   return (
     <section className="relative py-24 bg-white">
       <div className="absolute right-[10%] top-[20%] w-[375px] h-[375px] rounded-full bg-[#ECF1FF] opacity-50 blur-3xl" />
-      <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
           variants={fadeInUpVariants}
-          className="text-center mb-16"
+          className="text-center mb-12"
         >
           <h2 className="mb-4 font-bold leading-tight" style={{ 
             fontSize: 'var(--h2)',
@@ -143,35 +155,6 @@ export function ProgressiveLearning() {
           <div className="w-24 h-1 bg-[#6366F1] mx-auto rounded-full" />
         </motion.div>
         
-        {/* Level Selection */}
-        <motion.div 
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          variants={fadeInUpVariants}
-          className="flex flex-wrap gap-4 justify-center mb-8"
-        >
-          {levels.map((level, index) => (
-            <motion.button
-              key={index}
-              whileHover={{ y: -2, scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() => setActiveLevel(index)}
-              className={cn(
-                "flex items-center px-6 py-3 rounded-xl transition-colors",
-                "text-sm sm:text-base font-medium shadow-sm",
-                activeLevel === index 
-                  ? "bg-[#6366F1] text-white"
-                  : "bg-white hover:bg-gray-50 text-gray-700 border border-gray-200"
-              )}
-            >
-              <level.icon className="w-5 h-5 mr-2" />
-              <span>{level.title}</span>
-            </motion.button>
-          ))}
-        </motion.div>
-
         {/* Content Area */}
         <motion.div 
           initial="hidden"
@@ -179,19 +162,15 @@ export function ProgressiveLearning() {
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.4 }}
           variants={fadeInUpVariants}
-          className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8"
         >
-          <div className="space-y-6">
-            {levels.slice(0, activeLevel + 1).map((level, index) => (
+          <div className="space-y-4">
+            {levels.map((level, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3 }}
-                className={cn(
-                  "transition-all duration-200",
-                  index === activeLevel ? "opacity-100" : "opacity-70"
-                )}
+                className="opacity-100"
               >
                 <motion.div
                   whileHover={{ scale: 1.01 }}
@@ -207,12 +186,17 @@ export function ProgressiveLearning() {
                     <level.icon className="w-6 h-6 mr-3 text-[#6366F1]" />
                     {level.title}
                   </h3>
-                  <div className="flex items-center gap-2 text-sm text-gray-500">
-                    {!expandedSections[index] && <span className="hidden sm:inline">Click to expand</span>}
+                  <div className={cn(
+                    "flex items-center justify-center w-8 h-8 rounded-full",
+                    "transition-colors duration-200",
+                    expandedSections[index] 
+                      ? "bg-indigo-100 text-indigo-600" 
+                      : "bg-gray-100 text-gray-500 hover:bg-indigo-50 hover:text-indigo-600"
+                  )}>
                     {expandedSections[index] ? (
-                      <Minus className="w-5 h-5 text-[#6366F1]" />
+                      <ChevronUp className="w-5 h-5" />
                     ) : (
-                      <Plus className="w-5 h-5 text-[#6366F1]" />
+                      <ChevronDown className="w-5 h-5" />
                     )}
                   </div>
                 </motion.div>
@@ -223,7 +207,7 @@ export function ProgressiveLearning() {
                     animate={{ opacity: 1, height: "auto" }}
                     exit={{ opacity: 0, height: 0 }}
                     transition={{ duration: 0.3 }}
-                    className="mt-4 pl-9 text-gray-600 bg-gray-50/50 p-8 rounded-xl"
+                    className="mt-4 px-5 py-6 text-gray-600 bg-gray-50/50 rounded-xl"
                   >
                     <div className="prose prose-gray max-w-none">
                       {level.details.split('\n\n').map((paragraph, idx) => {
@@ -271,7 +255,7 @@ export function ProgressiveLearning() {
                     </div>
                     
                     {/* Minimize Button */}
-                    <div className="mt-8 flex justify-center">
+                    <div className="mt-6 flex justify-center">
                       <motion.button
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
@@ -284,9 +268,9 @@ export function ProgressiveLearning() {
                             block: 'center'
                           });
                         }}
-                        className="flex items-center gap-2 text-[#6366F1] hover:text-[#6366F1]/80 font-medium px-4 py-2 rounded-lg hover:bg-[#6366F1]/5 transition-colors"
+                        className="flex items-center gap-2 text-indigo-600 hover:text-indigo-700 font-medium px-4 py-2 rounded-lg hover:bg-indigo-50 transition-colors"
                       >
-                        <Minus className="w-4 h-4" />
+                        <ChevronUp className="w-4 h-4" />
                         <span>Minimize section</span>
                       </motion.button>
                     </div>
@@ -295,18 +279,6 @@ export function ProgressiveLearning() {
               </motion.div>
             ))}
           </div>
-
-          {/* Next Level Button */}
-          {activeLevel < levels.length - 1 && (
-            <motion.button
-              whileHover={{ x: 4 }}
-              onClick={() => setActiveLevel(prev => prev + 1)}
-              className="mt-8 flex items-center text-[#6366F1] hover:text-[#6366F1]/80 font-medium"
-            >
-              Ready for more
-              <ArrowRight className="w-4 h-4 ml-2" />
-            </motion.button>
-          )}
         </motion.div>
       </div>
     </section>
