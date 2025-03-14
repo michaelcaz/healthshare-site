@@ -40,7 +40,7 @@ export function TrustElements({ recommendation, planDetails = defaultPlanDetails
         {/* Trust Metrics Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* BBB Rating Card */}
-          <Card className="p-6 border border-blue-100 hover:shadow-md transition-shadow">
+          <Card className="p-6 border border-blue-100">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-gray-900">BBB Rating</h3>
               <div className="h-10 w-10 rounded-full bg-blue-600 flex items-center justify-center">
@@ -55,7 +55,7 @@ export function TrustElements({ recommendation, planDetails = defaultPlanDetails
           </Card>
 
           {/* Processing Time Card */}
-          <Card className="p-6 border border-green-100 hover:shadow-md transition-shadow">
+          <Card className="p-6 border border-green-100">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-gray-900">Fast Processing</h3>
               <div className="h-10 w-10 rounded-full bg-green-100 flex items-center justify-center">
@@ -70,7 +70,7 @@ export function TrustElements({ recommendation, planDetails = defaultPlanDetails
           </Card>
 
           {/* Member Stats Card */}
-          <Card className="p-6 border border-purple-100 hover:shadow-md transition-shadow">
+          <Card className="p-6 border border-purple-100">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-gray-900">Member Stats</h3>
               <div className="h-10 w-10 rounded-full bg-purple-100 flex items-center justify-center">

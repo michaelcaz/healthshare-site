@@ -127,16 +127,10 @@
 
 /* Plan Card Enhancements */
 .plan-card {
-  transition: var(--card-transition);
   border-radius: 1rem;
   overflow: hidden;
   border: 1px solid rgba(229, 231, 235, 0.5);
   box-shadow: var(--shadow-md);
-}
-
-.plan-card:hover {
-  transform: var(--card-hover-transform);
-  box-shadow: var(--shadow-lg);
 }
 
 /* Top Recommendation Badge */
@@ -159,11 +153,6 @@
   border-radius: 0.75rem;
   padding: 1.25rem;
   box-shadow: var(--shadow-sm);
-  transition: var(--card-transition);
-}
-
-.cost-display:hover {
-  box-shadow: var(--shadow-md);
 }
 
 .cost-amount {
@@ -197,12 +186,6 @@
   background: linear-gradient(135deg, white 0%, #f9fafb 100%);
   border: 1px solid rgba(229, 231, 235, 0.5);
   box-shadow: var(--shadow-md);
-  transition: var(--card-transition);
-}
-
-.testimonial-card:hover {
-  transform: var(--card-hover-transform);
-  box-shadow: var(--shadow-lg);
 }
 
 .testimonial-avatar {

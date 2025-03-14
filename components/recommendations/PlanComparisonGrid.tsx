@@ -218,7 +218,7 @@ export function PlanComparisonGrid({
           {alternativePlans.map((plan, index) => (
             <Card 
               key={plan.plan.id} 
-              className="p-6 border border-gray-200 hover:border-gray-300 plan-card"
+              className="p-6 border border-gray-200 plan-card"
             >
               <div className="space-y-5 pt-4">
                 <Badge variant="outline" className="bg-gray-50 text-gray-700 border-gray-200">
