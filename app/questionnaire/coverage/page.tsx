@@ -62,6 +62,12 @@ export default function CoveragePage() {
     try {
       setIsSubmitting(true);
       
+      // Scroll to top of the page
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+      
       // 1. Get and validate basic info
       const existingData = localStorage.getItem('questionnaire-basic-info');
       console.log('Basic Info Data:', existingData);

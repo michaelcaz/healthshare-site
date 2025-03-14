@@ -17,6 +17,14 @@ export const PlansLoader = ({
   const [count, setCount] = useState(0);
   const [progress, setProgress] = useState(0);
 
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  }, []);
+
   useEffect(() => {
     // Calculate the increment step for the counter
     const counterStep = Math.ceil(totalPlans / 20); // Divide the animation into 20 steps

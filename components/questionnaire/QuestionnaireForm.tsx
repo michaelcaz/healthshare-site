@@ -634,6 +634,13 @@ export const QuestionnaireForm = () => {
     
     try {
       setIsSubmitting(true);
+      
+      // Scroll to top of the page
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+      
       setFormError(null);
       
       console.log("Form submission started", data);
