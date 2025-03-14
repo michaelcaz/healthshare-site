@@ -1,6 +1,7 @@
 import './globals.css'
 import { Inter, Montserrat, Caveat } from 'next/font/google'
 import { Header } from '@/components/layout/header'
+import { AnnouncementBar } from '@/components/layout/announcement-bar'
 import { Toaster } from "@/components/ui/toaster"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { GoogleAnalytics } from '@/components/providers/GoogleAnalytics'
@@ -38,8 +39,12 @@ export default function RootLayout({
       <body suppressHydrationWarning className={`${inter.variable} ${montserrat.variable} ${caveat.variable} font-sans`} style={{ background: 'var(--color-cream-bg)' }}>
         <TooltipProvider>
           <ScrollRestoration />
+          <AnnouncementBar 
+            phoneNumber="(225) 718-8977" 
+            calendlyLink="https://calendly.com/michaelcaz/30min" 
+          />
           <Header />
-          <main className="pt-[76px]">
+          <main className="pt-[calc(76px+var(--announcement-bar-height,0px))]">
             {children}
           </main>
         </TooltipProvider>

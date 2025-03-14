@@ -42,6 +42,9 @@
     --blur-strength: 8px;
     --glow-primary: 0 0 16px rgba(99, 102, 241, 0.3);
     --grain-opacity: 0.4;
+    
+    /* Announcement bar */
+    --announcement-bar-height: 40px;
   }
 
   /* Dark theme colors */
