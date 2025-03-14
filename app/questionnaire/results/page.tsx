@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { type QuestionnaireResponse } from '@/types/questionnaire'
 import { PlanRecommendations } from '@/components/questionnaire/plan-recommendations'
+import { PlansLoader } from '../../components/questionnaire'
 import { createBrowserClient } from '@supabase/ssr'
 
 export default function ResultsPage() {
@@ -12,6 +13,8 @@ export default function ResultsPage() {
   const [response, setResponse] = useState<QuestionnaireResponse | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [debugInfo, setDebugInfo] = useState<string[]>([])
+  // Total number of plans available - this could be fetched from an API or config
+  const TOTAL_AVAILABLE_PLANS = 22
 
   // Add debug log function
   const addDebugLog = (message: string) => {
@@ -103,7 +106,11 @@ export default function ResultsPage() {
         console.error('Error fetching response:', err)
         setError(`Failed to load your responses: ${errorMessage}`)
       } finally {
-        setIsLoading(false)
+        // We'll keep isLoading true for a moment to show the loader
+        // The FindingPlansLoader will call setIsLoading(false) when it's done
+        setTimeout(() => {
+          setIsLoading(false)
+        }, 3500) // Slightly longer than the loader animation
       }
     }
 
@@ -114,9 +121,10 @@ export default function ResultsPage() {
     return (
       <div className="min-h-screen bg-gray-50 py-8">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <div className="animate-pulse">Loading your results...</div>
-          </div>
+          <PlansLoader 
+            totalPlans={TOTAL_AVAILABLE_PLANS} 
+            onComplete={() => setIsLoading(false)}
+          />
         </div>
       </div>
     )

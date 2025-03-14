@@ -9,6 +9,7 @@ import { ProgressIndicator } from '@/components/questionnaire/progress-indicator
 import { useState, useEffect } from 'react';
 import { toast } from '@/components/ui/use-toast';
 import { QuestionnaireData } from '@/lib/types';
+import { PlansLoader } from '../../components/questionnaire';
 
 const savingsSchema = z.object({
   currentPremium: z.string().optional()
@@ -44,6 +45,9 @@ export default function SavingsPage() {
   const [showSavings, setShowSavings] = useState(false);
   const [potentialSavings, setPotentialSavings] = useState<number | null>(null);
   const [basicInfo, setBasicInfo] = useState<{ coverageType: string; oldestAge: string } | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  // Total number of plans available - this should match the value in results/page.tsx
+  const TOTAL_AVAILABLE_PLANS = 22;
   
   const form = useForm<SavingsData>({
     resolver: zodResolver(savingsSchema),
@@ -53,36 +57,62 @@ export default function SavingsPage() {
   });
 
   useEffect(() => {
-    // Get the basic info from localStorage
-    const data = localStorage.getItem('questionnaire-data');
-    if (data) {
-      const parsed = JSON.parse(data);
-      setBasicInfo(parsed.basicInfo);
+    // Load existing data from localStorage
+    const existingData = localStorage.getItem('questionnaire-data');
+    if (existingData) {
+      try {
+        const data = JSON.parse(existingData);
+        if (data.basicInfo) {
+          setBasicInfo({
+            coverageType: data.basicInfo.coverageType,
+            oldestAge: data.basicInfo.oldestAge
+          });
+        }
+        
+        // Pre-fill form if we have savings data
+        if (data.savings && data.savings.currentPremium) {
+          form.setValue('currentPremium', data.savings.currentPremium);
+          calculateSavings(data.savings.currentPremium);
+        }
+      } catch (error) {
+        console.error('Error parsing localStorage data:', error);
+      }
     }
-  }, []);
+  }, [form]);
 
   const calculateSavings = (currentPremium: string) => {
-    if (!basicInfo) return;
+    if (!currentPremium || !basicInfo) {
+      setShowSavings(false);
+      return;
+    }
     
     const premium = parseFloat(currentPremium);
-    if (isNaN(premium)) return;
+    if (isNaN(premium)) {
+      setShowSavings(false);
+      return;
+    }
     
     const baselinePrice = getBaselinePricing(basicInfo.coverageType, parseInt(basicInfo.oldestAge));
-    const monthlySavings = premium - baselinePrice;
+    const savings = premium - baselinePrice;
     
-    setPotentialSavings(monthlySavings);
+    setPotentialSavings(savings > 0 ? savings : 0);
     setShowSavings(true);
   };
 
   const onSubmit = async (data: SavingsData) => {
     try {
+      setIsSubmitting(true);
+      
       const existingData = localStorage.getItem('questionnaire-data');
       const questionnaireData: QuestionnaireData = existingData ? JSON.parse(existingData) : {};
       questionnaireData.savings = data;
       localStorage.setItem('questionnaire-data', JSON.stringify(questionnaireData));
       
-      // Don't save to Supabase until final step
-      router.push('/questionnaire/health');
+      // Simulate a delay to show the loading state
+      setTimeout(() => {
+        // Don't save to Supabase until final step
+        router.push('/questionnaire/health');
+      }, 3000);
     } catch (error) {
       console.error('Error submitting form:', error);
       toast({
@@ -90,8 +120,22 @@ export default function SavingsPage() {
         description: 'Failed to save your responses. Please try again.',
         variant: 'destructive',
       });
+      setIsSubmitting(false);
     }
   };
+
+  if (isSubmitting) {
+    return (
+      <div className="min-h-screen bg-gray-50 py-8">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <PlansLoader 
+            totalPlans={TOTAL_AVAILABLE_PLANS}
+            onComplete={() => router.push('/questionnaire/health')}
+          />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <section className="relative py-24" style={{ background: 'var(--color-cream-bg)' }}>
@@ -183,8 +227,9 @@ export default function SavingsPage() {
                     "transition-colors duration-200"
                   )}
                   style={{ background: 'var(--color-coral-primary)' }}
+                  disabled={isSubmitting}
                 >
-                  Continue
+                  {isSubmitting ? 'Processing...' : 'Continue'}
                 </button>
               </div>
             </div>

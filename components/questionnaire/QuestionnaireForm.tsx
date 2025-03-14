@@ -26,6 +26,7 @@ import { NumberInput } from '@/components/questionnaire/NumberInput';
 import { OptionCardGroup } from '@/components/questionnaire/OptionCard';
 import { InfoIcon } from 'lucide-react';
 import { PregnancyQuestion } from './PregnancyQuestion';
+import { PlansLoader } from '../../app/components/questionnaire';
 
 const COOKIE_KEY = 'questionnaire-form-data';
 const COOKIE_OPTIONS = {
@@ -730,8 +731,11 @@ export const QuestionnaireForm = () => {
           timestamp: new Date().toISOString()
         }));
         
-        // Redirect to recommendations page
-        router.push('/recommendations');
+        // Show loading state for a few seconds before redirecting
+        setTimeout(() => {
+          // Redirect to recommendations page
+          router.push('/recommendations');
+        }, 3000);
       } else {
         console.error("Validation failed:", validationResult.error);
         setFormError("Please check your answers and try again.");
@@ -740,6 +744,7 @@ export const QuestionnaireForm = () => {
           description: "Please check your answers and try again.",
           variant: "destructive"
         });
+        setIsSubmitting(false);
       }
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -749,11 +754,23 @@ export const QuestionnaireForm = () => {
         description: "An error occurred. Please try again.",
         variant: "destructive"
       });
-    } finally {
-      console.log("Setting isSubmitting to false");
       setIsSubmitting(false);
     }
   };
+
+  // Add a check for isSubmitting to show the loading state
+  if (isSubmitting) {
+    return (
+      <div className="min-h-screen bg-gray-50 py-8">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <PlansLoader 
+            totalPlans={22}
+            onComplete={() => router.push('/recommendations')}
+          />
+        </div>
+      </div>
+    );
+  }
 
   if (isLoading) {
     return (

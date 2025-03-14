@@ -6,12 +6,13 @@ import { z } from 'zod';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { ProgressIndicator } from '@/components/questionnaire/progress-indicator';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { InfoIcon } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
 import { QuestionnaireResponse } from '@/types/questionnaire';
 import { QuestionnaireData } from '@/lib/types';
 import { saveQuestionnaireResponse } from '@/lib/actions/questionnaire';
+import { PlansLoader } from '../../components/questionnaire';
 
 const formSchema = z.object({
   expense_preference: z.enum(['lower_monthly', 'higher_monthly']).optional().refine(val => val !== undefined, {
@@ -44,6 +45,10 @@ interface SaveResponse {
 export default function CoveragePage() {
   const router = useRouter();
   const [showExpenseInfo, setShowExpenseInfo] = useState(false);
+  const [showIUAInfo, setShowIUAInfo] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  // Total number of plans available - this should match the value in results/page.tsx
+  const TOTAL_AVAILABLE_PLANS = 22;
   
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -55,6 +60,8 @@ export default function CoveragePage() {
 
   const onSubmit = async (data: FormData) => {
     try {
+      setIsSubmitting(true);
+      
       // 1. Get and validate basic info
       const existingData = localStorage.getItem('questionnaire-basic-info');
       console.log('Basic Info Data:', existingData);
@@ -127,8 +134,11 @@ export default function CoveragePage() {
         throw new Error(result.error || 'Failed to save questionnaire response');
       }
       
-      // 8. Only redirect on success
-      router.push('/recommendations');
+      // 8. Show loading state for a few seconds before redirecting
+      setTimeout(() => {
+        // Only redirect on success
+        router.push('/recommendations');
+      }, 3000);
     } catch (error) {
       console.error('Error submitting form:', error);
       toast({
@@ -136,8 +146,22 @@ export default function CoveragePage() {
         description: error instanceof Error ? error.message : 'Failed to save your responses. Please try again.',
         variant: 'destructive',
       });
+      setIsSubmitting(false);
     }
   };
+
+  if (isSubmitting) {
+    return (
+      <div className="min-h-screen bg-gray-50 py-8">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <PlansLoader 
+            totalPlans={TOTAL_AVAILABLE_PLANS}
+            onComplete={() => router.push('/recommendations')}
+          />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <section className="relative py-24" style={{ background: 'var(--color-cream-bg)' }}>
@@ -240,8 +264,9 @@ export default function CoveragePage() {
                   "transition-colors duration-200"
                 )}
                 style={{ background: 'var(--color-coral-primary)' }}
+                disabled={isSubmitting}
               >
-                Continue
+                {isSubmitting ? 'Processing...' : 'Submit'}
               </button>
             </div>
           </form>

@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import { Info, DollarSign, Building2, Calendar, CheckSquare } from 'lucide-react';
+import { Info, DollarSign, Building2, Calendar, CheckSquare, Users, Shield } from 'lucide-react';
 import { Alert, AlertDescription } from '../ui/alert';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
@@ -15,6 +15,13 @@ const features = [
     riff: '30-50% less',
     insurance: 'Sky-high premiums',
     description: 'Save significantly on your monthly healthcare costs while maintaining quality coverage.'
+  },
+  {
+    icon: <Shield className="w-9 h-9 text-emerald-500 stroke-[2.5]" />,
+    name: 'Deductible',
+    riff: '$500-$5000 IUA',
+    insurance: '$500-$18,000',
+    description: 'Initial Unshared Amount (IUA) is similar to a deductible, but applies per incident rather than annually. For example, if you have a $1000 IUA and two separate medical needs in a year, you\'d pay $1000 for each. The key difference? Healthy people rarely hit their insurance deductible, meaning you pay high premiums for coverage you never use. With healthshares, lower monthly costs mean you save money even if you do pay your IUA occasionally.'
   },
   {
     icon: <Building2 className="w-9 h-9 text-emerald-500 stroke-[2.5]" />,
@@ -36,6 +43,13 @@ const features = [
     riff: '98% approved',
     insurance: '49%-85%',
     description: 'Higher likelihood of claim approval means more peace of mind.'
+  },
+  {
+    icon: <Users className="w-9 h-9 text-emerald-500 stroke-[2.5]" />,
+    name: 'Best For',
+    riff: 'Healthy folks',
+    insurance: 'Sick folks',
+    description: 'Healthshare plans are ideal for generally healthy individuals looking for affordable coverage.'
   }
 ];
 
