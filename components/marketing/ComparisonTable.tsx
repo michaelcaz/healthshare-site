@@ -73,7 +73,7 @@ export function ComparisonTable() {
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl p-8 border border-gray-100"
+          className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl p-6 border border-gray-100"
         >
           {/* Mobile View: Feature List */}
           <div className="md:hidden space-y-6">
@@ -97,7 +97,7 @@ export function ComparisonTable() {
                       <img 
                         src="/images/logo.svg" 
                         alt="ShareWell" 
-                        className="h-6 w-auto"
+                        className="comparison-logo-mobile w-auto h-6"
                       />
                     </div>
                     <div className="text-emerald-600 font-bold text-lg leading-8">{feature.riff}</div>
@@ -128,22 +128,22 @@ export function ComparisonTable() {
 
           {/* Desktop View: Grid Layout */}
           <div className="hidden md:block">
-            <div className="grid grid-cols-3 gap-6 mb-8">
+            <div className="grid grid-cols-3 gap-6 mb-4">
               <div className="font-bold text-xl text-gray-900 pl-20"></div>
-              <div className="pl-5">
+              <div className="flex items-center">
                 <img 
                   src="/images/logo.svg" 
                   alt="ShareWell" 
-                  className="h-8 w-auto"
+                  className="comparison-logo w-auto"
                 />
               </div>
-              <div className="font-bold text-xl text-orange-600 pl-5">Insurance</div>
+              <div className="font-bold text-2xl text-orange-600 pl-5 flex items-center">Insurance</div>
             </div>
 
             {features.map((feature, index) => (
               <div
                 key={feature.name}
-                className={`grid grid-cols-3 gap-6 p-5 rounded-xl transition-all duration-300 border border-gray-100
+                className={`grid grid-cols-3 gap-6 p-4 rounded-xl transition-all duration-300 border border-gray-100 mb-3
                   ${hoveredFeature === index ? 'bg-gray-50/80 shadow-md' : 'hover:bg-gray-50/40'}`}
                 onMouseEnter={() => setHoveredFeature(index)}
                 onMouseLeave={() => setHoveredFeature(null)}
@@ -155,14 +155,7 @@ export function ComparisonTable() {
                   <span className="font-bold text-base text-gray-900 leading-8">{feature.name}</span>
                 </div>
                 <div className="text-emerald-600 font-bold text-lg flex items-center px-5 leading-8">
-                  <div className="flex flex-col">
-                    <img 
-                      src="/images/logo.svg" 
-                      alt="ShareWell" 
-                      className="h-6 w-auto mb-1"
-                    />
-                    <span>{feature.riff}</span>
-                  </div>
+                  {feature.riff}
                 </div>
                 <div className="text-orange-600 text-lg flex items-center px-5 leading-8">{feature.insurance}</div>
                 

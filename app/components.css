@@ -263,4 +263,16 @@
   .plan-card {
     padding: 1rem;
   }
+}
+
+/* Comparison table specific styles */
+.comparison-logo {
+  height: 8.75rem !important; /* Restored to original 1.75x size */
+  width: auto;
+  margin: -1rem 0; /* Negative margin to reduce whitespace */
+}
+
+.comparison-logo-mobile {
+  height: 1.5rem !important;
+  width: auto;
 } 

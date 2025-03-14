@@ -11,12 +11,12 @@ export default function Home() {
   return (
     <div className="pt-16">
       <Hero />
+      <ComparisonTable />
       <WhyHealthshare />
       <ProgressiveLearning />
       <SafetyNet />
       <SocialProof />
       <RealTalk />
-      <ComparisonTable />
       <FAQ />
     </div>
   );
