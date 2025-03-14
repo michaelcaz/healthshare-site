@@ -19,24 +19,25 @@ export function ProviderLogo({ providerName, size = 'md' }: ProviderLogoProps) {
   // Normalize provider name for logo lookup
   const normalizedName = providerName.toLowerCase().replace(/\s+/g, '-');
   
-  // For now, we'll use a placeholder. In production, you would have actual logos
-  // and use something like:
-  // const logoPath = `/images/providers/${normalizedName}.png`;
+  // Use SVG placeholder logos
+  const logoPath = `/images/providers/${normalizedName}.svg`;
   
   return (
     <div 
-      className="bg-gray-100 rounded-md flex items-center justify-center"
+      className="bg-gray-100 rounded-md flex items-center justify-center overflow-hidden"
       style={{ width, height }}
     >
-      {/* In production, replace this with:
       <Image 
         src={logoPath}
         alt={`${providerName} logo`}
         width={width}
         height={height}
         className="object-contain"
-      /> */}
-      <Building className={`text-gray-400 ${size === 'sm' ? 'h-4 w-4' : size === 'md' ? 'h-6 w-6' : 'h-8 w-8'}`} />
+        onError={(e) => {
+          // Fallback to default provider logo if specific logo not found
+          (e.target as HTMLImageElement).src = '/images/providers/default-provider.svg';
+        }}
+      />
     </div>
   );
 } 

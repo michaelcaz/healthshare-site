@@ -13,6 +13,7 @@ export interface PlanRecommendation {
     factor: string
     impact: number
   }>
+  questionnaire?: QuestionnaireResponse // Added to store questionnaire data with each plan
 }
 
 export async function getRecommendations(
@@ -69,7 +70,8 @@ export async function getRecommendations(
       factors: score.factors.map(f => ({
         factor: f.factor,
         impact: f.score
-      }))
+      })),
+      questionnaire: questionnaire
     }));
   
   // If no recommendations were found, create a fallback recommendation for Knew Health
@@ -90,7 +92,8 @@ export async function getRecommendations(
         { factor: 'Monthly Cost', impact: 80 },
         { factor: 'Incident Cost', impact: 75 },
         { factor: 'Annual Cost', impact: 70 }
-      ]
+      ],
+      questionnaire: questionnaire
     }];
   }
   

@@ -22,6 +22,19 @@ export function SelectedPlansProvider({ children, maxPlans = 3 }: {
   const router = useRouter()
 
   const togglePlanSelection = (plan: PlanRecommendation) => {
+    // Get the questionnaire data to ensure we're using the correct parameters
+    const questionnaire = localStorage.getItem('questionnaire-data');
+    let questionnaireData = null;
+    
+    if (questionnaire) {
+      try {
+        const parsedQuestionnaire = JSON.parse(questionnaire);
+        questionnaireData = parsedQuestionnaire.response || parsedQuestionnaire;
+      } catch (error) {
+        console.error('Error parsing questionnaire data in togglePlanSelection:', error);
+      }
+    }
+    
     setSelectedPlans(current => {
       const isSelected = current.some(p => p.plan.id === plan.plan.id)
       
@@ -33,7 +46,16 @@ export function SelectedPlansProvider({ children, maxPlans = 3 }: {
         return current
       }
       
-      return [...current, plan]
+      // Create a new plan object with the questionnaire data attached
+      // This ensures the plan data is complete when stored in localStorage
+      const enhancedPlan = {
+        ...plan,
+        questionnaire: questionnaireData
+      };
+      
+      console.log('Adding plan with questionnaire data:', enhancedPlan);
+      
+      return [...current, enhancedPlan]
     })
   }
 
@@ -50,19 +72,34 @@ export function SelectedPlansProvider({ children, maxPlans = 3 }: {
       const questionnaire = localStorage.getItem('questionnaire-data');
       let visitFrequency = 'just_checkups';
       let coverageType = 'just_me';
+      let age = '34'; // Default age
+      let iua = '5000'; // Default IUA
       
       if (questionnaire) {
         try {
           const parsedQuestionnaire = JSON.parse(questionnaire);
-          visitFrequency = parsedQuestionnaire.visit_frequency || 'just_checkups';
-          coverageType = parsedQuestionnaire.coverage_type || 'just_me';
+          
+          // Extract questionnaire response data
+          const responseData = parsedQuestionnaire.response || parsedQuestionnaire;
+          
+          visitFrequency = responseData.visit_frequency || 'just_checkups';
+          coverageType = responseData.coverage_type || 'just_me';
+          age = responseData.age?.toString() || '34';
+          iua = responseData.iua_preference || '5000';
+          
+          console.log('Questionnaire data for comparison:', {
+            visitFrequency,
+            coverageType,
+            age,
+            iua
+          });
         } catch (error) {
           console.error('Error parsing questionnaire data:', error);
         }
       }
       
-      // Navigate to the comparison page with query parameters
-      router.push(`/plans/comparison?visitFrequency=${visitFrequency}&coverageType=${coverageType}`)
+      // Navigate to the comparison page with all necessary query parameters
+      router.push(`/plans/comparison?visitFrequency=${visitFrequency}&coverageType=${coverageType}&age=${age}&iua=${iua}`)
     }
   }
 

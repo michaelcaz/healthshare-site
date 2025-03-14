@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#f0f4f8" rx="10" ry="10" />
+  <text x="100" y="115" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#4a5568">Provider Logo</text>
+  <path d="M100,50 L100,50 C77.9,50 60,67.9 60,90 L60,110 C60,132.1 77.9,150 100,150 L100,150 C122.1,150 140,132.1 140,110 L140,90 C140,67.9 122.1,50 100,50 Z M120,110 C120,121 111,130 100,130 C89,130 80,121 80,110 L80,90 C80,79 89,70 100,70 C111,70 120,79 120,90 L120,110 Z" fill="#4a5568" />
+</svg> 
