@@ -9,10 +9,14 @@ export function HeroCta({
 }) {
   const router = useRouter()
   
+  const handleGetStarted = () => {
+    router.push('/account-check?redirectTo=/questionnaire')
+  }
+  
   return (
     <div className="flex flex-col sm:flex-row items-center gap-4 mt-8">
       <motion.button
-        onClick={() => router.push('/questionnaire')}
+        onClick={handleGetStarted}
         whileHover={{ scale: 1.02, y: -1 }}
         whileTap={{ scale: 0.98 }}
         className="btn-primary btn-arrow py-3 px-6 w-full sm:w-auto"

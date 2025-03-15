@@ -2,10 +2,16 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 
 export function MobileBottomCTA() {
+  const router = useRouter();
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+
+  const handleFindMyPlan = () => {
+    router.push('/account-check?redirectTo=/questionnaire');
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -28,7 +34,10 @@ export function MobileBottomCTA() {
           className="fixed bottom-0 left-0 right-0 md:hidden bg-white border-t shadow-lg z-50"
         >
           <div className="flex items-center justify-between p-4">
-            <button className="bg-blue-900 text-white px-6 py-3 rounded-lg font-medium flex-grow mr-2">
+            <button 
+              className="bg-blue-900 text-white px-6 py-3 rounded-lg font-medium flex-grow mr-2"
+              onClick={handleFindMyPlan}
+            >
               Find My Plan
             </button>
             <button 

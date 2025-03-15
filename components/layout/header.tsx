@@ -5,11 +5,14 @@ import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { X } from 'lucide-react'
+import { LoginModal } from '@/components/auth/login-modal'
 
 export function Header() {
   const router = useRouter()
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [showLoginModal, setShowLoginModal] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -19,6 +22,14 @@ export function Header() {
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
+
+  const handleGetStarted = () => {
+    router.push('/account-check?redirectTo=/questionnaire')
+  }
+
+  const handleContinueAsGuest = () => {
+    router.push('/questionnaire')
+  }
 
   return (
     <>
@@ -68,7 +79,7 @@ export function Header() {
                 Contact
               </Link>
               <motion.button
-                onClick={() => router.push('/questionnaire')}
+                onClick={handleGetStarted}
                 whileHover={{ scale: 1.02, y: -1 }}
                 whileTap={{ scale: 0.98 }}
                 className="btn-primary btn-arrow py-2 px-6 ml-2"
@@ -139,8 +150,8 @@ export function Header() {
                 </Link>
                 <motion.button
                   onClick={() => {
-                    router.push('/questionnaire')
                     setIsMobileMenuOpen(false)
+                    handleGetStarted()
                   }}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
@@ -153,6 +164,14 @@ export function Header() {
           )}
         </AnimatePresence>
       </motion.header>
+
+      {/* Login Modal */}
+      <LoginModal 
+        isOpen={showLoginModal} 
+        onClose={() => setShowLoginModal(false)} 
+        redirectTo="/questionnaire"
+        onContinueAsGuest={handleContinueAsGuest}
+      />
     </>
   )
 }

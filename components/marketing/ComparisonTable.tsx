@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { LoginModal } from '@/components/auth/login-modal';
 
 const features = [
   {
@@ -63,6 +64,15 @@ export function ComparisonTable() {
     threshold: 0.1
   });
   const ctaRef = useRef<HTMLDivElement>(null);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+
+  const handleFindMyPlan = () => {
+    router.push('/account-check?redirectTo=/questionnaire');
+  };
+
+  const handleContinueAsGuest = () => {
+    router.push('/questionnaire');
+  };
 
   return (
     <section ref={ref} className="py-[var(--section-spacing)] relative overflow-hidden bg-gradient-to-r from-[#4A3C8D] to-[#2B1F6B]">
@@ -199,7 +209,7 @@ export function ComparisonTable() {
             className="mt-16 text-center px-4 sm:px-0"
           >
             <button 
-              onClick={() => router.push('/questionnaire')}
+              onClick={handleFindMyPlan}
               className="group relative w-full sm:w-[200px] h-12 bg-emerald-500 text-white px-8 py-3 rounded-xl 
                        text-lg font-bold hover:bg-emerald-600 transition-all duration-300 
                        hover:scale-105 hover:shadow-lg border border-emerald-400"
@@ -214,6 +224,14 @@ export function ComparisonTable() {
           </motion.div>
         </div>
       </div>
+
+      {/* Login Modal */}
+      <LoginModal 
+        isOpen={showLoginModal} 
+        onClose={() => setShowLoginModal(false)} 
+        redirectTo="/questionnaire"
+        onContinueAsGuest={handleContinueAsGuest}
+      />
     </section>
   );
 } 

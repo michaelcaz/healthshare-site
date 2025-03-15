@@ -14,6 +14,10 @@ export function FAQ() {
 
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
+  const handleFindMyPlan = () => {
+    router.push('/account-check?redirectTo=/questionnaire');
+  };
+
   const faqs = [
     {
       question: "What exactly is a healthshare?",
@@ -106,7 +110,7 @@ export function FAQ() {
         >
           <div className="mt-12 text-center">
             <button 
-              onClick={() => router.push('/questionnaire')}
+              onClick={handleFindMyPlan}
               className="bg-primary hover:bg-primary/90 text-white font-medium py-3 px-8 rounded-lg transition-all duration-300"
             >
               Find My Plan →
