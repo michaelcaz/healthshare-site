@@ -19,6 +19,8 @@ import * as z from 'zod'
 import Link from 'next/link'
 import { getQuestionnaireResponse } from '@/lib/utils/storage'
 import { saveQuestionnaireResponse as saveToSupabase } from '@/lib/supabase/questionnaire'
+import { useToast } from '@/components/ui/toast'
+import { CheckCircle } from 'lucide-react'
 
 // Different schemas for login and signup
 const loginSchema = z.object({
@@ -47,6 +49,7 @@ export function EnhancedAuthForm({ type }: EnhancedAuthFormProps) {
   const searchParams = useSearchParams()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const { toast } = useToast()
 
   // Use the appropriate schema and form based on type
   if (type === 'login') {
@@ -63,10 +66,13 @@ export function EnhancedAuthForm({ type }: EnhancedAuthFormProps) {
         password: '',
       },
     })
+    
+    const [isSuccess, setIsSuccess] = useState(false)
 
     async function onSubmit(values: z.infer<typeof loginSchema>) {
       setError(null)
       setIsLoading(true)
+      setIsSuccess(false)
 
       try {
         const { error } = await supabase.auth.signInWithPassword({
@@ -89,11 +95,25 @@ export function EnhancedAuthForm({ type }: EnhancedAuthFormProps) {
           }
         }
         
-        // Always redirect to the questionnaire page after successful login
-        router.refresh()
-        router.push('/questionnaire')
+        // Set success state
+        setIsSuccess(true)
+        
+        // Show success toast first
+        toast({
+          title: 'Login Successful',
+          description: 'You have been successfully logged in.',
+          variant: 'default'
+        })
+        
+        // Delay navigation to give user time to see the success state
+        setTimeout(() => {
+          // Always redirect to the questionnaire page after successful login
+          router.refresh()
+          router.push('/questionnaire')
+        }, 2000) // Increased to 2 seconds
       } catch (error) {
         setError(error instanceof Error ? error.message : 'An error occurred')
+        setIsSuccess(false)
       } finally {
         setIsLoading(false)
       }
@@ -139,13 +159,22 @@ export function EnhancedAuthForm({ type }: EnhancedAuthFormProps) {
 
             <Button
               type="submit"
-              className="w-full bg-indigo-500 hover:bg-indigo-600 text-white py-3 rounded-lg transition-all"
+              className={`w-full py-3 rounded-lg transition-all duration-500 ${
+                isSuccess 
+                  ? 'bg-green-500 hover:bg-green-600 text-white scale-105' 
+                  : 'bg-indigo-500 hover:bg-indigo-600 text-white'
+              }`}
               disabled={isLoading}
             >
               {isLoading ? (
                 <div className="flex items-center space-x-2">
                   <span className="animate-spin">⌛</span>
                   <span>Please wait...</span>
+                </div>
+              ) : isSuccess ? (
+                <div className="flex items-center justify-center space-x-2 animate-pulse">
+                  <CheckCircle className="h-5 w-5" />
+                  <span className="font-medium">Login Successful!</span>
                 </div>
               ) : (
                 <span>LOG IN</span>
@@ -173,10 +202,13 @@ export function EnhancedAuthForm({ type }: EnhancedAuthFormProps) {
         password: '',
       },
     })
+    
+    const [isSuccess, setIsSuccess] = useState(false)
 
     async function onSubmit(values: z.infer<typeof signupSchema>) {
       setError(null)
       setIsLoading(true)
+      setIsSuccess(false)
 
       try {
         const { error } = await supabase.auth.signUp({
@@ -195,10 +227,24 @@ export function EnhancedAuthForm({ type }: EnhancedAuthFormProps) {
         // Get the redirectedFrom parameter or default to '/'
         const redirectTo = searchParams.get('redirectedFrom') || '/'
         
-        router.refresh()
-        router.push(redirectTo)
+        // Set success state
+        setIsSuccess(true)
+        
+        // Show success toast first
+        toast({
+          title: 'Signup Successful',
+          description: 'You have been successfully signed up.',
+          variant: 'default'
+        })
+        
+        // Delay navigation to give user time to see the success state
+        setTimeout(() => {
+          router.refresh()
+          router.push(redirectTo)
+        }, 2000) // Increased to 2 seconds
       } catch (error) {
         setError(error instanceof Error ? error.message : 'An error occurred')
+        setIsSuccess(false)
       } finally {
         setIsLoading(false)
       }
@@ -271,13 +317,22 @@ export function EnhancedAuthForm({ type }: EnhancedAuthFormProps) {
 
             <Button
               type="submit"
-              className="w-full bg-indigo-500 hover:bg-indigo-600 text-white py-3 rounded-lg transition-all"
+              className={`w-full py-3 rounded-lg transition-all duration-500 ${
+                isSuccess 
+                  ? 'bg-green-500 hover:bg-green-600 text-white scale-105' 
+                  : 'bg-indigo-500 hover:bg-indigo-600 text-white'
+              }`}
               disabled={isLoading}
             >
               {isLoading ? (
                 <div className="flex items-center space-x-2">
                   <span className="animate-spin">⌛</span>
                   <span>Please wait...</span>
+                </div>
+              ) : isSuccess ? (
+                <div className="flex items-center justify-center space-x-2 animate-pulse">
+                  <CheckCircle className="h-5 w-5" />
+                  <span className="font-medium">Signup Successful!</span>
                 </div>
               ) : (
                 <span>LET'S DO THIS</span>

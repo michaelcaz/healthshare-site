@@ -18,6 +18,8 @@ import * as z from 'zod'
 import Link from 'next/link'
 import { getQuestionnaireResponse } from '@/lib/utils/storage'
 import { saveQuestionnaireResponse as saveToSupabase } from '@/lib/supabase/questionnaire'
+import { useToast } from '@/components/ui/toast'
+import { CheckCircle } from 'lucide-react'
 
 const formSchema = z.object({
   email: z.string().email('Please enter a valid email address'),
@@ -37,7 +39,9 @@ export function AuthForm({ type }: AuthFormProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [isLoading, setIsLoading] = useState(false)
+  const [isSuccess, setIsSuccess] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const { toast } = useToast()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -50,6 +54,7 @@ export function AuthForm({ type }: AuthFormProps) {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setError(null)
     setIsLoading(true)
+    setIsSuccess(false)
 
     try {
       if (type === 'login') {
@@ -67,15 +72,33 @@ export function AuthForm({ type }: AuthFormProps) {
             // Save the questionnaire data to Supabase with the user's ID
             await saveToSupabase(questionnaireData)
             console.log('Questionnaire data saved to Supabase')
+            toast({
+              title: 'Questionnaire Data Saved',
+              description: 'Your questionnaire data has been successfully saved to Supabase.',
+              variant: 'default'
+            })
           } catch (saveError) {
             console.error('Error saving questionnaire data:', saveError)
             // Continue even if there's an error saving
           }
         }
         
-        // Always redirect to the questionnaire page after successful login
-        router.refresh()
-        router.push('/questionnaire')
+        // Show success toast first
+        toast({
+          title: 'Login Successful',
+          description: 'You have been successfully logged in.',
+          variant: 'default'
+        })
+        
+        // Set success state
+        setIsSuccess(true)
+        
+        // Delay navigation to give user time to see the success state
+        setTimeout(() => {
+          // Always redirect to the questionnaire page after successful login
+          router.refresh()
+          router.push('/questionnaire')
+        }, 2000) // Increased to 2 seconds
       } else {
         const { error } = await supabase.auth.signUp({
           email: values.email,
@@ -89,8 +112,21 @@ export function AuthForm({ type }: AuthFormProps) {
         // Get the redirectedFrom parameter or default to '/'
         const redirectTo = searchParams.get('redirectedFrom') || '/'
         
-        router.refresh()
-        router.push(redirectTo)
+        // Show success toast first
+        toast({
+          title: 'Signup Successful',
+          description: 'You have been successfully signed up.',
+          variant: 'default'
+        })
+        
+        // Set success state for signup
+        setIsSuccess(true)
+        
+        // Delay navigation to give user time to see the success state
+        setTimeout(() => {
+          router.refresh()
+          router.push(redirectTo)
+        }, 2000) // Increased to 2 seconds
       }
     } catch (error) {
       setError(error instanceof Error ? error.message : 'An error occurred')
@@ -137,13 +173,22 @@ export function AuthForm({ type }: AuthFormProps) {
 
         <Button
           type="submit"
-          className="w-full"
+          className={`w-full transition-all duration-500 ${
+            isSuccess 
+              ? 'bg-green-500 hover:bg-green-600 text-white scale-105' 
+              : ''
+          }`}
           disabled={isLoading}
         >
           {isLoading ? (
             <div className="flex items-center space-x-2">
               <span className="animate-spin">⌛</span>
               <span>Please wait...</span>
+            </div>
+          ) : isSuccess ? (
+            <div className="flex items-center justify-center space-x-2 animate-pulse">
+              <CheckCircle className="h-5 w-5" />
+              <span className="font-medium">{type === 'login' ? 'Login' : 'Signup'} Successful!</span>
             </div>
           ) : (
             <span>{type === 'login' ? 'Sign in' : 'Sign up'}</span>
