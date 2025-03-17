@@ -16,6 +16,8 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import Link from 'next/link'
+import { getQuestionnaireResponse } from '@/lib/utils/storage'
+import { saveQuestionnaireResponse as saveToSupabase } from '@/lib/supabase/questionnaire'
 
 const formSchema = z.object({
   email: z.string().email('Please enter a valid email address'),
@@ -56,6 +58,24 @@ export function AuthForm({ type }: AuthFormProps) {
           password: values.password,
         })
         if (error) throw error
+        
+        // Check if there's questionnaire data in localStorage
+        const questionnaireData = getQuestionnaireResponse()
+        
+        if (questionnaireData) {
+          try {
+            // Save the questionnaire data to Supabase with the user's ID
+            await saveToSupabase(questionnaireData)
+            console.log('Questionnaire data saved to Supabase')
+          } catch (saveError) {
+            console.error('Error saving questionnaire data:', saveError)
+            // Continue even if there's an error saving
+          }
+        }
+        
+        // Always redirect to the questionnaire page after successful login
+        router.refresh()
+        router.push('/questionnaire')
       } else {
         const { error } = await supabase.auth.signUp({
           email: values.email,
@@ -65,13 +85,13 @@ export function AuthForm({ type }: AuthFormProps) {
           },
         })
         if (error) throw error
+        
+        // Get the redirectedFrom parameter or default to '/'
+        const redirectTo = searchParams.get('redirectedFrom') || '/'
+        
+        router.refresh()
+        router.push(redirectTo)
       }
-
-      // Get the redirectedFrom parameter or default to '/'
-      const redirectTo = searchParams.get('redirectedFrom') || '/'
-      
-      router.refresh()
-      router.push(redirectTo)
     } catch (error) {
       setError(error instanceof Error ? error.message : 'An error occurred')
     } finally {

@@ -15,6 +15,7 @@ import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/comp
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { getClientStorage, setClientStorage } from '@/lib/utils/client-storage';
+import { getQuestionnaireResponse } from '@/lib/utils/storage';
 import { logError, getErrorMessage, AppError } from '@/lib/utils/error-logging';
 import { steps } from '@/lib/questionnaire/steps';
 import { Button } from '@/components/ui/button';
@@ -395,17 +396,13 @@ export const QuestionnaireForm = () => {
   const [startTime] = useState(Date.now());
   const [isComplete, setIsComplete] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formSubmitted, setFormSubmitted] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const [currentStep, setCurrentStep] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { toast } = useToast();
   const [formData, setFormData] = useState<Partial<FormValues>>({});
-  
-  // Scroll to top when the component loads
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
   
   // Define the steps for the questionnaire
   const steps = [
@@ -448,6 +445,81 @@ export const QuestionnaireForm = () => {
     },
     mode: 'onSubmit', // Change to onSubmit to prevent premature validation
   });
+  
+  // Scroll to top when the component loads and load existing data
+  useEffect(() => {
+    // Ensure isSubmitting is false when component mounts
+    setIsSubmitting(false);
+    setFormSubmitted(false);
+    
+    window.scrollTo(0, 0);
+    
+    console.log("Attempting to load existing questionnaire data...");
+    
+    // Load existing questionnaire data if available
+    try {
+      // First try to get data from localStorage directly
+      const storedData = localStorage.getItem('questionnaire-data');
+      console.log("Raw localStorage data:", storedData ? "Found" : "Not found");
+      
+      // Then try using the utility function
+      const utilityData = getQuestionnaireResponse();
+      console.log("Utility function data:", utilityData ? "Found" : "Not found");
+      
+      if (storedData) {
+        const parsedData = JSON.parse(storedData);
+        console.log("Parsed localStorage data:", parsedData);
+        
+        // If we have a response object, use it to pre-fill the form
+        if (parsedData.response) {
+          console.log('Found existing questionnaire data:', parsedData.response);
+          
+          // Convert the data to match the form's expected format
+          const formValues: Partial<FormValues> = {
+            age: parsedData.response.age?.toString() || '',
+            coverage_type: parsedData.response.coverage_type,
+            zip_code: parsedData.response.zip_code || '',
+            iua_preference: parsedData.response.iua_preference,
+            pregnancy: parsedData.response.pregnancy,
+            pre_existing: parsedData.response.pre_existing,
+            state: parsedData.response.state || '',
+            expense_preference: parsedData.response.expense_preference,
+            pregnancy_planning: parsedData.response.pregnancy_planning,
+            visit_frequency: parsedData.response.visit_frequency,
+            financial_capacity: parsedData.response.financial_capacity,
+            risk_preference: parsedData.response.risk_preference,
+            pre_existing_approach: parsedData.response.pre_existing_approach,
+          };
+          
+          console.log("Converted form values:", formValues);
+          
+          // Update the form with the existing values
+          Object.entries(formValues).forEach(([key, value]) => {
+            if (value !== undefined && value !== null) {
+              console.log(`Setting form value for ${key}:`, value);
+              form.setValue(key as keyof FormValues, value as any);
+            }
+          });
+          
+          setFormData(formValues);
+          
+          // Show a toast notification to inform the user
+          toast({
+            title: "Welcome back!",
+            description: "We've loaded your previous answers. Feel free to review and update them.",
+            variant: "default"
+          });
+        } else {
+          console.log("No response object found in localStorage data");
+        }
+      } else {
+        console.log("No questionnaire data found in localStorage");
+      }
+    } catch (error) {
+      console.error('Error loading questionnaire data:', error);
+      // Don't show an error to the user, just continue with an empty form
+    }
+  }, [form, toast]);
   
   // Watch the pregnancy field to conditionally show pregnancy_planning
   const watchPregnancy = form.watch('pregnancy');
@@ -634,6 +706,7 @@ export const QuestionnaireForm = () => {
     
     try {
       setIsSubmitting(true);
+      setFormSubmitted(true);
       
       // Scroll to top of the page
       window.scrollTo({
@@ -766,7 +839,7 @@ export const QuestionnaireForm = () => {
   };
 
   // Add a check for isSubmitting to show the loading state
-  if (isSubmitting) {
+  if (isSubmitting && formSubmitted && currentStep === steps.length - 1) {
     return (
       <div className="min-h-screen bg-gray-50 py-8">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">

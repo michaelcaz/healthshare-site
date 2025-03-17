@@ -17,6 +17,8 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import Link from 'next/link'
+import { getQuestionnaireResponse } from '@/lib/utils/storage'
+import { saveQuestionnaireResponse as saveToSupabase } from '@/lib/supabase/questionnaire'
 
 // Different schemas for login and signup
 const loginSchema = z.object({
@@ -73,11 +75,23 @@ export function EnhancedAuthForm({ type }: EnhancedAuthFormProps) {
         })
         if (error) throw error
 
-        // Get the redirectedFrom parameter or default to '/'
-        const redirectTo = searchParams.get('redirectedFrom') || '/'
+        // Check if there's questionnaire data in localStorage
+        const questionnaireData = getQuestionnaireResponse()
         
+        if (questionnaireData) {
+          try {
+            // Save the questionnaire data to Supabase with the user's ID
+            await saveToSupabase(questionnaireData)
+            console.log('Questionnaire data saved to Supabase')
+          } catch (saveError) {
+            console.error('Error saving questionnaire data:', saveError)
+            // Continue even if there's an error saving
+          }
+        }
+        
+        // Always redirect to the questionnaire page after successful login
         router.refresh()
-        router.push(redirectTo)
+        router.push('/questionnaire')
       } catch (error) {
         setError(error instanceof Error ? error.message : 'An error occurred')
       } finally {
