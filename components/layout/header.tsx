@@ -5,14 +5,32 @@ import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { X } from 'lucide-react'
+import { X, User, LogOut } from 'lucide-react'
 import { LoginModal } from '@/components/auth/login-modal'
+import { createBrowserClient } from '@supabase/ssr'
+import { useToast } from '@/components/ui/toast'
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuTrigger 
+} from '@/components/ui/dropdown-menu'
+import { Button } from '@/components/ui/button'
 
 export function Header() {
   const router = useRouter()
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [showLoginModal, setShowLoginModal] = useState(false)
+  const [user, setUser] = useState<any>(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [isLoggingOut, setIsLoggingOut] = useState(false)
+  const { toast } = useToast()
+
+  const supabase = createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  )
 
   useEffect(() => {
     const handleScroll = () => {
@@ -23,12 +41,79 @@ export function Header() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  useEffect(() => {
+    async function getUser() {
+      try {
+        setIsLoading(true)
+        const { data: { session } } = await supabase.auth.getSession()
+        console.log('Auth session:', session)
+        
+        if (session) {
+          console.log('User is logged in:', session.user)
+          setUser(session.user)
+        } else {
+          console.log('No active session found')
+          setUser(null)
+        }
+      } catch (error) {
+        console.error('Error getting session:', error)
+        setUser(null)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    getUser()
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        console.log('Auth state changed - Event:', event)
+        console.log('Auth state changed - Session:', session)
+        
+        if (session) {
+          setUser(session.user)
+        } else {
+          setUser(null)
+        }
+      }
+    )
+
+    return () => {
+      subscription.unsubscribe()
+    }
+  }, [supabase.auth])
+
   const handleGetStarted = () => {
     router.push('/account-check?redirectTo=/questionnaire')
   }
 
   const handleContinueAsGuest = () => {
     router.push('/questionnaire')
+  }
+
+  const handleSignOut = async () => {
+    try {
+      setIsLoggingOut(true)
+      await supabase.auth.signOut()
+      
+      toast({
+        title: 'Logged out successfully',
+        description: 'You have been logged out of your account.',
+        variant: 'default'
+      })
+      
+      router.refresh()
+      router.push('/')
+    } catch (error) {
+      console.error('Error signing out:', error)
+      toast({
+        title: 'Error logging out',
+        description: 'There was a problem logging you out. Please try again.',
+        variant: 'destructive'
+      })
+    } finally {
+      setIsLoggingOut(false)
+    }
   }
 
   return (
@@ -78,14 +163,45 @@ export function Header() {
               >
                 Contact
               </Link>
-              <motion.button
-                onClick={handleGetStarted}
-                whileHover={{ scale: 1.02, y: -1 }}
-                whileTap={{ scale: 0.98 }}
-                className="btn-primary btn-arrow py-2 px-6 ml-2"
-              >
-                Get Started
-              </motion.button>
+              
+              {!isLoading && user ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button 
+                      variant="ghost" 
+                      size="sm"
+                      className="rounded-full w-10 h-10 border border-gray-200 hover:bg-gray-100 p-0"
+                    >
+                      <User className="h-5 w-5 text-gray-600" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-48">
+                    <DropdownMenuItem 
+                      onClick={() => router.push('/questionnaire')}
+                      className="cursor-pointer"
+                    >
+                      <span>My Questionnaire</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem 
+                      onClick={handleSignOut}
+                      disabled={isLoggingOut}
+                      className="cursor-pointer text-red-600"
+                    >
+                      <LogOut className="mr-2 h-4 w-4" />
+                      <span>{isLoggingOut ? 'Logging out...' : 'Sign Out'}</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <motion.button
+                  onClick={handleGetStarted}
+                  whileHover={{ scale: 1.02, y: -1 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="btn-primary btn-arrow py-2 px-6 ml-2"
+                >
+                  Get Started
+                </motion.button>
+              )}
             </div>
               
             <button 
@@ -148,17 +264,40 @@ export function Header() {
                 >
                   Contact
                 </Link>
-                <motion.button
-                  onClick={() => {
-                    setIsMobileMenuOpen(false)
-                    handleGetStarted()
-                  }}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="btn-primary btn-arrow py-2 px-6 self-start"
-                >
-                  Get Started
-                </motion.button>
+                
+                {!isLoading && user ? (
+                  <>
+                    <Link 
+                      href="/questionnaire"
+                      className="text-base font-medium text-gray-warm/90 hover:text-gray-warm transition-colors py-2"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      My Questionnaire
+                    </Link>
+                    <button
+                      onClick={() => {
+                        setIsMobileMenuOpen(false)
+                        handleSignOut()
+                      }}
+                      className="text-base font-medium text-red-600 hover:text-red-700 transition-colors py-2 flex items-center"
+                    >
+                      <LogOut className="mr-2 h-4 w-4" />
+                      Sign Out
+                    </button>
+                  </>
+                ) : (
+                  <motion.button
+                    onClick={() => {
+                      setIsMobileMenuOpen(false)
+                      handleGetStarted()
+                    }}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="btn-primary btn-arrow py-2 px-6 self-start"
+                  >
+                    Get Started
+                  </motion.button>
+                )}
               </div>
             </motion.div>
           )}

@@ -93,14 +93,17 @@ export function AuthForm({ type }: AuthFormProps) {
         // Set success state
         setIsSuccess(true)
         
-        // Delay navigation to give user time to see the success state
+        // Instead of using router.push which triggers the loading state,
+        // use window.location to navigate after showing success state
         setTimeout(() => {
-          // Always redirect to the questionnaire page after successful login
+          // Refresh the session first
           router.refresh()
-          router.push('/questionnaire')
-        }, 2000) // Increased to 2 seconds
+          // Use window.location for a full page navigation without loading state
+          window.location.href = '/questionnaire'
+        }, 1500)
       } else {
-        const { error } = await supabase.auth.signUp({
+        // For signup, we need to handle the flow differently
+        const { data, error } = await supabase.auth.signUp({
           email: values.email,
           password: values.password,
           options: {
@@ -122,11 +125,26 @@ export function AuthForm({ type }: AuthFormProps) {
         // Set success state for signup
         setIsSuccess(true)
         
-        // Delay navigation to give user time to see the success state
+        // For signup, we need to ensure the session is established
+        // Sign in the user immediately after signup
+        if (data.user) {
+          // After signup, sign in the user with the same credentials
+          const { error: signInError } = await supabase.auth.signInWithPassword({
+            email: values.email,
+            password: values.password,
+          })
+          
+          if (signInError) {
+            console.error('Error signing in after signup:', signInError)
+            // Continue with redirect even if there's an error
+          }
+        }
+        
+        // Use window.location for a full page navigation without loading state
         setTimeout(() => {
           router.refresh()
-          router.push(redirectTo)
-        }, 2000) // Increased to 2 seconds
+          window.location.href = redirectTo
+        }, 1500)
       }
     } catch (error) {
       setError(error instanceof Error ? error.message : 'An error occurred')
