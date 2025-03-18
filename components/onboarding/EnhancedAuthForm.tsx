@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { createBrowserClient } from '@supabase/ssr'
 import { Button } from '@/components/ui/button'
@@ -21,6 +21,7 @@ import { getQuestionnaireResponse } from '@/lib/utils/storage'
 import { saveQuestionnaireResponse as saveToSupabase } from '@/lib/supabase/questionnaire'
 import { useToast } from '@/components/ui/toast'
 import { CheckCircle } from 'lucide-react'
+import { sendWelcomeEmailAction } from '@/app/actions/welcome-email'
 
 // Different schemas for login and signup
 const loginSchema = z.object({
@@ -193,15 +194,45 @@ export function EnhancedAuthForm({ type }: EnhancedAuthFormProps) {
   }
 
   function SignupForm() {
+    const searchParams = useSearchParams();
+    const firstName = searchParams.get('firstName') || '';
+    const email = searchParams.get('email') || '';
+    
     const form = useForm<z.infer<typeof signupSchema>>({
       resolver: zodResolver(signupSchema),
       defaultValues: {
-        firstName: '',
+        firstName: firstName,
         lastName: '',
-        email: '',
+        email: email,
         password: '',
       },
     })
+    
+    // Get data from session storage if available
+    useEffect(() => {
+      if (typeof window !== 'undefined') {
+        try {
+          const storedData = sessionStorage.getItem('signupData');
+          if (storedData) {
+            const parsedData = JSON.parse(storedData);
+            
+            // Pre-fill the form with stored data
+            if (parsedData.firstName) {
+              form.setValue('firstName', parsedData.firstName);
+            }
+            
+            if (parsedData.email) {
+              form.setValue('email', parsedData.email);
+            }
+            
+            // Clean up after retrieving the data
+            sessionStorage.removeItem('signupData');
+          }
+        } catch (error) {
+          console.error('Error retrieving session data:', error);
+        }
+      }
+    }, [form]);
     
     const [isSuccess, setIsSuccess] = useState(false)
 
@@ -211,7 +242,7 @@ export function EnhancedAuthForm({ type }: EnhancedAuthFormProps) {
       setIsSuccess(false)
 
       try {
-        const { error } = await supabase.auth.signUp({
+        const { data, error } = await supabase.auth.signUp({
           email: values.email,
           password: values.password,
           options: {
@@ -229,6 +260,24 @@ export function EnhancedAuthForm({ type }: EnhancedAuthFormProps) {
         
         // Set success state
         setIsSuccess(true)
+        
+        // Try to send welcome email via server action if we have user data
+        if (data.user) {
+          try {
+            console.log('Sending welcome email for:', data.user.email);
+            // Ignore the result, don't block signup if email fails
+            sendWelcomeEmailAction(data.user, values.firstName)
+              .then(result => {
+                console.log('Welcome email result:', result);
+              })
+              .catch(emailError => {
+                console.error('Failed to send welcome email:', emailError);
+              });
+          } catch (emailError) {
+            console.error('Welcome email error:', emailError);
+            // Don't block signup process if email fails
+          }
+        }
         
         // Show success toast first
         toast({

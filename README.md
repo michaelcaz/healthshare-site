@@ -341,6 +341,13 @@ Navigation structure:
   - [x] Welcome email
 - [x] Build login flow
   - [x] Remember me option
+- [ ] Implement authentication persistence and smart redirects:
+  - [ ] Create auth state detection in navigation components
+  - [ ] Add logic to all CTAs to check auth status
+  - [ ] Direct authenticated users straight to questionnaire when clicking "Get Started"
+  - [ ] Skip login page for authenticated users
+  - [ ] Preserve questionnaire progress for returning users
+  - [ ] Handle session expiration gracefully
 
 #### 8. Provider Integration
 - [x] Create affiliate link generator ✓
@@ -383,6 +390,14 @@ Navigation structure:
 - [ ] Verify tracking systems
 - [ ] Test backup systems
 - [ ] Create launch checklist
+- [ ] Set up SendGrid SMTP for Supabase email confirmation:
+  - [ ] Register with SendGrid using domain email
+  - [ ] Configure domain verification
+  - [ ] Create API key
+  - [ ] Set up Supabase to use SendGrid SMTP
+  - [ ] Re-enable email confirmation in Supabase
+  - [ ] Test email verification flow
+  - [ ] Test password reset flow
 
 #### 12. Launch
 - [ ] Deploy to production

@@ -14,21 +14,23 @@ async function attemptEmailSend(props: SendWelcomeEmailProps, attempt: number = 
   }
 
   try {
+    // Clean the sequence ID to ensure it's just numbers
+    const sequenceId = process.env.CONVERTKIT_WELCOME_SEQUENCE_ID.replace(/[^0-9]/g, '')
+
     console.log('Making API request to Kit:', {
-      sequenceId: process.env.CONVERTKIT_WELCOME_SEQUENCE_ID,
+      sequenceId,
       attempt,
       timestamp: new Date().toISOString()
     })
 
-    const response = await fetch('https://api.convertkit.com/v3/sequences/subscribers', {
+    // Using the working 'courses' endpoint format instead of 'sequences'
+    const response = await fetch(`https://api.convertkit.com/v3/courses/${sequenceId}/subscribe`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${process.env.CONVERTKIT_API_KEY}`
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         api_key: process.env.CONVERTKIT_API_KEY,
-        sequence_id: process.env.CONVERTKIT_WELCOME_SEQUENCE_ID,
         email: user.email,
         first_name: firstName,
         fields: {

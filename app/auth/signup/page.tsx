@@ -1,13 +1,14 @@
 'use client'
 
 import { useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { createBrowserClient } from '@supabase/ssr'
-import { AuthForm } from '@/components/auth/auth-form'
-import { Card } from '@/components/ui/card'
 
 export default function SignUpPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const redirectedFrom = searchParams.get('redirectedFrom') || '/questionnaire'
+  
   const supabase = createBrowserClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
@@ -20,26 +21,21 @@ export default function SignUpPage() {
       
       // If session exists, redirect to questionnaire
       if (session) {
-        router.replace('/questionnaire')
+        router.replace(redirectedFrom)
+        return
       }
+      
+      // If not logged in, redirect to the new account-check page
+      router.replace(`/account-check?redirectTo=${encodeURIComponent(redirectedFrom)}`)
     }
     
     checkUser()
-  }, [router, supabase.auth])
+  }, [router, supabase.auth, redirectedFrom])
 
+  // This component will not render anything as it immediately redirects
   return (
-    <div className="min-h-screen w-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <Card className="w-full max-w-md p-8 mx-auto">
-        <div className="flex flex-col space-y-2 text-center mb-8">
-          <h1 className="text-2xl font-semibold tracking-tight">
-            Create an account
-          </h1>
-          <p className="text-sm text-muted-foreground">
-            Enter your email below to create your account
-          </p>
-        </div>
-        <AuthForm type="signup" />
-      </Card>
+    <div className="min-h-screen w-full flex items-center justify-center">
+      <p className="text-gray-500">Redirecting...</p>
     </div>
   )
 } 

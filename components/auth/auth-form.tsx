@@ -28,6 +28,7 @@ const formSchema = z.object({
 
 interface AuthFormProps {
   type: 'login' | 'signup'
+  termsAccepted?: boolean
 }
 
 const supabase = createBrowserClient(
@@ -35,7 +36,7 @@ const supabase = createBrowserClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 )
 
-export function AuthForm({ type }: AuthFormProps) {
+export function AuthForm({ type, termsAccepted = false }: AuthFormProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [isLoading, setIsLoading] = useState(false)
@@ -52,6 +53,15 @@ export function AuthForm({ type }: AuthFormProps) {
   })
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    if (!termsAccepted) {
+      toast({
+        title: "Terms and Conditions Required",
+        description: "Please accept the terms and conditions to continue",
+        variant: "destructive"
+      })
+      return
+    }
+    
     setError(null)
     setIsLoading(true)
     setIsSuccess(false)
