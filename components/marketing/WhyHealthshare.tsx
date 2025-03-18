@@ -33,12 +33,12 @@ export const WhyHealthshare = () => {
     {
       icon: <IconShare className="w-6 h-6" />,
       title: "Share Don't Insure",
-      description: "Stop padding corporate pockets. Pay 40% less by sharing costs directly with other members. Your monthly fees go into the community pot – when you have a big bill, it's paid directly from there. Simple.",
+      description: "Stop padding corporate pockets. Pay 30-50% less by sharing costs directly with other members. Your monthly fees go into the community pot – when you have a big bill, your plan sends you everything above your IUA, and you pay your provider directly. Simple.",
     },
     {
       icon: <IconGlobe className="w-6 h-6" />,
       title: "Choose Anyone, Save Big",
-      description: "See any provider you want and pay cash – instantly saving 25-85% on care. Get reimbursed in 7-14 days guaranteed (we only work with the fastest-paying healthshares in America). No networks, no referrals, no BS.",
+      description: "See any provider you want and pay cash – instantly saving HUGE on care. You cover the small stuff, and in the event of \"big\" stuff your plan gets everything over your IUA for eligible needs. No networks, no referrals, no BS.",
     },
     {
       icon: <IconShield className="w-6 h-6" />,

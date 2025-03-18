@@ -135,7 +135,7 @@ export function ProgressiveLearning() {
   };
 
   return (
-    <section className="relative py-24 bg-white">
+    <section id="understanding-healthcare-sharing" className="relative py-24 bg-white scroll-mt-36">
       <div className="absolute right-[10%] top-[20%] w-[375px] h-[375px] rounded-full bg-[#ECF1FF] opacity-50 blur-3xl" />
       <div className="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div

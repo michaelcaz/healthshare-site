@@ -15,42 +15,42 @@ const features = [
   {
     icon: <DollarSign className="w-9 h-9 text-emerald-500 stroke-[2.5]" />,
     name: 'Monthly Cost',
-    riff: '30-50% less',
+    ShareWell: '30-50% less',
     insurance: 'Sky-high premiums',
-    description: 'Save significantly on your monthly healthcare costs while maintaining quality coverage.'
+    description: 'Save significantly on your monthly healthcare costs while maintaining quality coverage. Yeah we know it sounds too good to be true (that\'s sincerely what we thought at first too). We explain how this is achieved below in the "Understanding Healthcare Sharing" section.'
   },
   {
     icon: <Shield className="w-9 h-9 text-emerald-500 stroke-[2.5]" />,
-    name: 'Deductible',
-    riff: '$500-$5000 IUA',
-    insurance: '$500-$18,000',
-    description: 'Initial Unshared Amount (IUA) is similar to a deductible, but applies per incident rather than annually. For example, if you have a $1000 IUA and two separate medical needs in a year, you\'d pay $1000 for each. The key difference? Healthy people rarely hit their insurance deductible, meaning you pay high premiums for coverage you never use. With healthshares, lower monthly costs mean you save money even if you do pay your IUA occasionally.'
+    name: 'Personal Responsibility',
+    ShareWell: '$500-$5000 IUA',
+    insurance: '$500-$18,000 deductible',
+    description: 'Initial Unshared Amount (IUA) is the amount you pay before your health share plan kicks in. For example, if you have a $1000 IUA and get an injury that results in $2300 of medical bills, you pay the first $1000, and the health share community pays the other $1300. Healthy people rarely hit their insurance deductible, meaning you pay high premiums for coverage you never use. With healthshares, lower monthly costs mean you save money even if you do pay your IUA occasionally.'
   },
   {
     icon: <Building2 className="w-9 h-9 text-emerald-500 stroke-[2.5]" />,
     name: 'Network Restrictions',
-    riff: 'Any provider',
+    ShareWell: 'Any provider',
     insurance: 'Restrictive networks',
     description: 'Choose your preferred healthcare providers without network restrictions.'
   },
   {
     icon: <Calendar className="w-9 h-9 text-emerald-500 stroke-[2.5]" />,
     name: 'Enrollment Period',
-    riff: 'Join anytime',
+    ShareWell: 'Join anytime',
     insurance: 'Once yearly',
     description: 'You can cancel your insurance and join any health share plan at any time.'
   },
   {
     icon: <CheckSquare className="w-9 h-9 text-emerald-500 stroke-[2.5]" />,
-    name: 'Claim Approval',
-    riff: '98% approved',
-    insurance: '49%-85%',
-    description: 'Higher likelihood of claim approval means more peace of mind.'
+    name: 'Medical Need Approval',
+    ShareWell: '98% approval',
+    insurance: '49%-85% approval',
+    description: 'Higher likelihood of medical need approval means more peace of mind.'
   },
   {
     icon: <Users className="w-9 h-9 text-emerald-500 stroke-[2.5]" />,
     name: 'Best For',
-    riff: 'Healthy folks',
+    ShareWell: 'Healthy folks',
     insurance: 'Sick folks',
     description: 'Healthshare plans are ideal for generally healthy individuals looking for affordable coverage.'
   }
@@ -123,7 +123,7 @@ export function ComparisonTable() {
                           className="comparison-logo-mobile w-auto h-6"
                         />
                       </div>
-                      <div className="text-emerald-600 font-bold text-lg leading-8">{feature.riff}</div>
+                      <div className="text-emerald-600 font-bold text-lg leading-8">{feature.ShareWell}</div>
                     </div>
                     <div>
                       <div className="text-sm font-medium text-orange-600 mb-2">Insurance</div>
@@ -178,7 +178,7 @@ export function ComparisonTable() {
                     <span className="font-bold text-base text-gray-900 leading-8">{feature.name}</span>
                   </div>
                   <div className="text-emerald-600 font-bold text-lg flex items-center px-5 leading-8">
-                    {feature.riff}
+                    {feature.ShareWell}
                   </div>
                   <div className="text-orange-600 text-lg flex items-center px-5 leading-8">{feature.insurance}</div>
                   

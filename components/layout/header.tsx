@@ -152,10 +152,10 @@ export function Header() {
                 Blog
               </Link>
               <Link 
-                href="/what-is-healthshare"
+                href="/#understanding-healthcare-sharing"
                 className="text-base font-medium text-gray-warm/90 hover:text-gray-warm transition-colors"
               >
-                What's a Healthshare?
+                What's Health Sharing?
               </Link>
               <Link 
                 href="/contact"
@@ -251,11 +251,11 @@ export function Header() {
                   Blog
                 </Link>
                 <Link 
-                  href="/what-is-healthshare"
+                  href="/#understanding-healthcare-sharing"
                   className="text-base font-medium text-gray-warm/90 hover:text-gray-warm transition-colors py-2"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  What's a Healthshare?
+                  What's Health Sharing?
                 </Link>
                 <Link 
                   href="/contact"

@@ -119,7 +119,7 @@ export function Hero() {
 
               <StatCard
                 value="2M+"
-                label="Active Members"
+                label="Active Healthshare Members"
                 trend={{ direction: 'up', value: '12%' }}
                 position="bottom-right"
                 delay={0.8}
@@ -128,8 +128,8 @@ export function Hero() {
 
               <NotificationCard
                 icon={<Users className="w-4 h-4 text-accent" />}
-                title="Community Growing"
-                subtitle="50k new members this month"
+                title="Healthcare Revolution"
+                subtitle="Pioneers wanted"
                 position="top-right"
                 delay={1}
                 className="-right-8 top-16 shadow-xl bg-white/95 backdrop-blur-sm"
