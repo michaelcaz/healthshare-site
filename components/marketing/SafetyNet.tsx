@@ -26,21 +26,21 @@ const cards = [
     icon: Activity,
     iconColor: "text-red-600",
     coverage: "Plan covers 100% after your share for eligible needs",
-    example: "Hit the ER with belly pain? One member's $2,300 bill shrank to a $1,000 hit—his plan covered $1,300, saving $1,800 vs. insurance's sky-high rates."
+    example: "Struck by a sudden stroke with an initial $90,000 hospital bill? Your health share provider would first negotiate it down to a fair market rate of, say, $55,000, then cover $54,000 (after your IUA of $1,000) and any follow up visits or therapy you need since it's part of the same \"need.\""
   },
   {
-    title: "Primary Care Checkup",
+    title: "Accident",
     icon: Stethoscope,
     iconColor: "text-blue-600",
-    coverage: "Depending on your plan, it's Free",
-    example: "Need a checkup? One member paid $185—their plan covered it all, saving $215 vs. insurance's bloated $400 bill."
+    coverage: "Plan covers 100% after your share for eligible needs",
+    example: "Picture this: you fall off a ladder while painting your home, breaking your leg. You rack up $16,000 in bills for urgent care, a cast, follow-up visits, and physical therapy. Again, your health share plan steps in, negotiates the costs down to $6500, then covers the $5500 over your IUA."
   },
   {
-    title: "Surgery",
+    title: "Planned Surgery",
     icon: Scissors,
     iconColor: "text-purple-600",
     coverage: "Your plan covers 100% after your share for eligible needs",
-    example: "Need knee surgery? One member got a $32,000 bill for the surgery, and the health share team negotiated it down to $14,000. The member paid her initial unshared amount of $1,000, and her plan covered the rest."
+    example: "Let's say you need a hip replacement. Your health share plan helps you find a high quality, trusted outpatient center. The cash pay market cost for the procedure is ~$22,000—a bundled rate covering the surgeon, facility, and follow-up care. After negotiation, your health share provider sends you $21,000 (you still cover your IUA), ensuring you can pay upfront at the time of service."
   }
 ];
 
@@ -109,15 +109,11 @@ export function SafetyNet() {
                 
                 <div className="space-y-4">
                   <div>
-                    <div className="text-sm text-gray-500 flex items-center gap-1">
-                      COVERAGE
-                      <Info className="w-4 h-4 text-gray-400 hover:text-indigo-600 cursor-help" />
-                    </div>
                     <div className="text-indigo-600 font-medium">{card.coverage}</div>
                   </div>
                   
                   <div>
-                    <div className="text-sm text-gray-500">REAL EXAMPLE</div>
+                    <div className="text-sm text-gray-500">IMAGINED EXAMPLE</div>
                     <div 
                       className="text-sm mt-1 text-gray-700"
                       dangerouslySetInnerHTML={{ __html: formatPrices(card.example) }}

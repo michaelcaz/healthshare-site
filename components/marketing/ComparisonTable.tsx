@@ -75,7 +75,7 @@ export function ComparisonTable() {
   };
 
   return (
-    <section ref={ref} className="py-[var(--section-spacing)] relative overflow-hidden bg-gradient-to-r from-[#4A3C8D] to-[#2B1F6B]">
+    <section ref={ref} className="py-[var(--section-spacing)] relative overflow-hidden bg-gradient-to-r from-[#6B5CB3] to-[#4A3C8D]">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
