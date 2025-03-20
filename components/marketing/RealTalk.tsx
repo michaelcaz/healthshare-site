@@ -19,18 +19,16 @@ interface TestimonialCardProps {
   };
 }
 
-const TestimonialCard = ({ 
+const TestimonialRow = ({ 
   title, 
   description, 
   highlight, 
   testimonial 
 }: TestimonialCardProps) => {
-  const [isExpanded, setIsExpanded] = useState(false);
   const [isQuoteExpanded, setIsQuoteExpanded] = useState(false);
   
-  // Get first paragraph of description
-  const firstParagraph = description.split('\n')[0];
-  const remainingParagraphs = description.split('\n').slice(1);
+  // Split description into paragraphs
+  const paragraphs = description.split('\n');
   
   // Truncate quote if longer than 150 characters
   const shouldTruncateQuote = testimonial.quote.length > 150;
@@ -47,34 +45,74 @@ const TestimonialCard = ({
   return (
     <motion.div 
       className={cn(
-        "bg-white rounded-xl p-6",
+        "bg-white rounded-xl p-8 mb-12",
         "shadow-md transition-all duration-300",
         "border border-indigo-100"
       )}
     >
-      <div className="mb-4">
-        <h3 className="text-xl font-semibold text-gray-900">{title}</h3>
-      </div>
-
-      <div className="bg-gray-50 rounded-lg p-5 mb-6">
-        <div className="flex items-center gap-4 mb-4">
-          <div className={cn(
-            "relative w-24 h-24 rounded-full overflow-hidden flex-shrink-0",
-            !isTaylor && "border-2 border-white shadow-sm"
-          )}>
-            <Image 
-              src={testimonial.photoPath} 
-              alt={testimonial.name}
-              fill
-              className="object-cover object-center"
-              style={isTaylor ? { transform: 'scale(1.15)' } : undefined}
-              priority
-            />
+      <div className="flex flex-col lg:flex-row gap-8">
+        {/* Left side - Concern and explanation */}
+        <div className="flex-1">
+          <div className="mb-6">
+            <h3 className="text-2xl font-semibold text-gray-900 mb-4">{title}</h3>
+            
+            <div className="space-y-4">
+              {paragraphs.map((paragraph, idx) => (
+                <p key={idx} className="text-gray-700">{paragraph}</p>
+              ))}
+              
+              <div className="bg-indigo-50 border-l-4 border-indigo-500 p-4 mt-4">
+                <p className="text-indigo-700 font-medium">{highlight}</p>
+              </div>
+            </div>
           </div>
-          
-          <div className="flex-1">
-            <p className="font-medium text-gray-900">{testimonial.name}</p>
-            <p className="text-sm text-gray-600">{testimonial.role}</p>
+        </div>
+        
+        {/* Right side - Member testimonial */}
+        <div className="flex-1 lg:max-w-[50%]">
+          <h4 className="text-xl font-semibold text-gray-900 mb-4">Real Member Experience</h4>
+          <div className="bg-gray-50 rounded-lg p-5 mb-6">
+            <div className="flex items-center gap-4 mb-4">
+              <div className={cn(
+                "relative w-24 h-24 rounded-full overflow-hidden flex-shrink-0",
+                !isTaylor && "border-2 border-white shadow-sm"
+              )}>
+                <Image 
+                  src={testimonial.photoPath} 
+                  alt={testimonial.name}
+                  fill
+                  className="object-cover object-center"
+                  style={isTaylor ? { transform: 'scale(1.15)' } : undefined}
+                  priority
+                />
+              </div>
+              
+              <div className="flex-1">
+                <p className="font-medium text-gray-900">{testimonial.name}</p>
+                <p className="text-sm text-gray-600">{testimonial.role}</p>
+              </div>
+            </div>
+            
+            <blockquote className="text-gray-700 italic mb-4">
+              "{isQuoteExpanded ? testimonial.quote : truncatedQuote}"
+              {shouldTruncateQuote && !isQuoteExpanded && (
+                <button 
+                  onClick={() => setIsQuoteExpanded(true)}
+                  className="text-indigo-600 hover:text-indigo-700 font-medium ml-1 inline-block"
+                >
+                  Read full quote
+                </button>
+              )}
+              {isQuoteExpanded && (
+                <button 
+                  onClick={() => setIsQuoteExpanded(false)}
+                  className="text-indigo-600 hover:text-indigo-700 font-medium ml-1 inline-block"
+                >
+                  Show less
+                </button>
+              )}
+            </blockquote>
+            
             <div className="flex items-center mt-1">
               <div className={cn(
                 "relative h-6 w-28",
@@ -94,81 +132,16 @@ const TestimonialCard = ({
             </div>
           </div>
         </div>
-        
-        <blockquote className="text-gray-700 italic">
-          "{isQuoteExpanded ? testimonial.quote : truncatedQuote}"
-          {shouldTruncateQuote && !isQuoteExpanded && (
-            <button 
-              onClick={() => setIsQuoteExpanded(true)}
-              className="text-indigo-600 hover:text-indigo-700 font-medium ml-1 inline-block"
-            >
-              Read full quote
-            </button>
-          )}
-          {isQuoteExpanded && (
-            <button 
-              onClick={() => setIsQuoteExpanded(false)}
-              className="text-indigo-600 hover:text-indigo-700 font-medium ml-1 inline-block"
-            >
-              Show less
-            </button>
-          )}
-        </blockquote>
       </div>
-
-      <div className="mb-4">
-        <p className="text-gray-700">{firstParagraph}</p>
-      </div>
-
-      {!isExpanded && (
-        <button 
-          onClick={() => setIsExpanded(true)}
-          className="text-indigo-600 font-medium hover:text-indigo-700 transition-colors"
-        >
-          Read more
-        </button>
-      )}
-
-      {isExpanded && (
-        <div className="mt-4 space-y-3">
-          {remainingParagraphs.map((paragraph, idx) => (
-            <p key={idx} className="text-gray-700">{paragraph}</p>
-          ))}
-          
-          <div className="bg-indigo-50 border-l-4 border-indigo-500 p-4 mt-4">
-            <p className="text-indigo-700 font-medium">{highlight}</p>
-          </div>
-          
-          <button 
-            onClick={() => setIsExpanded(false)}
-            className="text-indigo-600 font-medium hover:text-indigo-700 transition-colors mt-2 block"
-          >
-            Read less
-          </button>
-        </div>
-      )}
     </motion.div>
   );
 };
 
 const testimonials = [
   {
-    title: "There's More Manual Work",
-    description: "With insurance, you just hand over your card. With healthshares, you'll pay smaller bills directly and submit them for reimbursement through a dashboard.\n\nBut here's the thing: This extra step is why you save 40-50% on costs. Plus, being a cash-pay patient often gets you better service and attention.",
-    highlight: "The 2 minutes you spend uploading a receipt saves you hundreds of dollars.",
-    testimonial: {
-      name: "Karielle Silk",
-      role: "Director, Playwright, Mother of three",
-      planName: "Knew Health",
-      quote: "The single greatest healthcare coverage experience my husband and I have ever had, combined! Not only is the plan affordable, the coverage makes sense and is fair - but the greatest thing of all is the opportunity to actually talk to a real person when things come up. Whenever information needs to be shared or a follow up needs to happen, I always get an email and am able to reply right there as well. As a mom of three young children, I don't have time to wait on hold or play phone tag with agents. Knew Health makes it easy to understand and easy to manage! 10/10 recommend.",
-      photoPath: "/images/testimonials/Karielle-Silk.png",
-      logoPath: "/images/logos/knew.svg"
-    }
-  },
-  {
-    title: "The Legal Protection Myth",
-    description: "Insurance is a legally binding contract. In theory, you can sue if they wrongfully deny claims.\n\nBut let's be real: Insurance companies have mastered the 'Delay, Deny, Defend' system. With a 35% claim denial rate, how protected are you really?",
-    highlight: "Would you rather have a 98% approval rate or the right to sue for a denial and spend 2-3 years trying to fight the best attorneys in the WORLD in court?",
+    title: "Will they really cover me when 💩 hits the fan?",
+    description: "Insurance is a legally binding contract. In theory, you can sue if they wrongfully deny claims.\n\nBut let's be real: Insurance companies have mastered the 'Delay, Deny, Defend' system. With a 35% claim denial rate, how protected are you really?\n\nThere are thousands of examples of people that have gotten cancer diagnoses, needed heart surgery, been in major accidents, etc. that have been entirely covered by their health share plan (after hitting their IUA).",
+    highlight: "Would you rather have the 98%+ needs approval rating of health share companies on this marketplace or the right to sue for a denial and spend 2-3 years trying to fight the best attorneys in the WORLD in court?",
     testimonial: {
       name: "Taylor Chamness",
       role: "Financial Advisor, Father of two",
@@ -179,7 +152,7 @@ const testimonials = [
     }
   },
   {
-    title: "Fear of Unknown Risk",
+    title: "Is this just some sketchy, untested idea?",
     description: "Your friends might raise eyebrows. 'Sounds like a scam,' they'll say.\n\nRemember Airbnb? 'You're letting strangers sleep in your house?!' Now millions trust it every day. Healthcare's changing—health shares are the next big thing. Early adopters always face skepticism, but with 95%+ member approval ratings, you're joining a trusted crew, not a gamble.",
     highlight: "The rebels always seem crazy before they're considered pioneers.",
     testimonial: {
@@ -189,6 +162,19 @@ const testimonials = [
       quote: "I've had an amazing experience with Zion HealthShare! I just had my first child and had Zion throughout my whole pregnancy. They have awesome customer service and everyone I worked with was so kind. The maternity team was easy to get a hold of and made the process simple. I am so thankful for them and would definitely recommend them!",
       photoPath: "/images/testimonials/Josie-Fickell .png",
       logoPath: "/images/logos/zion.svg"
+    }
+  },
+  {
+    title: "Isn't it a hassle to submit receipts myself?",
+    description: "With insurance, you just hand over your card. With healthshares, you'll pay smaller bills directly and submit them for reimbursement through a dashboard.\n\nBut here's the thing: This extra step is why you save 40-50% on costs. Plus, being a cash-pay patient often gets you better service and attention.",
+    highlight: "The 2 minutes you spend uploading a receipt saves you hundreds of dollars.",
+    testimonial: {
+      name: "Karielle Silk",
+      role: "Director, Playwright, Mother of three",
+      planName: "Knew Health",
+      quote: "The single greatest healthcare coverage experience my husband and I have ever had, combined! Not only is the plan affordable, the coverage makes sense and is fair - but the greatest thing of all is the opportunity to actually talk to a real person when things come up. Whenever information needs to be shared or a follow up needs to happen, I always get an email and am able to reply right there as well. As a mom of three young children, I don't have time to wait on hold or play phone tag with agents. Knew Health makes it easy to understand and easy to manage! 10/10 recommend.",
+      photoPath: "/images/testimonials/Karielle-Silk.png",
+      logoPath: "/images/logos/knew.svg"
     }
   }
 ];
@@ -224,7 +210,7 @@ export function RealTalk() {
           </p>
         </motion.div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="space-y-8">
           {testimonials.map((item, index) => (
             <motion.div
               key={index}
@@ -234,7 +220,7 @@ export function RealTalk() {
               transition={{ duration: 0.5, delay: index * 0.1 }}
               variants={fadeInUpVariants}
             >
-              <TestimonialCard
+              <TestimonialRow
                 title={item.title}
                 description={item.description}
                 highlight={item.highlight}
