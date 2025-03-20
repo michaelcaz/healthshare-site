@@ -210,16 +210,11 @@ export function ComparisonTable() {
           >
             <button 
               onClick={handleFindMyPlan}
-              className="group relative w-full sm:w-[200px] h-12 bg-emerald-500 text-white px-8 py-3 rounded-xl 
+              className="w-full sm:w-[200px] h-12 bg-emerald-500 text-white px-8 py-3 rounded-xl 
                        text-lg font-bold hover:bg-emerald-600 transition-all duration-300 
                        hover:scale-105 hover:shadow-lg border border-emerald-400"
             >
               Find My Plan →
-              <span className="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-emerald-700 text-white 
-                             px-4 py-2 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 
-                             text-sm whitespace-nowrap shadow-lg">
-                Save 30-50% today!
-              </span>
             </button>
           </motion.div>
         </div>
