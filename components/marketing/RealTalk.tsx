@@ -139,8 +139,8 @@ const TestimonialRow = ({
 
 const testimonials = [
   {
-    title: "Will they really cover me when 💩 hits the fan?",
-    description: "Insurance is a legally binding contract. In theory, you can sue if they wrongfully deny claims.\n\nBut let's be real: Insurance companies have mastered the 'Delay, Deny, Defend' system. With a 35% claim denial rate, how protected are you really?\n\nThere are thousands of examples of people that have gotten cancer diagnoses, needed heart surgery, been in major accidents, etc. that have been entirely covered by their health share plan (after hitting their IUA).",
+    title: "Will they really cover me if 💩 hits the fan?",
+    description: "Traditional insurance offers a legal contract. In theory, this means protection if they deny your claim.\n\nReality tells a different story. Insurance companies excel at what industry insiders call the \"Delay, Deny, Defend\" strategy. With denial rates reaching 35%-51% for some insurers, that legal protection often means years of fighting against massive corporate legal teams.\n\nThere are thousands of examples of people that have gotten cancer diagnoses, needed heart surgery, been in major accidents, etc. that have been entirely covered by their health share plan (after hitting their IUA).",
     highlight: "Would you rather have the 98%+ needs approval rating of health share companies on this marketplace or the right to sue for a denial and spend 2-3 years trying to fight the best attorneys in the WORLD in court?",
     testimonial: {
       name: "Taylor Chamness",
@@ -153,7 +153,7 @@ const testimonials = [
   },
   {
     title: "Is this just some sketchy, untested idea?",
-    description: "Your friends might raise eyebrows. 'Sounds like a scam,' they'll say.\n\nRemember Airbnb? 'You're letting strangers sleep in your house?!' Now millions trust it every day. Healthcare's changing—health shares are the next big thing. Early adopters always face skepticism, but with 95%+ member approval ratings, you're joining a trusted crew, not a gamble.",
+    description: "No - it's a proven concept with decades of success.\n\nYour friends might raise eyebrows. 'Sounds like a scam,' they'll say.\n\nRemember Airbnb? 'You're letting strangers sleep in your house?!' Now millions trust it every day. Healthcare's changing—health shares are the next big thing. Early adopters always face skepticism, but with 98%+ needs approval ratings for plans on this marketplace, you're joining a trusted crew, not a gamble.\n\nHealth sharing communities have been operating successfully since the 1980s, with over 2 million Americans currently participating. These are established organizations with long track records of paying eligible medical needs and supporting their members through health crises.",
     highlight: "The rebels always seem crazy before they're considered pioneers.",
     testimonial: {
       name: "Josie Fickell",
@@ -165,9 +165,9 @@ const testimonials = [
     }
   },
   {
-    title: "Isn't it a hassle to submit receipts myself?",
-    description: "With insurance, you just hand over your card. With healthshares, you'll pay smaller bills directly and submit them for reimbursement through a dashboard.\n\nBut here's the thing: This extra step is why you save 40-50% on costs. Plus, being a cash-pay patient often gets you better service and attention.",
-    highlight: "The 2 minutes you spend uploading a receipt saves you hundreds of dollars.",
+    title: "Do I have to handle my own medical bills?",
+    description: "With insurance, you just hand over your card. With health shares, you'll pay smaller bills directly. For larger bills (such as an emergency room visit, accident or other large medical need), you'll submit the need on your health share plan's online portal, and if it's eligible they'll either reimburse you or pay the provider directly.\n\nIt's an extra step. But here's the thing: This step is one of the reasons why you save 30-50% on costs. You're also less likely to have a need above your IUA if you're healthy. Plus, being a cash-pay patient often gets you better service and attention.",
+    highlight: "The 2 minutes you spend uploading a receipt can save you thousands of dollars per year.",
     testimonial: {
       name: "Karielle Silk",
       role: "Director, Playwright, Mother of three",

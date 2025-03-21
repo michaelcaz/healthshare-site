@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { useRouter } from 'next/navigation';
+import { ChevronDown, ChevronUp } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 export function FAQ() {
   const router = useRouter();
@@ -73,15 +75,25 @@ export function FAQ() {
             >
               <button
                 onClick={() => setOpenIndex(openIndex === index ? null : index)}
-                className="w-full text-left bg-white/80 backdrop-blur-sm p-6 rounded-xl border border-gray-100 hover:shadow-md transition-all duration-300"
+                className="w-full text-left bg-white/80 backdrop-blur-sm p-6 rounded-xl border border-gray-100 transition-all duration-300"
               >
                 <div className="flex justify-between items-center">
                   <h3 className="font-medium" style={{ color: 'var(--color-warm-gray)' }}>
                     {faq.question}
                   </h3>
-                  <span className="ml-6 flex-shrink-0">
-                    {openIndex === index ? '−' : '+'}
-                  </span>
+                  <div className={cn(
+                    "flex items-center justify-center w-8 h-8 rounded-full ml-6 flex-shrink-0",
+                    "transition-colors duration-200",
+                    openIndex === index 
+                      ? "bg-indigo-100 text-indigo-600" 
+                      : "bg-gray-100 text-gray-500"
+                  )}>
+                    {openIndex === index ? (
+                      <ChevronUp className="w-5 h-5" />
+                    ) : (
+                      <ChevronDown className="w-5 h-5" />
+                    )}
+                  </div>
                 </div>
                 <AnimatePresence>
                   {openIndex === index && (
@@ -120,4 +132,4 @@ export function FAQ() {
       </div>
     </section>
   );
-} 
+}
