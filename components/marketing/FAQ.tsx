@@ -6,6 +6,7 @@ import { useInView } from 'react-intersection-observer';
 import { useRouter } from 'next/navigation';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import React from 'react';
 
 export function FAQ() {
   const router = useRouter();
@@ -27,11 +28,11 @@ export function FAQ() {
     },
     {
       question: "Is it really cheaper than insurance?",
-      answer: "Yes, most members save 30-50% compared to traditional insurance premiums. This is possible because healthshares operate with lower overhead and negotiate directly with providers."
+      answer: "Yes, members save 30-50% (and some much more) on their annual medical expenses compared to traditional insurance. This is possible because health shares operate with lower overhead and generally serve a much healthier population. As a health share plan subscriber, you will also usually get astronomically lower costs when you present yourself as a cash pay patient, bringing down the costs for the entire community."
     },
     {
       question: "What's the catch?",
-      answer: "No catch, but healthshares aren't for everyone. They work best for generally healthy people who want quality care at lower costs. We'll help you decide if it's right for you."
+      answer: "No catch, but health shares aren't for everyone. \n\nThere are waiting periods before they will cover anything related to any pre-existing conditions:\n\nYear 1: $0 coverage\nYear 2: Up to $25,000\nYear 3: Up to $50,000\nYear 4+: Up to $125,000\n\nThis graduated coverage structure is one of the reasons health shares can offer such affordable rates—but it also means they're not ideal for people who ALREADY have significant medical expenses.\n\nHealth shares work best for generally healthy individuals who want quality care at lower costs, with solid protection against emergencies, accidents, or unexpected major medical events.\n\nWe'll help you determine if it's the right fit for your specific situation."
     },
     {
       question: "How is an IUA different from a deductible?",
@@ -44,6 +45,10 @@ export function FAQ() {
     {
       question: "How do healthshares handle pre-existing conditions?",
       answer: "Pre-existing conditions are not eligible for cost-sharing during your first year of membership with any healthshare plan. After the first year, coverage for pre-existing conditions will gradually increase based on the specific plan. Most plans offer increasing coverage limits in years 2, 3, and 4 of membership."
+    },
+    {
+      question: "How is pregnancy handled?",
+      answer: "There's a waiting period of 6-12 months before maternity needs will be covered. This means that if you are already pregnant when you join, or you get pregnant before the waiting period is over (times vary by health share plan), your maternity expenses will not be eligible for sharing.\n\nIn cases where the mother is pregnant or is considering getting pregnant very soon, many families opt for signing up everyone other than the mother. Then signing the mother up after delivery.\n\nAs with any other need, expectant mothers pay a single IUA for all expenses related to their pregnancy. Expenses eligible for sharing are related to miscarriage, prenatal care, postnatal care, and delivery."
     }
   ];
 
@@ -104,9 +109,18 @@ export function FAQ() {
                       transition={{ duration: 0.3 }}
                       className="overflow-hidden"
                     >
-                      <p className="mt-4" style={{ color: 'var(--color-warm-gray)', opacity: 0.9 }}>
-                        {faq.answer}
-                      </p>
+                      <div className="mt-4 space-y-4" style={{ color: 'var(--color-warm-gray)', opacity: 0.9 }}>
+                        {faq.answer.split('\n\n').map((paragraph, i) => (
+                          <div key={i} className={i > 0 ? 'mt-4' : ''}>
+                            {paragraph.split('\n').map((line, j) => (
+                              <React.Fragment key={j}>
+                                {line}
+                                {j < paragraph.split('\n').length - 1 && <br />}
+                              </React.Fragment>
+                            ))}
+                          </div>
+                        ))}
+                      </div>
                     </motion.div>
                   )}
                 </AnimatePresence>
