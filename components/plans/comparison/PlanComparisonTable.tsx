@@ -2,11 +2,12 @@
 
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { X, Star, StarHalf } from 'lucide-react'
+import { X, Star, StarHalf, Sparkles } from 'lucide-react'
 import { planDetailsData } from '@/data/plan-details-data'
 import { PlanDetailsData } from '@/types/plan-details'
 import { Tooltip, TooltipContent as BaseTooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { Badge } from '@/components/ui/badge'
+import Image from 'next/image'
 
 // Custom styled tooltip content for better readability
 const TooltipContent = ({ children, className = '', ...props }: React.ComponentPropsWithoutRef<typeof BaseTooltipContent>) => (
@@ -102,14 +103,48 @@ const StarRating = ({ rating }: { rating: number }) => {
   );
 };
 
+// Helper function to get the correct logo path for providers
+const getProviderLogoPath = (providerName: string): string => {
+  // Base URL 
+  const baseUrl = process.env.NODE_ENV === 'development' 
+    ? 'http://localhost:3000' 
+    : 'https://healthshare-site.vercel.app';
+  
+  // Normalize the provider name (lowercase and remove spaces)
+  const normalizedName = providerName.toLowerCase();
+  
+  // Check for each provider by substring to handle variations in naming
+  if (normalizedName.includes('zion')) {
+    return `${baseUrl}/images/logos/zion.svg`;
+  } else if (normalizedName.includes('sedera')) {
+    return `${baseUrl}/images/logos/sedera.svg`;
+  } else if (normalizedName.includes('knew')) {
+    return `${baseUrl}/images/logos/knew.svg`;
+  } else if (normalizedName.includes('crowd')) {
+    return `${baseUrl}/images/logos/crowd-health.svg`;
+  }
+  
+  // Fallback to site logo
+  console.warn(`No logo mapping found for provider: ${providerName}`);
+  return `${baseUrl}/images/logo.svg`;
+};
+
 export function PlanComparisonTable() {
   const searchParams = useSearchParams()
   const [plans, setPlans] = useState<PlanData[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [logoLoaded, setLogoLoaded] = useState<Record<string, boolean>>({});
+  const [topRecommendationId, setTopRecommendationId] = useState<string | null>(null);
 
   useEffect(() => {
     // Get selected plans from localStorage
     const storedPlans = localStorage.getItem('selected-plans')
+    // Get the top recommendation ID from localStorage
+    const topRecommendationId = localStorage.getItem('top-recommendation-id')
+    
+    if (topRecommendationId) {
+      setTopRecommendationId(topRecommendationId)
+    }
     
     if (storedPlans) {
       try {
@@ -129,6 +164,8 @@ export function PlanComparisonTable() {
           if (!planDetails) {
             console.warn(`No plan details found for plan ID: ${planId}`)
           }
+          
+          console.log('Plan provider name:', planData.plan.providerName);
           
           // Use the scoring data directly from the plan recommendation
           // Return 0 if data isn't found instead of using default values
@@ -160,6 +197,11 @@ export function PlanComparisonTable() {
   }, [searchParams])
 
   const removePlan = (planId: string) => {
+    // Check if the removed plan is the top recommendation
+    if (planId === topRecommendationId) {
+      setTopRecommendationId(null)
+    }
+    
     setPlans(current => current.filter(plan => plan.id !== planId))
     
     // Also update localStorage
@@ -206,6 +248,26 @@ export function PlanComparisonTable() {
   return (
     <TooltipProvider>
       <div className="overflow-x-auto pb-8">
+        <div className="w-full mt-10 mb-2 flex">
+          <div className="w-1/4">
+            {/* Empty space for the label column */}
+          </div>
+          
+          {/* Badge container for each plan */}
+          <div className="flex-1 grid" style={{ gridTemplateColumns: `repeat(${plans.length}, 1fr)` }}>
+            {plans.map((plan, index) => (
+              <div key={`badge-container-${plan.id}`} className="flex justify-center">
+                {plan.id === topRecommendationId && (
+                  <div className="bg-gradient-to-r from-[#6366F1]/90 to-[#5A51E5]/90 text-white rounded-full px-4 py-1.5 flex items-center gap-1.5 shadow-lg border border-white/30">
+                    <Sparkles className="h-4 w-4 text-white/90" />
+                    <span className="text-sm font-semibold whitespace-nowrap">Top Recommendation</span>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+        
         <table className="w-full border-collapse rounded-xl shadow-md bg-white overflow-hidden border border-gray-100">
           <thead>
             <tr>
@@ -219,15 +281,69 @@ export function PlanComparisonTable() {
                   className={`p-6 border-b border-gray-200 relative ${index === plans.length - 1 ? 'rounded-tr-xl' : ''}`}
                 >
                   <div className="flex flex-col items-center text-center">
-                    {index === 0 && (
-                      <div className="absolute -top-1 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                        <div className="bg-primary text-white text-xs font-bold uppercase tracking-wider py-1 px-3 rounded-full shadow-md">
-                          Recommended
-                        </div>
-                      </div>
-                    )}
-                    <h3 className="font-semibold text-xl text-gray-900 mt-4">{plan.providerName}</h3>
-                    <p className="text-sm text-gray-600 mt-1">{plan.planName}</p>
+                    {/* Provider Logo - Direct approach */}
+                    <div className="mb-3 flex items-center justify-center" style={{ minHeight: '80px' }}>
+                      {(() => {
+                        const name = plan.providerName.toLowerCase();
+                        
+                        // Use very direct approach for each provider
+                        if (name.includes('zion')) {
+                          return (
+                            <img 
+                              src="/images/logos/zion.svg"
+                              alt="Zion Healthshare logo"
+                              width={140}
+                              height={70}
+                              style={{ 
+                                maxWidth: '140px', 
+                                height: 'auto',
+                                objectFit: 'contain'
+                              }}
+                              onLoad={() => {
+                                console.log('Zion logo loaded');
+                                setLogoLoaded(prev => ({...prev, [plan.id]: true}));
+                              }}
+                              onError={() => {
+                                console.error('Failed to load Zion logo');
+                              }}
+                            />
+                          );
+                        }
+                        
+                        if (name.includes('sedera')) {
+                          return (
+                            <img 
+                              src="/images/logos/sedera.svg"
+                              alt="Sedera logo"
+                              width={140}
+                              height={70}
+                              style={{ 
+                                maxWidth: '140px', 
+                                height: 'auto',
+                                objectFit: 'contain'
+                              }}
+                              onLoad={() => {
+                                console.log('Sedera logo loaded');
+                                setLogoLoaded(prev => ({...prev, [plan.id]: true}));
+                              }}
+                              onError={() => {
+                                console.error('Failed to load Sedera logo');
+                              }}
+                            />
+                          );
+                        }
+                        
+                        // Fallback to just displaying the name nicely
+                        return (
+                          <span className="font-bold text-xl text-primary">
+                            {plan.providerName}
+                          </span>
+                        );
+                      })()}
+                    </div>
+                    
+                    {/* Remove the redundant company name heading - only show plan name */}
+                    <p className="text-md text-gray-800 font-medium mt-1">{plan.planName}</p>
                     
                     <button 
                       onClick={() => removePlan(plan.id)}

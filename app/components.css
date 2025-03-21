@@ -267,9 +267,16 @@
 
 /* Comparison table specific styles */
 .comparison-logo {
-  height: 8.75rem !important; /* Restored to original 1.75x size */
+  height: auto !important;
+  max-height: 70px !important; /* Adjusted for better consistency */
   width: auto;
-  margin: -1rem 0; /* Negative margin to reduce whitespace */
+  object-fit: contain;
+}
+
+@media (max-width: 768px) {
+  .comparison-logo {
+    max-height: 50px !important;
+  }
 }
 
 .comparison-logo-mobile {

@@ -51,6 +51,11 @@ export default function RecommendationsPage() {
         setQuestionnaire(questionnaireData)
         const recommendationsData = await getRecommendations(providerPlans, questionnaireData)
         setRecommendations(recommendationsData)
+        
+        // Store the top recommendation ID in localStorage
+        if (recommendationsData && recommendationsData.length > 0) {
+          localStorage.setItem('top-recommendation-id', recommendationsData[0].plan.id)
+        }
       } catch (error) {
         console.error('Error loading recommendations:', error)
         setError('Failed to load recommendations')
