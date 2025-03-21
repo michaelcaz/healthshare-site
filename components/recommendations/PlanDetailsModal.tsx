@@ -47,10 +47,6 @@ export function PlanDetailsModal({
         <div className="flex justify-between items-center p-6 border-b sticky top-0 bg-white z-10">
           <div className="flex items-center gap-4">
             <h2 className="text-2xl font-bold">{plan.plan.planName}</h2>
-            <div className="flex items-center gap-2 bg-blue-500 text-white px-3 py-1 rounded-full">
-              <Star className="h-4 w-4 fill-current" />
-              <span className="font-medium">{Math.round(plan.score)}% Match</span>
-            </div>
           </div>
           <button 
             onClick={onClose} 

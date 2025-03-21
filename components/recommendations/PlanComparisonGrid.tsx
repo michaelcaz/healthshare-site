@@ -12,6 +12,7 @@ import { QuestionnaireResponse } from '@/types/questionnaire'
 import { planDetailsData } from '@/data/plan-details-data'
 import { getPlanCost } from '@/lib/utils/plan-costs'
 import { calculateAnnualCost } from '@/utils/plan-utils'
+import { ProviderLogo } from './ProviderLogo'
 
 interface PlanComparisonGridProps {
   topPlan: PlanRecommendationType
@@ -152,14 +153,14 @@ export function PlanComparisonGrid({
               </div>
               
               <div>
-                <h3 className="font-semibold text-xl text-gray-900">{topPlan.plan.providerName}</h3>
-                <p className="text-sm text-gray-600 mt-1">{topPlan.plan.planName}</p>
-              </div>
-              
-              {/* Match Score */}
-              <div className="bg-primary/10 p-4 rounded-lg flex items-center justify-between">
-                <span className="text-sm font-medium text-gray-700">Match Score</span>
-                <span className="text-lg font-bold text-primary">{Math.round(topPlan.score)}%</span>
+                <div className="flex flex-col items-center gap-3 mb-2">
+                  <div className="h-[60px] flex items-center justify-center mb-2">
+                    <ProviderLogo providerName={topPlan.plan.providerName} size="md" />
+                  </div>
+                  <div className="text-center">
+                    <p className="text-lg font-semibold text-gray-900">{topPlan.plan.planName}</p>
+                  </div>
+                </div>
               </div>
               
               {/* Cost Information */}
@@ -226,14 +227,14 @@ export function PlanComparisonGrid({
                 </Badge>
                 
                 <div>
-                  <h3 className="font-semibold text-xl text-gray-900">{plan.plan.providerName}</h3>
-                  <p className="text-sm text-gray-600 mt-1">{plan.plan.planName}</p>
-                </div>
-                
-                {/* Match Score */}
-                <div className="bg-gray-50 p-4 rounded-lg flex items-center justify-between">
-                  <span className="text-sm font-medium text-gray-700">Match Score</span>
-                  <span className="text-lg font-bold text-gray-900">{Math.round(plan.score)}%</span>
+                  <div className="flex flex-col items-center gap-3 mb-2">
+                    <div className="h-[60px] flex items-center justify-center mb-2">
+                      <ProviderLogo providerName={plan.plan.providerName} size="md" />
+                    </div>
+                    <div className="text-center">
+                      <p className="text-lg font-semibold text-gray-900">{plan.plan.planName}</p>
+                    </div>
+                  </div>
                 </div>
                 
                 {/* Cost Information */}

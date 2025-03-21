@@ -131,10 +131,6 @@ export function HeroRecommendation({
                 : "Lowest Out of Pocket in Case of Emergency"}
             </span>
           </div>
-          <div className="sm:ml-auto mt-2 sm:mt-0 flex items-center bg-[#EEF0FF] text-[#4F46E5] rounded-full px-3 py-1.5">
-            <Award className="h-3.5 w-3.5 mr-1.5" />
-            <span className="text-sm font-semibold">{badges.matchScore}% Match</span>
-          </div>
         </div>
         
         {/* Pre-existing Conditions Notice Banner */}
@@ -187,7 +183,7 @@ export function HeroRecommendation({
         {/* Plan Logo, Name and Provider */}
         <div className="mb-10 flex items-center">
           <div className="mr-5 flex-shrink-0">
-            <ProviderLogo providerName={plan.providerName} size="lg" />
+            <ProviderLogo providerName={plan.providerName} size="xl" />
           </div>
           <div>
             <h2 className="text-3xl font-bold text-gray-900 mb-2">
@@ -196,14 +192,6 @@ export function HeroRecommendation({
             
             {/* Feature badges */}
             <div className="flex flex-wrap gap-3 mt-3">
-              <div className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-[#EEF2FF] text-[#4338CA]">
-                <CustomTooltip 
-                  id="no-network"
-                  trigger="No Network"
-                  content="You can see any provider you want. These plans encourage you to seek providers with fair prices to keep costs reasonable for everyone."
-                />
-              </div>
-              
               {isDpcCompatible && (
                 <div className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-[#ECFDF5] text-[#047857]">
                   <CustomTooltip 
@@ -278,29 +266,6 @@ export function HeroRecommendation({
               <p className="text-xs font-medium text-gray-700">
                 Save ${annualSavings.toFixed(0)} vs. traditional insurance
               </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Member Satisfaction */}
-        <div className="mb-10 p-5 bg-gradient-to-r from-[#F5F7FF] to-[#F0F4FF] rounded-xl border border-[#D1D5F5]/30">
-          <div className="flex flex-wrap items-center justify-between">
-            <div className="flex items-center gap-3">
-              <CheckCircle className="h-5 w-5 text-[#10B981]/90" />
-              <span className="text-sm font-medium text-gray-700" dangerouslySetInnerHTML={{ __html: `${providerDetails.memberSatisfaction} Member Satisfaction` }} />
-            </div>
-            
-            <div className="flex items-center gap-6 mt-2 sm:mt-0">
-              <div className="flex items-center gap-2">
-                <Users className="h-4 w-4 text-[#4F46E5]/80" />
-                <span className="text-sm font-medium" dangerouslySetInnerHTML={{ __html: `${providerDetails.memberCount} Active Members` }} />
-                <TrendingUp className="h-3 w-3 text-[#10B981]/80" />
-              </div>
-              
-              <div className="flex items-center gap-2">
-                <Calendar className="h-4 w-4 text-[#4F46E5]/80" />
-                <span className="text-sm">Est. {providerDetails.yearEstablished}</span>
-              </div>
             </div>
           </div>
         </div>
