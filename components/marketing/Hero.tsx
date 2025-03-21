@@ -166,42 +166,42 @@ export function Hero() {
                 alt="Wall Street Journal"
                 width={96}
                 height={32}
-                className="h-8 w-auto opacity-60 hover:opacity-80 transition-opacity grayscale"
+                className="h-8 w-auto opacity-60 grayscale"
               />
               <Image
                 src="/images/logos/pbs.svg"
                 alt="PBS"
                 width={96}
                 height={32}
-                className="h-8 w-auto opacity-60 hover:opacity-80 transition-opacity grayscale"
+                className="h-8 w-auto opacity-60 grayscale"
               />
               <Image
                 src="/images/logos/forbes.svg"
                 alt="Forbes"
                 width={96}
                 height={32}
-                className="h-8 w-auto opacity-60 hover:opacity-80 transition-opacity grayscale"
+                className="h-8 w-auto opacity-60 grayscale"
               />
               <Image
                 src="/images/logos/vox.svg"
                 alt="Vox"
                 width={144}
                 height={32}
-                className="w-[144px] opacity-70 hover:opacity-90 transition-opacity grayscale"
+                className="w-[144px] opacity-70 grayscale"
               />
               <Image
                 src="/images/logos/nbcnews.svg"
                 alt="NBC News"
                 width={200}
                 height={32}
-                className="w-[200px] opacity-70 hover:opacity-90 transition-opacity grayscale"
+                className="w-[200px] opacity-70 grayscale"
               />
               <Image
                 src="/images/logos/cbsnews.svg"
                 alt="CBS News"
                 width={96}
                 height={32}
-                className="h-8 w-auto opacity-60 hover:opacity-80 transition-opacity grayscale"
+                className="h-8 w-auto opacity-60 grayscale"
               />
             </div>
           </div>
