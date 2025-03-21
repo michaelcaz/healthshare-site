@@ -3,7 +3,7 @@
 import { Card } from '../ui/card'
 import { Progress } from '../ui/progress'
 import { type PlanRecommendation } from './types'
-import { CheckCircle, Star, Shield, Clock, Users, Award, Calendar, TrendingUp } from 'lucide-react'
+import { CheckCircle, Star, Shield, Clock, Users, Award, Calendar, TrendingUp, DollarSign, Unlock, Headset, Heart, Info, Search, Lock, Users2 } from 'lucide-react'
 import { Badge } from '../ui/badge'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import Image from 'next/image'
@@ -35,147 +35,103 @@ export function TrustElements({ recommendation, planDetails = defaultPlanDetails
   return (
     <TooltipProvider>
       <div className="space-y-10">
-        <h2 className="text-2xl font-bold text-gray-900">Why Members Trust {plan.providerName}</h2>
+        <h2 className="text-2xl font-bold text-gray-900">Why Members Love {plan.providerName}</h2>
         
-        {/* Trust Metrics Grid */}
+        {/* Trust Elements Grid - Updated with new benefits */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* BBB Rating Card */}
+          {/* Cost Transparency Card */}
           <Card className="p-6 border border-blue-100">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">BBB Rating</h3>
-              <div className="h-10 w-10 rounded-full bg-blue-600 flex items-center justify-center">
-                <span className="text-white font-bold" dangerouslySetInnerHTML={{ __html: providerDetails.ratings.bbbRating }} />
+              <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
+                <DollarSign className="h-5 w-5 text-blue-600" />
               </div>
             </div>
+            <div className="mb-3">
+              <p className="font-medium text-blue-700 text-lg">Clear, Predictable Costs</p>
+            </div>
             <div className="space-y-2">
-              <p className="text-sm text-gray-600">BBB Accredited Business</p>
-              <p className="text-sm text-gray-600">Member since {providerDetails.yearEstablished}</p>
-              <p className="text-sm text-gray-600">Zero unresolved complaints</p>
+              <div className="flex items-start gap-2">
+                <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
+                <p className="text-sm text-gray-600">Average monthly savings of 30-50% compared to traditional insurance</p>
+              </div>
+              <div className="flex items-start gap-2">
+                <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
+                <p className="text-sm text-gray-600">No hidden fees or surprise bills</p>
+              </div>
+              <div className="flex items-start gap-2">
+                <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
+                <p className="text-sm text-gray-600">Published price lists for common procedures</p>
+              </div>
+              <div className="flex items-start gap-2">
+                <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
+                <p className="text-sm text-gray-600">Real member examples of cost savings for specific conditions</p>
+              </div>
             </div>
           </Card>
 
-          {/* Processing Time Card */}
+          {/* Flexibility & Freedom Card */}
           <Card className="p-6 border border-green-100">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">Fast Processing</h3>
               <div className="h-10 w-10 rounded-full bg-green-100 flex items-center justify-center">
-                <Clock className="h-5 w-5 text-green-600" />
+                <Unlock className="h-5 w-5 text-green-600" />
               </div>
             </div>
+            <div className="mb-3">
+              <p className="font-medium text-green-700 text-lg">Healthcare on Your Terms</p>
+            </div>
             <div className="space-y-2">
-              <p className="text-sm text-gray-600" dangerouslySetInnerHTML={{ __html: providerDetails.processingTime }} />
-              <p className="text-sm text-gray-600">Online submission portal</p>
-              <p className="text-sm text-gray-600">Real-time status tracking</p>
+              <div className="flex items-start gap-2">
+                <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
+                <p className="text-sm text-gray-600">No network restrictions - choose any provider</p>
+              </div>
+              <div className="flex items-start gap-2">
+                <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
+                <p className="text-sm text-gray-600">Coverage that moves with you across states</p>
+              </div>
+              <div className="flex items-start gap-2">
+                <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
+                <p className="text-sm text-gray-600">No enrollment period limitations</p>
+              </div>
+              <div className="flex items-start gap-2">
+                <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
+                <p className="text-sm text-gray-600">Tailored plans for entrepreneurial lifestyles</p>
+              </div>
+              <div className="flex items-start gap-2">
+                <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
+                <p className="text-sm text-gray-600">Telemedicine options included</p>
+              </div>
             </div>
           </Card>
 
-          {/* Member Stats Card */}
+          {/* Stellar Customer Service Card */}
           <Card className="p-6 border border-purple-100">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">Member Stats</h3>
               <div className="h-10 w-10 rounded-full bg-purple-100 flex items-center justify-center">
-                <Users className="h-5 w-5 text-purple-600" />
+                <Headset className="h-5 w-5 text-purple-600" />
               </div>
+            </div>
+            <div className="mb-3">
+              <p className="font-medium text-purple-700 text-lg">Real People, Real Support</p>
             </div>
             <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-gray-600" dangerouslySetInnerHTML={{ __html: `${providerDetails.memberCount} Active Members` }} />
-                <TrendingUp className="h-3 w-3 text-green-500" />
+              <div className="flex items-start gap-2">
+                <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
+                <p className="text-sm text-gray-600">Average call wait time under 2 minutes</p>
               </div>
-              <p className="text-sm text-gray-600">{providerDetails.memberSatisfaction} Member Satisfaction</p>
-              <p className="text-sm text-gray-600">Average tenure: {providerDetails.averageTenure}</p>
+              <div className="flex items-start gap-2">
+                <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
+                <p className="text-sm text-gray-600">Dedicated personal advisor for complex cases</p>
+              </div>
+              <div className="flex items-start gap-2">
+                <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
+                <p className="text-sm text-gray-600">No automated phone trees or overseas call centers</p>
+              </div>
+              <div className="flex items-start gap-2">
+                <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
+                <p className="text-sm text-gray-600">Proactive communication on claim status</p>
+              </div>
             </div>
           </Card>
-        </div>
-
-        {/* Cost Transparency Section */}
-        <div className="bg-white p-8 rounded-xl border border-gray-100 shadow-sm">
-          <h3 className="text-xl font-semibold mb-8 text-gray-900">Cost Transparency</h3>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-            <div>
-              <h4 className="font-medium text-lg mb-5 text-gray-800">How Your Money Is Used</h4>
-              <div className="space-y-5">
-                <div>
-                  <div className="flex justify-between mb-2">
-                    <span className="text-sm font-medium text-gray-600">Medical Cost Sharing</span>
-                    <span className="text-sm font-semibold">84%</span>
-                  </div>
-                  <div className="relative h-3 w-full overflow-hidden rounded-full bg-gray-200">
-                    <div
-                      className="h-full w-full flex-1 bg-gradient-to-r from-green-400 to-green-600 transition-all"
-                      style={{ transform: `translateX(-${100 - 84}%)` }}
-                    />
-                  </div>
-                </div>
-                
-                <div>
-                  <div className="flex justify-between mb-2">
-                    <span className="text-sm font-medium text-gray-600">Administrative Costs</span>
-                    <span className="text-sm font-semibold">12%</span>
-                  </div>
-                  <div className="relative h-3 w-full overflow-hidden rounded-full bg-gray-200">
-                    <div
-                      className="h-full w-full flex-1 bg-gradient-to-r from-blue-400 to-blue-600 transition-all"
-                      style={{ transform: `translateX(-${100 - 12}%)` }}
-                    />
-                  </div>
-                </div>
-                
-                <div>
-                  <div className="flex justify-between mb-2">
-                    <span className="text-sm font-medium text-gray-600">Operational Reserves</span>
-                    <span className="text-sm font-semibold">4%</span>
-                  </div>
-                  <div className="relative h-3 w-full overflow-hidden rounded-full bg-gray-200">
-                    <div
-                      className="h-full w-full flex-1 bg-gradient-to-r from-purple-400 to-purple-600 transition-all"
-                      style={{ transform: `translateX(-${100 - 4}%)` }}
-                    />
-                  </div>
-                </div>
-              </div>
-              
-              <div className="mt-5 text-sm text-gray-600">
-                <p>Unlike insurance companies, healthshares are non-profit organizations that allocate the majority of funds directly to member medical expenses.</p>
-              </div>
-            </div>
-            
-            <div>
-              <h4 className="font-medium text-lg mb-5 text-gray-800">Savings vs. Traditional Insurance</h4>
-              <div className="space-y-5">
-                <div className="flex items-center gap-4">
-                  <div className="h-12 w-12 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center shadow-md">
-                    <span className="text-white font-semibold">30%</span>
-                  </div>
-                  <div>
-                    <p className="font-medium text-gray-800">Average Monthly Savings</p>
-                    <p className="text-sm text-gray-600">Compared to ACA plans with similar coverage</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-center gap-4">
-                  <div className="h-12 w-12 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center shadow-md">
-                    <span className="text-white font-semibold">$0</span>
-                  </div>
-                  <div>
-                    <p className="font-medium text-gray-800">No Network Restrictions</p>
-                    <p className="text-sm text-gray-600">Freedom to choose your own providers</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-center gap-4">
-                  <div className="h-12 w-12 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center shadow-md">
-                    <span className="text-white font-semibold">100%</span>
-                  </div>
-                  <div>
-                    <p className="font-medium text-gray-800">Transparency</p>
-                    <p className="text-sm text-gray-600">Clear guidelines on what is eligible for sharing</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
 
         {/* Testimonials Section */}
@@ -220,57 +176,6 @@ export function TrustElements({ recommendation, planDetails = defaultPlanDetails
                 <p className="text-gray-600 text-sm" dangerouslySetInnerHTML={{ __html: testimonial.text }} />
               </div>
             ))}
-          </div>
-        </div>
-        
-        {/* Educational Section */}
-        <div className="bg-blue-50 p-8 rounded-xl border border-blue-100">
-          <h3 className="text-xl font-semibold mb-8 text-gray-900">Understanding Healthshares</h3>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-            <div className="space-y-6">
-              <div className="flex items-start gap-4">
-                <div className="mt-1 h-8 w-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center flex-shrink-0 shadow-md">
-                  <span className="text-white font-medium">1</span>
-                </div>
-                <div>
-                  <p className="font-medium text-gray-800 mb-1">Not Insurance</p>
-                  <p className="text-sm text-gray-600">Healthshares are not insurance companies but non-profit organizations where members voluntarily share each other's medical expenses.</p>
-                </div>
-              </div>
-              
-              <div className="flex items-start gap-4">
-                <div className="mt-1 h-8 w-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center flex-shrink-0 shadow-md">
-                  <span className="text-white font-medium">2</span>
-                </div>
-                <div>
-                  <p className="font-medium text-gray-800 mb-1">Faith-Based Community</p>
-                  <p className="text-sm text-gray-600">Most healthshares are built around faith-based communities with shared values and commitments to supporting each other.</p>
-                </div>
-              </div>
-            </div>
-            
-            <div className="space-y-6">
-              <div className="flex items-start gap-4">
-                <div className="mt-1 h-8 w-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center flex-shrink-0 shadow-md">
-                  <span className="text-white font-medium">3</span>
-                </div>
-                <div>
-                  <p className="font-medium text-gray-800 mb-1">Cost Sharing</p>
-                  <p className="text-sm text-gray-600">Members contribute monthly shares that are matched with other members' eligible medical expenses according to plan guidelines.</p>
-                </div>
-              </div>
-              
-              <div className="flex items-start gap-4">
-                <div className="mt-1 h-8 w-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center flex-shrink-0 shadow-md">
-                  <span className="text-white font-medium">4</span>
-                </div>
-                <div>
-                  <p className="font-medium text-gray-800 mb-1">Flexibility & Savings</p>
-                  <p className="text-sm text-gray-600">Healthshares typically offer more flexibility in provider choice and lower monthly costs compared to traditional insurance.</p>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>
