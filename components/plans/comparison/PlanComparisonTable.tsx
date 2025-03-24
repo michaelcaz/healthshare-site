@@ -8,6 +8,10 @@ import { PlanDetailsData } from '@/types/plan-details'
 import { Tooltip, TooltipContent as BaseTooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { Badge } from '@/components/ui/badge'
 import Image from 'next/image'
+import { getPlanCost } from '@/lib/utils/plan-costs'
+import { CoverageType } from '@/types/provider-plans'
+import { getDisplayAnnualCost, formatCurrency } from '@/lib/utils/plan-display'
+import { getVisitFrequencyCost, calculateAnnualCost } from '@/utils/plan-utils'
 
 // Custom styled tooltip content for better readability
 const TooltipContent = ({ children, className = '', ...props }: React.ComponentPropsWithoutRef<typeof BaseTooltipContent>) => (
@@ -153,8 +157,19 @@ export function PlanComparisonTable() {
         // Extract query parameters
         const visitFrequency = searchParams.get('visitFrequency') || 'just_checkups'
         const coverageType = searchParams.get('coverageType') || 'just_me'
-        const age = searchParams.get('age') || '34'
-        const iua = searchParams.get('iua') || '5000'
+        const ageParam = searchParams.get('age') || '34'
+        const iuaPreference = searchParams.get('iua') || '5000'
+        
+        // Parse age as a number for the getPlanCost function
+        const age = parseInt(ageParam, 10)
+        
+        // Log URL parameters for debugging
+        console.log('PlanComparisonTable - URL Parameters:', { 
+          visitFrequency, 
+          coverageType, 
+          age: ageParam, 
+          iua: iuaPreference 
+        })
         
         // Transform the plans data to match our component's needs
         const formattedPlans = parsedPlans.map((planData: any) => {
@@ -165,17 +180,57 @@ export function PlanComparisonTable() {
             console.warn(`No plan details found for plan ID: ${planId}`)
           }
           
-          console.log('Plan provider name:', planData.plan.providerName);
+          console.log(`Processing plan: ${planId}`, {
+            providerName: planData.plan.providerName,
+            planName: planData.plan.planName
+          });
           
-          // Use the scoring data directly from the plan recommendation
-          // Return 0 if data isn't found instead of using default values
+          // Get plan costs using the getPlanCost utility
+          const planCosts = getPlanCost(
+            planId,
+            age,
+            coverageType as CoverageType,
+            iuaPreference
+          )
+          
+          // Log the getPlanCost result
+          console.log(`getPlanCost result for ${planId}:`, planCosts)
+          
+          // If we have valid plan costs, calculate the annual cost
+          let annualCost = 0
+          if (planCosts) {
+            // Check if this is a DPC plan
+            const isDpcPlan = planId.includes('dpc') || planId.includes('vpc')
+            
+            // Calculate annual cost using the getDisplayAnnualCost utility
+            annualCost = getDisplayAnnualCost(
+              planId,
+              planCosts.monthlyPremium,
+              planCosts.initialUnsharedAmount,
+              visitFrequency,
+              coverageType
+            )
+            
+            console.log(`Annual cost calculation for ${planId}:`, {
+              monthlyPremium: planCosts.monthlyPremium,
+              initialUnsharedAmount: planCosts.initialUnsharedAmount,
+              annualPremium: planCosts.monthlyPremium * 12,
+              visitFrequency,
+              coverageType,
+              isDpcPlan,
+              annualCost
+            })
+          } else {
+            console.error(`Failed to get costs for plan ${planId}`)
+          }
+          
           return {
             id: planId,
             planName: planData.plan.planName || '',
             providerName: planData.plan.providerName || '',
-            monthlyCost: planData.monthlyCost || planData.plan.monthlyCost || 0,
-            iua: planData.iua || parseInt(iua, 10) || 0,
-            estAnnualCost: planData.annualCost || planData.plan.annualCost || 0,
+            monthlyCost: planCosts?.monthlyPremium || 0,
+            iua: planCosts?.initialUnsharedAmount || 0,
+            estAnnualCost: annualCost,
             avgReviews: planDetails?.providerDetails?.ratings?.overall 
               ? planDetails.providerDetails.ratings.overall.toFixed(1) 
               : '0.0',
@@ -429,7 +484,7 @@ export function PlanComparisonTable() {
               
               {plans.map((plan) => (
                 <td key={`monthly-${plan.id}`} className="p-5 border-b border-gray-200 text-center">
-                  <span className="font-semibold text-xl text-gray-900">${plan.monthlyCost}</span>
+                  <span className="font-semibold text-xl text-gray-900">{formatCurrency(plan.monthlyCost)}</span>
                 </td>
               ))}
             </tr>
@@ -451,7 +506,7 @@ export function PlanComparisonTable() {
               
               {plans.map((plan) => (
                 <td key={`iua-${plan.id}`} className="p-5 border-b border-gray-200 text-center">
-                  <span className="font-semibold text-gray-900">${plan.iua.toLocaleString()}</span>
+                  <span className="font-semibold text-gray-900">{formatCurrency(plan.iua)}</span>
                 </td>
               ))}
             </tr>
@@ -473,7 +528,7 @@ export function PlanComparisonTable() {
               
               {plans.map((plan) => (
                 <td key={`annual-${plan.id}`} className="p-5 border-b border-gray-200 text-center">
-                  <span className="font-semibold text-gray-900">${plan.estAnnualCost.toLocaleString()}</span>
+                  <span className="font-semibold text-gray-900">{formatCurrency(plan.estAnnualCost)}</span>
                 </td>
               ))}
             </tr>
