@@ -333,6 +333,52 @@ export function PlanComparisonTable() {
                           );
                         }
                         
+                        if (name.includes('crowd')) {
+                          return (
+                            <img 
+                              src="/images/logos/crowd-health.svg"
+                              alt="CrowdHealth logo"
+                              width={140}
+                              height={70}
+                              style={{ 
+                                maxWidth: '140px', 
+                                height: 'auto',
+                                objectFit: 'contain'
+                              }}
+                              onLoad={() => {
+                                console.log('CrowdHealth logo loaded');
+                                setLogoLoaded(prev => ({...prev, [plan.id]: true}));
+                              }}
+                              onError={(e) => {
+                                console.error('Failed to load CrowdHealth logo:', e);
+                              }}
+                            />
+                          );
+                        }
+                        
+                        if (name.includes('knew')) {
+                          return (
+                            <img 
+                              src="/images/logos/knew.svg"
+                              alt="Knew Health logo"
+                              width={140}
+                              height={70}
+                              style={{ 
+                                maxWidth: '140px', 
+                                height: 'auto',
+                                objectFit: 'contain'
+                              }}
+                              onLoad={() => {
+                                console.log('Knew Health logo loaded');
+                                setLogoLoaded(prev => ({...prev, [plan.id]: true}));
+                              }}
+                              onError={() => {
+                                console.error('Failed to load Knew Health logo');
+                              }}
+                            />
+                          );
+                        }
+                        
                         // Fallback to just displaying the name nicely
                         return (
                           <span className="font-bold text-xl text-primary">

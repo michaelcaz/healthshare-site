@@ -55,7 +55,7 @@ export function Hero() {
               <span className="text-[#6366F1]">That's the point.</span>
             </h1>
             <p className="text-xl leading-relaxed text-gray-warm/80 mb-10 max-w-xl">
-              Tired of being gouged by Big Insurance? Join 2M+ Americans who are saving 30-50% on healthcare while keeping their trusted doctors. Find the best plan for your family's needs, at the lowest price, in under 2 minutes.
+              Hot take: healthier people should pay less for a safety net. Why should you pay sky-high premiums to cover other people's health problems? Join 2M+ Americans saving 30-50% with healthcare plans that reward health-conscious entrepreneurs, freelancers, and independent contractors like you.
             </p>
             <motion.form 
               onSubmit={handleSubmit} 
