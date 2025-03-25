@@ -141,9 +141,7 @@ export const PlanDetails: React.FC<PlanDetailsProps> = ({
           <div>
             <div className="font-medium">How Your IUA Works</div>
             <div className="text-sm text-gray-600 mt-1">
-              <p className="mb-2">Your Initial Unshared Amount is ${initialUnsharedAmount.toLocaleString()} per incident.</p>
               <p className="mb-2">This is the amount you pay before the community begins sharing your eligible medical expenses.</p>
-              <p>Annual Unshared Amount Structure: {plan.plan.annualUnsharedAmount}</p>
             </div>
           </div>
         </div>
@@ -159,16 +157,6 @@ export const PlanDetails: React.FC<PlanDetailsProps> = ({
             <div className="text-sm text-gray-600 mt-1">
               <p className="mb-2">Most healthshare plans allow you to see any provider you choose.</p>
               <p className="mb-2">There are no network restrictions, but you may receive better pricing by using providers experienced with healthshare plans.</p>
-              <p>
-                <a 
-                  href={plan.plan.sourceUrl} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-blue-600 hover:underline"
-                >
-                  Learn more about {plan.plan.providerName}'s provider options
-                </a>
-              </p>
             </div>
           </div>
         </div>
@@ -183,17 +171,7 @@ export const PlanDetails: React.FC<PlanDetailsProps> = ({
             <div className="font-medium">Prescription Coverage</div>
             <div className="text-sm text-gray-600 mt-1">
               <p className="mb-2">Most healthshare plans include prescription discount programs rather than traditional prescription coverage.</p>
-              <p className="mb-2">Maintenance medications are typically not shared, but medications related to eligible medical incidents may be shareable.</p>
-              <p>
-                <a 
-                  href={plan.plan.sourceUrl} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-blue-600 hover:underline"
-                >
-                  View {plan.plan.providerName}'s prescription details
-                </a>
-              </p>
+              <p>Maintenance medications are typically not shared, but medications related to eligible medical incidents may be shareable.</p>
             </div>
           </div>
         </div>
@@ -224,17 +202,7 @@ export const PlanDetails: React.FC<PlanDetailsProps> = ({
             <div className="font-medium">Surgical Procedures & Treatments</div>
             <div className="text-sm text-gray-600 mt-1">
               <p className="mb-2">Medically necessary surgeries and treatments are typically eligible for sharing after your IUA.</p>
-              <p className="mb-2">Pre-existing conditions may have waiting periods or limitations.</p>
-              <p>
-                <a 
-                  href={plan.plan.sourceUrl} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-blue-600 hover:underline"
-                >
-                  View full medical guidelines
-                </a>
-              </p>
+              <p>Pre-existing conditions may have waiting periods or limitations.</p>
             </div>
           </div>
         </div>
@@ -249,17 +217,7 @@ export const PlanDetails: React.FC<PlanDetailsProps> = ({
             <div className="font-medium">Maternity Coverage</div>
             <div className="text-sm text-gray-600 mt-1">
               <p className="mb-2">Most healthshare plans have waiting periods for maternity coverage, typically 6-10 months from enrollment.</p>
-              <p className="mb-2">Conception must occur after the waiting period for maternity expenses to be eligible for sharing.</p>
-              <p>
-                <a 
-                  href={plan.plan.sourceUrl} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-blue-600 hover:underline"
-                >
-                  View {plan.plan.providerName}'s maternity guidelines
-                </a>
-              </p>
+              <p>Conception must occur after the waiting period for maternity expenses to be eligible for sharing.</p>
             </div>
           </div>
         </div>
@@ -308,16 +266,6 @@ export const PlanDetails: React.FC<PlanDetailsProps> = ({
             <div className="text-sm text-gray-600">
               Plan Name: {plan.plan.planName}
             </div>
-            {plan.plan.sourceUrl && (
-              <a 
-                href={plan.plan.sourceUrl} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-sm text-blue-600 hover:underline mt-1 inline-block"
-              >
-                Visit Provider Website
-              </a>
-            )}
           </div>
         </div>
       </section>

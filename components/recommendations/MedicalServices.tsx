@@ -33,14 +33,7 @@ export const MedicalServices: React.FC<MedicalServicesProps> = ({ plan }) => {
             <div>
               <div className="font-medium">{plan.plan.providerName}</div>
               <div className="text-sm text-gray-600">
-                <a 
-                  href={plan.plan.sourceUrl} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-blue-600 hover:underline"
-                >
-                  View Provider Details
-                </a>
+                Plan Name: {plan.plan.planName}
               </div>
             </div>
           </div>
@@ -54,9 +47,9 @@ export const MedicalServices: React.FC<MedicalServicesProps> = ({ plan }) => {
           <div className="flex items-start gap-3">
             <DollarSign className="h-5 w-5 text-green-500 mt-0.5" />
             <div>
-              <div className="font-medium">Annual Unshared Amount Structure</div>
+              <div className="font-medium">Initial Unshared Amount (IUA)</div>
               <div className="text-sm text-gray-600">
-                {plan.plan.annualUnsharedAmount}
+                The amount you pay before the community begins sharing your eligible medical expenses.
               </div>
             </div>
           </div>

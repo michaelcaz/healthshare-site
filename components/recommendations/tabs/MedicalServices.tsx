@@ -3,6 +3,7 @@ import { Ambulance, Stethoscope, Pill, Baby } from 'lucide-react'
 import React from 'react'
 import { planDetailsData } from '@/data/plan-details-data'
 import { defaultPlanDetailsData } from '@/types/plan-details'
+import { markdownToBold } from '@/lib/utils'
 
 interface MedicalServicesProps {
   plan: PlanRecommendation
@@ -22,7 +23,7 @@ export const MedicalServices: React.FC<MedicalServicesProps> = ({ plan }) => {
           <div>
             <div className="font-medium">Emergency Services</div>
             <div className="text-sm text-gray-600 mt-1">
-              <p className="mb-2">{planData.medicalServices.emergencyCare}</p>
+              <p className="mb-2" dangerouslySetInnerHTML={{ __html: markdownToBold(planData.medicalServices.emergencyCare) }}></p>
               <p>Maximum Coverage: {plan.plan.maxCoverage}</p>
             </div>
           </div>
@@ -37,17 +38,7 @@ export const MedicalServices: React.FC<MedicalServicesProps> = ({ plan }) => {
           <div>
             <div className="font-medium">Surgical Procedures & Treatments</div>
             <div className="text-sm text-gray-600 mt-1">
-              <p className="mb-2">{planData.medicalServices.surgeryAndTreatment}</p>
-              <p>
-                <a 
-                  href={plan.plan.sourceUrl} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-blue-600 hover:underline"
-                >
-                  View full medical guidelines
-                </a>
-              </p>
+              <p className="mb-2" dangerouslySetInnerHTML={{ __html: markdownToBold(planData.medicalServices.surgeryAndTreatment) }}></p>
             </div>
           </div>
         </div>
@@ -61,17 +52,7 @@ export const MedicalServices: React.FC<MedicalServicesProps> = ({ plan }) => {
           <div>
             <div className="font-medium">Prescription Coverage</div>
             <div className="text-sm text-gray-600 mt-1">
-              <p className="mb-2">{planData.medicalServices.prescriptionDrugs}</p>
-              <p>
-                <a 
-                  href={plan.plan.sourceUrl} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-blue-600 hover:underline"
-                >
-                  View {plan.plan.providerName}'s prescription details
-                </a>
-              </p>
+              <p className="mb-2" dangerouslySetInnerHTML={{ __html: markdownToBold(planData.medicalServices.prescriptionDrugs) }}></p>
             </div>
           </div>
         </div>
@@ -85,17 +66,7 @@ export const MedicalServices: React.FC<MedicalServicesProps> = ({ plan }) => {
           <div>
             <div className="font-medium">Maternity Coverage</div>
             <div className="text-sm text-gray-600 mt-1">
-              <p className="mb-2">{planData.medicalServices.pregnancy}</p>
-              <p>
-                <a 
-                  href={plan.plan.sourceUrl} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-blue-600 hover:underline"
-                >
-                  View {plan.plan.providerName}'s maternity guidelines
-                </a>
-              </p>
+              <p className="mb-2" dangerouslySetInnerHTML={{ __html: markdownToBold(planData.medicalServices.pregnancy) }}></p>
             </div>
           </div>
         </div>

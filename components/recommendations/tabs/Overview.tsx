@@ -5,6 +5,7 @@ import { getPlanCost } from '@/lib/utils/plan-costs'
 import { calculateAnnualCost, getVisitFrequencyCost } from '@/utils/plan-utils'
 import { planDetailsData } from '@/data/plan-details-data'
 import { defaultPlanDetailsData } from '@/types/plan-details'
+import { markdownToBold } from '@/lib/utils'
 
 interface OverviewProps {
   plan: PlanRecommendation
@@ -104,7 +105,7 @@ export const Overview: React.FC<OverviewProps> = ({
             <div className="text-sm text-gray-700 mt-1">
               <ul className="list-disc pl-5 space-y-2">
                 {planData.overview.whatWeLove.map((item, index) => (
-                  <li key={index} dangerouslySetInnerHTML={{ __html: item }} />
+                  <li key={index} dangerouslySetInnerHTML={{ __html: markdownToBold(item) }} />
                 ))}
               </ul>
             </div>
@@ -124,17 +125,7 @@ export const Overview: React.FC<OverviewProps> = ({
             </div>
             {planData.overview.providerInfo && (
               <div className="text-sm text-gray-600 mt-2" 
-                   dangerouslySetInnerHTML={{ __html: planData.overview.providerInfo }} />
-            )}
-            {plan.plan.sourceUrl && (
-              <a 
-                href={plan.plan.sourceUrl} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-sm text-blue-600 hover:underline mt-2 inline-block"
-              >
-                Visit Provider Website
-              </a>
+                   dangerouslySetInnerHTML={{ __html: markdownToBold(planData.overview.providerInfo) }} />
             )}
           </div>
         </div>

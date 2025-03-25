@@ -5,6 +5,7 @@ import { getPlanCost } from '@/lib/utils/plan-costs'
 import { planDetailsData } from '@/data/plan-details-data'
 import { defaultPlanDetailsData } from '@/types/plan-details'
 import { calculateAnnualCost, getVisitFrequencyCost } from '@/utils/plan-utils'
+import { markdownToBold } from '@/lib/utils'
 
 interface CoverageDetailsProps {
   plan: PlanRecommendation
@@ -59,9 +60,7 @@ export const CoverageDetails: React.FC<CoverageDetailsProps> = ({
           <div>
             <div className="font-medium">How Your IUA Works</div>
             <div className="text-sm text-gray-600 mt-1">
-              <p className="mb-2">Your Initial Unshared Amount is ${initialUnsharedAmount.toLocaleString()} per incident.</p>
-              <p className="mb-2">{planData.coverageDetails.iuaExplanation}</p>
-              <p>Annual Unshared Amount Structure: {plan.plan.annualUnsharedAmount}</p>
+              <p className="mb-2" dangerouslySetInnerHTML={{ __html: markdownToBold(planData.coverageDetails.iuaExplanation) }}></p>
             </div>
           </div>
         </div>
@@ -75,17 +74,7 @@ export const CoverageDetails: React.FC<CoverageDetailsProps> = ({
           <div>
             <div className="font-medium">{plan.plan.providerName} Network</div>
             <div className="text-sm text-gray-600 mt-1">
-              <p className="mb-2">{planData.coverageDetails.networkInfo}</p>
-              <p>
-                <a 
-                  href={plan.plan.sourceUrl} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-blue-600 hover:underline"
-                >
-                  Learn more about {plan.plan.providerName}'s provider options
-                </a>
-              </p>
+              <p className="mb-2" dangerouslySetInnerHTML={{ __html: markdownToBold(planData.coverageDetails.networkInfo) }}></p>
             </div>
           </div>
         </div>
@@ -100,8 +89,7 @@ export const CoverageDetails: React.FC<CoverageDetailsProps> = ({
               <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
               <div>
                 <div className="font-medium">{service.title}</div>
-                <div className="text-sm text-gray-600">
-                  {service.description}
+                <div className="text-sm text-gray-600" dangerouslySetInnerHTML={{ __html: markdownToBold(service.description) }}>
                 </div>
               </div>
             </div>
@@ -115,7 +103,7 @@ export const CoverageDetails: React.FC<CoverageDetailsProps> = ({
         <div className="bg-blue-50 p-4 rounded-lg">
           <ul className="list-disc pl-5 space-y-2 text-gray-700">
             {planData.overview.keyFeatures.map((feature, index) => (
-              <li key={index}>{feature}</li>
+              <li key={index} dangerouslySetInnerHTML={{ __html: markdownToBold(feature) }}></li>
             ))}
           </ul>
         </div>

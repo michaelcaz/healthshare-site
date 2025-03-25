@@ -56,19 +56,12 @@ export const CoverageTimeline: React.FC<CoverageTimelineProps> = ({ plan }) => {
               </div>
             </div>
           </div>
-          <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg">
+          <div className="flex items-start gap-3 p-4 bg-blue-50 rounded-lg">
             <Clock className="h-5 w-5 text-blue-500 mt-0.5" />
             <div>
               <div className="font-medium">Learn More</div>
               <div className="text-sm text-gray-600">
-                <a 
-                  href={plan.plan.sourceUrl} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-blue-600 hover:underline"
-                >
-                  View full plan details
-                </a>
+                Additional information about your coverage timeline may be available in the plan guidelines.
               </div>
             </div>
           </div>

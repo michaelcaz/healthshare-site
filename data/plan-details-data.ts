@@ -108,52 +108,54 @@ export const planDetailsData: Record<string, PlanDetailsData> = {
   'zion-healthshare-essential-membership': {
     overview: {
       whatWeLove: [
-        "Zion is the MOST affordable health share plan on the market with **monthly contributions starting at $82/mo for individuals.** Add RX Share for $10/mo (deep discounts on prescription meds) and/or Virtual Care for only $5/mo",
-        "**Zero lifetime sharing limits** - unlike many competitors that cap at $1M",
-        "**Direct provider partnerships** help members access deeper discounts"
+        "Zion is the MOST affordable health share plan on the market with **monthly contributions starting at $82/mo for individuals**. Add RX Share for $10/mo (deep discounts on prescription meds) and/or Virtual Care for only $5/mo",
+        "**Zero lifetime sharing limits** - unlike many competitors that cap at $1M or lower",
+        "One of the **best avg. ratings (over 4.7/5 out of hundreds of reviews)** in the health share industry. No insurance company has ratings anywhere close.",
+        "They have a **HUGE reserve** to protect their community in the event of some major nationwide health catastrophe - over 3x their yearly contribution amount.",
+        "They have been very **transparent in all communications** with us, and as a non-profit are required to post their financials publicly on their site."
       ],
       keyFeatures: [
-        "**Telemedicine included** with $0 consult fees through Amwell",
+        "**Telemedicine included** for $5-$15/mo",
         "**Guaranteed Acceptance** for applicants under age 65",
-        "**No denomination requirements** - open to all faiths"
+        "**Essential membership** is great to pair with Direct Primary Care (subscription based primary care in your city)"
       ],
-      providerInfo: "Founded in 2019, Zion HealthShare is a **501(c)(3) nonprofit** organization operating under revised 2024 guidelines. They emphasize **price transparency** by publishing exact reimbursement rates for 300+ common procedures."
+      providerInfo: "Founded in 2019, Zion HealthShare is a **501(c)(3) nonprofit** organization. They emphasize **price transparency** by publishing exact reimbursement rates for 300+ common procedures."
     },
     coverageDetails: {
-      iuaExplanation: "**Annual** Initial Unshared Amount (IUA) resets every membership year.",
-      networkInfo: "**Direct Contracting Program** offers 20-60% discounts at 900K+ providers nationwide. Members receive a Zion ID card for instant self-pay pricing.",
+      iuaExplanation: "The **Initial Unshared Amount (IUA)** is the amount you pay before your health share plan kicks in. For example, if you have a $1000 IUA and get an injury that results in $2300 of medical bills, you pay the first $1000, and the health share community pays the other $1300.",
+      networkInfo: "Zion HealthShare is **not health insurance**, they have **no network limitations**. However, wherever possible, it is suggested that you find a provider with fair-market prices. Their Medical Advocacy team can also assist you in identifying a provider in your area and making prepayments, or you can use their online portal to find a provider in your area.",
       includedServices: [
         {
-          title: "Preventive Services",
-          description: "**$0 sharing** for annual physicals, 57 CDC-recommended screenings, and routine vaccinations when using in-network providers"
+          title: "Medical Advocacy",
+          description: "The Zion **Medical Advocacy team** is there to help you find high quality, fair-market providers in your area for anything from a primary care visit to a serious surgery. And if you ever get a huge bill, they are there to help negotiate the price down on your behalf."
         },
         {
           title: "Chronic Condition Support",
-          description: "**Diabetes/hypertension management** programs with 50% shared costs after IUA"
+          description: "**High blood pressure, high cholesterol, and diabetes** (types 1 and 2) are not considered pre-membership medical conditions as long as\n1. the member has not been hospitalized for the condition in the 12 months prior to joining, and\n2. the member is able to control the condition through medication or diet.\n\n**Any medical expenses related to supplies, testing, medication, or other implements used to treat diabetes are not shareable.**"
         },
         {
           title: "Alternative Medicine",
-          description: "**$500 annual allowance** for chiropractic care, acupuncture, and naturopathic medicine"
+          description: "If you're injured or have any other eligible medical need, **therapeutic Treatments** prescribed and performed by a licensed medical professional are shareable for an eligible request, up to **$7,500 or 35 treatments per medical need**. Once either limit is reached, further treatments are no longer shareable. Therapeutic services include, but are not limited to:\n• Alternative and/or integrative therapies such as acupuncture, craniosacral therapy, dry needling, ozone treatments, prolotherapy, and alternative infusion therapies.\n• Chiropractic treatments and services provided by licensed chiropractors.\n• Massage therapy and services provided by licensed massage therapists.\n• Physical therapy and services performed by licensed physical therapists."
         }
       ]
     },
     medicalServices: {
-      emergencyCare: "**$250 member responsibility** per ER visit (waived if admitted). Air ambulance **capped at $25K** per incident.",
-      surgeryAndTreatment: "**Pre-negotiated rates** for 300+ common procedures (e.g., $12K for knee replacement vs $35K national average)",
-      prescriptionDrugs: "**Tiered formulary**: Generic ($10), Preferred Brand ($50), Non-Preferred Brand ($100). **90-day mail order** available.",
-      pregnancy: "**$4,500 global maternity fee** (normal delivery) or **$7,500** (C-section). **10-month waiting period** before conception."
+      emergencyCare: "**ER visits are generally eligible for sharing**, whether or not they are in conjunction with an eligible medical need. The first ER visit for a medical condition is treated as a normal sharing request. Each additional visit related to the same condition requires the member to take on a personal responsibility of $500 in addition to the member's IUA.",
+      surgeryAndTreatment: "**Covered for eligible medical needs**. For any non-emergency surgery, you can get prior authorization to ensure that your surgery will be fully shared.",
+      prescriptionDrugs: "**Prescription medications** are considered eligible for sharing under the following conditions: 1. The prescription is related to the treatment of an eligible sharing request. 2. The prescription is ordered by a licensed provider. 3. The prescription is approved by Zion HealthShare. When these conditions are met, the member will be reimbursed for the cost or given a one-time use credit card for the exact cost of the prescription to take to the pharmacy and pay for their prescription. For all other medications, you can subscribe to **Zion RX Share** to order heavily discounted medications online or to pick up at your local pharmacy.",
+      pregnancy: "**6 Month Waiting Period**: You must be a member for 6 months before conceiving, for your pregnancy related needs to be eligible for sharing. Services available for sharing include pre-natal, delivery (including birthing centers and home-births), post-natal, and miscarriage."
     },
     providerDetails: {
       yearEstablished: 2019,
-      memberCount: "**50,000+**",
+      memberCount: "**60,000+**",
       memberSatisfaction: "4.7/5",
       averageTenure: "2.8 years",
       ratings: {
-        overall: 4.8,
-        reviewCount: 246,
-        bbbRating: "**NR** (Not Rated)"
+        overall: 4.7,
+        reviewCount: 952,
+        bbbRating: "**A+**"
       },
-      processingTime: "**7-10 business days**",
+      processingTime: "**typically 3-5 business days**",
       costTransparency: {
         medicalCostSharing: 84,
         administrativeCosts: 12,
