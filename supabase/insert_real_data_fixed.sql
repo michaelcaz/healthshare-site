@@ -125,7 +125,7 @@ INSERT INTO plans (
     updated_at
 )
 VALUES (
-    'zion-direct',
+    'zion-healthshare-direct-membership',
     'zion-health',
     'Zion Direct',
     'Direct membership with flexible Initial Unshared Amount options',
@@ -389,11 +389,11 @@ SELECT id as plan_id, category, subcategory, coverage_type, coverage_percentage,
 FROM (
     VALUES
     -- Zion Direct Coverage
-    ('zion-direct', 'Medical', 'Primary Care', 'Copay', 100, 25.00, 0, NULL, NULL, 'Primary care visits covered after IUA'),
-    ('zion-direct', 'Medical', 'Specialist', 'Copay', 100, 50.00, 0, NULL, NULL, 'Specialist visits covered after IUA'),
-    ('zion-direct', 'Medical', 'Emergency', 'Copay', 100, 250.00, 0, NULL, NULL, 'Emergency visits covered after IUA'),
-    ('zion-direct', 'Maternity', 'Normal Delivery', 'IUA', 100, 2500.00, 365, NULL, NULL, 'Maternity covered after 12 month waiting period'),
-    ('zion-direct', 'Prescriptions', 'Generic', 'Discount', NULL, NULL, 0, NULL, NULL, 'Prescription discount program included'),
+    ('zion-healthshare-direct-membership', 'Medical', 'Primary Care', 'Copay', 100, 25.00, 0, NULL, NULL, 'Primary care visits covered after IUA'),
+    ('zion-healthshare-direct-membership', 'Medical', 'Specialist', 'Copay', 100, 50.00, 0, NULL, NULL, 'Specialist visits covered after IUA'),
+    ('zion-healthshare-direct-membership', 'Medical', 'Emergency', 'Copay', 100, 250.00, 0, NULL, NULL, 'Emergency visits covered after IUA'),
+    ('zion-healthshare-direct-membership', 'Maternity', 'Normal Delivery', 'IUA', 100, 2500.00, 365, NULL, NULL, 'Maternity covered after 12 month waiting period'),
+    ('zion-healthshare-direct-membership', 'Prescriptions', 'Generic', 'Discount', NULL, NULL, 0, NULL, NULL, 'Prescription discount program included'),
     
     -- CrowdHealth Basic Coverage
     ('crowdhealth-basic', 'Medical', 'Primary Care', 'Copay', 100, 0.00, 0, NULL, NULL, 'Primary care visits included'),

@@ -100,12 +100,33 @@ export const CoverageDetails: React.FC<CoverageDetailsProps> = ({
       {/* Key Features */}
       <section>
         <h3 className="text-xl font-semibold mb-4">Key Features</h3>
-        <div className="bg-blue-50 p-4 rounded-lg">
-          <ul className="list-disc pl-5 space-y-2 text-gray-700">
-            {planData.overview.keyFeatures.map((feature, index) => (
-              <li key={index} dangerouslySetInnerHTML={{ __html: markdownToBold(feature) }}></li>
-            ))}
-          </ul>
+        <div className="flex items-start gap-3 p-4 bg-blue-50 rounded-lg">
+          <CheckCircle className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" />
+          <div>
+            <div className="font-medium">Plan Highlights</div>
+            <div className="text-sm text-gray-700 mt-1">
+              {/* First item as header */}
+              {planData.overview.keyFeatures.length > 0 && (
+                <div className="font-medium mb-2" dangerouslySetInnerHTML={{ 
+                  __html: markdownToBold(planData.overview.keyFeatures[0]) 
+                }}></div>
+              )}
+              
+              {/* Middle items as bullet points */}
+              <ul className="list-disc pl-5 space-y-2">
+                {planData.overview.keyFeatures.slice(1, -1).map((feature, index) => (
+                  <li key={index} dangerouslySetInnerHTML={{ __html: markdownToBold(feature) }}></li>
+                ))}
+              </ul>
+              
+              {/* Last item with asterisk */}
+              {planData.overview.keyFeatures.length > 1 && (
+                <div className="mt-2 italic text-gray-600" dangerouslySetInnerHTML={{ 
+                  __html: markdownToBold(planData.overview.keyFeatures[planData.overview.keyFeatures.length - 1]) 
+                }}></div>
+              )}
+            </div>
+          </div>
         </div>
       </section>
 

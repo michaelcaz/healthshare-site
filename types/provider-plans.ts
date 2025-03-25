@@ -122,7 +122,7 @@ export const healthshareProviders: Record<string, ProviderPlan> = {
     sourceUrl: "https://zionhealthshare.org/memberships/direct/",
     plans: [
       {
-        id: 'zion-direct',
+        id: 'zion-healthshare-direct-membership',
         name: "Zion Direct",
         maxCoverage: "No limit",
         annualUnsharedAmount: "Total of paid three IUAs in 12 months",
