@@ -6,6 +6,7 @@ import { calculateAnnualCost, getVisitFrequencyCost } from '@/utils/plan-utils'
 import { planDetailsData } from '@/data/plan-details-data'
 import { defaultPlanDetailsData } from '@/types/plan-details'
 import { markdownToBold } from '@/lib/utils'
+import { type QuestionnaireResponse } from '@/types/questionnaire'
 
 interface OverviewProps {
   plan: PlanRecommendation
@@ -13,6 +14,7 @@ interface OverviewProps {
   coverageType?: string
   iuaPreference?: string
   visitFrequency?: string
+  questionnaire?: QuestionnaireResponse
 }
 
 export const Overview: React.FC<OverviewProps> = ({ 
@@ -20,7 +22,8 @@ export const Overview: React.FC<OverviewProps> = ({
   age = 35,
   coverageType = 'just_me',
   iuaPreference = '2500',
-  visitFrequency = 'just_checkups'
+  visitFrequency = 'just_checkups',
+  questionnaire
 }) => {
   // Get plan-specific details or fall back to default data
   const planData = planDetailsData[plan.plan.id] || defaultPlanDetailsData;
@@ -74,24 +77,25 @@ export const Overview: React.FC<OverviewProps> = ({
 
   return (
     <div className="space-y-8">
-      {/* Why Is This Plan The Best? */}
+      {/* Why This Is The Top Recommendation */}
       <section>
-        <h3 className="text-xl font-semibold mb-4">Why Is This Plan The Best?</h3>
+        <h3 className="text-xl font-semibold mb-4">Why This Is The Top Recommendation</h3>
         <div className="flex items-start gap-3 p-4 bg-blue-50 rounded-lg">
           <Info className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" />
-          <div>
-            <div className="text-sm text-gray-700 mt-1">
-              <ul className="list-disc pl-5 space-y-2">
-                {plan.explanation.map((item, index) => (
-                  <li key={index}>{item}</li>
-                ))}
-                {plan.factors.slice(0, 3).map((factor, index) => (
-                  <li key={`factor-${index}`}>
-                    <span className="font-medium">{factor.factor}:</span> {Math.round(factor.impact)}% impact on recommendation
-                  </li>
-                ))}
-              </ul>
-            </div>
+          <div className="text-sm text-gray-700 mt-1">
+            <p className="font-medium mb-2">This plan best matches your priorities:</p>
+            <p>
+              {questionnaire?.expense_preference === 'lower_monthly' 
+                ? `It has the lowest monthly contribution ($${monthlyPremium}) with an estimated annual cost of $${estimatedAnnualCost.toLocaleString()}.` 
+                : `It has the lowest monthly contribution ($${monthlyPremium}) given the IUA amount you selected with an estimated annual cost of $${estimatedAnnualCost.toLocaleString()}.`
+              }
+            </p>
+            
+            {questionnaire?.pregnancy_planning === 'yes' && (
+              <p className="mt-3">
+                Zion has the shortest waiting period for pregnancies at 6 months. Note: This means that you must wait at least 6 months from the start date of your membership to conceive for your pregnancy needs to be eligible for sharing.
+              </p>
+            )}
           </div>
         </div>
       </section>
@@ -120,9 +124,6 @@ export const Overview: React.FC<OverviewProps> = ({
           <Building className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" />
           <div>
             <div className="font-medium">{plan.plan.providerName}</div>
-            <div className="text-sm text-gray-600">
-              Plan Name: {plan.plan.planName}
-            </div>
             {planData.overview.providerInfo && (
               <div className="text-sm text-gray-600 mt-2" 
                    dangerouslySetInnerHTML={{ __html: markdownToBold(planData.overview.providerInfo) }} />

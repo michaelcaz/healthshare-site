@@ -1,5 +1,5 @@
 import { type PlanRecommendation } from '../types'
-import { Ambulance, Stethoscope, Pill, Baby } from 'lucide-react'
+import { Ambulance, Stethoscope, Pill } from 'lucide-react'
 import React from 'react'
 import { planDetailsData } from '@/data/plan-details-data'
 import { defaultPlanDetailsData } from '@/types/plan-details'
@@ -53,20 +53,6 @@ export const MedicalServices: React.FC<MedicalServicesProps> = ({ plan }) => {
             <div className="font-medium">Prescription Coverage</div>
             <div className="text-sm text-gray-600 mt-1">
               <p className="mb-2" dangerouslySetInnerHTML={{ __html: markdownToBold(planData.medicalServices.prescriptionDrugs) }}></p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Pregnancy */}
-      <section>
-        <h3 className="text-xl font-semibold mb-4">Pregnancy</h3>
-        <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg">
-          <Baby className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" />
-          <div>
-            <div className="font-medium">Maternity Coverage</div>
-            <div className="text-sm text-gray-600 mt-1">
-              <p className="mb-2" dangerouslySetInnerHTML={{ __html: markdownToBold(planData.medicalServices.pregnancy) }}></p>
             </div>
           </div>
         </div>

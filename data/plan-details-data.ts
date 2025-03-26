@@ -42,13 +42,14 @@ export const planDetailsData: Record<string, PlanDetailsData> = {
           title: "Alternative Medicine",
           description: "If you're injured or have any other eligible medical need, **therapeutic Treatments** prescribed and performed by a licensed medical professional are shareable for an eligible request, up to **$7,500 or 35 treatments per medical need**. Once either limit is reached, further treatments are no longer shareable. Therapeutic services include, but are not limited to:\n• Alternative and/or integrative therapies such as acupuncture, craniosacral therapy, dry needling, ozone treatments, prolotherapy, and alternative infusion therapies.\n• Chiropractic treatments and services provided by licensed chiropractors.\n• Massage therapy and services provided by licensed massage therapists.\n• Physical therapy and services performed by licensed physical therapists."
         }
-      ]
+      ],
+      pregnancy: "**6 Month Waiting Period**: You must be a member for 6 months before conceiving, for your pregnancy related needs to be eligible for sharing. Services available for sharing include pre-natal, delivery (including birthing centers and home-births), post-natal, and miscarriage.",
+      preExistingConditions: "**Graduated sharing approach**: Starting from the membership start date, there is a one-year waiting period before pre-membership medical conditions are eligible for sharing. After the waiting period, the amount eligible for sharing increases with each membership year:\n\n- **Year One**: $0 (waiting period)\n- **Year Two**: $25,000 maximum per sharing request\n- **Year Three**: $50,000 maximum per sharing request\n- **Year Four**: $125,000 maximum per sharing request"
     },
     medicalServices: {
       emergencyCare: "**ER visits are generally eligible for sharing**, whether or not they are in conjunction with an eligible medical need. The first ER visit for a medical condition is treated as a normal sharing request. Each additional visit related to the same condition requires the member to take on a personal responsibility of $500 in addition to the member's IUA.",
       surgeryAndTreatment: "**Covered for eligible medical needs**. For any non-emergency surgery, you can get prior authorization to ensure that your surgery will be fully shared.",
-      prescriptionDrugs: "**Prescription medications** are considered eligible for sharing under the following conditions: 1. The prescription is related to the treatment of an eligible sharing request. 2. The prescription is ordered by a licensed provider. 3. The prescription is approved by Zion HealthShare. When these conditions are met, the member will be reimbursed for the cost or given a one-time use credit card for the exact cost of the prescription to take to the pharmacy and pay for their prescription. For all other medications, you can subscribe to **Zion RX Share** to order heavily discounted medications online or to pick up at your local pharmacy.",
-      pregnancy: "**6 Month Waiting Period**: You must be a member for 6 months before conceiving, for your pregnancy related needs to be eligible for sharing. Services available for sharing include pre-natal, delivery (including birthing centers and home-births), post-natal, and miscarriage."
+      prescriptionDrugs: "**Prescription medications** are considered eligible for sharing under the following conditions: 1. The prescription is related to the treatment of an eligible sharing request. 2. The prescription is ordered by a licensed provider. 3. The prescription is approved by Zion HealthShare. When these conditions are met, the member will be reimbursed for the cost or given a one-time use credit card for the exact cost of the prescription to take to the pharmacy and pay for their prescription. For all other medications, you can subscribe to **Zion RX Share** to order heavily discounted medications online or to pick up at your local pharmacy."
     },
     providerDetails: {
       yearEstablished: 2019,
@@ -143,13 +144,14 @@ export const planDetailsData: Record<string, PlanDetailsData> = {
           title: "Alternative Medicine",
           description: "If you're injured or have any other eligible medical need, **therapeutic Treatments** prescribed and performed by a licensed medical professional are shareable for an eligible request, up to **$7,500 or 35 treatments per medical need**. Once either limit is reached, further treatments are no longer shareable. Therapeutic services include, but are not limited to:\n• Alternative and/or integrative therapies such as acupuncture, craniosacral therapy, dry needling, ozone treatments, prolotherapy, and alternative infusion therapies.\n• Chiropractic treatments and services provided by licensed chiropractors.\n• Massage therapy and services provided by licensed massage therapists.\n• Physical therapy and services performed by licensed physical therapists."
         }
-      ]
+      ],
+      pregnancy: "**6 Month Waiting Period**: You must be a member for 6 months before conceiving, for your pregnancy related needs to be eligible for sharing. Services available for sharing include pre-natal, delivery (including birthing centers and home-births), post-natal, and miscarriage.",
+      preExistingConditions: "**Graduated sharing approach**: Starting from the membership start date, there is a one-year waiting period before pre-membership medical conditions are eligible for sharing. After the waiting period, the amount eligible for sharing increases with each membership year:\n\n- **Year One**: $0 (waiting period)\n- **Year Two**: $25,000 maximum per sharing request\n- **Year Three**: $50,000 maximum per sharing request\n- **Year Four**: $125,000 maximum per sharing request"
     },
     medicalServices: {
       emergencyCare: "**ER visits are generally eligible for sharing**, whether or not they are in conjunction with an eligible medical need. The first ER visit for a medical condition is treated as a normal sharing request. Each additional visit related to the same condition requires the member to take on a personal responsibility of $500 in addition to the member's IUA.",
       surgeryAndTreatment: "**Covered for eligible medical needs**. For any non-emergency surgery, you can get prior authorization to ensure that your surgery will be fully shared.",
-      prescriptionDrugs: "**Prescription medications** are considered eligible for sharing under the following conditions: 1. The prescription is related to the treatment of an eligible sharing request. 2. The prescription is ordered by a licensed provider. 3. The prescription is approved by Zion HealthShare. When these conditions are met, the member will be reimbursed for the cost or given a one-time use credit card for the exact cost of the prescription to take to the pharmacy and pay for their prescription. For all other medications, you can subscribe to **Zion RX Share** to order heavily discounted medications online or to pick up at your local pharmacy.",
-      pregnancy: "**6 Month Waiting Period**: You must be a member for 6 months before conceiving, for your pregnancy related needs to be eligible for sharing. Services available for sharing include pre-natal, delivery (including birthing centers and home-births), post-natal, and miscarriage."
+      prescriptionDrugs: "**Prescription medications** are considered eligible for sharing under the following conditions: 1. The prescription is related to the treatment of an eligible sharing request. 2. The prescription is ordered by a licensed provider. 3. The prescription is approved by Zion HealthShare. When these conditions are met, the member will be reimbursed for the cost or given a one-time use credit card for the exact cost of the prescription to take to the pharmacy and pay for their prescription. For all other medications, you can subscribe to **Zion RX Share** to order heavily discounted medications online or to pick up at your local pharmacy."
     },
     providerDetails: {
       yearEstablished: 2019,
@@ -327,7 +329,7 @@ export const planDetailsData: Record<string, PlanDetailsData> = {
     },
     coverageDetails: {
       iuaExplanation: "**Per-need Initial Unshared Amount** with options ranging from $500 to $5,000.",
-      networkInfo: "**No network restrictions** - see any provider you choose. Sedera helps negotiate fair prices.",
+      networkInfo: "Sedera HealthShare is not health insurance, and they have no network limitations. However, wherever possible, it is suggested that you find a provider with fair-market prices. Their Medical Advocacy team can also assist you in identifying a provider in your area and making prepayments, or you can use their online portal to find a provider in your area.",
       includedServices: [
         {
           title: "Medical Cost Sharing",
@@ -341,7 +343,8 @@ export const planDetailsData: Record<string, PlanDetailsData> = {
           title: "Bill Negotiation",
           description: "**Professional negotiators** work to reduce your medical bills"
         }
-      ]
+      ],
+      pregnancy: "**Maternity expenses** eligible for sharing after 10-month waiting period."
     },
     medicalServices: {
       emergencyCare: "**Eligible for sharing** after Initial Unshared Amount. Includes emergency room visits and ambulance services.",
@@ -412,91 +415,101 @@ export const planDetailsData: Record<string, PlanDetailsData> = {
   'sedera-access+': {
     overview: {
       whatWeLove: [
-        "Sedera ACCESS+ offers **enhanced benefits** over the standard Sedera membership",
-        "**Expanded sharing eligibility** for certain medical needs",
-        "**Excellent member support** throughout the medical need process"
+        "Sedera is one of the most affordable health share plans on the market with **monthly contributions starting at $132/mo for individuals**.",
+        "**Zero lifetime sharing limits** - unlike many competitors that cap at $1M or lower",
+        "**0% denial rate for eligible needs to date**. Incredible!",
+        "They have been very **transparent in all communications** with us."
       ],
       keyFeatures: [
-        "**Flexible Initial Unshared Amount** options to fit your budget",
-        "**Unlimited sharing** for eligible medical needs",
-        "**Enhanced preventive care** options"
+        "**No network restrictions** with price negotiation support through MDsave partnership",
+        "**24/7 telemedicine services** included at no extra cost",
+        "**Comprehensive maternity support** after 12-month waiting period"
       ],
-      providerInfo: "Founded in 2014, Sedera is a healthcare sharing community that has helped thousands of members share millions in medical expenses."
+      providerInfo: "Founded in 2014, Sedera is a membership-based non-insurance Community of like-minded individuals established for the purpose of sharing legitimate healthcare expenses between Members."
     },
     coverageDetails: {
-      iuaExplanation: "**Per-need Initial Unshared Amount** with options ranging from $500 to $5,000.",
-      networkInfo: "**No network restrictions** - see any provider you choose. Sedera helps negotiate fair prices.",
+      iuaExplanation: "The **Initial Unshared Amount (IUA)** is the amount you pay before your health share plan kicks in. For example, if you have a $1000 IUA and get an injury that results in $2300 of medical bills, you pay the first $1000, and the health share community pays the other $1300.",
+      networkInfo: "Sedera HealthShare is not health insurance, and they have no network limitations. However, wherever possible, it is suggested that you find a provider with fair-market prices. Their Medical Advocacy team can also assist you in identifying a provider in your area and making prepayments, or you can use their online portal to find a provider in your area.",
       includedServices: [
         {
-          title: "Medical Cost Sharing",
-          description: "**Unlimited sharing** for eligible medical needs after IUA"
+          title: "Preventive Care",
+          description: "• **Annual Provider Visit**<br/>• **Colorectal Cancer Screening**<br/>• **Mammograms**<br/>• **Youth Immunizations**<br/>• **Adult Flu Shots**<br/><br/>Some of these are only available in certain circumstances. We highly recommend reading through the membership guidelines to ensure you know the details of each of these as well as what's in the rest of the plan"
         },
         {
-          title: "Expert Medical Opinion",
-          description: "**Second opinion service** for complex medical conditions"
+          title: "Medical Advocacy",
+          description: "The Sedera **Medical Advocacy team** is there to help you find high quality, fair-market providers in your area for anything from a primary care visit to a serious surgery. And if you ever get a huge bill, they are there to help negotiate the price down on your behalf."
         },
         {
-          title: "Enhanced Preventive Care",
-          description: "**Expanded preventive services** compared to SELECT+"
+          title: "Telemedicine",
+          description: "**24/7 access** to virtual doctor visits included at no extra cost with your membership"
         }
-      ]
+      ],
+      pregnancy: "**12 Month Waiting Period**: You must be a member for 12 months before conceiving, for your pregnancy related needs to be eligible for sharing. Services available for sharing include pre-natal, delivery (including birthing centers and home-births), post-natal, and miscarriage. Regardless of your chosen IUA, there is a $5,000 IUA applied to normal vaginal deliveries and emergency C-Section deliveries. There is a $7,500 IUA applied to elective/planned C-Section deliveries.",
+      preExistingConditions: "**Graduated sharing approach**: Starting from the membership start date, there is a one-year waiting period before pre-membership medical conditions are eligible for sharing. After the waiting period, the amount eligible for sharing increases with each membership year:<br/><br/>**Year One**: $0 (waiting period)<br/>**Year Two**: $15,000 maximum per sharing request<br/>**Year Three**: $30,000 maximum per sharing request<br/>**Year Four**: Fully Shareable"
     },
     medicalServices: {
-      emergencyCare: "**Eligible for sharing** after Initial Unshared Amount. Includes emergency room visits and ambulance services.",
-      surgeryAndTreatment: "**Eligible for sharing** after Initial Unshared Amount. Includes surgeries, hospital stays, and follow-up care.",
-      prescriptionDrugs: "**Enhanced prescription program** included. Medications for eligible medical needs shareable for 180 days.",
-      pregnancy: "**Maternity expenses** eligible for sharing after 10-month waiting period with enhanced benefits."
+      emergencyCare: "**ER visits, including medically necessary ambulance rides are generally eligible for sharing**. Air ambulance rides are eligible for sharing for up to $25,000.",
+      surgeryAndTreatment: "**Surgical procedures are generally shareable after a 60-day waiting period**. Pre-authorization is required for non-emergency procedures over $3,000.",
+      prescriptionDrugs: "**Acute condition medications shareable for 120-day supply**. Chronic medications require prior authorization. Maintenance medications for chronic conditions require prior authorization and are shareable for up to a 120-day supply. You also get access to Sedera's Rx Marketplace and GoodRx for additional prescription discounts for prescriptions related to eligible needs as well as those not related to an eligible need."
     },
     providerDetails: {
       yearEstablished: 2014,
-      memberCount: "**70,000+**",
-      memberSatisfaction: "4.8/5",
-      averageTenure: "3.2 years",
+      memberCount: "**30,000+**",
+      memberSatisfaction: "4.5/5",
+      averageTenure: "3.0 years",
       ratings: {
-        overall: 4.8,
-        reviewCount: 320,
+        overall: 4.48,
+        reviewCount: 200,
         bbbRating: "**A+**"
       },
-      processingTime: "**10-14 business days**",
+      processingTime: "**14-60 business days**",
       costTransparency: {
-        medicalCostSharing: 82,
-        administrativeCosts: 13,
-        operationalReserves: 5
+        medicalCostSharing: 85,
+        administrativeCosts: 15,
+        operationalReserves: 0
       },
       savingsVsInsurance: {
-        averageMonthlySavings: "**35%** (per 2023 member survey)"
+        averageMonthlySavings: "**30%** (per 2023 member survey)"
       }
     },
     testimonials: [
       {
-        text: "**Sedera helped me navigate a complex surgery** and negotiated my bills down by 45%. Their support was incredible.",
-        author: "James T.",
-        highlight: "Excellent support",
-        tenure: "Member for 3 years",
-        avatar: "J",
+        text: "**Sedera's price negotiation helped me save $8,000** on an MRI and surgery. The process was surprisingly smooth",
+        author: "Michael R.",
+        highlight: "Substantial procedure savings",
+        tenure: "Member for 4 years",
+        avatar: "M",
         rating: 5
       },
       {
-        text: "**I've saved over $12,000** compared to my previous insurance plan. The process is simple and transparent.",
-        author: "Rebecca M.",
-        highlight: "Significant savings",
+        text: "**The telemedicine service has been a lifesaver** for our family's routine care needs",
+        author: "Sarah L.",
+        highlight: "Convenient telehealth access",
         tenure: "Member for 2 years",
-        avatar: "R",
+        avatar: "S",
+        rating: 4.5
+      },
+      {
+        text: "**I have been a Sedera member for a little over a year**. Just recently I tore my ACL, resulting in a need for surgery. I was anxious about approaching surgery without traditional insurance. Thankfully, Sedera has made it a very positive experience!",
+        author: "Lindsey D.",
+        highlight: "I am confident in utilizing Sedera for my family's healthcare needs",
+        tenure: "Member for 2 years",
+        avatar: "L",
         rating: 5
       }
     ],
     keyPlanFeatures: [
       {
-        text: "Pre-Existing Conditions: **36-month waiting period**",
-        isPositive: false,
-        icon: "AlertCircle",
-        tooltip: "Conditions treated in past 36 months have graduated sharing eligibility"
+        text: "Pre-Existing Conditions: **Graduated sharing**",
+        isPositive: true,
+        icon: "Clock",
+        tooltip: "Pre-existing conditions fully shareable after 3 years of membership"
       },
       {
-        text: "Mental Health: **Enhanced sharing**",
+        text: "Telemedicine: **Included at no extra cost**",
         isPositive: true,
-        icon: "Heart",
-        tooltip: "Up to $5,000 per need"
+        icon: "Phone",
+        tooltip: "24/7 access to virtual doctor visits included with membership"
       },
       {
         text: "Unlimited Sharing: **No annual or lifetime caps**",
@@ -510,56 +523,57 @@ export const planDetailsData: Record<string, PlanDetailsData> = {
   'sedera-access+-+dpc/vpc': {
     overview: {
       whatWeLove: [
-        "Sedera ACCESS+ with DPC/VPC offers **comprehensive healthcare** combining sharing with direct primary care",
-        "**Unlimited primary care access** through DPC/VPC membership",
-        "**Reduced Initial Unshared Amount** for needs referred by your DPC/VPC provider"
+        "Sedera is one of the most affordable health share plans on the market with **monthly contributions starting at $132/mo for individuals**.",
+        "**Zero lifetime sharing limits** - unlike many competitors that cap at $1M or lower",
+        "**0% denial rate for eligible needs to date**. Incredible!",
+        "They have been very **transparent in all communications** with us."
       ],
       keyFeatures: [
-        "**Direct Primary Care** membership included",
-        "**Unlimited sharing** for eligible medical needs",
-        "**Enhanced preventive care** through your DPC/VPC provider"
+        "**Comprehensive maternity support** after 12-month waiting period",
+        "**24/7 telemedicine services** included at no extra cost"
       ],
-      providerInfo: "Founded in 2014, Sedera is a healthcare sharing community that has helped thousands of members share millions in medical expenses."
+      providerInfo: "Founded in 2014, Sedera is a membership-based non-insurance Community of like-minded individuals established for the purpose of sharing legitimate healthcare expenses between Members."
     },
     coverageDetails: {
-      iuaExplanation: "**Per-need Initial Unshared Amount** with options ranging from $500 to $5,000. **50% reduction** for needs referred by your DPC/VPC provider.",
-      networkInfo: "**No network restrictions** for specialists - see any provider you choose. Primary care provided through your DPC/VPC membership.",
+      iuaExplanation: "The **Initial Unshared Amount (IUA)** is the amount you pay before your health share plan kicks in. For example, if you have a $1000 IUA and get an injury that results in $2300 of medical bills, you pay the first $1000, and the health share community pays the other $1300.",
+      networkInfo: "Sedera HealthShare is not health insurance, and they have no network limitations. However, wherever possible, it is suggested that you find a provider with fair-market prices. Their Medical Advocacy team can also assist you in identifying a provider in your area and making prepayments, or you can use their online portal to find a provider in your area.",
       includedServices: [
         {
-          title: "Direct Primary Care",
-          description: "**Unlimited access** to your primary care provider with no per-visit fees"
+          title: "Preventive Care",
+          description: "• **Annual Provider Visit**<br/>• **Colorectal Cancer Screening**<br/>• **Mammograms**<br/>• **Youth Immunizations**<br/>• **Adult Flu Shots**<br/><br/>Some of these are only available in certain circumstances. We highly recommend reading through the membership guidelines to ensure you know the details of each of these as well as what's in the rest of the plan"
         },
         {
-          title: "Medical Cost Sharing",
-          description: "**Unlimited sharing** for eligible medical needs after IUA"
+          title: "Medical Advocacy",
+          description: "The Sedera **Medical Advocacy team** is there to help you find high quality, fair-market providers in your area for anything from a primary care visit to a serious surgery. And if you ever get a huge bill, they are there to help negotiate the price down on your behalf."
         },
         {
-          title: "Enhanced Preventive Care",
-          description: "**Comprehensive preventive services** through your DPC/VPC provider"
+          title: "Telemedicine",
+          description: "**24/7 access** to virtual doctor visits included at no extra cost with your membership"
         }
-      ]
+      ],
+      pregnancy: "**12 Month Waiting Period**: You must be a member for 12 months before conceiving, for your pregnancy related needs to be eligible for sharing. Services available for sharing include pre-natal, delivery (including birthing centers and home-births), post-natal, and miscarriage. Regardless of your chosen IUA, there is a $5,000 IUA applied to normal vaginal deliveries and emergency C-Section deliveries. There is a $7,500 IUA applied to elective/planned C-Section deliveries.",
+      preExistingConditions: "**Graduated sharing approach**: Starting from the membership start date, there is a one-year waiting period before pre-membership medical conditions are eligible for sharing. After the waiting period, the amount eligible for sharing increases with each membership year:<br/><br/>**Year One**: $0 (waiting period)<br/>**Year Two**: $15,000 maximum per sharing request<br/>**Year Three**: $30,000 maximum per sharing request<br/>**Year Four**: Fully Shareable"
     },
     medicalServices: {
-      emergencyCare: "**Eligible for sharing** after Initial Unshared Amount. Includes emergency room visits and ambulance services.",
-      surgeryAndTreatment: "**Eligible for sharing** after Initial Unshared Amount. Includes surgeries, hospital stays, and follow-up care.",
-      prescriptionDrugs: "**Enhanced prescription program** included. Medications for eligible medical needs shareable for 180 days. Additional discounts through DPC/VPC provider.",
-      pregnancy: "**Maternity expenses** eligible for sharing after 10-month waiting period with enhanced benefits."
+      emergencyCare: "**ER visits, including medically necessary ambulance rides are generally eligible for sharing**. Air ambulance rides are eligible for sharing for up to $25,000.",
+      surgeryAndTreatment: "**Surgical procedures are generally shareable after a 60-day waiting period**. Pre-authorization is required for non-emergency procedures over $3,000.",
+      prescriptionDrugs: "**Acute condition medications shareable for 120-day supply**. Chronic medications require prior authorization. Maintenance medications for chronic conditions require prior authorization and are shareable for up to a 120-day supply. You also get access to Sedera's Rx Marketplace and GoodRx for additional prescription discounts for prescriptions related to eligible needs as well as those not related to an eligible need."
     },
     providerDetails: {
       yearEstablished: 2014,
-      memberCount: "**70,000+**",
-      memberSatisfaction: "4.9/5",
-      averageTenure: "3.5 years",
+      memberCount: "**30,000+**",
+      memberSatisfaction: "4.7/5",
+      averageTenure: "3.2 years",
       ratings: {
-        overall: 4.9,
-        reviewCount: 320,
+        overall: 4.48,
+        reviewCount: 200,
         bbbRating: "**A+**"
       },
-      processingTime: "**10-14 business days**",
+      processingTime: "**14-60 business days**",
       costTransparency: {
-        medicalCostSharing: 82,
-        administrativeCosts: 13,
-        operationalReserves: 5
+        medicalCostSharing: 85,
+        administrativeCosts: 15,
+        operationalReserves: 0
       },
       savingsVsInsurance: {
         averageMonthlySavings: "**30%** (per 2023 member survey)"
@@ -567,34 +581,28 @@ export const planDetailsData: Record<string, PlanDetailsData> = {
     },
     testimonials: [
       {
-        text: "**Having unlimited access to my doctor** through DPC plus Sedera for larger medical needs is the perfect combination.",
-        author: "Michael S.",
-        highlight: "Perfect combination",
+        text: "**The telemedicine service has been a lifesaver** for our family's routine care needs",
+        author: "Sarah L.",
+        highlight: "Convenient telehealth access",
         tenure: "Member for 2 years",
-        avatar: "M",
-        rating: 5
+        avatar: "S",
+        rating: 4.5
       },
       {
-        text: "**My DPC doctor caught a health issue early** that could have been much more serious. The value is incredible.",
-        author: "Jennifer K.",
-        highlight: "Preventive care value",
-        tenure: "Member for 3 years",
-        avatar: "J",
+        text: "**I have been a Sedera member for a little over a year**. Just recently I tore my ACL, resulting in a need for surgery. I was anxious about approaching surgery without traditional insurance. Thankfully, Sedera has made it a very positive experience!",
+        author: "Lindsey D.",
+        highlight: "I am confident in utilizing Sedera for my family's healthcare needs",
+        tenure: "Member for 2 years",
+        avatar: "L",
         rating: 5
       }
     ],
     keyPlanFeatures: [
       {
-        text: "Direct Primary Care: **Unlimited access included**",
+        text: "Telemedicine: **Included at no extra cost**",
         isPositive: true,
-        icon: "User",
-        tooltip: "No per-visit fees for primary care visits"
-      },
-      {
-        text: "Reduced IUA: **50% reduction for referred needs**",
-        isPositive: true,
-        icon: "DollarSign",
-        tooltip: "Initial Unshared Amount reduced by 50% for needs referred by your DPC/VPC provider"
+        icon: "Phone",
+        tooltip: "24/7 access to virtual doctor visits included with membership"
       },
       {
         text: "Unlimited Sharing: **No annual or lifetime caps**",

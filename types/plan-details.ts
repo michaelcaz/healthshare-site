@@ -14,12 +14,15 @@ export interface PlanDetailsData {
       title: string;
       description: string;
     }>;
+    pregnancy?: string;
+    preExistingConditions?: string;
   };
   medicalServices: {
     emergencyCare: string;
     surgeryAndTreatment: string;
     prescriptionDrugs: string;
-    pregnancy: string;
+    pregnancy?: string;
+    preExistingConditions?: string;
   };
   // Additional fields for hero section and trust elements
   providerDetails?: {
@@ -90,13 +93,15 @@ export const defaultPlanDetailsData: PlanDetailsData = {
         title: "Member Support",
         description: "Dedicated support team to help navigate your healthcare needs"
       }
-    ]
+    ],
+    pregnancy: "Most healthshare plans have waiting periods for maternity coverage, typically 6-10 months from enrollment. Conception must occur after the waiting period for maternity expenses to be eligible for sharing.",
+    preExistingConditions: "Pre-existing conditions typically have waiting periods before becoming eligible for sharing. Most healthshare plans use a graduated approach where conditions become eligible for limited sharing after 1-2 years and may become fully eligible after 2-3 years of continuous membership."
   },
   medicalServices: {
     emergencyCare: "Emergency room visits and ambulance services are typically eligible for sharing after your IUA. For true emergencies, seek care immediately. For non-emergencies, urgent care centers are often a more cost-effective option.",
     surgeryAndTreatment: "Medically necessary surgeries and treatments are typically eligible for sharing after your IUA. Pre-existing conditions may have waiting periods or limitations.",
     prescriptionDrugs: "Most healthshare plans include prescription discount programs rather than traditional prescription coverage. Maintenance medications are typically not shared, but medications related to eligible medical incidents may be shareable.",
-    pregnancy: "Most healthshare plans have waiting periods for maternity coverage, typically 6-10 months from enrollment. Conception must occur after the waiting period for maternity expenses to be eligible for sharing."
+    preExistingConditions: "Pre-existing conditions typically have waiting periods before becoming eligible for sharing. Most healthshare plans use a graduated approach where conditions become eligible for limited sharing after 1-2 years and may become fully eligible after 2-3 years of continuous membership."
   },
   // Default values for the new fields
   providerDetails: {

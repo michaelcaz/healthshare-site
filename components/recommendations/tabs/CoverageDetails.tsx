@@ -1,5 +1,5 @@
 import { type PlanRecommendation } from '../types'
-import { DollarSign, Globe, CheckCircle } from 'lucide-react'
+import { DollarSign, Globe, CheckCircle, Baby, AlertCircle } from 'lucide-react'
 import React from 'react'
 import { getPlanCost } from '@/lib/utils/plan-costs'
 import { planDetailsData } from '@/data/plan-details-data'
@@ -105,25 +105,42 @@ export const CoverageDetails: React.FC<CoverageDetailsProps> = ({
           <div>
             <div className="font-medium">Plan Highlights</div>
             <div className="text-sm text-gray-700 mt-1">
-              {/* First item as header */}
-              {planData.overview.keyFeatures.length > 0 && (
-                <div className="font-medium mb-2" dangerouslySetInnerHTML={{ 
-                  __html: markdownToBold(planData.overview.keyFeatures[0]) 
-                }}></div>
-              )}
-              
-              {/* Middle items as bullet points */}
               <ul className="list-disc pl-5 space-y-2">
-                {planData.overview.keyFeatures.slice(1, -1).map((feature, index) => (
+                {planData.overview.keyFeatures.map((feature, index) => (
                   <li key={index} dangerouslySetInnerHTML={{ __html: markdownToBold(feature) }}></li>
                 ))}
               </ul>
-              
-              {/* Last item with asterisk */}
-              {planData.overview.keyFeatures.length > 1 && (
-                <div className="mt-2 italic text-gray-600" dangerouslySetInnerHTML={{ 
-                  __html: markdownToBold(planData.overview.keyFeatures[planData.overview.keyFeatures.length - 1]) 
-                }}></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Pregnancy */}
+      <section>
+        <h3 className="text-xl font-semibold mb-4">Pregnancy</h3>
+        <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg">
+          <Baby className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" />
+          <div>
+            <div className="font-medium">Maternity Coverage</div>
+            <div className="text-sm text-gray-600 mt-1">
+              <p className="mb-2" dangerouslySetInnerHTML={{ __html: markdownToBold(planData.coverageDetails.pregnancy || 'Most healthshare plans have waiting periods for maternity coverage, typically 6-10 months from enrollment. Conception must occur after the waiting period for maternity expenses to be eligible for sharing.') }}></p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Pre-existing Conditions */}
+      <section>
+        <h3 className="text-xl font-semibold mb-4">Pre-existing Conditions</h3>
+        <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg">
+          <AlertCircle className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" />
+          <div>
+            <div className="font-medium">Coverage Eligibility</div>
+            <div className="text-sm text-gray-600 mt-1">
+              {planData.coverageDetails.preExistingConditions ? (
+                <div dangerouslySetInnerHTML={{ __html: markdownToBold(planData.coverageDetails.preExistingConditions) }}></div>
+              ) : (
+                <p className="mb-2" dangerouslySetInnerHTML={{ __html: markdownToBold('Pre-existing conditions typically have waiting periods before becoming eligible for sharing. Most healthshare plans use a graduated approach where conditions become eligible for limited sharing after 1-2 years and may become fully eligible after 2-3 years of continuous membership.') }}></p>
               )}
             </div>
           </div>

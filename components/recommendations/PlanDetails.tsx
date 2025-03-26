@@ -263,9 +263,6 @@ export const PlanDetails: React.FC<PlanDetailsProps> = ({
           <Building className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" />
           <div>
             <div className="font-medium">{plan.plan.providerName}</div>
-            <div className="text-sm text-gray-600">
-              Plan Name: {plan.plan.planName}
-            </div>
           </div>
         </div>
       </section>
