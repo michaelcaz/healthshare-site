@@ -121,7 +121,6 @@ export const CoverageDetails: React.FC<CoverageDetailsProps> = ({
         <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg">
           <Baby className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" />
           <div>
-            <div className="font-medium">Maternity Coverage</div>
             <div className="text-sm text-gray-600 mt-1">
               <p className="mb-2" dangerouslySetInnerHTML={{ __html: markdownToBold(planData.coverageDetails.pregnancy || 'Most healthshare plans have waiting periods for maternity coverage, typically 6-10 months from enrollment. Conception must occur after the waiting period for maternity expenses to be eligible for sharing.') }}></p>
             </div>
@@ -135,7 +134,6 @@ export const CoverageDetails: React.FC<CoverageDetailsProps> = ({
         <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg">
           <AlertCircle className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" />
           <div>
-            <div className="font-medium">Coverage Eligibility</div>
             <div className="text-sm text-gray-600 mt-1">
               {planData.coverageDetails.preExistingConditions ? (
                 <div dangerouslySetInnerHTML={{ __html: markdownToBold(planData.coverageDetails.preExistingConditions) }}></div>

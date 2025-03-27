@@ -43,8 +43,8 @@ export const planDetailsData: Record<string, PlanDetailsData> = {
           description: "If you're injured or have any other eligible medical need, **therapeutic Treatments** prescribed and performed by a licensed medical professional are shareable for an eligible request, up to **$7,500 or 35 treatments per medical need**. Once either limit is reached, further treatments are no longer shareable. Therapeutic services include, but are not limited to:\n• Alternative and/or integrative therapies such as acupuncture, craniosacral therapy, dry needling, ozone treatments, prolotherapy, and alternative infusion therapies.\n• Chiropractic treatments and services provided by licensed chiropractors.\n• Massage therapy and services provided by licensed massage therapists.\n• Physical therapy and services performed by licensed physical therapists."
         }
       ],
-      pregnancy: "**6 Month Waiting Period**: You must be a member for 6 months before conceiving, for your pregnancy related needs to be eligible for sharing. Services available for sharing include pre-natal, delivery (including birthing centers and home-births), post-natal, and miscarriage.",
-      preExistingConditions: "**Graduated sharing approach**: Starting from the membership start date, there is a one-year waiting period before pre-membership medical conditions are eligible for sharing. After the waiting period, the amount eligible for sharing increases with each membership year:\n\n- **Year One**: $0 (waiting period)\n- **Year Two**: $25,000 maximum per sharing request\n- **Year Three**: $50,000 maximum per sharing request\n- **Year Four**: $125,000 maximum per sharing request"
+      pregnancy: "You must be a member for 6 months before conceiving, for your pregnancy related needs to be eligible for sharing. Services available for sharing include pre-natal, delivery (including birthing centers and home-births), post-natal, and miscarriage.",
+      preExistingConditions: "Starting from the membership start date, there is a one-year waiting period before pre-membership medical conditions are eligible for sharing. After the waiting period, the amount eligible for sharing increases with each membership year:\n\n- **Year One**: $0 (waiting period)\n- **Year Two**: $25,000 maximum per sharing request\n- **Year Three**: $50,000 maximum per sharing request\n- **Year Four**: $125,000 maximum per sharing request"
     },
     medicalServices: {
       emergencyCare: "**ER visits are generally eligible for sharing**, whether or not they are in conjunction with an eligible medical need. The first ER visit for a medical condition is treated as a normal sharing request. Each additional visit related to the same condition requires the member to take on a personal responsibility of $500 in addition to the member's IUA.",
@@ -145,8 +145,8 @@ export const planDetailsData: Record<string, PlanDetailsData> = {
           description: "If you're injured or have any other eligible medical need, **therapeutic Treatments** prescribed and performed by a licensed medical professional are shareable for an eligible request, up to **$7,500 or 35 treatments per medical need**. Once either limit is reached, further treatments are no longer shareable. Therapeutic services include, but are not limited to:\n• Alternative and/or integrative therapies such as acupuncture, craniosacral therapy, dry needling, ozone treatments, prolotherapy, and alternative infusion therapies.\n• Chiropractic treatments and services provided by licensed chiropractors.\n• Massage therapy and services provided by licensed massage therapists.\n• Physical therapy and services performed by licensed physical therapists."
         }
       ],
-      pregnancy: "**6 Month Waiting Period**: You must be a member for 6 months before conceiving, for your pregnancy related needs to be eligible for sharing. Services available for sharing include pre-natal, delivery (including birthing centers and home-births), post-natal, and miscarriage.",
-      preExistingConditions: "**Graduated sharing approach**: Starting from the membership start date, there is a one-year waiting period before pre-membership medical conditions are eligible for sharing. After the waiting period, the amount eligible for sharing increases with each membership year:\n\n- **Year One**: $0 (waiting period)\n- **Year Two**: $25,000 maximum per sharing request\n- **Year Three**: $50,000 maximum per sharing request\n- **Year Four**: $125,000 maximum per sharing request"
+      pregnancy: "You must be a member for 6 months before conceiving, for your pregnancy related needs to be eligible for sharing. Services available for sharing include pre-natal, delivery (including birthing centers and home-births), post-natal, and miscarriage.",
+      preExistingConditions: "Starting from the membership start date, there is a one-year waiting period before pre-membership medical conditions are eligible for sharing. After the waiting period, the amount eligible for sharing increases with each membership year:\n\n- **Year One**: $0 (waiting period)\n- **Year Two**: $25,000 maximum per sharing request\n- **Year Three**: $50,000 maximum per sharing request\n- **Year Four**: $125,000 maximum per sharing request"
     },
     medicalServices: {
       emergencyCare: "**ER visits are generally eligible for sharing**, whether or not they are in conjunction with an eligible medical need. The first ER visit for a medical condition is treated as a normal sharing request. Each additional visit related to the same condition requires the member to take on a personal responsibility of $500 in addition to the member's IUA.",
@@ -214,27 +214,27 @@ export const planDetailsData: Record<string, PlanDetailsData> = {
   },
   
   // CrowdHealth plans
-  'crowdhealth-essential-membership-(basic,-no-additional-services)': {
+  'crowdhealth-membership': {
     overview: {
       whatWeLove: [
-        "CrowdHealth offers a modern approach to healthcare sharing with **transparent pricing**",
-        "**Innovative crowdfunding model** for medical expenses",
-        "**Simple, predictable costs** with no complicated sharing rules"
+        "They have THE HIGHEST average customer satisfaction of any health share organization (4.8 avg. with 450 reviews on TrustPilot and Google)",
+        "They have one of the most innovative pricing models (that could make it one of, if not the, safest). You make two payments per month. 1. You pay a $55 fee per member, and that goes towards them running their business. Member advocacy, price negotiation team, customer support, etc. and anything left over is their profit.  2. Then you pay a second, variable amount, based on the needs of the community that goes into the community \"pot.\" This fee is up to $140/mo for members under 55, and up to $280/mo for members 55 and older, and up to $420 for families of four or more. The community pot is ONLY to cover the needs of members.",
+        "Their platform is the most intuitive and easiest to use."
       ],
       keyFeatures: [
-        "**Fixed monthly contribution** regardless of age or family size",
-        "**Simple $500 Initial Unshared Amount** per medical need",
-        "**Care coordination team** helps negotiate prices with providers"
+        "**CrowdNegotiate™ team** that helps members challenge medical bills",
+        "**Price Transparency Dashboard** showing fair pricing for 500+ common procedures",
+        "**24/7 telemedicine** included in all plans"
       ],
-      providerInfo: "Founded in 2021, CrowdHealth is a modern healthcare sharing community that uses technology to simplify the healthcare experience."
+      providerInfo: "Founded in 2021, Crowd Health combines medical cost sharing with proactive bill negotiation technology. Their model empowers members to fight healthcare inflation through community support and direct price negotiation tools."
     },
     coverageDetails: {
-      iuaExplanation: "**$500 per medical need** - simple and straightforward Initial Unshared Amount.",
-      networkInfo: "**No network restrictions** - see any provider you choose. CrowdHealth helps negotiate fair prices.",
+      iuaExplanation: "With CrowdHealth, your IUA is set at **$500**. Preventive care visits are shareable immediately, while other expenses become shareable after meeting your Initial Unshared Amount (IUA). The IUA is the amount you pay before your health share plan kicks in. For example, if you get an injury that results in $2300 of medical bills, you pay the first $500, and the CrowdHealth community pays the other $1800.",
+      networkInfo: "**No network restrictions**. You can see who you want. Members are encouraged to use CrowdHealth's negotiation tools with any provider. Higher savings typically achieved with Crowd-verified providers.",
       includedServices: [
         {
-          title: "Preventive Care",
-          description: "**Annual check-ups** and preventive screenings included"
+          title: "Wellness Checks",
+          description: "CrowdHealth Members can submit up to **$300 for ONE basic wellness event** per year per member to be crowdfunded. This wellness event can be utilized for any one preventative or screening exam or test, performed by a licensed or board-certified practitioner"
         },
         {
           title: "Care Coordination",
@@ -244,25 +244,27 @@ export const planDetailsData: Record<string, PlanDetailsData> = {
           title: "Telemedicine",
           description: "**24/7 access** to virtual doctor visits"
         }
-      ]
+      ],
+      pregnancy: "**10 Month Waiting Period and $3,000 IUA**: You, or your partner, must be a member for 10 months BEFORE conceiving, for your pregnancy related needs to be eligible for crowdfunding. Services available for sharing include pre-natal, delivery (including birthing centers and home-births), post-natal, and miscarriage. For pregnancy related needs, you will pay the first $3,000, and the rest will be eligible for crowd-funding.",
+      preExistingConditions: "There are limitations on funding health events related to conditions that have been Previously Documented, Diagnosed, or Symptomatic.  This includes conditions such as asthma, congenital conditions (except for children who become CrowdHealth Members at birth), diabetes, genetic disorders, heart conditions, sleep apnea, and any other medical condition which was Previously Diagnosed, Documented, or Symptomatic.  This is not an exhaustive list.\n\nThose conditions that have been Previously Documented, Diagnosed, or Symptomatic within five (5) years of joining CrowdHealth are eligible for limited funding starting in the third year of Membership. This includes any condition that was diagnosed, symptomatic, suspected, or has required treatment. Specifically, any condition, illness, or injury that was Previously Documented, Diagnosed, or Symptomatic is not eligible for funding in years one and two of Membership, and a maximum crowdfunding limit of $25,000 per year related to these conditions applies in years three and following.\n\nHigh cholesterol and high blood pressure are not subject to these Previously Documented, Diagnosed, or Symptomatic Condition limitations."
     },
     medicalServices: {
-      emergencyCare: "**$500 member responsibility** per emergency room visit. Ambulance services eligible for sharing.",
-      surgeryAndTreatment: "**Negotiated rates** for planned procedures. CrowdHealth helps members find fair prices.",
-      prescriptionDrugs: "**Prescription discount program** included. Medications related to eligible medical needs may be shareable.",
-      pregnancy: "**Maternity expenses** eligible for sharing after 10-month waiting period."
+      emergencyCare: "Emergency room visits, including medically necessary ambulance transport, are **eligible for full crowdfunding** after the IUA is met.",
+      surgeryAndTreatment: "Surgeries are **eligible for full crowdfunding** after the IUA is met. For planned surgeries (like a knee replacement), it is recommended that you use CrowdHealth's negotiation tools before scheduling to ensure you get the highest value: highest quality + fairest price.",
+      prescriptionDrugs: "For your prescriptions to be eligible for crowdfunding, you must use your prescription discount and choose a generic option if available when purchasing. You will show your RX discount card (accessible through your Member profile in the CrowdHealth app) at the pharmacy to get the best price, pay at checkout, and submit the prescription receipt through the app for crowdfunding. Maintenance prescription drug costs are eligible for crowdfunding are generally limited to a **120-day supply per valid health event**.",
+      pregnancy: "**10 Month Waiting Period and $3,000 IUA**: You, or your partner, must be a member for 10 months BEFORE conceiving, for your pregnancy related needs to be eligible for crowdfunding. Services available for sharing include pre-natal, delivery (including birthing centers and home-births), post-natal, and miscarriage. For pregnancy related needs, you will pay the first $3,000, and the rest will be eligible for crowd-funding."
     },
     providerDetails: {
       yearEstablished: 2021,
       memberCount: "**10,000+**",
-      memberSatisfaction: "4.6/5",
+      memberSatisfaction: "**97%**",
       averageTenure: "1.5 years",
       ratings: {
-        overall: 4.6,
-        reviewCount: 120,
+        overall: 4.8,
+        reviewCount: 450,
         bbbRating: "**A-**"
       },
-      processingTime: "**5-7 business days**",
+      processingTime: "**5-10 business days**",
       costTransparency: {
         medicalCostSharing: 85,
         administrativeCosts: 10,
@@ -274,28 +276,36 @@ export const planDetailsData: Record<string, PlanDetailsData> = {
     },
     testimonials: [
       {
-        text: "**CrowdHealth negotiated my hospital bill down by 60%**. The process was simple and transparent.",
-        author: "Mark R.",
-        highlight: "Bill negotiation",
+        text: "**Crowd Health's negotiation team saved me $12,000** on an unexpected surgery bill. Their dashboard makes tracking contributions effortless.",
+        author: "Jason W.",
+        highlight: "Bill negotiation success",
         tenure: "Member for 1 year",
+        avatar: "J",
+        rating: 4.5
+      },
+      {
+        text: "**I love controlling where my money goes each month**. The tiered plans let me choose coverage that matches my family's needs.",
+        author: "Maria S.",
+        highlight: "Flexible contributions",
+        tenure: "Member for 3 years",
         avatar: "M",
         rating: 5
       },
       {
-        text: "**I love the predictable costs**. No surprises with CrowdHealth.",
-        author: "Sarah L.",
-        highlight: "Predictable costs",
-        tenure: "Member for 2 years",
-        avatar: "S",
-        rating: 4
+        text: "**I only paid $500 to be able to have my knee replaced**. The only thing I had to deal with was my physical therapy afterward, which was reimbursed in full.",
+        author: "C. Street.",
+        highlight: "Life-changing care",
+        tenure: "Member for 4 years",
+        avatar: "C",
+        rating: 5
       }
     ],
     keyPlanFeatures: [
       {
-        text: "Pre-Existing Conditions: **12-month waiting period**",
-        isPositive: true,
-        icon: "Clock",
-        tooltip: "Shorter waiting period than many competitors"
+        text: "Pre-Existing Conditions: **2-year waiting period**",
+        isPositive: false,
+        icon: "AlertCircle",
+        tooltip: "Pre-existing conditions not eligible for funding in years 1-2, limited to $25,000/year in year 3+"
       },
       {
         text: "Mental Health: **Included after IUA**",
@@ -344,13 +354,13 @@ export const planDetailsData: Record<string, PlanDetailsData> = {
           description: "**Professional negotiators** work to reduce your medical bills"
         }
       ],
-      pregnancy: "**Maternity expenses** eligible for sharing after 10-month waiting period."
+      pregnancy: "Maternity expenses eligible for sharing after 10-month waiting period."
     },
     medicalServices: {
       emergencyCare: "**Eligible for sharing** after Initial Unshared Amount. Includes emergency room visits and ambulance services.",
       surgeryAndTreatment: "**Eligible for sharing** after Initial Unshared Amount. Includes surgeries, hospital stays, and follow-up care.",
       prescriptionDrugs: "**Prescription discount program** included. Medications for eligible medical needs shareable for 120 days.",
-      pregnancy: "**Maternity expenses** eligible for sharing after 10-month waiting period."
+      pregnancy: "Maternity expenses eligible for sharing after 10-month waiting period."
     },
     providerDetails: {
       yearEstablished: 2014,
@@ -444,8 +454,8 @@ export const planDetailsData: Record<string, PlanDetailsData> = {
           description: "**24/7 access** to virtual doctor visits included at no extra cost with your membership"
         }
       ],
-      pregnancy: "**12 Month Waiting Period**: You must be a member for 12 months before conceiving, for your pregnancy related needs to be eligible for sharing. Services available for sharing include pre-natal, delivery (including birthing centers and home-births), post-natal, and miscarriage. Regardless of your chosen IUA, there is a $5,000 IUA applied to normal vaginal deliveries and emergency C-Section deliveries. There is a $7,500 IUA applied to elective/planned C-Section deliveries.",
-      preExistingConditions: "**Graduated sharing approach**: Starting from the membership start date, there is a one-year waiting period before pre-membership medical conditions are eligible for sharing. After the waiting period, the amount eligible for sharing increases with each membership year:<br/><br/>**Year One**: $0 (waiting period)<br/>**Year Two**: $15,000 maximum per sharing request<br/>**Year Three**: $30,000 maximum per sharing request<br/>**Year Four**: Fully Shareable"
+      pregnancy: "You must be a member for 12 months before conceiving, for your pregnancy related needs to be eligible for sharing. Services available for sharing include pre-natal, delivery (including birthing centers and home-births), post-natal, and miscarriage. Regardless of your chosen IUA, there is a $5,000 IUA applied to normal vaginal deliveries and emergency C-Section deliveries. There is a $7,500 IUA applied to elective/planned C-Section deliveries.",
+      preExistingConditions: "Starting from the membership start date, there is a one-year waiting period before pre-membership medical conditions are eligible for sharing. After the waiting period, the amount eligible for sharing increases with each membership year:<br/><br/>**Year One**: $0 (waiting period)<br/>**Year Two**: $15,000 maximum per sharing request<br/>**Year Three**: $30,000 maximum per sharing request<br/>**Year Four**: Fully Shareable"
     },
     medicalServices: {
       emergencyCare: "**ER visits, including medically necessary ambulance rides are generally eligible for sharing**. Air ambulance rides are eligible for sharing for up to $25,000.",
@@ -551,8 +561,8 @@ export const planDetailsData: Record<string, PlanDetailsData> = {
           description: "**24/7 access** to virtual doctor visits included at no extra cost with your membership"
         }
       ],
-      pregnancy: "**12 Month Waiting Period**: You must be a member for 12 months before conceiving, for your pregnancy related needs to be eligible for sharing. Services available for sharing include pre-natal, delivery (including birthing centers and home-births), post-natal, and miscarriage. Regardless of your chosen IUA, there is a $5,000 IUA applied to normal vaginal deliveries and emergency C-Section deliveries. There is a $7,500 IUA applied to elective/planned C-Section deliveries.",
-      preExistingConditions: "**Graduated sharing approach**: Starting from the membership start date, there is a one-year waiting period before pre-membership medical conditions are eligible for sharing. After the waiting period, the amount eligible for sharing increases with each membership year:<br/><br/>**Year One**: $0 (waiting period)<br/>**Year Two**: $15,000 maximum per sharing request<br/>**Year Three**: $30,000 maximum per sharing request<br/>**Year Four**: Fully Shareable"
+      pregnancy: "You must be a member for 12 months before conceiving, for your pregnancy related needs to be eligible for sharing. Services available for sharing include pre-natal, delivery (including birthing centers and home-births), post-natal, and miscarriage. Regardless of your chosen IUA, there is a $5,000 IUA applied to normal vaginal deliveries and emergency C-Section deliveries. There is a $7,500 IUA applied to elective/planned C-Section deliveries.",
+      preExistingConditions: "Starting from the membership start date, there is a one-year waiting period before pre-membership medical conditions are eligible for sharing. After the waiting period, the amount eligible for sharing increases with each membership year:<br/><br/>**Year One**: $0 (waiting period)<br/>**Year Two**: $15,000 maximum per sharing request<br/>**Year Three**: $30,000 maximum per sharing request<br/>**Year Four**: Fully Shareable"
     },
     medicalServices: {
       emergencyCare: "**ER visits, including medically necessary ambulance rides are generally eligible for sharing**. Air ambulance rides are eligible for sharing for up to $25,000.",

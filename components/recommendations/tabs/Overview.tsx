@@ -1,5 +1,5 @@
 import { type PlanRecommendation } from '../types'
-import { Info, Building, CreditCard, Heart } from 'lucide-react'
+import { Info, Building, CreditCard, Heart, CheckCircle } from 'lucide-react'
 import React from 'react'
 import { getPlanCost } from '@/lib/utils/plan-costs'
 import { calculateAnnualCost, getVisitFrequencyCost } from '@/utils/plan-utils'
@@ -75,25 +75,74 @@ export const Overview: React.FC<OverviewProps> = ({
     totalAnnualCost: estimatedAnnualCost
   });
 
+  // Determine if this plan has the lowest monthly payment or lowest out-of-pocket
+  const hasLowestMonthlyPayment = plan.factors.some(f => f.factor === "Monthly Cost" && f.impact > 80);
+  const hasLowestOutOfPocket = plan.factors.some(f => f.factor === "Incident Cost" && f.impact > 80);
+  
+  // Helper function to get the ranking suffix (1st, 2nd, 3rd, etc.)
+  const getRankingSuffix = (num: number): string => {
+    if (num === 1) return 'st';
+    if (num === 2) return 'nd';
+    if (num === 3) return 'rd';
+    return 'th';
+  };
+  
+  // Create a single paragraph recommendation reason
+  const getSingleRecommendationParagraph = (): string => {
+    let paragraph = '';
+    
+    // Add explanation based on expense preference
+    if (questionnaire?.expense_preference === 'lower_monthly' && hasLowestMonthlyPayment) {
+      paragraph = `This plan has the lowest monthly contribution ($${monthlyPremium}) with an estimated annual cost of $${estimatedAnnualCost.toLocaleString()}.`;
+    } else if (questionnaire?.expense_preference === 'higher_monthly' && hasLowestOutOfPocket) {
+      paragraph = `This plan has one of the lowest Initial Unshared Amounts ($${initialUnsharedAmount}) given your preference for lower out-of-pocket costs.`;
+    } else {
+      paragraph = `This plan has a good balance of monthly contribution ($${monthlyPremium}) and Initial Unshared Amount ($${initialUnsharedAmount}) with an estimated annual cost of $${estimatedAnnualCost.toLocaleString()}.`;
+    }
+    
+    // Add family coverage mention if applicable
+    if (questionnaire?.coverage_type === 'family' || questionnaire?.coverage_type === 'me_kids') {
+      paragraph += ' It offers comprehensive coverage for your family.';
+    }
+    
+    // Add risk preference explanation if applicable
+    if (questionnaire?.risk_preference === 'lower_risk' && hasLowestOutOfPocket) {
+      paragraph += ' Based on your preference for lower risk, this plan minimizes your out-of-pocket costs for medical events.';
+    } else if (questionnaire?.risk_preference === 'higher_risk' && hasLowestMonthlyPayment) {
+      paragraph += ' This aligns with your comfort for higher risk in exchange for lower monthly costs.';
+    }
+    
+    return paragraph;
+  };
+
+  const { ranking } = plan;
+  const rankSuffix = getRankingSuffix(ranking);
+  const recommendationParagraph = getSingleRecommendationParagraph();
+
   return (
     <div className="space-y-8">
       {/* Why This Is The Top Recommendation */}
       <section>
-        <h3 className="text-xl font-semibold mb-4">Why This Is The Top Recommendation</h3>
+        <h3 className="text-xl font-semibold mb-4">
+          {ranking === 1 
+            ? "Why This Is The Top Recommendation" 
+            : `Why we think this is the ${ranking}${rankSuffix} best option for you`
+          }
+        </h3>
         <div className="flex items-start gap-3 p-4 bg-blue-50 rounded-lg">
           <Info className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" />
           <div className="text-sm text-gray-700 mt-1">
             <p className="font-medium mb-2">This plan best matches your priorities:</p>
-            <p>
-              {questionnaire?.expense_preference === 'lower_monthly' 
-                ? `It has the lowest monthly contribution ($${monthlyPremium}) with an estimated annual cost of $${estimatedAnnualCost.toLocaleString()}.` 
-                : `It has the lowest monthly contribution ($${monthlyPremium}) given the IUA amount you selected with an estimated annual cost of $${estimatedAnnualCost.toLocaleString()}.`
-              }
-            </p>
+            <p>{recommendationParagraph}</p>
             
             {questionnaire?.pregnancy_planning === 'yes' && (
               <p className="mt-3">
-                Zion has the shortest waiting period for pregnancies at 6 months. Note: This means that you must wait at least 6 months from the start date of your membership to conceive for your pregnancy needs to be eligible for sharing.
+                {plan.plan.providerName.includes('Zion') 
+                  ? 'Zion has the shortest waiting period for pregnancies at 6 months.'
+                  : plan.plan.providerName.includes('Sedera')
+                    ? 'Sedera has a 10-month waiting period for pregnancies.'
+                    : 'This plan has a standard 12-month waiting period for pregnancies.'
+                } Note: This means that you must wait that long from the start date of your membership to conceive for your pregnancy needs to be eligible for sharing.
               </p>
             )}
           </div>

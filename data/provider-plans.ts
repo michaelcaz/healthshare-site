@@ -547,9 +547,9 @@ export const providerPlans: PricingPlan[] = [
     ]
   },
   {
-    "id": "crowdhealth-essential-membership-(basic,-no-additional-services)",
+    "id": "crowdhealth-membership",
     "providerName": "CrowdHealth",
-    "planName": "Essential Membership \n (Basic, no additional services)",
+    "planName": "Membership",
     "maxCoverage": "No limit",
     "annualUnsharedAmount": "Total of paid three IUAs in 12 months",
     "sourceUrl": "",
@@ -572,7 +572,7 @@ export const providerPlans: PricingPlan[] = [
     },
     "planMatrix": [
       {
-        "ageBracket": "18-55",
+        "ageBracket": "18-54",
         "householdType": "Member Only",
         "costs": [
           {
@@ -582,7 +582,7 @@ export const providerPlans: PricingPlan[] = [
         ]
       },
       {
-        "ageBracket": "18-55",
+        "ageBracket": "18-54",
         "householdType": "Member & Spouse",
         "costs": [
           {
@@ -592,7 +592,7 @@ export const providerPlans: PricingPlan[] = [
         ]
       },
       {
-        "ageBracket": "18-55",
+        "ageBracket": "18-54",
         "householdType": "Member & Child(ren)",
         "costs": [
           {
@@ -602,21 +602,11 @@ export const providerPlans: PricingPlan[] = [
         ]
       },
       {
-        "ageBracket": "18-55",
+        "ageBracket": "18-54",
         "householdType": "Member & Family",
         "costs": [
           {
             "monthlyPremium": 640,
-            "initialUnsharedAmount": 500
-          }
-        ]
-      },
-      {
-        "ageBracket": "18-55",
-        "householdType": "Member & Family",
-        "costs": [
-          {
-            "monthlyPremium": 695,
             "initialUnsharedAmount": 500
           }
         ]
@@ -664,542 +654,9 @@ export const providerPlans: PricingPlan[] = [
     ]
   },
   {
-    "id": "sedera-select+",
-    "providerName": "Sedera",
-    "planName": "SELECT+",
-    "maxCoverage": "no limit",
-    "annualUnsharedAmount": "Total of paid three IUAs in 12 months",
-    "sourceUrl": "",
-    "ageRules": {
-      "type": "standard"
-    },
-    "planMatrix": [
-      {
-        "ageBracket": "18-29",
-        "householdType": "Member Only",
-        "costs": [
-          {
-            "monthlyPremium": 247,
-            "initialUnsharedAmount": 500
-          },
-          {
-            "monthlyPremium": 233,
-            "initialUnsharedAmount": 1000
-          },
-          {
-            "monthlyPremium": 209,
-            "initialUnsharedAmount": 1500
-          },
-          {
-            "monthlyPremium": 186,
-            "initialUnsharedAmount": 2500
-          },
-          {
-            "monthlyPremium": 141,
-            "initialUnsharedAmount": 5000
-          }
-        ]
-      },
-      {
-        "ageBracket": "18-29",
-        "householdType": "Member & Spouse",
-        "costs": [
-          {
-            "monthlyPremium": 458,
-            "initialUnsharedAmount": 500
-          },
-          {
-            "monthlyPremium": 429,
-            "initialUnsharedAmount": 1000
-          },
-          {
-            "monthlyPremium": 382,
-            "initialUnsharedAmount": 1500
-          },
-          {
-            "monthlyPremium": 335,
-            "initialUnsharedAmount": 2500
-          },
-          {
-            "monthlyPremium": 246,
-            "initialUnsharedAmount": 5000
-          }
-        ]
-      },
-      {
-        "ageBracket": "18-29",
-        "householdType": "Member & Child(ren)",
-        "costs": [
-          {
-            "monthlyPremium": 441,
-            "initialUnsharedAmount": 500
-          },
-          {
-            "monthlyPremium": 414,
-            "initialUnsharedAmount": 1000
-          },
-          {
-            "monthlyPremium": 369,
-            "initialUnsharedAmount": 1500
-          },
-          {
-            "monthlyPremium": 326,
-            "initialUnsharedAmount": 2500
-          },
-          {
-            "monthlyPremium": 240,
-            "initialUnsharedAmount": 5000
-          }
-        ]
-      },
-      {
-        "ageBracket": "18-29",
-        "householdType": "Member & Family",
-        "costs": [
-          {
-            "monthlyPremium": 657,
-            "initialUnsharedAmount": 500
-          },
-          {
-            "monthlyPremium": 617,
-            "initialUnsharedAmount": 1000
-          },
-          {
-            "monthlyPremium": 548,
-            "initialUnsharedAmount": 1500
-          },
-          {
-            "monthlyPremium": 480,
-            "initialUnsharedAmount": 2500
-          },
-          {
-            "monthlyPremium": 350,
-            "initialUnsharedAmount": 5000
-          }
-        ]
-      },
-      {
-        "ageBracket": "30-39",
-        "householdType": "Member Only",
-        "costs": [
-          {
-            "monthlyPremium": 288,
-            "initialUnsharedAmount": 500
-          },
-          {
-            "monthlyPremium": 280,
-            "initialUnsharedAmount": 1000
-          },
-          {
-            "monthlyPremium": 252,
-            "initialUnsharedAmount": 1500
-          },
-          {
-            "monthlyPremium": 207,
-            "initialUnsharedAmount": 2500
-          },
-          {
-            "monthlyPremium": 179,
-            "initialUnsharedAmount": 5000
-          }
-        ]
-      },
-      {
-        "ageBracket": "30-39",
-        "householdType": "Member & Spouse",
-        "costs": [
-          {
-            "monthlyPremium": 537,
-            "initialUnsharedAmount": 500
-          },
-          {
-            "monthlyPremium": 523,
-            "initialUnsharedAmount": 1000
-          },
-          {
-            "monthlyPremium": 467,
-            "initialUnsharedAmount": 1500
-          },
-          {
-            "monthlyPremium": 377,
-            "initialUnsharedAmount": 2500
-          },
-          {
-            "monthlyPremium": 321,
-            "initialUnsharedAmount": 5000
-          }
-        ]
-      },
-      {
-        "ageBracket": "30-39",
-        "householdType": "Member & Child(ren)",
-        "costs": [
-          {
-            "monthlyPremium": 517,
-            "initialUnsharedAmount": 500
-          },
-          {
-            "monthlyPremium": 504,
-            "initialUnsharedAmount": 1000
-          },
-          {
-            "monthlyPremium": 450,
-            "initialUnsharedAmount": 1500
-          },
-          {
-            "monthlyPremium": 365,
-            "initialUnsharedAmount": 2500
-          },
-          {
-            "monthlyPremium": 312,
-            "initialUnsharedAmount": 5000
-          }
-        ]
-      },
-      {
-        "ageBracket": "30-39",
-        "householdType": "Member & Family",
-        "costs": [
-          {
-            "monthlyPremium": 774,
-            "initialUnsharedAmount": 500
-          },
-          {
-            "monthlyPremium": 752,
-            "initialUnsharedAmount": 1000
-          },
-          {
-            "monthlyPremium": 671,
-            "initialUnsharedAmount": 1500
-          },
-          {
-            "monthlyPremium": 542,
-            "initialUnsharedAmount": 2500
-          },
-          {
-            "monthlyPremium": 460,
-            "initialUnsharedAmount": 5000
-          }
-        ]
-      },
-      {
-        "ageBracket": "40-49",
-        "householdType": "Member Only",
-        "costs": [
-          {
-            "monthlyPremium": 331,
-            "initialUnsharedAmount": 500
-          },
-          {
-            "monthlyPremium": 292,
-            "initialUnsharedAmount": 1000
-          },
-          {
-            "monthlyPremium": 264,
-            "initialUnsharedAmount": 1500
-          },
-          {
-            "monthlyPremium": 230,
-            "initialUnsharedAmount": 2500
-          },
-          {
-            "monthlyPremium": 200,
-            "initialUnsharedAmount": 5000
-          }
-        ]
-      },
-      {
-        "ageBracket": "40-49",
-        "householdType": "Member & Spouse",
-        "costs": [
-          {
-            "monthlyPremium": 627,
-            "initialUnsharedAmount": 500
-          },
-          {
-            "monthlyPremium": 546,
-            "initialUnsharedAmount": 1000
-          },
-          {
-            "monthlyPremium": 490,
-            "initialUnsharedAmount": 1500
-          },
-          {
-            "monthlyPremium": 424,
-            "initialUnsharedAmount": 2500
-          },
-          {
-            "monthlyPremium": 364,
-            "initialUnsharedAmount": 5000
-          }
-        ]
-      },
-      {
-        "ageBracket": "40-49",
-        "householdType": "Member & Child(ren)",
-        "costs": [
-          {
-            "monthlyPremium": 602,
-            "initialUnsharedAmount": 500
-          },
-          {
-            "monthlyPremium": 526,
-            "initialUnsharedAmount": 1000
-          },
-          {
-            "monthlyPremium": 472,
-            "initialUnsharedAmount": 1500
-          },
-          {
-            "monthlyPremium": 410,
-            "initialUnsharedAmount": 2500
-          },
-          {
-            "monthlyPremium": 352,
-            "initialUnsharedAmount": 5000
-          }
-        ]
-      },
-      {
-        "ageBracket": "40-49",
-        "householdType": "Member & Family",
-        "costs": [
-          {
-            "monthlyPremium": 902,
-            "initialUnsharedAmount": 500
-          },
-          {
-            "monthlyPremium": 787,
-            "initialUnsharedAmount": 1000
-          },
-          {
-            "monthlyPremium": 705,
-            "initialUnsharedAmount": 1500
-          },
-          {
-            "monthlyPremium": 609,
-            "initialUnsharedAmount": 2500
-          },
-          {
-            "monthlyPremium": 520,
-            "initialUnsharedAmount": 5000
-          }
-        ]
-      },
-      {
-        "ageBracket": "50-59",
-        "householdType": "Member Only",
-        "costs": [
-          {
-            "monthlyPremium": 405,
-            "initialUnsharedAmount": 500
-          },
-          {
-            "monthlyPremium": 350,
-            "initialUnsharedAmount": 1000
-          },
-          {
-            "monthlyPremium": 322,
-            "initialUnsharedAmount": 1500
-          },
-          {
-            "monthlyPremium": 290,
-            "initialUnsharedAmount": 2500
-          },
-          {
-            "monthlyPremium": 230,
-            "initialUnsharedAmount": 5000
-          }
-        ]
-      },
-      {
-        "ageBracket": "50-59",
-        "householdType": "Member & Spouse",
-        "costs": [
-          {
-            "monthlyPremium": 772,
-            "initialUnsharedAmount": 500
-          },
-          {
-            "monthlyPremium": 664,
-            "initialUnsharedAmount": 1000
-          },
-          {
-            "monthlyPremium": 608,
-            "initialUnsharedAmount": 1500
-          },
-          {
-            "monthlyPremium": 542,
-            "initialUnsharedAmount": 2500
-          },
-          {
-            "monthlyPremium": 424,
-            "initialUnsharedAmount": 5000
-          }
-        ]
-      },
-      {
-        "ageBracket": "50-59",
-        "householdType": "Member & Child(ren)",
-        "costs": [
-          {
-            "monthlyPremium": 741,
-            "initialUnsharedAmount": 500
-          },
-          {
-            "monthlyPremium": 638,
-            "initialUnsharedAmount": 1000
-          },
-          {
-            "monthlyPremium": 584,
-            "initialUnsharedAmount": 1500
-          },
-          {
-            "monthlyPremium": 522,
-            "initialUnsharedAmount": 2500
-          },
-          {
-            "monthlyPremium": 410,
-            "initialUnsharedAmount": 5000
-          }
-        ]
-      },
-      {
-        "ageBracket": "50-59",
-        "householdType": "Member & Family",
-        "costs": [
-          {
-            "monthlyPremium": 1114,
-            "initialUnsharedAmount": 500
-          },
-          {
-            "monthlyPremium": 957,
-            "initialUnsharedAmount": 1000
-          },
-          {
-            "monthlyPremium": 876,
-            "initialUnsharedAmount": 1500
-          },
-          {
-            "monthlyPremium": 780,
-            "initialUnsharedAmount": 2500
-          },
-          {
-            "monthlyPremium": 609,
-            "initialUnsharedAmount": 5000
-          }
-        ]
-      },
-      {
-        "ageBracket": "60-64",
-        "householdType": "Member Only",
-        "costs": [
-          {
-            "monthlyPremium": 687,
-            "initialUnsharedAmount": 500
-          },
-          {
-            "monthlyPremium": 593,
-            "initialUnsharedAmount": 1000
-          },
-          {
-            "monthlyPremium": 553,
-            "initialUnsharedAmount": 1500
-          },
-          {
-            "monthlyPremium": 501,
-            "initialUnsharedAmount": 2500
-          },
-          {
-            "monthlyPremium": 407,
-            "initialUnsharedAmount": 5000
-          }
-        ]
-      },
-      {
-        "ageBracket": "60-64",
-        "householdType": "Member & Spouse",
-        "costs": [
-          {
-            "monthlyPremium": 1337,
-            "initialUnsharedAmount": 500
-          },
-          {
-            "monthlyPremium": 1149,
-            "initialUnsharedAmount": 1000
-          },
-          {
-            "monthlyPremium": 1069,
-            "initialUnsharedAmount": 1500
-          },
-          {
-            "monthlyPremium": 965,
-            "initialUnsharedAmount": 2500
-          },
-          {
-            "monthlyPremium": 777,
-            "initialUnsharedAmount": 5000
-          }
-        ]
-      },
-      {
-        "ageBracket": "60-64",
-        "householdType": "Member & Child(ren)",
-        "costs": [
-          {
-            "monthlyPremium": 1276,
-            "initialUnsharedAmount": 500
-          },
-          {
-            "monthlyPremium": 1098,
-            "initialUnsharedAmount": 1000
-          },
-          {
-            "monthlyPremium": 1022,
-            "initialUnsharedAmount": 1500
-          },
-          {
-            "monthlyPremium": 924,
-            "initialUnsharedAmount": 2500
-          },
-          {
-            "monthlyPremium": 746,
-            "initialUnsharedAmount": 5000
-          }
-        ]
-      },
-      {
-        "ageBracket": "60-64",
-        "householdType": "Member & Family",
-        "costs": [
-          {
-            "monthlyPremium": 1933,
-            "initialUnsharedAmount": 500
-          },
-          {
-            "monthlyPremium": 1660,
-            "initialUnsharedAmount": 1000
-          },
-          {
-            "monthlyPremium": 1544,
-            "initialUnsharedAmount": 1500
-          },
-          {
-            "monthlyPremium": 1394,
-            "initialUnsharedAmount": 2500
-          },
-          {
-            "monthlyPremium": 1121,
-            "initialUnsharedAmount": 5000
-          }
-        ]
-      }
-    ]
-  },
-  {
     "id": "sedera-access+",
     "providerName": "Sedera",
-    "planName": "ACCESS+",
+    "planName": "ACCESS+ +DPC/VPC",
     "maxCoverage": "no limit",
     "annualUnsharedAmount": "Total of paid three IUAs in 12 months",
     "sourceUrl": "",
@@ -1723,539 +1180,6 @@ export const providerPlans: PricingPlan[] = [
           },
           {
             "monthlyPremium": 1211,
-            "initialUnsharedAmount": 5000
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "id": "sedera-access+-+dpc/vpc",
-    "providerName": "Sedera",
-    "planName": "ACCESS+\n +DPC/VPC",
-    "maxCoverage": "no limit",
-    "annualUnsharedAmount": "Total of paid three IUAs in 12 months",
-    "sourceUrl": "",
-    "ageRules": {
-      "type": "standard"
-    },
-    "planMatrix": [
-      {
-        "ageBracket": "18-29",
-        "householdType": "Member Only",
-        "costs": [
-          {
-            "monthlyPremium": 230.23,
-            "initialUnsharedAmount": 500
-          },
-          {
-            "monthlyPremium": 217.33,
-            "initialUnsharedAmount": 1000
-          },
-          {
-            "monthlyPremium": 194.97,
-            "initialUnsharedAmount": 1500
-          },
-          {
-            "monthlyPremium": 173.47,
-            "initialUnsharedAmount": 2500
-          },
-          {
-            "monthlyPremium": 132.19,
-            "initialUnsharedAmount": 5000
-          }
-        ]
-      },
-      {
-        "ageBracket": "18-29",
-        "householdType": "Member & Spouse",
-        "costs": [
-          {
-            "monthlyPremium": 426.31,
-            "initialUnsharedAmount": 500
-          },
-          {
-            "monthlyPremium": 399.65,
-            "initialUnsharedAmount": 1000
-          },
-          {
-            "monthlyPremium": 355.79,
-            "initialUnsharedAmount": 1500
-          },
-          {
-            "monthlyPremium": 311.93,
-            "initialUnsharedAmount": 2500
-          },
-          {
-            "monthlyPremium": 229.37,
-            "initialUnsharedAmount": 5000
-          }
-        ]
-      },
-      {
-        "ageBracket": "18-29",
-        "householdType": "Member & Child(ren)",
-        "costs": [
-          {
-            "monthlyPremium": 410.83,
-            "initialUnsharedAmount": 500
-          },
-          {
-            "monthlyPremium": 385.03,
-            "initialUnsharedAmount": 1000
-          },
-          {
-            "monthlyPremium": 343.75,
-            "initialUnsharedAmount": 1500
-          },
-          {
-            "monthlyPremium": 303.33,
-            "initialUnsharedAmount": 2500
-          },
-          {
-            "monthlyPremium": 224.21,
-            "initialUnsharedAmount": 5000
-          }
-        ]
-      },
-      {
-        "ageBracket": "18-29",
-        "householdType": "Member & Family",
-        "costs": [
-          {
-            "monthlyPremium": 611.21,
-            "initialUnsharedAmount": 500
-          },
-          {
-            "monthlyPremium": 574.23,
-            "initialUnsharedAmount": 1000
-          },
-          {
-            "monthlyPremium": 509.73,
-            "initialUnsharedAmount": 1500
-          },
-          {
-            "monthlyPremium": 446.95,
-            "initialUnsharedAmount": 2500
-          },
-          {
-            "monthlyPremium": 325.69,
-            "initialUnsharedAmount": 5000
-          }
-        ]
-      },
-      {
-        "ageBracket": "30-39",
-        "householdType": "Member Only",
-        "costs": [
-          {
-            "monthlyPremium": 268.07,
-            "initialUnsharedAmount": 500
-          },
-          {
-            "monthlyPremium": 261.19,
-            "initialUnsharedAmount": 1000
-          },
-          {
-            "monthlyPremium": 232.53,
-            "initialUnsharedAmount": 1500
-          },
-          {
-            "monthlyPremium": 193.25,
-            "initialUnsharedAmount": 2500
-          },
-          {
-            "monthlyPremium": 167.45,
-            "initialUnsharedAmount": 5000
-          }
-        ]
-      },
-      {
-        "ageBracket": "30-39",
-        "householdType": "Member & Spouse",
-        "costs": [
-          {
-            "monthlyPremium": 499.41,
-            "initialUnsharedAmount": 500
-          },
-          {
-            "monthlyPremium": 486.51,
-            "initialUnsharedAmount": 1000
-          },
-          {
-            "monthlyPremium": 434.91,
-            "initialUnsharedAmount": 1500
-          },
-          {
-            "monthlyPremium": 350.63,
-            "initialUnsharedAmount": 2500
-          },
-          {
-            "monthlyPremium": 299.03,
-            "initialUnsharedAmount": 5000
-          }
-        ]
-      },
-      {
-        "ageBracket": "30-39",
-        "householdType": "Member & Child(ren)",
-        "costs": [
-          {
-            "monthlyPremium": 481.35,
-            "initialUnsharedAmount": 500
-          },
-          {
-            "monthlyPremium": 469.31,
-            "initialUnsharedAmount": 1000
-          },
-          {
-            "monthlyPremium": 418.57,
-            "initialUnsharedAmount": 1500
-          },
-          {
-            "monthlyPremium": 340.31,
-            "initialUnsharedAmount": 2500
-          },
-          {
-            "monthlyPremium": 290.43,
-            "initialUnsharedAmount": 5000
-          }
-        ]
-      },
-      {
-        "ageBracket": "30-39",
-        "householdType": "Member & Family",
-        "costs": [
-          {
-            "monthlyPremium": 719.57,
-            "initialUnsharedAmount": 500
-          },
-          {
-            "monthlyPremium": 698.93,
-            "initialUnsharedAmount": 1000
-          },
-          {
-            "monthlyPremium": 624.11,
-            "initialUnsharedAmount": 1500
-          },
-          {
-            "monthlyPremium": 504.57,
-            "initialUnsharedAmount": 2500
-          },
-          {
-            "monthlyPremium": 428.03,
-            "initialUnsharedAmount": 5000
-          }
-        ]
-      },
-      {
-        "ageBracket": "40-49",
-        "householdType": "Member Only",
-        "costs": [
-          {
-            "monthlyPremium": 308.49,
-            "initialUnsharedAmount": 500
-          },
-          {
-            "monthlyPremium": 272.37,
-            "initialUnsharedAmount": 1000
-          },
-          {
-            "monthlyPremium": 245.71,
-            "initialUnsharedAmount": 1500
-          },
-          {
-            "monthlyPremium": 214.75,
-            "initialUnsharedAmount": 2500
-          },
-          {
-            "monthlyPremium": 186.37,
-            "initialUnsharedAmount": 5000
-          }
-        ]
-      },
-      {
-        "ageBracket": "40-49",
-        "householdType": "Member & Spouse",
-        "costs": [
-          {
-            "monthlyPremium": 582.83,
-            "initialUnsharedAmount": 500
-          },
-          {
-            "monthlyPremium": 508.01,
-            "initialUnsharedAmount": 1000
-          },
-          {
-            "monthlyPremium": 456.41,
-            "initialUnsharedAmount": 1500
-          },
-          {
-            "monthlyPremium": 394.49,
-            "initialUnsharedAmount": 2500
-          },
-          {
-            "monthlyPremium": 338.59,
-            "initialUnsharedAmount": 5000
-          }
-        ]
-      },
-      {
-        "ageBracket": "40-49",
-        "householdType": "Member & Child(ren)",
-        "costs": [
-          {
-            "monthlyPremium": 559.61,
-            "initialUnsharedAmount": 500
-          },
-          {
-            "monthlyPremium": 489.09,
-            "initialUnsharedAmount": 1000
-          },
-          {
-            "monthlyPremium": 439.21,
-            "initialUnsharedAmount": 1500
-          },
-          {
-            "monthlyPremium": 381.59,
-            "initialUnsharedAmount": 2500
-          },
-          {
-            "monthlyPremium": 327.41,
-            "initialUnsharedAmount": 5000
-          }
-        ]
-      },
-      {
-        "ageBracket": "40-49",
-        "householdType": "Member & Family",
-        "costs": [
-          {
-            "monthlyPremium": 838.25,
-            "initialUnsharedAmount": 500
-          },
-          {
-            "monthlyPremium": 731.61,
-            "initialUnsharedAmount": 1000
-          },
-          {
-            "monthlyPremium": 655.93,
-            "initialUnsharedAmount": 1500
-          },
-          {
-            "monthlyPremium": 566.49,
-            "initialUnsharedAmount": 2500
-          },
-          {
-            "monthlyPremium": 483.93,
-            "initialUnsharedAmount": 5000
-          }
-        ]
-      },
-      {
-        "ageBracket": "50-59",
-        "householdType": "Member Only",
-        "costs": [
-          {
-            "monthlyPremium": 377.29,
-            "initialUnsharedAmount": 500
-          },
-          {
-            "monthlyPremium": 325.69,
-            "initialUnsharedAmount": 1000
-          },
-          {
-            "monthlyPremium": 299.89,
-            "initialUnsharedAmount": 1500
-          },
-          {
-            "monthlyPremium": 270.65,
-            "initialUnsharedAmount": 2500
-          },
-          {
-            "monthlyPremium": 214.75,
-            "initialUnsharedAmount": 5000
-          }
-        ]
-      },
-      {
-        "ageBracket": "50-59",
-        "householdType": "Member & Spouse",
-        "costs": [
-          {
-            "monthlyPremium": 717.85,
-            "initialUnsharedAmount": 500
-          },
-          {
-            "monthlyPremium": 617.23,
-            "initialUnsharedAmount": 1000
-          },
-          {
-            "monthlyPremium": 565.63,
-            "initialUnsharedAmount": 1500
-          },
-          {
-            "monthlyPremium": 504.57,
-            "initialUnsharedAmount": 2500
-          },
-          {
-            "monthlyPremium": 394.49,
-            "initialUnsharedAmount": 5000
-          }
-        ]
-      },
-      {
-        "ageBracket": "50-59",
-        "householdType": "Member & Child(ren)",
-        "costs": [
-          {
-            "monthlyPremium": 689.47,
-            "initialUnsharedAmount": 500
-          },
-          {
-            "monthlyPremium": 593.15,
-            "initialUnsharedAmount": 1000
-          },
-          {
-            "monthlyPremium": 543.27,
-            "initialUnsharedAmount": 1500
-          },
-          {
-            "monthlyPremium": 485.65,
-            "initialUnsharedAmount": 2500
-          },
-          {
-            "monthlyPremium": 381.59,
-            "initialUnsharedAmount": 5000
-          }
-        ]
-      },
-      {
-        "ageBracket": "50-59",
-        "householdType": "Member & Family",
-        "costs": [
-          {
-            "monthlyPremium": 1035.19,
-            "initialUnsharedAmount": 500
-          },
-          {
-            "monthlyPremium": 889.85,
-            "initialUnsharedAmount": 1000
-          },
-          {
-            "monthlyPremium": 814.17,
-            "initialUnsharedAmount": 1500
-          },
-          {
-            "monthlyPremium": 725.59,
-            "initialUnsharedAmount": 2500
-          },
-          {
-            "monthlyPremium": 566.49,
-            "initialUnsharedAmount": 5000
-          }
-        ]
-      },
-      {
-        "ageBracket": "60-64",
-        "householdType": "Member Only",
-        "costs": [
-          {
-            "monthlyPremium": 683.73,
-            "initialUnsharedAmount": 500
-          },
-          {
-            "monthlyPremium": 551.87,
-            "initialUnsharedAmount": 1000
-          },
-          {
-            "monthlyPremium": 514.89,
-            "initialUnsharedAmount": 1500
-          },
-          {
-            "monthlyPremium": 465.87,
-            "initialUnsharedAmount": 2500
-          },
-          {
-            "monthlyPremium": 379.01,
-            "initialUnsharedAmount": 5000
-          }
-        ]
-      },
-      {
-        "ageBracket": "60-64",
-        "householdType": "Member & Spouse",
-        "costs": [
-          {
-            "monthlyPremium": 1242.45,
-            "initialUnsharedAmount": 500
-          },
-          {
-            "monthlyPremium": 1067.87,
-            "initialUnsharedAmount": 1000
-          },
-          {
-            "monthlyPremium": 993.91,
-            "initialUnsharedAmount": 1500
-          },
-          {
-            "monthlyPremium": 897.59,
-            "initialUnsharedAmount": 2500
-          },
-          {
-            "monthlyPremium": 722.15,
-            "initialUnsharedAmount": 5000
-          }
-        ]
-      },
-      {
-        "ageBracket": "60-64",
-        "householdType": "Member & Child(ren)",
-        "costs": [
-          {
-            "monthlyPremium": 1185.69,
-            "initialUnsharedAmount": 500
-          },
-          {
-            "monthlyPremium": 1020.57,
-            "initialUnsharedAmount": 1000
-          },
-          {
-            "monthlyPremium": 950.05,
-            "initialUnsharedAmount": 1500
-          },
-          {
-            "monthlyPremium": 858.89,
-            "initialUnsharedAmount": 2500
-          },
-          {
-            "monthlyPremium": 693.77,
-            "initialUnsharedAmount": 5000
-          }
-        ]
-      },
-      {
-        "ageBracket": "60-64",
-        "householdType": "Member & Family",
-        "costs": [
-          {
-            "monthlyPremium": 1796.29,
-            "initialUnsharedAmount": 500
-          },
-          {
-            "monthlyPremium": 1542.59,
-            "initialUnsharedAmount": 1000
-          },
-          {
-            "monthlyPremium": 1435.09,
-            "initialUnsharedAmount": 1500
-          },
-          {
-            "monthlyPremium": 1295.77,
-            "initialUnsharedAmount": 2500
-          },
-          {
-            "monthlyPremium": 1042.07,
             "initialUnsharedAmount": 5000
           }
         ]
@@ -3758,6 +2682,307 @@ export const providerPlans: PricingPlan[] = [
           },
           {
             "monthlyPremium": 823,
+            "initialUnsharedAmount": 5000
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "zion-direct",
+    "providerName": "Zion Healthshare",
+    "planName": "Direct Membership",
+    "maxCoverage": "$1,000,000 per incident",
+    "annualUnsharedAmount": "$5,000 per calendar year",
+    "sourceUrl": "https://zionhealth.org/",
+    "ageRules": {
+      "type": "standard"
+    },
+    "planMatrix": [
+      {
+        "ageBracket": "18-29",
+        "householdType": "Member Only",
+        "costs": [
+          {
+            "monthlyPremium": 209,
+            "initialUnsharedAmount": 1000
+          },
+          {
+            "monthlyPremium": 156,
+            "initialUnsharedAmount": 2500
+          },
+          {
+            "monthlyPremium": 111,
+            "initialUnsharedAmount": 5000
+          }
+        ]
+      },
+      {
+        "ageBracket": "18-29",
+        "householdType": "Member & Spouse",
+        "costs": [
+          {
+            "monthlyPremium": 399,
+            "initialUnsharedAmount": 1000
+          },
+          {
+            "monthlyPremium": 291,
+            "initialUnsharedAmount": 2500
+          },
+          {
+            "monthlyPremium": 199,
+            "initialUnsharedAmount": 5000
+          }
+        ]
+      },
+      {
+        "ageBracket": "18-29",
+        "householdType": "Member & Child(ren)",
+        "costs": [
+          {
+            "monthlyPremium": 418,
+            "initialUnsharedAmount": 1000
+          },
+          {
+            "monthlyPremium": 294,
+            "initialUnsharedAmount": 2500
+          },
+          {
+            "monthlyPremium": 199,
+            "initialUnsharedAmount": 5000
+          }
+        ]
+      },
+      {
+        "ageBracket": "18-29",
+        "householdType": "Member & Family",
+        "costs": [
+          {
+            "monthlyPremium": 605,
+            "initialUnsharedAmount": 1000
+          },
+          {
+            "monthlyPremium": 446,
+            "initialUnsharedAmount": 2500
+          },
+          {
+            "monthlyPremium": 324,
+            "initialUnsharedAmount": 5000
+          }
+        ]
+      },
+      {
+        "ageBracket": "30-39",
+        "householdType": "Member Only",
+        "costs": [
+          {
+            "monthlyPremium": 248,
+            "initialUnsharedAmount": 1000
+          },
+          {
+            "monthlyPremium": 198,
+            "initialUnsharedAmount": 2500
+          },
+          {
+            "monthlyPremium": 170,
+            "initialUnsharedAmount": 5000
+          }
+        ]
+      },
+      {
+        "ageBracket": "30-39",
+        "householdType": "Member & Spouse",
+        "costs": [
+          {
+            "monthlyPremium": 459,
+            "initialUnsharedAmount": 1000
+          },
+          {
+            "monthlyPremium": 364,
+            "initialUnsharedAmount": 2500
+          },
+          {
+            "monthlyPremium": 288,
+            "initialUnsharedAmount": 5000
+          }
+        ]
+      },
+      {
+        "ageBracket": "30-39",
+        "householdType": "Member & Child(ren)",
+        "costs": [
+          {
+            "monthlyPremium": 468,
+            "initialUnsharedAmount": 1000
+          },
+          {
+            "monthlyPremium": 378,
+            "initialUnsharedAmount": 2500
+          },
+          {
+            "monthlyPremium": 288,
+            "initialUnsharedAmount": 5000
+          }
+        ]
+      },
+      {
+        "ageBracket": "30-39",
+        "householdType": "Member & Family",
+        "costs": [
+          {
+            "monthlyPremium": 637,
+            "initialUnsharedAmount": 1000
+          },
+          {
+            "monthlyPremium": 504,
+            "initialUnsharedAmount": 2500
+          },
+          {
+            "monthlyPremium": 433,
+            "initialUnsharedAmount": 5000
+          }
+        ]
+      },
+      {
+        "ageBracket": "40-49",
+        "householdType": "Member Only",
+        "costs": [
+          {
+            "monthlyPremium": 242,
+            "initialUnsharedAmount": 1000
+          },
+          {
+            "monthlyPremium": 208,
+            "initialUnsharedAmount": 2500
+          },
+          {
+            "monthlyPremium": 183,
+            "initialUnsharedAmount": 5000
+          }
+        ]
+      },
+      {
+        "ageBracket": "40-49",
+        "householdType": "Member & Spouse",
+        "costs": [
+          {
+            "monthlyPremium": 483,
+            "initialUnsharedAmount": 1000
+          },
+          {
+            "monthlyPremium": 390,
+            "initialUnsharedAmount": 2500
+          },
+          {
+            "monthlyPremium": 314,
+            "initialUnsharedAmount": 5000
+          }
+        ]
+      },
+      {
+        "ageBracket": "40-49",
+        "householdType": "Member & Child(ren)",
+        "costs": [
+          {
+            "monthlyPremium": 483,
+            "initialUnsharedAmount": 1000
+          },
+          {
+            "monthlyPremium": 390,
+            "initialUnsharedAmount": 2500
+          },
+          {
+            "monthlyPremium": 314,
+            "initialUnsharedAmount": 5000
+          }
+        ]
+      },
+      {
+        "ageBracket": "40-49",
+        "householdType": "Member & Family",
+        "costs": [
+          {
+            "monthlyPremium": 683,
+            "initialUnsharedAmount": 1000
+          },
+          {
+            "monthlyPremium": 562,
+            "initialUnsharedAmount": 2500
+          },
+          {
+            "monthlyPremium": 489,
+            "initialUnsharedAmount": 5000
+          }
+        ]
+      },
+      {
+        "ageBracket": "50-64",
+        "householdType": "Member Only",
+        "costs": [
+          {
+            "monthlyPremium": 305,
+            "initialUnsharedAmount": 1000
+          },
+          {
+            "monthlyPremium": 281,
+            "initialUnsharedAmount": 2500
+          },
+          {
+            "monthlyPremium": 201,
+            "initialUnsharedAmount": 5000
+          }
+        ]
+      },
+      {
+        "ageBracket": "50-64",
+        "householdType": "Member & Spouse",
+        "costs": [
+          {
+            "monthlyPremium": 588,
+            "initialUnsharedAmount": 1000
+          },
+          {
+            "monthlyPremium": 473,
+            "initialUnsharedAmount": 2500
+          },
+          {
+            "monthlyPremium": 374,
+            "initialUnsharedAmount": 5000
+          }
+        ]
+      },
+      {
+        "ageBracket": "50-64",
+        "householdType": "Member & Child(ren)",
+        "costs": [
+          {
+            "monthlyPremium": 588,
+            "initialUnsharedAmount": 1000
+          },
+          {
+            "monthlyPremium": 473,
+            "initialUnsharedAmount": 2500
+          },
+          {
+            "monthlyPremium": 374,
+            "initialUnsharedAmount": 5000
+          }
+        ]
+      },
+      {
+        "ageBracket": "50-64",
+        "householdType": "Member & Family",
+        "costs": [
+          {
+            "monthlyPremium": 856,
+            "initialUnsharedAmount": 1000
+          },
+          {
+            "monthlyPremium": 707,
+            "initialUnsharedAmount": 2500
+          },
+          {
+            "monthlyPremium": 549,
             "initialUnsharedAmount": 5000
           }
         ]

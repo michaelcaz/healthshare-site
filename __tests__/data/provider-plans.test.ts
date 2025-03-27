@@ -3,7 +3,7 @@ import { providerPlans } from '@/data/provider-plans';
 
 describe('Provider Plans Data', () => {
   describe('CrowdHealth Plan', () => {
-    const crowdHealthPlan = providerPlans.find(p => p.id === 'crowdhealth-essential-membership-(basic,-no-additional-services)');
+    const crowdHealthPlan = providerPlans.find(p => p.id === 'crowdhealth-membership');
     
     // Skip all tests if CrowdHealth plan is not found
     if (!crowdHealthPlan) {
