@@ -320,7 +320,7 @@ export const providerPlans: PricingPlan[] = [
   {
     "id": "zion-healthshare-essential-membership",
     "providerName": "Zion Healthshare",
-    "planName": "Essential Membership",
+    "planName": "Essential +DPC Membership",
     "maxCoverage": "no limit",
     "annualUnsharedAmount": "Total of paid three IUAs in 12 months",
     "sourceUrl": "",

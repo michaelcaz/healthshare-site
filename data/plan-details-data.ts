@@ -9,8 +9,8 @@ export const planDetailsData: Record<string, PlanDetailsData> = {
   'zion-healthshare-direct-membership': {
     overview: {
       whatWeLove: [
-        "Zion is the **MOST affordable health share plan** on the market with **monthly contributions starting at $82/mo for individuals**. Add RX Share for $10/mo (deep discounts on prescription meds) and/or Virtual Care for only $5/mo",
-        "**Zero lifetime sharing limits** - unlike many competitors that cap at $1M or lower",
+        "Zion is the **MOST affordable health share plan** on the market with **monthly contributions starting at $82/mo for individuals**. Add RX Share for $10/mo (deep discounts on prescription meds) and/or Virtual Care for only $5/mo.",
+        "**Zero lifetime sharing limits** - unlike many competitors that cap at $1M or lower.",
         "One of the **best avg. ratings (over 4.7/5 out of hundreds of reviews)** in the health share industry. No insurance company has ratings anywhere close.",
         "They have a **HUGE reserve** to protect their community in the event of some major nationwide health catastrophe - over 3x their yearly contribution amount.",
         "They have been very **transparent in all communications** with us, and as a non-profit are required to post their financials publicly on their site."
@@ -24,7 +24,7 @@ export const planDetailsData: Record<string, PlanDetailsData> = {
         "Well Child Visits",
         "We recommend reading through the membership guidelines to ensure you know the details of each of these as well as what's in the rest of the plan"
       ],
-      providerInfo: "Founded in 2019, Zion HealthShare is a **501(c)(3) nonprofit** organization. They emphasize **price transparency** by publishing exact reimbursement rates for 300+ common procedures."
+      providerInfo: "Founded in 2019, Zion HealthShare is a **501(c)(3) nonprofit** organization that combines medical cost sharing with proactive bill negotiation technology. Their model empowers members to fight healthcare inflation through community support and direct price negotiation tools."
     },
     coverageDetails: {
       iuaExplanation: "The **Initial Unshared Amount (IUA)** is the amount you pay before your health share plan kicks in. For example, if you have a $1000 IUA and get an injury that results in $2300 of medical bills, you pay the first $1000, and the health share community pays the other $1300. Members are only required to pay their IUA a maximum of up to three times per rolling 12 month period.",
@@ -111,12 +111,12 @@ export const planDetailsData: Record<string, PlanDetailsData> = {
     ]
   },
   
-  // Zion Essential plan with updated data
+  // Zion Essential +DPC plan with updated data
   'zion-healthshare-essential-membership': {
     overview: {
       whatWeLove: [
-        "Zion is the MOST affordable health share plan on the market with **monthly contributions starting at $82/mo for individuals**. Add RX Share for $10/mo (deep discounts on prescription meds) and/or Virtual Care for only $5/mo",
-        "**Zero lifetime sharing limits** - unlike many competitors that cap at $1M or lower",
+        "Zion is the MOST affordable health share plan on the market with **monthly contributions starting at $82/mo for individuals**. Add RX Share for $10/mo (deep discounts on prescription meds) and/or Virtual Care for only $5/mo.",
+        "**Zero lifetime sharing limits** - unlike many competitors that cap at $1M or lower.",
         "One of the **best avg. ratings (over 4.7/5 out of hundreds of reviews)** in the health share industry. No insurance company has ratings anywhere close.",
         "They have a **HUGE reserve** to protect their community in the event of some major nationwide health catastrophe - over 3x their yearly contribution amount.",
         "They have been very **transparent in all communications** with us, and as a non-profit are required to post their financials publicly on their site."
@@ -124,9 +124,15 @@ export const planDetailsData: Record<string, PlanDetailsData> = {
       keyFeatures: [
         "**Telemedicine included** for $5-$15/mo",
         "**Guaranteed Acceptance** for applicants under age 65",
-        "**Essential membership** is great to pair with Direct Primary Care (subscription based primary care in your city)"
+        "**+DPC Membership** designed to pair with Direct Primary Care (subscription based primary care in your city)"
       ],
-      providerInfo: "Founded in 2019, Zion HealthShare is a **501(c)(3) nonprofit** organization. They emphasize **price transparency** by publishing exact reimbursement rates for 300+ common procedures."
+      dpcPairing: {
+        title: "This plan is best paired with a Direct Primary Care provider",
+        description: "Direct Primary Care (DPC) is a model in which providers contract directly with patients. Members sign up for a monthly membership with their physician and often get unlimited visits, same day appointments, zero waiting lines, longer appointments, and an actual relationship with their caregiver. Many members of the **Zion Essential +DPC** plan report that they pair it with a DPC membership, get the best care they've ever received in their life, while still paying 50% or less per month than they did on their old insurance premiums alone.",
+        linkText: "HERE",
+        linkUrl: "https://mapper.dpcfrontier.com/"
+      },
+      providerInfo: "Founded in 2019, Zion HealthShare is a **501(c)(3) nonprofit** organization that combines medical cost sharing with proactive bill negotiation technology. Their model empowers members to fight healthcare inflation through community support and direct price negotiation tools."
     },
     coverageDetails: {
       iuaExplanation: "The **Initial Unshared Amount (IUA)** is the amount you pay before your health share plan kicks in. For example, if you have a $1000 IUA and get an injury that results in $2300 of medical bills, you pay the first $1000, and the health share community pays the other $1300. Members are only required to pay their IUA a maximum of up to three times per rolling 12 month period.",
@@ -218,7 +224,7 @@ export const planDetailsData: Record<string, PlanDetailsData> = {
     overview: {
       whatWeLove: [
         "They have THE HIGHEST average customer satisfaction of any health share organization (4.8 avg. with 450 reviews on TrustPilot and Google)",
-        "They have one of the most innovative pricing models (that could make it one of, if not the, safest). You make two payments per month. 1. You pay a $55 fee per member, and that goes towards them running their business. Member advocacy, price negotiation team, customer support, etc. and anything left over is their profit.  2. Then you pay a second, variable amount, based on the needs of the community that goes into the community \"pot.\" This fee is up to $140/mo for members under 55, and up to $280/mo for members 55 and older, and up to $420 for families of four or more. The community pot is ONLY to cover the needs of members.",
+        "They have one of the most innovative pricing models **(that could make it one of, if not the, most secure)**. You make two payments per month. 1. You pay a $55 fee per member, and that goes towards them running their business. Member advocacy, price negotiation team, customer support, etc. and anything left over is their profit.  2. Then you pay a second, variable amount, based on the needs of the community that goes into the community \"pot.\" This fee is up to $140/mo for members under 55, and up to $280/mo for members 55 and older, and up to $420 for families of four or more. The community pot is ONLY to cover the needs of members.",
         "Their platform is the most intuitive and easiest to use."
       ],
       keyFeatures: [
@@ -238,15 +244,15 @@ export const planDetailsData: Record<string, PlanDetailsData> = {
         },
         {
           title: "Care Coordination",
-          description: "**Dedicated team** helps coordinate care and negotiate prices"
+          description: "**A dedicated team** to help coordinate care and negotiate prices"
         },
         {
           title: "Telemedicine",
           description: "**24/7 access** to virtual doctor visits"
         }
       ],
-      pregnancy: "**10 Month Waiting Period and $3,000 IUA**: You, or your partner, must be a member for 10 months BEFORE conceiving, for your pregnancy related needs to be eligible for crowdfunding. Services available for sharing include pre-natal, delivery (including birthing centers and home-births), post-natal, and miscarriage. For pregnancy related needs, you will pay the first $3,000, and the rest will be eligible for crowd-funding.",
-      preExistingConditions: "There are limitations on funding health events related to conditions that have been Previously Documented, Diagnosed, or Symptomatic.  This includes conditions such as asthma, congenital conditions (except for children who become CrowdHealth Members at birth), diabetes, genetic disorders, heart conditions, sleep apnea, and any other medical condition which was Previously Diagnosed, Documented, or Symptomatic.  This is not an exhaustive list.\n\nThose conditions that have been Previously Documented, Diagnosed, or Symptomatic within five (5) years of joining CrowdHealth are eligible for limited funding starting in the third year of Membership. This includes any condition that was diagnosed, symptomatic, suspected, or has required treatment. Specifically, any condition, illness, or injury that was Previously Documented, Diagnosed, or Symptomatic is not eligible for funding in years one and two of Membership, and a maximum crowdfunding limit of $25,000 per year related to these conditions applies in years three and following.\n\nHigh cholesterol and high blood pressure are not subject to these Previously Documented, Diagnosed, or Symptomatic Condition limitations."
+      pregnancy: "**10 Month Waiting Period and $3,000 IUA**: You must be a member for 10 months BEFORE conceiving, for your pregnancy related needs to be eligible for crowdfunding. Services available for sharing include pre-natal, delivery (including birthing centers and home-births), post-natal, and miscarriage. For pregnancy related needs, you will pay the first $3,000, and the rest will be eligible for crowd-funding.",
+      preExistingConditions: "**TWO Year Waiting Period:** There are limitations on funding health events related to conditions that have been Previously Documented, Diagnosed, or Symptomatic.  This includes conditions such as asthma, congenital conditions (except for children who become CrowdHealth Members at birth), diabetes, genetic disorders, heart conditions, sleep apnea, and any other medical condition which was Previously Diagnosed, Documented, or Symptomatic.  This is not an exhaustive list.\n\nThose conditions that have been Previously Documented, Diagnosed, or Symptomatic within five (5) years of joining CrowdHealth are eligible for limited funding starting in the third year of Membership. This includes any condition that was diagnosed, symptomatic, suspected, or has required treatment. Specifically, any condition, illness, or injury that was Previously Documented, Diagnosed, or Symptomatic is not eligible for funding in years one and two of Membership, and a maximum crowdfunding limit of $25,000 per year related to these conditions applies in years three and following.\n\nHigh cholesterol and high blood pressure are not subject to these Previously Documented, Diagnosed, or Symptomatic Condition limitations."
     },
     medicalServices: {
       emergencyCare: "Emergency room visits, including medically necessary ambulance transport, are **eligible for full crowdfunding** after the IUA is met.",
@@ -431,10 +437,15 @@ export const planDetailsData: Record<string, PlanDetailsData> = {
         "They have been very **transparent in all communications** with us."
       ],
       keyFeatures: [
-        "**No network restrictions** with price negotiation support through MDsave partnership",
-        "**24/7 telemedicine services** included at no extra cost",
-        "**Comprehensive maternity support** after 12-month waiting period"
+        "**Comprehensive maternity support** after 12-month waiting period",
+        "**24/7 telemedicine services** included at no extra cost"
       ],
+      dpcPairing: {
+        title: "This plan is best paired with a Direct Primary Care provider",
+        description: "Direct Primary Care (DPC) is a model in which providers contract directly with patients. Members sign up for a monthly membership with their physician and often get unlimited visits, same day appointments, zero waiting lines, longer appointments, and an actual relationship with their caregiver. Many members of the **Sedera Access+ +DPC/VPC** plan report that they pair it with a DPC membership, get the best care they've ever received in their life, while still paying 50% or less per month than they did on their old insurance premiums alone.",
+        linkText: "HERE",
+        linkUrl: "https://mapper.dpcfrontier.com/"
+      },
       providerInfo: "Founded in 2014, Sedera is a membership-based non-insurance Community of like-minded individuals established for the purpose of sharing legitimate healthcare expenses between Members."
     },
     coverageDetails: {
@@ -526,99 +537,12 @@ export const planDetailsData: Record<string, PlanDetailsData> = {
         isPositive: true,
         icon: "Check",
         tooltip: "No maximum limits on eligible medical needs"
-      }
-    ]
-  },
-  
-  'sedera-access+-+dpc/vpc': {
-    overview: {
-      whatWeLove: [
-        "Sedera is one of the most affordable health share plans on the market with **monthly contributions starting at $132/mo for individuals**.",
-        "**Zero lifetime sharing limits** - unlike many competitors that cap at $1M or lower",
-        "**0% denial rate for eligible needs to date**. Incredible!",
-        "They have been very **transparent in all communications** with us."
-      ],
-      keyFeatures: [
-        "**Comprehensive maternity support** after 12-month waiting period",
-        "**24/7 telemedicine services** included at no extra cost"
-      ],
-      providerInfo: "Founded in 2014, Sedera is a membership-based non-insurance Community of like-minded individuals established for the purpose of sharing legitimate healthcare expenses between Members."
-    },
-    coverageDetails: {
-      iuaExplanation: "The **Initial Unshared Amount (IUA)** is the amount you pay before your health share plan kicks in. For example, if you have a $1000 IUA and get an injury that results in $2300 of medical bills, you pay the first $1000, and the health share community pays the other $1300.",
-      networkInfo: "Sedera HealthShare is not health insurance, and they have no network limitations. However, wherever possible, it is suggested that you find a provider with fair-market prices. Their Medical Advocacy team can also assist you in identifying a provider in your area and making prepayments, or you can use their online portal to find a provider in your area.",
-      includedServices: [
-        {
-          title: "Preventive Care",
-          description: "• **Annual Provider Visit**<br/>• **Colorectal Cancer Screening**<br/>• **Mammograms**<br/>• **Youth Immunizations**<br/>• **Adult Flu Shots**<br/><br/>Some of these are only available in certain circumstances. We highly recommend reading through the membership guidelines to ensure you know the details of each of these as well as what's in the rest of the plan"
-        },
-        {
-          title: "Medical Advocacy",
-          description: "The Sedera **Medical Advocacy team** is there to help you find high quality, fair-market providers in your area for anything from a primary care visit to a serious surgery. And if you ever get a huge bill, they are there to help negotiate the price down on your behalf."
-        },
-        {
-          title: "Telemedicine",
-          description: "**24/7 access** to virtual doctor visits included at no extra cost with your membership"
-        }
-      ],
-      pregnancy: "You must be a member for 12 months before conceiving, for your pregnancy related needs to be eligible for sharing. Services available for sharing include pre-natal, delivery (including birthing centers and home-births), post-natal, and miscarriage. Regardless of your chosen IUA, there is a $5,000 IUA applied to normal vaginal deliveries and emergency C-Section deliveries. There is a $7,500 IUA applied to elective/planned C-Section deliveries.",
-      preExistingConditions: "Starting from the membership start date, there is a one-year waiting period before pre-membership medical conditions are eligible for sharing. After the waiting period, the amount eligible for sharing increases with each membership year:<br/><br/>**Year One**: $0 (waiting period)<br/>**Year Two**: $15,000 maximum per sharing request<br/>**Year Three**: $30,000 maximum per sharing request<br/>**Year Four**: Fully Shareable"
-    },
-    medicalServices: {
-      emergencyCare: "**ER visits, including medically necessary ambulance rides are generally eligible for sharing**. Air ambulance rides are eligible for sharing for up to $25,000.",
-      surgeryAndTreatment: "**Surgical procedures are generally shareable after a 60-day waiting period**. Pre-authorization is required for non-emergency procedures over $3,000.",
-      prescriptionDrugs: "**Acute condition medications shareable for 120-day supply**. Chronic medications require prior authorization. Maintenance medications for chronic conditions require prior authorization and are shareable for up to a 120-day supply. You also get access to Sedera's Rx Marketplace and GoodRx for additional prescription discounts for prescriptions related to eligible needs as well as those not related to an eligible need."
-    },
-    providerDetails: {
-      yearEstablished: 2014,
-      memberCount: "**30,000+**",
-      memberSatisfaction: "4.7/5",
-      averageTenure: "3.2 years",
-      ratings: {
-        overall: 4.48,
-        reviewCount: 200,
-        bbbRating: "**A+**"
-      },
-      processingTime: "**14-60 business days**",
-      costTransparency: {
-        medicalCostSharing: 85,
-        administrativeCosts: 15,
-        operationalReserves: 0
-      },
-      savingsVsInsurance: {
-        averageMonthlySavings: "**30%** (per 2023 member survey)"
-      }
-    },
-    testimonials: [
-      {
-        text: "**The telemedicine service has been a lifesaver** for our family's routine care needs",
-        author: "Sarah L.",
-        highlight: "Convenient telehealth access",
-        tenure: "Member for 2 years",
-        avatar: "S",
-        rating: 4.5
       },
       {
-        text: "**I have been a Sedera member for a little over a year**. Just recently I tore my ACL, resulting in a need for surgery. I was anxious about approaching surgery without traditional insurance. Thankfully, Sedera has made it a very positive experience!",
-        author: "Lindsey D.",
-        highlight: "I am confident in utilizing Sedera for my family's healthcare needs",
-        tenure: "Member for 2 years",
-        avatar: "L",
-        rating: 5
-      }
-    ],
-    keyPlanFeatures: [
-      {
-        text: "Telemedicine: **Included at no extra cost**",
+        text: "DPC Pairing: **Direct Primary Care**",
         isPositive: true,
-        icon: "Phone",
-        tooltip: "24/7 access to virtual doctor visits included with membership"
-      },
-      {
-        text: "Unlimited Sharing: **No annual or lifetime caps**",
-        isPositive: true,
-        icon: "Check",
-        tooltip: "No maximum limits on eligible medical needs"
+        icon: "User",
+        tooltip: "Pairing with a Direct Primary Care provider"
       }
     ]
   },

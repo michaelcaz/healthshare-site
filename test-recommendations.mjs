@@ -39,15 +39,15 @@ async function testRecommendations() {
       console.log('');
     });
     
-    // Check if Zion Essential is in the top recommendations
+    // Check if Zion Essential +DPC is in the top recommendations
     const zionEssentialIndex = recommendations.findIndex(r => 
       r.plan.id.includes('zion') && r.plan.id.includes('essential')
     );
     
     if (zionEssentialIndex !== -1) {
-      console.log(`✅ Zion Essential found at position ${zionEssentialIndex + 1}`);
+      console.log(`✅ Zion Essential +DPC found at position ${zionEssentialIndex + 1}`);
     } else {
-      console.log('❌ Zion Essential not found in recommendations');
+      console.log('❌ Zion Essential +DPC not found in recommendations');
     }
     
     // Check if Sedera Access+ DPC is in the top recommendations
@@ -58,11 +58,11 @@ async function testRecommendations() {
     if (sederaDpcIndex !== -1) {
       console.log(`Sedera Access+ DPC found at position ${sederaDpcIndex + 1}`);
       
-      // Check if Zion Essential is ranked higher than Sedera Access+ DPC
+      // Check if Zion Essential +DPC is ranked higher than Sedera Access+ DPC
       if (zionEssentialIndex !== -1 && zionEssentialIndex < sederaDpcIndex) {
-        console.log('✅ Zion Essential is ranked higher than Sedera Access+ DPC');
+        console.log('✅ Zion Essential +DPC is ranked higher than Sedera Access+ DPC');
       } else if (zionEssentialIndex !== -1) {
-        console.log('❌ Sedera Access+ DPC is still ranked higher than Zion Essential');
+        console.log('❌ Sedera Access+ DPC is still ranked higher than Zion Essential +DPC');
       }
     } else {
       console.log('Sedera Access+ DPC not found in recommendations');

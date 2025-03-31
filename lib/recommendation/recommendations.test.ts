@@ -251,7 +251,7 @@ describe('getRecommendations', () => {
     }
   })
 
-  it('recommends Zion Essential with $5000 IUA for users who prefer lower monthly costs', async () => {
+  it('recommends Zion Essential +DPC with $5000 IUA for users who prefer lower monthly costs', async () => {
     const questionnaire: QuestionnaireResponse = {
       age: 34,
       coverage_type: 'family',
@@ -267,18 +267,18 @@ describe('getRecommendations', () => {
 
     const recommendations = await getRecommendations(providerPlans, questionnaire)
     
-    // Find Zion Essential plan
+    // Find Zion Essential +DPC plan
     const zionEssentialIndex = recommendations.findIndex(r => 
       r.plan.id.includes('zion') && r.plan.id.includes('essential')
     )
     
-    // Skip test if Zion Essential is not found
+    // Skip test if Zion Essential +DPC is not found
     if (zionEssentialIndex === -1) {
-      console.warn('Zion Essential plan not found in recommendations, skipping test')
+      console.warn('Zion Essential +DPC plan not found in recommendations, skipping test')
       return
     }
     
-    // Zion Essential should be in the top 3 recommendations
+    // Zion Essential +DPC should be in the top 3 recommendations
     expect(zionEssentialIndex).toBeLessThanOrEqual(2)
   })
 }) 

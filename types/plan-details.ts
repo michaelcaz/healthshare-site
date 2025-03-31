@@ -5,6 +5,12 @@ export interface PlanDetailsData {
   overview: {
     whatWeLove: string[];
     keyFeatures: string[];
+    dpcPairing?: {
+      title: string;
+      description: string;
+      linkText: string;
+      linkUrl: string;
+    };
     providerInfo?: string;
   };
   coverageDetails: {

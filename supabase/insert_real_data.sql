@@ -160,7 +160,7 @@ INSERT INTO plans (
 VALUES (
     'zion-essential',
     'zion-health',
-    'Essential Membership',
+    'Essential +DPC Membership',
     'Essential coverage with comprehensive benefits',
     201.00,
     1000.00,

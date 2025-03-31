@@ -1,5 +1,5 @@
 import { type PlanRecommendation } from '../types'
-import { Building, CreditCard, Heart, CheckCircle } from 'lucide-react'
+import { Building, CreditCard, Heart, CheckCircle, ExternalLink } from 'lucide-react'
 import React from 'react'
 import { getPlanCost } from '@/lib/utils/plan-costs'
 import { calculateAnnualCost, getVisitFrequencyCost } from '@/utils/plan-utils'
@@ -97,6 +97,31 @@ export const Overview: React.FC<OverviewProps> = ({
           </div>
         </div>
       </section>
+
+      {/* DPC Pairing Section - Only show if the plan has this data */}
+      {('dpcPairing' in planData.overview && planData.overview.dpcPairing) && (
+        <section>
+          <h3 className="text-xl font-semibold mb-4">{planData.overview.dpcPairing.title}</h3>
+          <div className="flex items-start gap-3 p-4 bg-green-50 border border-green-100 rounded-lg">
+            <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
+            <div>
+              <div className="text-sm text-gray-700 mt-1">
+                <p dangerouslySetInnerHTML={{ __html: markdownToBold(planData.overview.dpcPairing.description) }} />
+                <p className="mt-3">
+                  Click <a 
+                    href={planData.overview.dpcPairing.linkUrl} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-blue-600 font-medium hover:underline inline-flex items-center"
+                  >
+                    {planData.overview.dpcPairing.linkText} <ExternalLink className="h-3.5 w-3.5 ml-0.5" />
+                  </a> to find a DPC in your area.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Provider Information */}
       <section>

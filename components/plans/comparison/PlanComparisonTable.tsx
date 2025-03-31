@@ -119,7 +119,7 @@ const hasAlternativeMedicineCoverage = (planDetails: PlanDetailsData, plan?: Pla
 
 // Helper function to check if plan has preventative services
 const hasPreventativeServices = (planDetails: PlanDetailsData, planData?: any): boolean => {
-  // Check if this is Zion Essential plan
+  // Check if this is Zion Essential +DPC plan
   if (planData && planData.id && planData.id.toLowerCase().includes('zion') && 
       planData.id.toLowerCase().includes('essential')) {
     return false;
