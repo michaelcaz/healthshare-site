@@ -3,7 +3,6 @@ import {
   Building, 
   Shield, 
   DollarSign, 
-  Info, 
   CheckCircle, 
   Pill, 
   Ambulance, 
@@ -77,28 +76,6 @@ export const PlanDetails: React.FC<PlanDetailsProps> = ({
 
   return (
     <div className="space-y-8">
-      {/* Why is this plan the best? */}
-      <section>
-        <h3 className="text-xl font-semibold mb-4">Why Is This Plan The Best?</h3>
-        <div className="flex items-start gap-3 p-4 bg-blue-50 rounded-lg">
-          <Info className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" />
-          <div>
-            <div className="text-sm text-gray-700 mt-1">
-              <ul className="list-disc pl-5 space-y-2">
-                {plan.explanation.map((item, index) => (
-                  <li key={index}>{item}</li>
-                ))}
-                {plan.factors.slice(0, 3).map((factor, index) => (
-                  <li key={`factor-${index}`}>
-                    <span className="font-medium">{factor.factor}:</span> {Math.round(factor.impact)}% impact on recommendation
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Included for Free */}
       <section>
         <h3 className="text-xl font-semibold mb-4">Included For Free</h3>

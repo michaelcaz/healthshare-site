@@ -656,15 +656,11 @@ export const planDetailsData: Record<string, PlanDetailsData> = {
         {
           title: "Telemedicine",
           description: "Knew Health offers complimentary, 24/7 unlimited access to help with urgent health concerns, like strep throat or urinary tract infection(UTI), from the comfort of your own home."
-        },
-        {
-          title: "Urgent/Emergency Care",
-          description: "Shares costs for emergency room visits and urgent care after IUA met."
         }
       ]
     },
     medicalServices: {
-      emergencyCare: "Emergency care, ambulances, and airlifts eligible for sharing after meeting the IUA.",
+      emergencyCare: "ER visits are generally eligible for sharing, whether or not they are in conjunction with an eligible medical need. The first ER visit for a medical condition is treated as a normal sharing request. Each additional visit related to the same condition requires the member to take on a personal responsibility of $500 in addition to the member's IUA.",
       surgeryAndTreatment: "Surgeries and major treatments are generally shareable. Elective surgeries require pre-approval. Prior medical review and approval is required for non-emergent surgical procedures to be eligible to share. Chronic conditions have 12-month waiting period.",
       prescriptionDrugs: "Covers generic medications for acute conditions. Specialty drugs require prior authorization.",
       pregnancy: "12 Month Waiting Period: You must be a member for 12 months before conceiving, for your pregnancy related needs to be eligible for sharing. Services available for sharing include pre-natal, delivery (including birthing centers and home-births), post-natal, and miscarriage."

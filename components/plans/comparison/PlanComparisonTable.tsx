@@ -92,73 +92,29 @@ const extractPregnancyInfo = (planDetails: PlanDetailsData) => {
 }
 
 // Helper function to extract pre-existing condition information from plan details
-const extractPreExistingInfo = (planDetails: PlanDetailsData) => {
-  // Parse the pre-existing conditions string to extract information
-  const preExistingText = planDetails.coverageDetails?.preExistingConditions || '';
-  
-  // Default waiting period
-  let waitingPeriod = '12 months';
-  
-  // Try to extract the waiting period
-  const yearMatch = preExistingText.match(/(\d+)[\s-]*year waiting period/i);
-  if (yearMatch && yearMatch[1]) {
-    waitingPeriod = `${parseInt(yearMatch[1]) * 12} months`;
+const extractPreExistingInfo = (planDetails: PlanDetailsData, plan?: PlanData) => {
+  // Check if this is Crowd Health using the plan object directly
+  if (plan && plan.providerName && plan.providerName.toLowerCase().includes('crowd')) {
+    return {
+      waitingPeriod: '2 years'
+    };
   }
   
-  const monthMatch = preExistingText.match(/(\d+)[\s-]*month waiting period/i);
-  if (monthMatch && monthMatch[1]) {
-    waitingPeriod = `${monthMatch[1]} months`;
-  }
-  
-  // If text contains "one-year" or similar phrases
-  if (preExistingText.toLowerCase().includes('one-year') || 
-      preExistingText.toLowerCase().includes('one year') ||
-      preExistingText.toLowerCase().includes('1-year') || 
-      preExistingText.toLowerCase().includes('1 year')) {
-    waitingPeriod = '12 months';
-  }
-  
-  // If text contains "two-year" or similar phrases
-  if (preExistingText.toLowerCase().includes('two-year') || 
-      preExistingText.toLowerCase().includes('two year') ||
-      preExistingText.toLowerCase().includes('2-year') || 
-      preExistingText.toLowerCase().includes('2 year')) {
-    waitingPeriod = '24 months';
-  }
-  
+  // For all other providers
   return {
-    waitingPeriod: waitingPeriod
+    waitingPeriod: '1 year'
   };
 }
 
 // Helper function to check if a plan covers alternative medicine
-const hasAlternativeMedicineCoverage = (planDetails: PlanDetailsData): boolean => {
-  // Check if any included services mention alternative medicine
-  const includedServices = planDetails.coverageDetails?.includedServices || [];
+const hasAlternativeMedicineCoverage = (planDetails: PlanDetailsData, plan?: PlanData): boolean => {
+  // Check if this is Sedera plan
+  if (plan && plan.providerName && plan.providerName.toLowerCase().includes('sedera')) {
+    return false;
+  }
   
-  // Check if any service title or description contains alternative medicine terms
-  const hasAlternativeMedicineService = includedServices.some(service => {
-    const titleAndDesc = (service.title + ' ' + service.description).toLowerCase();
-    return titleAndDesc.includes('alternative medicine') || 
-           titleAndDesc.includes('acupuncture') || 
-           titleAndDesc.includes('chiropractic') || 
-           titleAndDesc.includes('massage therapy') ||
-           titleAndDesc.includes('naturopath') ||
-           titleAndDesc.includes('holistic');
-  });
-  
-  // Also check in the overview text
-  const overviewText = JSON.stringify(planDetails.overview || {}).toLowerCase();
-  const hasAlternativeMedicineOverview = overviewText.includes('alternative medicine') || 
-                                        overviewText.includes('acupuncture') || 
-                                        overviewText.includes('chiropractic') ||
-                                        overviewText.includes('therapeutic treatments');
-  
-  // Check provider name for known providers that cover alternative medicine
-  const providerId = planDetails.overview?.providerInfo?.toLowerCase() || '';
-  const isKnownProviderWithCoverage = providerId.includes('zion') || providerId.includes('known');
-  
-  return hasAlternativeMedicineService || hasAlternativeMedicineOverview || isKnownProviderWithCoverage;
+  // Return true for all other plans
+  return true;
 }
 
 // Helper function to check if plan has preventative services
@@ -738,7 +694,7 @@ export function PlanComparisonTable() {
               </td>
               
               {plans.map((plan) => {
-                const preExistingInfo = extractPreExistingInfo(plan.details);
+                const preExistingInfo = extractPreExistingInfo(plan.details, plan);
                 return (
                   <td key={`preexisting-${plan.id}`} className="p-5 border-b border-gray-200 text-center">
                     <span className="font-semibold text-gray-900">{preExistingInfo.waitingPeriod}</span>
@@ -763,7 +719,7 @@ export function PlanComparisonTable() {
               </td>
               
               {plans.map((plan) => {
-                const hasAlternativeMedicine = hasAlternativeMedicineCoverage(plan.details);
+                const hasAlternativeMedicine = hasAlternativeMedicineCoverage(plan.details, plan);
                 return (
                   <td key={`alternative-${plan.id}`} className="p-5 border-b border-gray-200 text-center">
                     {hasAlternativeMedicine ? (
