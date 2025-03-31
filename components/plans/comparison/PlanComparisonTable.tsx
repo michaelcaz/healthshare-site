@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { X, Star, StarHalf, Sparkles } from 'lucide-react'
+import { X, Star, StarHalf, Sparkles, CheckCircle } from 'lucide-react'
 import { planDetailsData } from '@/data/plan-details-data'
 import { PlanDetailsData } from '@/types/plan-details'
 import { Tooltip, TooltipContent as BaseTooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
@@ -63,12 +63,13 @@ const extractPrescriptionInfo = (planDetails: PlanDetailsData) => {
 // Helper function to extract pregnancy information from plan details
 const extractPregnancyInfo = (planDetails: PlanDetailsData) => {
   // Parse the pregnancy string to extract information
-  const pregnancyText = planDetails.medicalServices.pregnancy || '';
+  const pregnancyText = planDetails.medicalServices.pregnancy || planDetails.coverageDetails?.pregnancy || '';
   
   // Default values
   const result = {
     prenatalCare: 'Full price',
-    delivery: 'Full price'
+    delivery: 'Full price',
+    waitingPeriod: '12 months'  // Default waiting period
   };
   
   // Try to extract more specific information if available
@@ -81,7 +82,138 @@ const extractPregnancyInfo = (planDetails: PlanDetailsData) => {
     }
   }
   
+  // Extract waiting period
+  const waitingPeriodMatch = pregnancyText.match(/(\d+)\s*(?:month|months)/i);
+  if (waitingPeriodMatch && waitingPeriodMatch[1]) {
+    result.waitingPeriod = `${waitingPeriodMatch[1]} months`;
+  }
+  
   return result;
+}
+
+// Helper function to extract pre-existing condition information from plan details
+const extractPreExistingInfo = (planDetails: PlanDetailsData) => {
+  // Parse the pre-existing conditions string to extract information
+  const preExistingText = planDetails.coverageDetails?.preExistingConditions || '';
+  
+  // Default waiting period
+  let waitingPeriod = '12 months';
+  
+  // Try to extract the waiting period
+  const yearMatch = preExistingText.match(/(\d+)[\s-]*year waiting period/i);
+  if (yearMatch && yearMatch[1]) {
+    waitingPeriod = `${parseInt(yearMatch[1]) * 12} months`;
+  }
+  
+  const monthMatch = preExistingText.match(/(\d+)[\s-]*month waiting period/i);
+  if (monthMatch && monthMatch[1]) {
+    waitingPeriod = `${monthMatch[1]} months`;
+  }
+  
+  // If text contains "one-year" or similar phrases
+  if (preExistingText.toLowerCase().includes('one-year') || 
+      preExistingText.toLowerCase().includes('one year') ||
+      preExistingText.toLowerCase().includes('1-year') || 
+      preExistingText.toLowerCase().includes('1 year')) {
+    waitingPeriod = '12 months';
+  }
+  
+  // If text contains "two-year" or similar phrases
+  if (preExistingText.toLowerCase().includes('two-year') || 
+      preExistingText.toLowerCase().includes('two year') ||
+      preExistingText.toLowerCase().includes('2-year') || 
+      preExistingText.toLowerCase().includes('2 year')) {
+    waitingPeriod = '24 months';
+  }
+  
+  return {
+    waitingPeriod: waitingPeriod
+  };
+}
+
+// Helper function to check if a plan covers alternative medicine
+const hasAlternativeMedicineCoverage = (planDetails: PlanDetailsData): boolean => {
+  // Check if any included services mention alternative medicine
+  const includedServices = planDetails.coverageDetails?.includedServices || [];
+  
+  // Check if any service title or description contains alternative medicine terms
+  const hasAlternativeMedicineService = includedServices.some(service => {
+    const titleAndDesc = (service.title + ' ' + service.description).toLowerCase();
+    return titleAndDesc.includes('alternative medicine') || 
+           titleAndDesc.includes('acupuncture') || 
+           titleAndDesc.includes('chiropractic') || 
+           titleAndDesc.includes('massage therapy') ||
+           titleAndDesc.includes('naturopath') ||
+           titleAndDesc.includes('holistic');
+  });
+  
+  // Also check in the overview text
+  const overviewText = JSON.stringify(planDetails.overview || {}).toLowerCase();
+  const hasAlternativeMedicineOverview = overviewText.includes('alternative medicine') || 
+                                        overviewText.includes('acupuncture') || 
+                                        overviewText.includes('chiropractic') ||
+                                        overviewText.includes('therapeutic treatments');
+  
+  // Check provider name for known providers that cover alternative medicine
+  const providerId = planDetails.overview?.providerInfo?.toLowerCase() || '';
+  const isKnownProviderWithCoverage = providerId.includes('zion') || providerId.includes('known');
+  
+  return hasAlternativeMedicineService || hasAlternativeMedicineOverview || isKnownProviderWithCoverage;
+}
+
+// Helper function to check if plan has preventative services
+const hasPreventativeServices = (planDetails: PlanDetailsData, planData?: any): boolean => {
+  // Check if this is Zion Essential plan
+  if (planData && planData.id && planData.id.toLowerCase().includes('zion') && 
+      planData.id.toLowerCase().includes('essential')) {
+    return false;
+  }
+  
+  // Check included services for preventative care
+  const includedServices = planDetails.coverageDetails?.includedServices || [];
+  const preventativeService = includedServices.find(service => 
+    service.title.toLowerCase().includes('prevent') || 
+    service.description.toLowerCase().includes('prevent') ||
+    service.title.toLowerCase().includes('wellness') ||
+    service.description.toLowerCase().includes('wellness') ||
+    service.title.toLowerCase().includes('check-up') ||
+    service.description.toLowerCase().includes('check-up')
+  );
+  
+  return preventativeService !== undefined;
+}
+
+// Helper function to extract lifetime sharing limit
+const extractLifetimeLimit = (planDetails: PlanDetailsData, planData?: any): string => {
+  // Default value
+  let lifetimeLimit = 'Limited';
+  
+  // Check for mentions of maximum coverage or limits
+  const overviewText = JSON.stringify(planDetails.overview || {}).toLowerCase();
+  const coverageText = JSON.stringify(planDetails.coverageDetails || {}).toLowerCase();
+  const allText = overviewText + coverageText;
+  
+  // Look for unlimited mentions
+  if (allText.includes('no lifetime sharing limits') || 
+      allText.includes('unlimited sharing') || 
+      allText.includes('no sharing limits') ||
+      allText.includes('no lifetime max')) {
+    return 'Unlimited';
+  }
+  
+  // Look for specific amount limits
+  const limitMatches = allText.match(/\$(\d+(?:,\d+)*)\s*(?:million|M)/i);
+  if (limitMatches && limitMatches[1]) {
+    const amount = limitMatches[1].replace(/,/g, '');
+    lifetimeLimit = `$${amount}M`;
+  }
+  
+  // Also check the plan's max coverage field if available from the plan object
+  if (planData && planData.plan && planData.plan.maxCoverage) {
+    lifetimeLimit = planData.plan.maxCoverage;
+  }
+  
+  return lifetimeLimit;
 }
 
 // Star Rating component
@@ -460,24 +592,17 @@ export function PlanComparisonTable() {
           </thead>
           
           <tbody>
-            {/* Cost Information Section */}
-            <tr className="bg-gray-50">
-              <td colSpan={plans.length + 1} className="p-5 border-b border-gray-200">
-                <h3 className="font-semibold text-gray-800">Cost Information</h3>
-              </td>
-            </tr>
-            
             {/* Monthly Cost */}
             <tr>
               <td className="p-5 border-b border-gray-200">
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <span className="text-gray-700 border-b border-dashed border-gray-400 cursor-help">
+                    <span className="text-gray-700 border-b border-dashed border-gray-400 cursor-pointer">
                       Monthly Cost
                     </span>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>Monthly contribution amount for your healthshare membership</p>
+                    <p>The fixed monthly contribution amount you'll pay for your healthshare membership. This is similar to a premium in traditional health insurance but typically much lower in cost.</p>
                   </TooltipContent>
                 </Tooltip>
               </td>
@@ -494,12 +619,12 @@ export function PlanComparisonTable() {
               <td className="p-5 border-b border-gray-200">
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <span className="text-gray-700 border-b border-dashed border-gray-400 cursor-help">
+                    <span className="text-gray-700 border-b border-dashed border-gray-400 cursor-pointer">
                       Initial Unshared Amount (IUA)
                     </span>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>Amount you pay before the community begins sharing your eligible medical expenses</p>
+                    <p>The amount you are responsible to pay before the healthshare community begins sharing your eligible medical expenses. This is similar to a deductible in traditional insurance but applies per medical incident rather than annually.</p>
                   </TooltipContent>
                 </Tooltip>
               </td>
@@ -516,12 +641,12 @@ export function PlanComparisonTable() {
               <td className="p-5 border-b border-gray-200">
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <span className="text-gray-700 border-b border-dashed border-gray-400 cursor-help">
+                    <span className="text-gray-700 border-b border-dashed border-gray-400 cursor-pointer">
                       Est. Annual Cost
                     </span>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>Estimated annual cost including monthly contributions and one IUA</p>
+                    <p>The projected total annual cost including 12 monthly contributions plus one Initial Unshared Amount (IUA), based on your expected healthcare utilization. This helps you compare the overall financial impact of different plans.</p>
                   </TooltipContent>
                 </Tooltip>
               </td>
@@ -538,12 +663,12 @@ export function PlanComparisonTable() {
               <td className="p-5 border-b border-gray-200">
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <span className="text-gray-700 border-b border-dashed border-gray-400 cursor-help">
+                    <span className="text-gray-700 border-b border-dashed border-gray-400 cursor-pointer">
                       Avg. Reviews
                     </span>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>Average member satisfaction rating</p>
+                    <p>The average member satisfaction rating based on verified reviews from current and past members. This reflects overall experience with the provider including customer service, sharing process efficiency, and member satisfaction.</p>
                   </TooltipContent>
                 </Tooltip>
               </td>
@@ -561,81 +686,17 @@ export function PlanComparisonTable() {
               ))}
             </tr>
             
-            {/* Prescription Drugs Section */}
-            <tr className="bg-gray-50">
-              <td colSpan={plans.length + 1} className="p-5 border-b border-gray-200">
-                <h3 className="font-semibold text-gray-800">Prescription Drugs</h3>
-              </td>
-            </tr>
-            
-            {/* Generic Drugs */}
+            {/* Prenatal Care - changed to Pregnancy Waiting Period */}
             <tr>
               <td className="p-5 border-b border-gray-200">
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <span className="text-gray-700 border-b border-dashed border-gray-400 cursor-help">
-                      Generic Drugs
+                    <span className="text-gray-700 border-b border-dashed border-gray-400 cursor-pointer">
+                      Pregnancy Waiting Period
                     </span>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>Cost for generic prescription medications</p>
-                  </TooltipContent>
-                </Tooltip>
-              </td>
-              
-              {plans.map((plan) => {
-                const rxInfo = extractPrescriptionInfo(plan.details);
-                return (
-                  <td key={`generic-${plan.id}`} className="p-5 border-b border-gray-200 text-center">
-                    <span className="font-semibold text-gray-900">{rxInfo.generic}</span>
-                  </td>
-                );
-              })}
-            </tr>
-            
-            {/* Brand Name Drugs */}
-            <tr className="bg-gray-50/50">
-              <td className="p-5 border-b border-gray-200">
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <span className="text-gray-700 border-b border-dashed border-gray-400 cursor-help">
-                      Brand Name Drugs
-                    </span>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Cost for brand name prescription medications</p>
-                  </TooltipContent>
-                </Tooltip>
-              </td>
-              
-              {plans.map((plan) => {
-                const rxInfo = extractPrescriptionInfo(plan.details);
-                return (
-                  <td key={`brand-${plan.id}`} className="p-5 border-b border-gray-200 text-center">
-                    <span className="font-semibold text-gray-900">{rxInfo.brand}</span>
-                  </td>
-                );
-              })}
-            </tr>
-            
-            {/* Pregnancy Section */}
-            <tr className="bg-gray-50">
-              <td colSpan={plans.length + 1} className="p-5 border-b border-gray-200">
-                <h3 className="font-semibold text-gray-800">Pregnancy</h3>
-              </td>
-            </tr>
-            
-            {/* Prenatal Care */}
-            <tr>
-              <td className="p-5 border-b border-gray-200">
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <span className="text-gray-700 border-b border-dashed border-gray-400 cursor-help">
-                      Prenatal Care
-                    </span>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Coverage for prenatal doctor visits and care</p>
+                    <p>The minimum time you must be an active member before conception for pregnancy costs to be eligible for sharing. Pregnancy costs resulting from conception before this waiting period expires are typically not eligible for sharing.</p>
                   </TooltipContent>
                 </Tooltip>
               </td>
@@ -644,116 +705,215 @@ export function PlanComparisonTable() {
                 const pregnancyInfo = extractPregnancyInfo(plan.details);
                 return (
                   <td key={`prenatal-${plan.id}`} className="p-5 border-b border-gray-200 text-center">
-                    <span className="font-semibold text-gray-900">{pregnancyInfo.prenatalCare}</span>
+                    <span className="font-semibold text-gray-900">{pregnancyInfo.waitingPeriod}</span>
                   </td>
                 );
               })}
             </tr>
             
-            {/* Delivery */}
+            {/* Delivery - changed to Pre-existing Condition Waiting Period */}
             <tr className="bg-gray-50/50">
               <td className="p-5 border-b border-gray-200">
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <span className="text-gray-700 border-b border-dashed border-gray-400 cursor-help">
-                      Delivery
+                    <span className="text-gray-700 border-b border-dashed border-gray-400 cursor-pointer">
+                      Pre-existing Condition Waiting Period
                     </span>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>Coverage for labor and delivery</p>
+                    <p>The time period you must be a member before medical costs related to pre-existing conditions become eligible for sharing. Pre-existing conditions are typically defined as conditions for which you've received treatment, medication, or medical advice within a certain timeframe prior to joining.</p>
                   </TooltipContent>
                 </Tooltip>
               </td>
               
               {plans.map((plan) => {
-                const pregnancyInfo = extractPregnancyInfo(plan.details);
+                const preExistingInfo = extractPreExistingInfo(plan.details);
                 return (
-                  <td key={`delivery-${plan.id}`} className="p-5 border-b border-gray-200 text-center">
-                    <span className="font-semibold text-gray-900">{pregnancyInfo.delivery}</span>
+                  <td key={`preexisting-${plan.id}`} className="p-5 border-b border-gray-200 text-center">
+                    <span className="font-semibold text-gray-900">{preExistingInfo.waitingPeriod}</span>
                   </td>
                 );
               })}
             </tr>
             
-            {/* Key Features Section */}
-            <tr className="bg-gray-50">
-              <td colSpan={plans.length + 1} className="p-5 border-b border-gray-200">
-                <h3 className="font-semibold text-gray-800">Key Features</h3>
-              </td>
-            </tr>
-            
-            {/* What We Love */}
+            {/* Alternative Medicine Eligible for Sharing */}
             <tr>
-              <td className="p-5 border-b border-gray-200 w-1/4">
+              <td className="p-5 border-b border-gray-200">
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <span className="text-gray-700 border-b border-dashed border-gray-400 cursor-help">
-                      What We Love
+                    <span className="text-gray-700 border-b border-dashed border-gray-400 cursor-pointer">
+                      Alternative Medicine Eligible for Sharing
                     </span>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>Standout features we appreciate about this plan</p>
+                    <p>Indicates whether the plan includes sharing eligibility for complementary and alternative medicine treatments such as acupuncture, chiropractic care, massage therapy, and naturopathic services. When eligible, these services typically require a referral from a primary care provider.</p>
+                  </TooltipContent>
+                </Tooltip>
+              </td>
+              
+              {plans.map((plan) => {
+                const hasAlternativeMedicine = hasAlternativeMedicineCoverage(plan.details);
+                return (
+                  <td key={`alternative-${plan.id}`} className="p-5 border-b border-gray-200 text-center">
+                    {hasAlternativeMedicine ? (
+                      <div className="flex justify-center">
+                        <CheckCircle className="h-5 w-5 text-green-500" />
+                      </div>
+                    ) : (
+                      <span className="text-gray-400">—</span>
+                    )}
+                  </td>
+                );
+              })}
+            </tr>
+            
+            {/* Preventative Services */}
+            <tr className="bg-gray-50/50">
+              <td className="p-5 border-b border-gray-200">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span className="text-gray-700 border-b border-dashed border-gray-400 cursor-pointer">
+                      Preventative Services
+                    </span>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Indicates if the plan includes sharing for preventative healthcare services such as annual wellness visits, health screenings, and routine check-ups. These services help detect health issues early and maintain overall wellness before conditions become more serious and costly.</p>
+                  </TooltipContent>
+                </Tooltip>
+              </td>
+              
+              {plans.map((plan) => {
+                const hasPreventative = hasPreventativeServices(plan.details, plan);
+                return (
+                  <td key={`preventative-${plan.id}`} className="p-5 border-b border-gray-200 text-center">
+                    {hasPreventative ? (
+                      <div className="flex justify-center">
+                        <CheckCircle className="h-5 w-5 text-green-500" />
+                      </div>
+                    ) : (
+                      <span className="text-gray-400">—</span>
+                    )}
+                  </td>
+                );
+              })}
+            </tr>
+            
+            {/* Lifetime Sharing Limit */}
+            <tr>
+              <td className="p-5 border-b border-gray-200">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span className="text-gray-700 border-b border-dashed border-gray-400 cursor-pointer">
+                      Lifetime Sharing Limit
+                    </span>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>The maximum dollar amount eligible for sharing over your entire lifetime of membership. Some healthshares have unlimited sharing (no cap), while others may have limits of $1M or more. This is particularly important to consider for long-term or chronic health conditions.</p>
+                  </TooltipContent>
+                </Tooltip>
+              </td>
+              
+              {plans.map((plan) => {
+                const planLifetimeLimit = extractLifetimeLimit(plan.details, plan);
+                return (
+                  <td key={`lifetime-${plan.id}`} className="p-5 border-b border-gray-200 text-center">
+                    <span className="font-semibold text-gray-900">{planLifetimeLimit}</span>
+                  </td>
+                );
+              })}
+            </tr>
+            
+            {/* Emergency Services */}
+            <tr className="bg-gray-50/50">
+              <td className="p-5 border-b border-gray-200">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span className="text-gray-700 border-b border-dashed border-gray-400 cursor-pointer">
+                      Emergency Services
+                    </span>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Indicates whether emergency medical services like emergency room visits, urgent care, and ambulance services are eligible for sharing after your IUA is met. Most healthshare plans prioritize true emergency situations to ensure members receive necessary care in critical moments.</p>
                   </TooltipContent>
                 </Tooltip>
               </td>
               
               {plans.map((plan) => (
-                <td key={`love-${plan.id}`} className="p-5 border-b border-gray-200 w-[300px]">
-                  <div className="space-y-3">
-                    {plan.details.overview.whatWeLove.map((item, i) => (
-                      <div key={i} className="flex items-start">
-                        <div className="flex-shrink-0 mt-1 mr-2 text-green-600">
-                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                            <path d="M8 12L11 15L16 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                          </svg>
-                        </div>
-                        <div className="text-sm text-gray-900" dangerouslySetInnerHTML={{ __html: item }} />
-                      </div>
-                    ))}
+                <td key={`emergency-${plan.id}`} className="p-5 border-b border-gray-200 text-center">
+                  <div className="flex justify-center">
+                    <CheckCircle className="h-5 w-5 text-green-500" />
                   </div>
                 </td>
               ))}
             </tr>
             
-            {/* Key Plan Features */}
-            <tr className="bg-gray-50/50">
-              <td className="p-5 border-b border-gray-200 w-1/4">
+            {/* Surgery and Major Treatment */}
+            <tr>
+              <td className="p-5 border-b border-gray-200">
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <span className="text-gray-700 border-b border-dashed border-gray-400 cursor-help">
-                      Key Plan Features
+                    <span className="text-gray-700 border-b border-dashed border-gray-400 cursor-pointer">
+                      Surgery and Major Treatment
                     </span>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>Important features and limitations of this plan</p>
+                    <p>Indicates if surgical procedures, hospitalizations, and other major medical treatments are eligible for sharing after your IUA. This includes both inpatient and outpatient surgeries, hospital stays, and specialty treatments for serious medical conditions.</p>
                   </TooltipContent>
                 </Tooltip>
               </td>
               
               {plans.map((plan) => (
-                <td key={`features-${plan.id}`} className="p-5 border-b border-gray-200 w-[300px]">
-                  <div className="space-y-3">
-                    {plan.details.keyPlanFeatures?.map((feature, i) => (
-                      <div key={i} className="flex items-start">
-                        <div className="flex-shrink-0 mt-1 mr-2 text-green-600">
-                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                            <path d="M8 12L11 15L16 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                          </svg>
-                        </div>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <div className="text-sm text-gray-900">
-                              <span dangerouslySetInnerHTML={{ __html: feature.text }} />
-                            </div>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>{feature.tooltip}</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </div>
-                    ))}
+                <td key={`surgery-${plan.id}`} className="p-5 border-b border-gray-200 text-center">
+                  <div className="flex justify-center">
+                    <CheckCircle className="h-5 w-5 text-green-500" />
+                  </div>
+                </td>
+              ))}
+            </tr>
+            
+            {/* Generic Drugs */}
+            <tr>
+              <td className="p-5 border-b border-gray-200">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span className="text-gray-700 border-b border-dashed border-gray-400 cursor-pointer">
+                      Prescriptions covered after you hit your IUA
+                    </span>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Indicates if prescription medications related to an eligible medical need are shareable after your Initial Unshared Amount (IUA) is met. Typically applies to short-term prescriptions for acute conditions rather than maintenance medications for chronic conditions.</p>
+                  </TooltipContent>
+                </Tooltip>
+              </td>
+              
+              {plans.map((plan) => (
+                <td key={`generic-${plan.id}`} className="p-5 border-b border-gray-200 text-center">
+                  <div className="flex justify-center">
+                    <CheckCircle className="h-5 w-5 text-green-500" />
+                  </div>
+                </td>
+              ))}
+            </tr>
+            
+            {/* Brand Name Drugs */}
+            <tr className="bg-gray-50/50">
+              <td className="p-5 border-b border-gray-200">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span className="text-gray-700 border-b border-dashed border-gray-400 cursor-pointer">
+                      Maintenance Prescriptions Discount Card
+                    </span>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Indicates if members receive access to prescription discount programs for ongoing medication needs. While most healthshares don't directly share costs for maintenance medications, many provide access to discount programs that can reduce out-of-pocket costs by 15-80% depending on the medication.</p>
+                  </TooltipContent>
+                </Tooltip>
+              </td>
+              
+              {plans.map((plan) => (
+                <td key={`brand-${plan.id}`} className="p-5 border-b border-gray-200 text-center">
+                  <div className="flex justify-center">
+                    <CheckCircle className="h-5 w-5 text-green-500" />
                   </div>
                 </td>
               ))}

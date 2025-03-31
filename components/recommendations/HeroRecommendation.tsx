@@ -169,7 +169,9 @@ export function HeroRecommendation({
           <div className="flex items-center gap-6 mt-2 sm:mt-0">
             <div className="flex items-center gap-2">
               <Users className="h-4 w-4 text-blue-600" />
-              <span className="text-sm font-medium" dangerouslySetInnerHTML={{ __html: `${providerDetails.memberCount} Active Members` }} />
+              <span className="text-sm font-medium">
+                {providerDetails.memberCount?.replace(/\*\*/g, '')} Active Members
+              </span>
               <TrendingUp className="h-3 w-3 text-green-500" />
             </div>
             
