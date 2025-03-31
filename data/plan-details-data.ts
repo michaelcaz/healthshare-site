@@ -252,7 +252,7 @@ export const planDetailsData: Record<string, PlanDetailsData> = {
       emergencyCare: "Emergency room visits, including medically necessary ambulance transport, are **eligible for full crowdfunding** after the IUA is met.",
       surgeryAndTreatment: "Surgeries are **eligible for full crowdfunding** after the IUA is met. For planned surgeries (like a knee replacement), it is recommended that you use CrowdHealth's negotiation tools before scheduling to ensure you get the highest value: highest quality + fairest price.",
       prescriptionDrugs: "For your prescriptions to be eligible for crowdfunding, you must use your prescription discount and choose a generic option if available when purchasing. You will show your RX discount card (accessible through your Member profile in the CrowdHealth app) at the pharmacy to get the best price, pay at checkout, and submit the prescription receipt through the app for crowdfunding. Maintenance prescription drug costs are eligible for crowdfunding are generally limited to a **120-day supply per valid health event**.",
-      pregnancy: "**10 Month Waiting Period and $3,000 IUA**: You, or your partner, must be a member for 10 months BEFORE conceiving, for your pregnancy related needs to be eligible for crowdfunding. Services available for sharing include pre-natal, delivery (including birthing centers and home-births), post-natal, and miscarriage. For pregnancy related needs, you will pay the first $3,000, and the rest will be eligible for crowd-funding."
+      pregnancy: "**10 Month Waiting Period and $3,000 IUA**: You, or your partner, must be a member for 10 months BEFORE conceiving, for your pregnancy related needs to be eligible for crowdfunding."
     },
     providerDetails: {
       yearEstablished: 2021,
@@ -624,100 +624,110 @@ export const planDetailsData: Record<string, PlanDetailsData> = {
   },
   
   // Knew Health plans
-  'knew-health-premium-hsa': {
+  'knew-health': {
     overview: {
       whatWeLove: [
-        "Knew Health offers a **modern approach to healthcare sharing** with a focus on wellness",
-        "**HSA-compatible** plan structure",
-        "**Holistic health** approach with wellness incentives"
+        "They focus on holistic health with coverage for alternative therapies like acupuncture and chiropractic care",
+        "They put a strong emphasis on preventive care and wellness incentives to reduce long-term costs",
+        "Transparent pricing model with no lifetime sharing limits for eligible expenses"
       ],
       keyFeatures: [
-        "**HSA compatibility** for tax advantages",
-        "**Wellness program** included",
-        "**Telemedicine** access included"
+        "Covers preventative services including annual physicals, well-woman visits, well-child visits from birth through age 18, standard screenings like mammograms, colonoscopies, and STD/STI screenings, birth control, and no cost or low cost lab work. You will not be limited in your choice of healthcare practitioner for preventive care and these costs will not be subject to your Initial Unshareable Amount (IUA).",
+        "Loads of preventative care services like membership to a huge digital wellness provider, complimentary fitness and life coaching sessions and telemedicine."
       ],
-      providerInfo: "Knew Health is a healthcare sharing community that emphasizes preventive care and wellness."
+      providerInfo: "Founded in 2017, Knew Health combines medical cost sharing with preventive care support. Their model emphasizes member education and holistic health approaches while maintaining affordability through community-based cost sharing."
     },
     coverageDetails: {
-      iuaExplanation: "**Annual Initial Unshared Amount** with options to fit your budget.",
-      networkInfo: "**No network restrictions** - see any provider you choose.",
+      iuaExplanation: "The Initial Unshared Amount (IUA) is the amount you pay before your health share plan kicks in. For example, if you have a $1000 IUA and get an injury that results in $2300 of medical bills, you pay the first $1000, and the health share community pays the other $1300.",
+      networkInfo: "Knew Health is not health insurance, they have no network limitations. However, wherever possible, it is suggested that you find a provider with fair-market prices. Their Concierge Care team can also assist you in identifying a provider in your area and making prepayments, or you can use their online portal to find a provider in your area.",
       includedServices: [
         {
-          title: "Medical Cost Sharing",
-          description: "**Sharing for eligible medical needs** after IUA"
+          title: "Two No Cost Personalized Health or Life Coaching Sessions",
+          description: "Their one-on-one health coaching service helps you identify and reach your wellness goals, like improving sleep quality and diet, developing effective exercise habits, and supporting your mental health. Each year members can schedule with one of their health & life coaches, and receive two complimentary sessions."
         },
         {
-          title: "Wellness Program",
-          description: "**Comprehensive wellness resources** included"
+          title: "Alternative Medicine",
+          description: "Knew Health covers things like acupuncture, chiropractic care, and naturopathic medicine after you hit your IUA. Some alternative medicines may be used related to an eligible need, but you need to submit a decent amount of information to show why it's going to be more effective than a \"traditional medicine\" approach to even request that they be eligible for sharing. They also give every member a $200/yr allowance to use on preventative alternative medicine."
+        },
+        {
+          title: "Access to FitOnHealth.com",
+          description: "As a Knew Health member you get access to a digital wellness platform with the following services: Yoga, Meditation, Celebrity Workouts, Peloton Digital, Premium Workouts- Cardio, Pilates, Dance, HIIT, Barre, Strength, and more! Mindfulness & Sleep, Recipes & Nutrition- Gluten Free, Keto, Intermittent Fasting, Mediterranean Diet and more! Step Tracker & Challenges"
         },
         {
           title: "Telemedicine",
-          description: "**24/7 access** to virtual doctor visits"
+          description: "Knew Health offers complimentary, 24/7 unlimited access to help with urgent health concerns, like strep throat or urinary tract infection(UTI), from the comfort of your own home."
+        },
+        {
+          title: "Urgent/Emergency Care",
+          description: "Shares costs for emergency room visits and urgent care after IUA met."
         }
       ]
     },
     medicalServices: {
-      emergencyCare: "**Eligible for sharing** after Initial Unshared Amount. Includes emergency room visits and ambulance services.",
-      surgeryAndTreatment: "**Eligible for sharing** after Initial Unshared Amount. Includes surgeries, hospital stays, and follow-up care.",
-      prescriptionDrugs: "**Prescription discount program** included. Medications for eligible medical needs may be shareable.",
-      pregnancy: "**Maternity expenses** eligible for sharing after waiting period."
+      emergencyCare: "Emergency care, ambulances, and airlifts eligible for sharing after meeting the IUA.",
+      surgeryAndTreatment: "Surgeries and major treatments are generally shareable. Elective surgeries require pre-approval. Prior medical review and approval is required for non-emergent surgical procedures to be eligible to share. Chronic conditions have 12-month waiting period.",
+      prescriptionDrugs: "Covers generic medications for acute conditions. Specialty drugs require prior authorization.",
+      pregnancy: "12 Month Waiting Period: You must be a member for 12 months before conceiving, for your pregnancy related needs to be eligible for sharing. Services available for sharing include pre-natal, delivery (including birthing centers and home-births), post-natal, and miscarriage."
     },
     providerDetails: {
-      yearEstablished: 2018,
-      memberCount: "**15,000+**",
-      memberSatisfaction: "4.5/5",
-      averageTenure: "2.0 years",
+      yearEstablished: 2017,
+      memberCount: "10,000+",
+      memberSatisfaction: "94%",
+      averageTenure: "3 years",
       ratings: {
-        overall: 4.5,
-        reviewCount: 150,
-        bbbRating: "**A-**"
+        overall: 4.7,
+        reviewCount: 137,
+        bbbRating: "A"
       },
-      processingTime: "**7-10 business days**",
-      costTransparency: {
-        medicalCostSharing: 80,
-        administrativeCosts: 15,
-        operationalReserves: 5
-      },
+      processingTime: "7-14 business days",
       savingsVsInsurance: {
-        averageMonthlySavings: "**35%** (per 2023 member survey)"
+        averageMonthlySavings: "30-50%"
       }
     },
     testimonials: [
       {
-        text: "**The HSA compatibility was a game-changer** for our family finances. We love the tax advantages.",
-        author: "Michael R.",
-        highlight: "HSA benefits",
-        tenure: "Member for 2 years",
-        avatar: "M",
+        text: "Knew Health's wellness program helped me save on both healthcare costs and gym memberships. I'm paying half what I did for insurance.",
+        author: "Sarah P.",
+        highlight: "Wellness incentives",
+        tenure: "Member for 4 years",
+        avatar: "S",
         rating: 5
       },
       {
-        text: "**The wellness program has helped me make positive changes** in my health habits.",
-        author: "Jennifer T.",
-        highlight: "Wellness focus",
+        text: "The acupuncture coverage was a game-changer for my chronic pain. Traditional insurance never covered this.",
+        author: "Michael R.",
+        highlight: "Alternative therapy coverage",
+        tenure: "Member for 2 years",
+        avatar: "M",
+        rating: 4.5
+      },
+      {
+        text: "My son had a knee injury in the summer that required surgery. Knew Health helped navigate the medical process and covered all expenses after we met the UIA. Communication and reimbursements were very timely and appreciated! I feel confident knowing Knew Health is there for my family when accidents happen.",
+        author: "Gina H.",
+        highlight: "Excellent support",
         tenure: "Member for 1 year",
-        avatar: "J",
-        rating: 4
+        avatar: "G",
+        rating: 5
       }
     ],
     keyPlanFeatures: [
       {
-        text: "HSA Compatible: **Tax advantages**",
+        text: "Holistic Health Focus",
         isPositive: true,
-        icon: "DollarSign",
-        tooltip: "Use pre-tax dollars for healthcare expenses"
+        icon: "Activity",
+        tooltip: "Coverage for alternative therapies and preventive wellness care"
       },
       {
-        text: "Wellness Program: **Included with membership**",
+        text: "Comprehensive Wellness Platform",
         isPositive: true,
         icon: "Heart",
-        tooltip: "Resources to improve your health and wellness"
+        tooltip: "Access to FitOnHealth.com with workouts, meditation, nutrition plans and more"
       },
       {
-        text: "Pre-Existing Conditions: **Waiting period applies**",
-        isPositive: false,
-        icon: "AlertCircle",
-        tooltip: "Graduated sharing for pre-existing conditions"
+        text: "Health Coaching Sessions",
+        isPositive: true,
+        icon: "User",
+        tooltip: "Two complimentary health coaching sessions per year"
       }
     ]
   },

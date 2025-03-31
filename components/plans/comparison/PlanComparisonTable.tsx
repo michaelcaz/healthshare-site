@@ -185,8 +185,18 @@ const hasPreventativeServices = (planDetails: PlanDetailsData, planData?: any): 
 
 // Helper function to extract lifetime sharing limit
 const extractLifetimeLimit = (planDetails: PlanDetailsData, planData?: any): string => {
+  // Return "None" for all plans as requested
+  return "None";
+  
+  // Previous implementation commented out below
+  /*
   // Default value
   let lifetimeLimit = 'Limited';
+  
+  // Special case for Knew Health - they have no lifetime maximum
+  if (planData && planData.providerName && planData.providerName.toLowerCase().includes('knew health')) {
+    return 'Unlimited';
+  }
   
   // Check for mentions of maximum coverage or limits
   const overviewText = JSON.stringify(planDetails.overview || {}).toLowerCase();
@@ -214,6 +224,7 @@ const extractLifetimeLimit = (planDetails: PlanDetailsData, planData?: any): str
   }
   
   return lifetimeLimit;
+  */
 }
 
 // Star Rating component
