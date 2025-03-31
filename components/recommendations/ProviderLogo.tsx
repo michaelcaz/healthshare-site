@@ -1,6 +1,7 @@
 import React from 'react';
 import { Building } from 'lucide-react';
 import Image from 'next/image';
+import { cn } from '@/lib/utils';
 
 interface ProviderLogoProps {
   providerName: string;
@@ -38,10 +39,39 @@ export function ProviderLogo({ providerName, size = 'md', className = '' }: Prov
   };
   
   const logoPath = getLogoPath();
+
+  // Special styling for CrowdHealth logo to ensure it appears visually consistent with Zion logo
+  const getLogoStyle = () => {
+    if (normalizedName.includes('crowd')) {
+      // Adjust scale for CrowdHealth logo based on the size prop
+      const scales = {
+        sm: 0.9,
+        md: 0.95,
+        lg: 1.0,
+        xl: 1.05
+      };
+      
+      return {
+        maxWidth: '85%', 
+        maxHeight: '85%',
+        transform: `scale(${scales[size]})`, // Scale the CrowdHealth logo
+        transformOrigin: 'center',
+        padding: '0px'
+      };
+    }
+    
+    return { 
+      maxWidth: '100%', 
+      maxHeight: '100%' 
+    };
+  };
   
   return (
     <div 
-      className={`bg-white rounded-md flex items-center justify-center overflow-hidden ${className}`}
+      className={cn(
+        "bg-white rounded-md flex items-center justify-center overflow-hidden",
+        className
+      )}
       style={{ width, height }}
     >
       <Image 
@@ -50,7 +80,7 @@ export function ProviderLogo({ providerName, size = 'md', className = '' }: Prov
         width={width}
         height={height}
         className="object-contain p-2"
-        style={{ maxWidth: '100%', maxHeight: '100%' }}
+        style={getLogoStyle()}
         onError={(e) => {
           // Fallback to default provider logo if specific logo not found
           (e.target as HTMLImageElement).src = '/images/providers/default-provider.svg';

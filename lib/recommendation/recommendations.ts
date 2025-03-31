@@ -3,6 +3,18 @@ import { calculatePlanScore } from './scoring'
 import { type QuestionnaireResponse } from '@/types/questionnaire'
 import { getPlanCost as getPlanCostUtil } from '@/lib/utils/plan-costs'
 
+/**
+ * Plan Recommendation Engine
+ * 
+ * This module handles generating recommendations based on user questionnaire responses.
+ * 
+ * IMPORTANT NOTES:
+ * - Plans with IDs starting with '_deprecated_' are filtered out from recommendations
+ *   to prevent duplicates in the UI while maintaining backward compatibility
+ * - The recommendations are ordered by score, with the highest scoring plan first
+ * - Scores are transformed for display purposes (see step 3 in getRecommendations)
+ */
+
 export interface PlanRecommendation {
   plan: PricingPlan
   score: number
@@ -23,22 +35,26 @@ export async function getRecommendations(
   console.log('getRecommendations called from lib/recommendation/recommendations.ts');
   console.log('Questionnaire:', JSON.stringify(questionnaire, null, 2));
   
+  // Filter out deprecated plans (those with IDs starting with "_deprecated_")
+  const activePlans = plans.filter(plan => !plan.id.startsWith('_deprecated_'));
+  console.log(`Filtered out ${plans.length - activePlans.length} deprecated plans`);
+  
   // Log all available plans before filtering
-  console.log(`Total plans before scoring: ${plans.length}`);
-  console.log('Available plans:', plans.map(p => p.id));
+  console.log(`Total plans before scoring: ${activePlans.length}`);
+  console.log('Available plans:', activePlans.map(p => p.id));
   
   // Check specifically for Knew Health plans
-  const knewHealthPlans = plans.filter(p => p.id.includes('knew-health'));
+  const knewHealthPlans = activePlans.filter(p => p.id.includes('knew-health'));
   console.log(`Found ${knewHealthPlans.length} Knew Health plans:`, knewHealthPlans.map(p => p.id));
   
   // Check specifically for CrowdHealth plans
-  const crowdHealthPlans = plans.filter(p => p.id.includes('crowdhealth'));
+  const crowdHealthPlans = activePlans.filter(p => p.id.includes('crowdhealth'));
   console.log(`Found ${crowdHealthPlans.length} CrowdHealth plans:`, crowdHealthPlans.map(p => p.id));
   
   // Step 1: Calculate raw scores for all plans using the existing scoring algorithm
   // This determines the actual ranking of plans based on how well they match the user's needs
   const scores = await Promise.all(
-    plans.map(plan => calculatePlanScore(plan, questionnaire))
+    activePlans.map(plan => calculatePlanScore(plan, questionnaire))
   );
 
   // Log scores for Knew Health and CrowdHealth specifically

@@ -2689,11 +2689,16 @@ export const providerPlans: PricingPlan[] = [
     ]
   },
   {
-    "id": "zion-direct",
+    // IMPORTANT: This is a duplicate of zion-healthshare-direct-membership that was causing
+    // duplicate plans to show in the recommendations UI. We're keeping this plan with the
+    // _deprecated_ prefix to maintain backward compatibility with any code that might reference
+    // this ID directly, while preventing it from showing up in recommendations with our filter
+    // in getRecommendations() that excludes plans with IDs starting with "_deprecated_".
+    "id": "_deprecated_zion-direct",
     "providerName": "Zion Healthshare",
-    "planName": "Direct Membership",
+    "planName": "Direct Membership [DEPRECATED]",
     "maxCoverage": "$1,000,000 per incident",
-    "annualUnsharedAmount": "$5,000 per calendar year",
+    "annualUnsharedAmount": "$5,000 per calendar year", 
     "sourceUrl": "https://zionhealth.org/",
     "ageRules": {
       "type": "standard"
