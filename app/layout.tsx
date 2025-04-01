@@ -44,7 +44,7 @@ export default function RootLayout({
           <ScrollRestoration />
           <AnnouncementBar 
             phoneNumber="(225) 718-8977" 
-            calendlyLink="https://calendly.com/michaelcaz/30min" 
+            calendlyLink="https://calendly.com/michaelcaz/45-minute-meeting-w-michael-zoom" 
           />
           <Header />
           <main className="pt-[calc(76px+var(--announcement-bar-height,0px))]">
@@ -52,11 +52,11 @@ export default function RootLayout({
           </main>
           <FloatingCTA 
             phoneNumber="(225) 718-8977" 
-            calendlyLink="https://calendly.com/michaelcaz/30min" 
+            calendlyLink="https://calendly.com/michaelcaz/45-minute-meeting-w-michael-zoom" 
           />
           <ExitIntentPopup 
             phoneNumber="(225) 718-8977" 
-            calendlyLink="https://calendly.com/michaelcaz/30min" 
+            calendlyLink="https://calendly.com/michaelcaz/45-minute-meeting-w-michael-zoom" 
           />
           <MobileBottomCTA />
         </TooltipProvider>

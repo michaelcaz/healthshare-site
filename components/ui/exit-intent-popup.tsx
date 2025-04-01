@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 
 export function ExitIntentPopup({
-  calendlyLink = "https://calendly.com/michaelcaz/30min",
+  calendlyLink = "https://calendly.com/michaelcaz/45-minute-meeting-w-michael-zoom",
   phoneNumber = "(225) 718-8977"
 }) {
   const [isVisible, setIsVisible] = useState(false)

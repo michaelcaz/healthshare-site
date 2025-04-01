@@ -35,6 +35,10 @@ export function FAQ() {
       answer: "No catch, but health shares aren't for everyone. \n\nThere are waiting periods before they will cover anything related to any pre-existing conditions:\n\nYear 1: $0 coverage\nYear 2: Up to $25,000\nYear 3: Up to $50,000\nYear 4+: Up to $125,000\n\nThis graduated coverage structure is one of the reasons health shares can offer such affordable rates—but it also means they're not ideal for people who ALREADY have significant medical expenses.\n\nHealth shares work best for generally healthy individuals who want quality care at lower costs, with solid protection against emergencies, accidents, or unexpected major medical events.\n\nWe'll help you determine if it's the right fit for your specific situation."
     },
     {
+      question: "Isn't it required to have insurance in the US?",
+      answer: "The federal mandate requiring individuals and families to have health insurance was eliminated at the end of 2018 in all states with exception of:\n\nCalifornia\nD.C.\nMassachusetts\nNew Jersey\nRhode Island\nVermont (Vermont has a mandate but no financial penalties)"
+    },
+    {
       question: "How is an IUA different from a deductible?",
       answer: "Unlike a traditional insurance deductible, the Initial Unshared Amount (IUA) applies to each separate medical need rather than accumulating throughout the year. For example, if you have a $1,000 IUA and break your arm, you pay the first $1,000, then the plan shares costs above that amount. If you later get pneumonia (a separate need), you pay another $1,000 before sharing begins."
     },

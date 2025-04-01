@@ -11,7 +11,7 @@ interface AnnouncementBarProps {
 
 export function AnnouncementBar({ 
   phoneNumber = "(225) 718-8977", 
-  calendlyLink = "https://calendly.com/michaelcaz/30min" 
+  calendlyLink = "https://calendly.com/michaelcaz/45-minute-meeting-w-michael-zoom" 
 }: AnnouncementBarProps) {
   const [isVisible, setIsVisible] = useState(true)
   
@@ -52,7 +52,7 @@ export function AnnouncementBar({
           <div className="container mx-auto px-4 py-2 flex items-center justify-between">
             <div className="flex-1 text-center">
               <p>
-                Interested? Hop on the phone with a team member now - call us at {phoneNumber} or{' '}
+                Interested? Hop on the phone with a team member now - call or text us at {phoneNumber} or{' '}
                 <Link 
                   href={calendlyLink}
                   target="_blank"
