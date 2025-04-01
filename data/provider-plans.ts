@@ -2318,7 +2318,7 @@ export const providerPlans: PricingPlan[] = [
   {
     "id": "knew-health-premium-hsa",
     "providerName": "Knew Health",
-    "planName": "Premium HSA",
+    "planName": "Membership",
     "maxCoverage": "no limit",
     "annualUnsharedAmount": "Total of paid three IUAs in 12 months",
     "sourceUrl": "",

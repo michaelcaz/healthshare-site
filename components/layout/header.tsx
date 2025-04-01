@@ -146,12 +146,6 @@ export function Header() {
                 About
               </Link>
               <Link 
-                href="/blog"
-                className="text-base font-medium text-gray-warm/90 hover:text-gray-warm transition-colors"
-              >
-                Blog
-              </Link>
-              <Link 
                 href="/#understanding-healthcare-sharing"
                 className="text-base font-medium text-gray-warm/90 hover:text-gray-warm transition-colors"
               >
@@ -242,13 +236,6 @@ export function Header() {
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   About
-                </Link>
-                <Link 
-                  href="/blog"
-                  className="text-base font-medium text-gray-warm/90 hover:text-gray-warm transition-colors py-2"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  Blog
                 </Link>
                 <Link 
                   href="/#understanding-healthcare-sharing"
