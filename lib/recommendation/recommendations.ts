@@ -39,22 +39,43 @@ export async function getRecommendations(
   const activePlans = plans.filter(plan => !plan.id.startsWith('_deprecated_'));
   console.log(`Filtered out ${plans.length - activePlans.length} deprecated plans`);
   
-  // Log all available plans before filtering
-  console.log(`Total plans before scoring: ${activePlans.length}`);
-  console.log('Available plans:', activePlans.map(p => p.id));
+  // Filter out specific plans based on preventative services preference
+  let filteredPlans = activePlans;
+  if (questionnaire.preventative_services === 'yes') {
+    // Filter out Zion Essential and Sedera Access+ +DPC plans when user wants preventative services
+    filteredPlans = activePlans.filter(plan => {
+      const isZionEssential = plan.id.toLowerCase().includes('zion') && 
+                              plan.id.toLowerCase().includes('essential');
+      const isSederaAccessDPC = plan.id.toLowerCase().includes('sedera') && 
+                                (plan.id.toLowerCase().includes('access+') || 
+                                plan.id.toLowerCase().includes('dpc'));
+      
+      // Return true to keep plans that are NOT Zion Essential or Sedera Access+ +DPC
+      return !(isZionEssential || isSederaAccessDPC);
+    });
+    
+    console.log(`Filtered out ${activePlans.length - filteredPlans.length} plans that don't include preventative services`);
+    if (activePlans.length !== filteredPlans.length) {
+      console.log('Filtered plans:', activePlans.filter(p => !filteredPlans.includes(p)).map(p => p.id));
+    }
+  }
+  
+  // Log all available plans before scoring
+  console.log(`Total plans before scoring: ${filteredPlans.length}`);
+  console.log('Available plans:', filteredPlans.map(p => p.id));
   
   // Check specifically for Knew Health plans
-  const knewHealthPlans = activePlans.filter(p => p.id.includes('knew-health'));
+  const knewHealthPlans = filteredPlans.filter(p => p.id.includes('knew-health'));
   console.log(`Found ${knewHealthPlans.length} Knew Health plans:`, knewHealthPlans.map(p => p.id));
   
   // Check specifically for CrowdHealth plans
-  const crowdHealthPlans = activePlans.filter(p => p.id.includes('crowdhealth'));
+  const crowdHealthPlans = filteredPlans.filter(p => p.id.includes('crowdhealth'));
   console.log(`Found ${crowdHealthPlans.length} CrowdHealth plans:`, crowdHealthPlans.map(p => p.id));
   
   // Step 1: Calculate raw scores for all plans using the existing scoring algorithm
   // This determines the actual ranking of plans based on how well they match the user's needs
   const scores = await Promise.all(
-    activePlans.map(plan => calculatePlanScore(plan, questionnaire))
+    filteredPlans.map(plan => calculatePlanScore(plan, questionnaire))
   );
 
   // Log scores for Knew Health and CrowdHealth specifically
