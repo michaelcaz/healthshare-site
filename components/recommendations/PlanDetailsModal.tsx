@@ -56,7 +56,12 @@ export function PlanDetailsModal({
       <div className="relative z-50 w-full max-w-4xl bg-white rounded-lg shadow-xl max-h-[90vh] flex flex-col">
         <div className="flex justify-between items-center p-6 border-b sticky top-0 bg-white z-10">
           <div className="flex items-center gap-4">
-            <h2 className="text-2xl font-bold">{plan.plan.planName}</h2>
+            {/* For Knew Health and Crowd Health plans, don't show plan name */}
+            {(plan.plan.id?.toLowerCase().includes('knew') || plan.plan.id?.toLowerCase().includes('crowd')) ? (
+              <h2 className="text-2xl font-bold">{plan.plan.providerName}</h2>
+            ) : (
+              <h2 className="text-2xl font-bold">{plan.plan.planName}</h2>
+            )}
           </div>
           <button 
             onClick={onClose} 

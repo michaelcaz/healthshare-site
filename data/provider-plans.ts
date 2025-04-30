@@ -549,7 +549,7 @@ export const providerPlans: PricingPlan[] = [
   {
     "id": "crowdhealth-membership",
     "providerName": "CrowdHealth",
-    "planName": "Membership",
+    "planName": "",
     "maxCoverage": "No limit",
     "annualUnsharedAmount": "Total of paid three IUAs in 12 months",
     "sourceUrl": "",
@@ -2318,7 +2318,7 @@ export const providerPlans: PricingPlan[] = [
   {
     "id": "knew-health-premium-hsa",
     "providerName": "Knew Health",
-    "planName": "Premium HSA",
+    "planName": "",
     "maxCoverage": "no limit",
     "annualUnsharedAmount": "Total of paid three IUAs in 12 months",
     "sourceUrl": "",

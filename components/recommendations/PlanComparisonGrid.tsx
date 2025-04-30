@@ -164,8 +164,12 @@ export function PlanComparisonGrid({
                   <div className="h-[60px] flex items-center justify-center mb-2">
                     <ProviderLogo providerName={topPlan.plan.providerName} size="md" />
                   </div>
-                  <div className="text-center">
-                    <p className="text-lg font-semibold text-gray-900">{topPlan.plan.planName}</p>
+                  {/* Always render the container div for consistent spacing, but only show text for non-Knew/Crowd plans */}
+                  <div className="text-center" style={{ minHeight: '28px' }}>
+                    {!topPlan.plan.id?.toLowerCase().includes('knew') && 
+                     !topPlan.plan.id?.toLowerCase().includes('crowd') && (
+                      <p className="text-lg font-semibold text-gray-900">{topPlan.plan.planName}</p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -238,8 +242,12 @@ export function PlanComparisonGrid({
                     <div className="h-[60px] flex items-center justify-center mb-2">
                       <ProviderLogo providerName={plan.plan.providerName} size="md" />
                     </div>
-                    <div className="text-center">
-                      <p className="text-lg font-semibold text-gray-900">{plan.plan.planName}</p>
+                    {/* Always render the container div for consistent spacing, but only show text for non-Knew/Crowd plans */}
+                    <div className="text-center" style={{ minHeight: '28px' }}>
+                      {!plan.plan.id?.toLowerCase().includes('knew') && 
+                       !plan.plan.id?.toLowerCase().includes('crowd') && (
+                        <p className="text-lg font-semibold text-gray-900">{plan.plan.planName}</p>
+                      )}
                     </div>
                   </div>
                 </div>

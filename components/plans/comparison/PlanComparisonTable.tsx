@@ -605,11 +605,15 @@ export function PlanComparisonTable() {
                     </div>
                     
                     {/* Remove the redundant company name heading - only show plan name */}
-                    <p className="text-md text-gray-800 font-medium mt-1">
-                      {plan.id.toLowerCase().includes('knew') 
-                        ? "Premium HSA" 
-                        : plan.planName}
-                    </p>
+                    {/* Add empty spacing placeholder for consistent layout */}
+                    <div className="mt-1" style={{ minHeight: '24px' }}>
+                      {!plan.id.toLowerCase().includes('knew') && 
+                       !plan.id.toLowerCase().includes('crowd') && (
+                        <p className="text-md text-gray-800 font-medium">
+                          {plan.planName}
+                        </p>
+                      )}
+                    </div>
                     
                     <button 
                       onClick={() => removePlan(plan.id)}
