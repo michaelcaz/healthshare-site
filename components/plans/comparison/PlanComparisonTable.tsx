@@ -61,7 +61,16 @@ const extractPrescriptionInfo = (planDetails: PlanDetailsData) => {
 }
 
 // Helper function to extract pregnancy information from plan details
-const extractPregnancyInfo = (planDetails: PlanDetailsData) => {
+const extractPregnancyInfo = (planDetails: PlanDetailsData, planData?: any) => {
+  // Special case for Knew Health - always use 12 months
+  if (planData && planData.id && planData.id.toLowerCase().includes('knew')) {
+    return {
+      prenatalCare: 'Included after waiting period',
+      delivery: 'Included after waiting period',
+      waitingPeriod: '12 months'
+    };
+  }
+  
   // Parse the pregnancy string to extract information
   const pregnancyText = planDetails.medicalServices.pregnancy || planDetails.coverageDetails?.pregnancy || '';
   
@@ -167,6 +176,11 @@ const hasPreventativeServices = (planDetails: PlanDetailsData, planData?: any): 
   if (planData && planData.id && planData.id.toLowerCase().includes('zion') && 
       planData.id.toLowerCase().includes('essential')) {
     return false;
+  }
+  
+  // Special case for Knew Health - they include preventative services
+  if (planData && planData.id && planData.id.toLowerCase().includes('knew')) {
+    return true;
   }
   
   // Check included services for preventative care
@@ -374,10 +388,14 @@ export function PlanComparisonTable() {
             monthlyCost: planCosts?.monthlyPremium || 0,
             iua: planCosts?.initialUnsharedAmount || 0,
             estAnnualCost: annualCost,
-            avgReviews: planDetails?.providerDetails?.ratings?.overall 
-              ? planDetails.providerDetails.ratings.overall.toFixed(1) 
-              : '0.0',
-            reviewCount: planDetails?.providerDetails?.ratings?.reviewCount || 0,
+            avgReviews: planId.toLowerCase().includes('knew') || planData.plan.providerName?.toLowerCase().includes('knew')
+              ? '4.7' // Hard-coded rating for Knew Health
+              : (planDetails?.providerDetails?.ratings?.overall 
+                  ? planDetails.providerDetails.ratings.overall.toFixed(1) 
+                  : '0.0'),
+            reviewCount: planId.toLowerCase().includes('knew') || planData.plan.providerName?.toLowerCase().includes('knew')
+              ? 137 // Hard-coded review count for Knew Health
+              : (planDetails?.providerDetails?.ratings?.reviewCount || 0),
             details: planDetails || planDetailsData['zion-healthshare-essential-membership'] // Need a fallback for details
           }
         })
@@ -587,7 +605,11 @@ export function PlanComparisonTable() {
                     </div>
                     
                     {/* Remove the redundant company name heading - only show plan name */}
-                    <p className="text-md text-gray-800 font-medium mt-1">{plan.planName}</p>
+                    <p className="text-md text-gray-800 font-medium mt-1">
+                      {plan.id.toLowerCase().includes('knew') 
+                        ? "Premium HSA" 
+                        : plan.planName}
+                    </p>
                     
                     <button 
                       onClick={() => removePlan(plan.id)}
@@ -684,17 +706,37 @@ export function PlanComparisonTable() {
                 </Tooltip>
               </td>
               
-              {plans.map((plan) => (
+              {plans.map((plan) => {
+                // Debug log to verify rating values
+                console.log(`Plan ${plan.id} ratings:`, {
+                  avgReviews: plan.avgReviews, 
+                  reviewCount: plan.reviewCount,
+                  isKnewHealth: plan.id.toLowerCase().includes('knew') || plan.providerName.toLowerCase().includes('knew')
+                });
+                
+                // Check if this is a Knew Health plan - simplified condition and made more explicit
+                const isKnewHealthPlan = plan.id.toLowerCase().includes('knew') || 
+                                        plan.providerName.toLowerCase().includes('knew health');
+                
+                // Force hardcoded values for Knew Health plans
+                const displayRating = isKnewHealthPlan ? 4.7 : parseFloat(plan.avgReviews);
+                const displayReviewCount = isKnewHealthPlan ? 137 : plan.reviewCount;
+                
+                return (
                 <td key={`reviews-${plan.id}`} className="p-5 border-b border-gray-200 text-center">
                   <div className="flex flex-col items-center justify-center">
                     <div className="flex items-center gap-2 mb-1">
-                      <StarRating rating={parseFloat(plan.avgReviews)} />
-                      <span className="font-semibold text-gray-900">{plan.avgReviews}</span>
+                      <StarRating rating={displayRating} />
+                      <span className="font-semibold text-gray-900">
+                        {isKnewHealthPlan ? '4.7' : plan.avgReviews}
+                      </span>
                     </div>
-                    <span className="text-sm text-gray-600">({plan.reviewCount} reviews)</span>
+                    <span className="text-sm text-gray-600">
+                      ({isKnewHealthPlan ? '137' : plan.reviewCount} reviews)
+                    </span>
                   </div>
                 </td>
-              ))}
+              )})}
             </tr>
             
             {/* Prenatal Care - changed to Pregnancy Waiting Period */}
@@ -713,7 +755,7 @@ export function PlanComparisonTable() {
               </td>
               
               {plans.map((plan) => {
-                const pregnancyInfo = extractPregnancyInfo(plan.details);
+                const pregnancyInfo = extractPregnancyInfo(plan.details, plan);
                 return (
                   <td key={`prenatal-${plan.id}`} className="p-5 border-b border-gray-200 text-center">
                     <span className="font-semibold text-gray-900">{pregnancyInfo.waitingPeriod}</span>

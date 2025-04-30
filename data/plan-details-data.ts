@@ -642,6 +642,10 @@ export const planDetailsData: Record<string, PlanDetailsData> = {
       networkInfo: "Knew Health is not health insurance, they have no network limitations. However, wherever possible, it is suggested that you find a provider with fair-market prices. Their Concierge Care team can also assist you in identifying a provider in your area and making prepayments, or you can use their online portal to find a provider in your area.",
       includedServices: [
         {
+          title: "Preventative Services",
+          description: "Covers preventative services including annual physicals, well-woman visits, well-child visits from birth through age 18, standard screenings like mammograms, colonoscopies, and STD/STI screenings, birth control, and no cost or low cost lab work."
+        },
+        {
           title: "Two No Cost Personalized Health or Life Coaching Sessions",
           description: "Their one-on-one health coaching service helps you identify and reach your wellness goals, like improving sleep quality and diet, developing effective exercise habits, and supporting your mental health. Each year members can schedule with one of their health & life coaches, and receive two complimentary sessions."
         },
@@ -661,7 +665,8 @@ export const planDetailsData: Record<string, PlanDetailsData> = {
           title: "Urgent/Emergency Care",
           description: "Shares costs for emergency room visits and urgent care after IUA met."
         }
-      ]
+      ],
+      pregnancy: "12 Month Waiting Period: You must be a member for 12 months before conceiving, for your pregnancy related needs to be eligible for sharing. Services available for sharing include pre-natal, delivery (including birthing centers and home-births), post-natal, and miscarriage."
     },
     medicalServices: {
       emergencyCare: "Emergency care, ambulances, and airlifts eligible for sharing after meeting the IUA.",

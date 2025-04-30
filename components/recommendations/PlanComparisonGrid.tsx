@@ -88,6 +88,13 @@ export function PlanComparisonGrid({
 
   // Get plan details and ratings
   const getPlanDetails = (planId: string) => {
+    // Special handling for Knew Health plans
+    if (planId?.toLowerCase().includes('knew') || 
+        topPlan.plan.providerName?.toLowerCase().includes('knew') ||
+        alternativePlans.some(p => p.plan.id === planId && 
+                              p.plan.providerName?.toLowerCase().includes('knew'))) {
+      return planDetailsData['knew-health'];
+    }
     return planDetailsData[planId] || null;
   }
   
