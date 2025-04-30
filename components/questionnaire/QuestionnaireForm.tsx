@@ -17,7 +17,6 @@ import { cn } from '@/lib/utils';
 import { getClientStorage, setClientStorage } from '@/lib/utils/client-storage';
 import { getQuestionnaireResponse } from '@/lib/utils/storage';
 import { logError, getErrorMessage, AppError } from '@/lib/utils/error-logging';
-import { steps } from '@/lib/questionnaire/steps';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { getVisitFrequencyOptions } from '@/lib/utils/visit-calculator';
@@ -79,6 +78,9 @@ const formSchema = z.object({
   }).optional(),
   pre_existing_approach: z.enum(['long_term', 'new_needs', 'balanced'], {
     errorMap: () => ({ message: "Please select your approach to pre-existing conditions" })
+  }).optional(),
+  preventative_services: z.enum(['yes', 'no'], {
+    errorMap: () => ({ message: "Please select if you want coverage for preventative services" })
   }).optional()
 });
 
@@ -95,7 +97,8 @@ const questionLabels: Record<keyof z.infer<typeof formSchema>, string> = {
   visit_frequency: "How often do you expect to visit the doctor?",
   financial_capacity: "In the event of an unexpected medical emergency, what's the maximum amount you could comfortably pay out-of-pocket before cost-sharing begins?",
   risk_preference: "Which approach do you prefer regarding your healthcare costs and risk tolerance?",
-  pre_existing_approach: "Understanding that your pre-existing conditions won't be covered in the first year, which approach do you prefer for your healthshare membership?"
+  pre_existing_approach: "Understanding that your pre-existing conditions won't be covered in the first year, which approach do you prefer for your healthshare membership?",
+  preventative_services: "Do you want coverage for preventative services like annual checkups and well-child visits?"
 }
 
 const getFieldLabel = (field: keyof z.infer<typeof formSchema>): string => {
@@ -123,6 +126,7 @@ const getFieldType = (fieldName: keyof z.infer<typeof formSchema>): 'text' | 'nu
     case 'financial_capacity':
     case 'risk_preference':
     case 'pre_existing_approach':
+    case 'preventative_services':
       return 'radio';
     default:
       return 'text';
@@ -159,6 +163,11 @@ const getSelectOptions = (fieldName: keyof z.infer<typeof formSchema>): SelectOp
       return [
         { value: 'true', label: 'Yes' },
         { value: 'false', label: 'No' }
+      ];
+    case 'preventative_services':
+      return [
+        { value: 'yes', label: 'Yes, I want preventative services included in my plan' },
+        { value: 'no', label: 'No, I have or plan to get a Direct Primary Membership, or plan to invest in my health in other ways.' }
       ];
     case 'expense_preference':
       return [
@@ -369,6 +378,7 @@ interface FormValues {
   financial_capacity: '500' | '1000' | '2500' | '5000' | undefined;
   risk_preference: 'lower_risk' | 'higher_risk' | undefined;
   pre_existing_approach: 'long_term' | 'new_needs' | 'balanced' | undefined;
+  preventative_services?: 'yes' | 'no';
 }
 
 // Create a schema for just the first step
@@ -405,7 +415,7 @@ export const QuestionnaireForm = () => {
   const [formData, setFormData] = useState<Partial<FormValues>>({});
   
   // Define the steps for the questionnaire
-  const steps = [
+  const questionnaireSections = [
     {
       title: "Basic Information",
       description: "Let's start with some basic information to find the right healthshare plan for you.",
@@ -421,7 +431,7 @@ export const QuestionnaireForm = () => {
     {
       title: "Preferences",
       description: "Help us understand your preferences for cost and coverage.",
-      fields: ['financial_capacity', 'risk_preference', 'visit_frequency'],
+      fields: ['financial_capacity', 'risk_preference', 'visit_frequency', 'preventative_services'],
       label: 'Preferences'
     }
   ];
@@ -442,6 +452,7 @@ export const QuestionnaireForm = () => {
       financial_capacity: undefined,
       risk_preference: undefined,
       pre_existing_approach: undefined,
+      preventative_services: undefined,
     },
     mode: 'onSubmit', // Change to onSubmit to prevent premature validation
   });
@@ -489,6 +500,7 @@ export const QuestionnaireForm = () => {
             financial_capacity: parsedData.response.financial_capacity,
             risk_preference: parsedData.response.risk_preference,
             pre_existing_approach: parsedData.response.pre_existing_approach,
+            preventative_services: parsedData.response.preventative_services,
           };
           
           console.log("Converted form values:", formValues);
@@ -554,7 +566,7 @@ export const QuestionnaireForm = () => {
       
       return fields;
     }
-    return steps[currentStep].fields;
+    return questionnaireSections[currentStep].fields;
   };
   
   // Log default values
@@ -563,7 +575,7 @@ export const QuestionnaireForm = () => {
   // Log detailed form information
   useEffect(() => {
     console.log("Form initialized with values:", form.getValues());
-    console.log("Steps configuration:", steps);
+    console.log("Steps configuration:", questionnaireSections);
     console.log("Form schema shape:", Object.keys(formSchema.shape));
     
     // Add event listener for form changes
@@ -656,7 +668,7 @@ export const QuestionnaireForm = () => {
       if (isValid) {
         console.log("Current step is valid, proceeding...");
         
-        if (currentStep < steps.length - 1) {
+        if (currentStep < questionnaireSections.length - 1) {
           // Scroll to top before changing step
           window.scrollTo(0, 0);
           // Move to the next step
@@ -790,6 +802,10 @@ export const QuestionnaireForm = () => {
         finalData.pre_existing_approach = submissionData.pre_existing_approach;
       }
       
+      if (submissionData.preventative_services) {
+        finalData.preventative_services = submissionData.preventative_services;
+      }
+      
       console.log("Final data before validation:", finalData);
       
       // Validate the entire form data
@@ -839,7 +855,7 @@ export const QuestionnaireForm = () => {
   };
 
   // Add a check for isSubmitting to show the loading state
-  if (isSubmitting && formSubmitted && currentStep === steps.length - 1) {
+  if (isSubmitting && formSubmitted && currentStep === questionnaireSections.length - 1) {
     return (
       <div className="min-h-screen bg-gray-50 py-8">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -864,14 +880,18 @@ export const QuestionnaireForm = () => {
     <div className="questionnaire-container">
       <ProgressIndicator 
         currentPage={currentStep + 1}
-        totalPages={steps.length}
-        steps={steps.map(step => ({ label: step.label }))}
+        totalPages={questionnaireSections.length}
+        steps={[
+          { label: 'Basic Info' },
+          { label: 'Health Status' },
+          { label: 'Preferences' }
+        ]}
       />
       
       <div className="questionnaire-card">
-        <h1 className="questionnaire-step-title">{steps[currentStep].title}</h1>
+        <h1 className="questionnaire-step-title">{questionnaireSections[currentStep].title}</h1>
         <p className="questionnaire-step-description">
-          {steps[currentStep].description}
+          {questionnaireSections[currentStep].description}
         </p>
         
         <form onSubmit={handleNextClick} className="space-y-6">
@@ -892,7 +912,7 @@ export const QuestionnaireForm = () => {
                 Back
               </button>
             )}
-            {currentStep < steps.length - 1 ? (
+            {currentStep < questionnaireSections.length - 1 ? (
               <button
                 type="button"
                 onClick={handleNextClick}

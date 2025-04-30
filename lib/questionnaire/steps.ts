@@ -15,7 +15,7 @@ export const steps = [
     id: 'preferences',
     title: 'Cost Preferences',
     description: 'Help us understand your cost and healthcare needs',
-    fields: ['visit_frequency', 'expense_preference', 'iua_preference']
+    fields: ['visit_frequency', 'expense_preference', 'iua_preference', 'preventative_services']
   }
 ] as const
 

@@ -53,4 +53,5 @@ export interface QuestionnaireResponse {
   risk_preference?: 'lower_risk' | 'higher_risk'
   pre_existing_approach?: 'long_term' | 'new_needs' | 'balanced'
   original_iua_preference?: '500' | '1000' | '2500' | '5000'
+  preventative_services?: 'yes' | 'no'
 }
