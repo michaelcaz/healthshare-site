@@ -1187,6 +1187,175 @@ export const providerPlans: PricingPlan[] = [
     ]
   },
   {
+    "id": "sedera-access+-+dpc/vpc",
+    "providerName": "Sedera",
+    "planName": "ACCESS+ +DPC/VPC",
+    "maxCoverage": "no limit",
+    "annualUnsharedAmount": "Total of paid three IUAs in 12 months",
+    "sourceUrl": "",
+    "ageRules": {
+      "type": "standard"
+    },
+    "planMatrix": [
+      {
+        "ageBracket": "18-29",
+        "householdType": "Member Only",
+        "costs": [
+          {
+            "monthlyPremium": 267,
+            "initialUnsharedAmount": 500
+          },
+          {
+            "monthlyPremium": 252,
+            "initialUnsharedAmount": 1000
+          },
+          {
+            "monthlyPremium": 226,
+            "initialUnsharedAmount": 1500
+          },
+          {
+            "monthlyPremium": 201,
+            "initialUnsharedAmount": 2500
+          },
+          {
+            "monthlyPremium": 153,
+            "initialUnsharedAmount": 5000
+          }
+        ]
+      },
+      {
+        "ageBracket": "18-29",
+        "householdType": "Member & Spouse",
+        "costs": [
+          {
+            "monthlyPremium": 495,
+            "initialUnsharedAmount": 500
+          },
+          {
+            "monthlyPremium": 464,
+            "initialUnsharedAmount": 1000
+          },
+          {
+            "monthlyPremium": 413,
+            "initialUnsharedAmount": 1500
+          },
+          {
+            "monthlyPremium": 362,
+            "initialUnsharedAmount": 2500
+          },
+          {
+            "monthlyPremium": 266,
+            "initialUnsharedAmount": 5000
+          }
+        ]
+      },
+      {
+        "ageBracket": "18-29",
+        "householdType": "Member & Child(ren)",
+        "costs": [
+          {
+            "monthlyPremium": 546,
+            "initialUnsharedAmount": 500
+          },
+          {
+            "monthlyPremium": 515,
+            "initialUnsharedAmount": 1000
+          },
+          {
+            "monthlyPremium": 464,
+            "initialUnsharedAmount": 1500
+          },
+          {
+            "monthlyPremium": 413,
+            "initialUnsharedAmount": 2500
+          },
+          {
+            "monthlyPremium": 317,
+            "initialUnsharedAmount": 5000
+          }
+        ]
+      },
+      {
+        "ageBracket": "18-29",
+        "householdType": "Member & Family",
+        "costs": [
+          {
+            "monthlyPremium": 774,
+            "initialUnsharedAmount": 500
+          },
+          {
+            "monthlyPremium": 723,
+            "initialUnsharedAmount": 1000
+          },
+          {
+            "monthlyPremium": 647,
+            "initialUnsharedAmount": 1500
+          },
+          {
+            "monthlyPremium": 571,
+            "initialUnsharedAmount": 2500
+          },
+          {
+            "monthlyPremium": 424,
+            "initialUnsharedAmount": 5000
+          }
+        ]
+      },
+      {
+        "ageBracket": "30-39",
+        "householdType": "Member Only",
+        "costs": [
+          {
+            "monthlyPremium": 317,
+            "initialUnsharedAmount": 500
+          },
+          {
+            "monthlyPremium": 292,
+            "initialUnsharedAmount": 1000
+          },
+          {
+            "monthlyPremium": 266,
+            "initialUnsharedAmount": 1500
+          },
+          {
+            "monthlyPremium": 236,
+            "initialUnsharedAmount": 2500
+          },
+          {
+            "monthlyPremium": 179,
+            "initialUnsharedAmount": 5000
+          }
+        ]
+      },
+      {
+        "ageBracket": "30-39",
+        "householdType": "Member & Spouse",
+        "costs": [
+          {
+            "monthlyPremium": 592,
+            "initialUnsharedAmount": 500
+          },
+          {
+            "monthlyPremium": 541,
+            "initialUnsharedAmount": 1000
+          },
+          {
+            "monthlyPremium": 490,
+            "initialUnsharedAmount": 1500
+          },
+          {
+            "monthlyPremium": 439,
+            "initialUnsharedAmount": 2500
+          },
+          {
+            "monthlyPremium": 321,
+            "initialUnsharedAmount": 5000
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "mpb-health-care+",
     "providerName": "MPB Health",
     "planName": "Care+",

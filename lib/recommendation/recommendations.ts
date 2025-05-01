@@ -333,5 +333,118 @@ export async function getRecommendations(
   });
   console.log("=== END SEDERA PLAN DEBUG ===\n");
   
+  // Special log for tracking Sedera ACCESS+ throughout the recommendation process
+  console.log("\n=== TRACKING SEDERA ACCESS+ DETAILS ===");
+  // 1. Check if it's in the active plans
+  const sederaAccessPlanTracking = activePlans.find(plan => 
+    plan.id.toLowerCase() === 'sedera-access+');
+  
+  console.log("1. Found in active plans:", !!sederaAccessPlanTracking);
+  if (sederaAccessPlanTracking) {
+    console.log("Details:", {
+      id: sederaAccessPlanTracking.id,
+      planName: sederaAccessPlanTracking.planName,
+      hasPlanMatrix: sederaAccessPlanTracking.planMatrix.length > 0
+    });
+  }
+  
+  // 2. Check if it passed the preventative services filter
+  const sederaAccessFilteredTracking = filteredPlans.find(plan => 
+    plan.id.toLowerCase() === 'sedera-access+');
+  console.log("2. Passed preventative services filter:", !!sederaAccessFilteredTracking);
+  
+  // 3. Check its score
+  const sederaScoreTracking = scores.find(s => 
+    s.plan.id.toLowerCase() === 'sedera-access+');
+  console.log("3. Score information:", sederaScoreTracking ? {
+    totalScore: sederaScoreTracking.total_score,
+    factors: sederaScoreTracking.factors.map(f => ({ factor: f.factor, score: f.score }))
+  } : "No score found");
+  
+  // 4. Check its position in recommendations
+  const sederaRecommendationIndex = recommendations.findIndex(r => 
+    r.plan.id.toLowerCase() === 'sedera-access+');
+  console.log("4. Position in recommendations:", 
+    sederaRecommendationIndex >= 0 ? sederaRecommendationIndex + 1 : "Not in recommendations");
+  
+  // 5. If it's not in recommendations but has a score, explain why
+  if (sederaScoreTracking && sederaRecommendationIndex < 0) {
+    console.log("5. Reason for exclusion:", 
+      sederaScoreTracking.total_score <= 0 ? 
+        "Score is zero or negative" : 
+        "Unknown reason - possibly filtered in a later step");
+  }
+  
+  // 6. Log all scores for comparison
+  console.log("6. All plan scores for comparison:");
+  scores.sort((a, b) => b.total_score - a.total_score).forEach(s => {
+    console.log(`- ${s.plan.id}: ${s.total_score.toFixed(2)}`);
+  });
+  console.log("=== END TRACKING SEDERA ACCESS+ ===\n");
+  
+  // Add similar tracking for Sedera ACCESS+ +DPC/VPC plan
+  console.log("\n=== TRACKING SEDERA ACCESS+ +DPC/VPC DETAILS ===");
+  // 1. Check if it's in the active plans
+  const sederaDpcVpcPlanTracking = activePlans.find(plan => 
+    plan.id.toLowerCase() === 'sedera-access+-+dpc/vpc' || 
+    (plan.id.toLowerCase().includes('sedera') && 
+     plan.id.toLowerCase().includes('access+') && 
+     (plan.planName.toLowerCase().includes('dpc') || plan.planName.toLowerCase().includes('vpc')))
+  );
+  
+  console.log("1. Found in active plans:", !!sederaDpcVpcPlanTracking);
+  if (sederaDpcVpcPlanTracking) {
+    console.log("Details:", {
+      id: sederaDpcVpcPlanTracking.id,
+      planName: sederaDpcVpcPlanTracking.planName,
+      hasPlanMatrix: sederaDpcVpcPlanTracking.planMatrix.length > 0
+    });
+  } else {
+    console.log("WARNING: No Sedera ACCESS+ +DPC/VPC plan found in active plans. This is likely the root cause of the issue.");
+  }
+  
+  // 2. Check if it's in filtered plans (it should be there when preventative_services = 'no')
+  const sederaDpcVpcFilteredTracking = filteredPlans.find(plan => 
+    plan.id.toLowerCase() === 'sedera-access+-+dpc/vpc' || 
+    (plan.id.toLowerCase().includes('sedera') && 
+     plan.id.toLowerCase().includes('access+') && 
+     (plan.planName.toLowerCase().includes('dpc') || plan.planName.toLowerCase().includes('vpc')))
+  );
+  console.log("2. In filtered plans:", !!sederaDpcVpcFilteredTracking);
+  console.log("Preventative services preference:", questionnaire.preventative_services);
+  
+  // 3. Check its score
+  const sederaDpcVpcScoreTracking = scores.find(s => 
+    s.plan.id.toLowerCase() === 'sedera-access+-+dpc/vpc' || 
+    (s.plan.id.toLowerCase().includes('sedera') && 
+     s.plan.id.toLowerCase().includes('access+') && 
+     (s.plan.planName.toLowerCase().includes('dpc') || s.plan.planName.toLowerCase().includes('vpc')))
+  );
+  console.log("3. Score information:", sederaDpcVpcScoreTracking ? {
+    id: sederaDpcVpcScoreTracking.plan.id,
+    planName: sederaDpcVpcScoreTracking.plan.planName,
+    totalScore: sederaDpcVpcScoreTracking.total_score,
+    factors: sederaDpcVpcScoreTracking.factors.map(f => ({ factor: f.factor, score: f.score }))
+  } : "No score found");
+  
+  // 4. Check its position in recommendations
+  const sederaDpcVpcRecommendationIndex = recommendations.findIndex(r => 
+    r.plan.id.toLowerCase() === 'sedera-access+-+dpc/vpc' || 
+    (r.plan.id.toLowerCase().includes('sedera') && 
+     r.plan.id.toLowerCase().includes('access+') && 
+     (r.plan.planName.toLowerCase().includes('dpc') || r.plan.planName.toLowerCase().includes('vpc')))
+  );
+  console.log("4. Position in recommendations:", 
+    sederaDpcVpcRecommendationIndex >= 0 ? sederaDpcVpcRecommendationIndex + 1 : "Not in recommendations");
+  
+  // 5. If it's not in recommendations but has a score, explain why
+  if (sederaDpcVpcScoreTracking && sederaDpcVpcRecommendationIndex < 0) {
+    console.log("5. Reason for exclusion:", 
+      sederaDpcVpcScoreTracking.total_score <= 0 ? 
+        "Score is zero or negative" : 
+        "Unknown reason - possibly filtered in a later step");
+  }
+  console.log("=== END TRACKING SEDERA ACCESS+ +DPC/VPC ===\n");
+  
   return recommendations;
 } 

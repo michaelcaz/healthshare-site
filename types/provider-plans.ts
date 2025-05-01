@@ -283,6 +283,39 @@ export const healthshareProviders: Record<string, ProviderPlan> = {
             details: "Sharing is limited to the total number of shares made available by the collective participants"
           }
         }
+      },
+      {
+        id: 'sedera-access+-+dpc/vpc',
+        name: "ACCESS+ +DPC/VPC",
+        maxCoverage: "No limit",
+        annualUnsharedAmount: "Total of paid three IUAs in 12 months",
+        planMatrix: [],
+        maternity: {
+          coverage: {
+            services: ["Normal and emergency Cesarean"],
+            additionalDetails: "total Maternity IUA of 2x the member's selected IUA up to a maximum of $5,000\n\nNon-emergency/Elective Cesarean has a fixed Maternity IUA of $5,000"
+          },
+          waitingPeriod: {
+            months: 12,
+            details: "12 months"
+          }
+        },
+        preExistingConditions: {
+          waitingPeriod: 12,
+          tiers: [
+            { timeframe: "First 12 Months", maximum: "Not Shareable" },
+            { timeframe: "Months 13-24", maximum: 15000 },
+            { timeframe: "Months 25-36", maximum: 30000 },
+            { timeframe: "Months 37 and up", maximum: "Fully Shareable" }
+          ]
+        },
+        coverageLimits: {
+          annual: "No limit",
+          lifetime: {
+            limit: "No limit",
+            details: "Sharing is limited to the total number of shares made available by the collective participants"
+          }
+        }
       }
     ]
   },
