@@ -399,20 +399,7 @@ export const providerPlans: PricingPlan[] = [
             "initialUnsharedAmount": 5000
           }
         ]
-      }
-    ]
-  },
-  {
-    "id": "zion-healthshare-essential-membership-(basic,-no-additional-services)",
-    "providerName": "Zion Healthshare",
-    "planName": "Essential Membership \r\n (Basic, no additional services)",
-    "maxCoverage": "no limit",
-    "annualUnsharedAmount": "Total of paid three IUAs in 12 months",
-    "sourceUrl": "",
-    "ageRules": {
-      "type": "standard"
-    },
-    "planMatrix": [
+      },
       {
         "ageBracket": "30-49",
         "householdType": "Member Only",
@@ -560,9 +547,9 @@ export const providerPlans: PricingPlan[] = [
     ]
   },
   {
-    "id": "crowdhealth-essential-membership-(basic,-no-additional-services)",
+    "id": "crowdhealth-essential-membership",
     "providerName": "CrowdHealth",
-    "planName": "Essential Membership \r\n (Basic, no additional services)",
+    "planName": "Essential Membership",
     "maxCoverage": "No limit",
     "annualUnsharedAmount": "Total of paid three IUAs in 12 months",
     "sourceUrl": "",
@@ -626,7 +613,7 @@ export const providerPlans: PricingPlan[] = [
       },
       {
         "ageBracket": "18-55",
-        "householdType": "Member & Family (5+)",
+        "householdType": "Member & Family",
         "costs": [
           {
             "monthlyPremium": 695,
