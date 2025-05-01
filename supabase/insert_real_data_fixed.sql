@@ -227,40 +227,7 @@ VALUES (
     'sedera-select-plus',
     'sedera',
     'SELECT+',
-    'Premium medical cost sharing with extensive benefits',
-    247.00,
-    500.00,
-    true,
-    9,
-    true,
-    12,
-    true,
-    now(),
-    now()
-)
-ON CONFLICT (id) DO NOTHING;
-
--- Insert Sedera Access+ Plan
-INSERT INTO plans (
-    id,
-    provider_id,
-    name,
-    description,
-    monthly_cost,
-    incident_cost,
-    maternity_coverage,
-    maternity_waiting_period,
-    pre_existing_conditions,
-    pre_existing_waiting_period,
-    is_active,
-    created_at,
-    updated_at
-)
-VALUES (
-    'sedera-access-plus',
-    'sedera',
-    'ACCESS+',
-    'Accessible medical cost sharing with comprehensive coverage',
+    'Premium healthcare sharing with comprehensive coverage',
     247.00,
     500.00,
     true,

@@ -656,7 +656,7 @@ export const providerPlans: PricingPlan[] = [
   {
     "id": "sedera-access+",
     "providerName": "Sedera",
-    "planName": "ACCESS+ +DPC/VPC",
+    "planName": "ACCESS+",
     "maxCoverage": "no limit",
     "annualUnsharedAmount": "Total of paid three IUAs in 12 months",
     "sourceUrl": "",
