@@ -11,7 +11,7 @@ export default function PlanComparisonPage() {
   return (
     <div className="container mx-auto px-4 py-8 max-w-7xl">
       <div className="mb-6">
-        <BackButton href="/plans" label="Back to Recommendations" />
+        <BackButton href="/recommendations" label="Back to Recommendations" />
       </div>
       
       <h1 className="text-3xl font-bold text-gray-900 mb-4">Plan Comparison</h1>

@@ -10,7 +10,7 @@ export default function PlanComparisonNotFound() {
         The plan comparison page you're looking for doesn't exist or has been moved.
       </p>
       <Link
-        href="/plans"
+        href="/recommendations"
         className="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90"
       >
         Return to recommendations

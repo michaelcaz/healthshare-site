@@ -31,7 +31,7 @@ export default function PlanComparisonError({
           Try again
         </button>
         <Link
-          href="/plans"
+          href="/recommendations"
           className="px-4 py-2 bg-gray-100 text-gray-800 rounded-md hover:bg-gray-200"
         >
           Return to recommendations

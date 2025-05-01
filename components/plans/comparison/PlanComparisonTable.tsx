@@ -172,18 +172,42 @@ const hasAlternativeMedicineCoverage = (planDetails: PlanDetailsData): boolean =
 
 // Helper function to check if plan has preventative services
 const hasPreventativeServices = (planDetails: PlanDetailsData, planData?: any): boolean => {
-  // Check if this is Zion Essential plan
-  if (planData && planData.id && planData.id.toLowerCase().includes('zion') && 
-      planData.id.toLowerCase().includes('essential')) {
-    return false;
+  // Check specific plan IDs based on requirements
+  if (planData && planData.id) {
+    const planId = planData.id.toLowerCase();
+    
+    // Zion Essential - no
+    if (planId.includes('zion') && planId.includes('essential')) {
+      return false;
+    }
+    
+    // Zion Direct - yes
+    if (planId.includes('zion') && planId.includes('direct')) {
+      return true;
+    }
+    
+    // Sedera Access+ - yes
+    if (planId.includes('sedera') && planId.includes('access+') && !planId.includes('dpc') && !planId.includes('vpc')) {
+      return true;
+    }
+    
+    // Sedera Access+ +DPC/VPC - no
+    if (planId.includes('sedera') && planId.includes('access+') && (planId.includes('dpc') || planId.includes('vpc'))) {
+      return false;
+    }
+    
+    // Crowd Health - yes
+    if (planId.includes('crowd')) {
+      return true;
+    }
+    
+    // Knew Health - yes
+    if (planId.includes('knew')) {
+      return true;
+    }
   }
   
-  // Special case for Knew Health - they include preventative services
-  if (planData && planData.id && planData.id.toLowerCase().includes('knew')) {
-    return true;
-  }
-  
-  // Check included services for preventative care
+  // For any other plans, check included services for preventative care
   const includedServices = planDetails.coverageDetails?.includedServices || [];
   const preventativeService = includedServices.find(service => 
     service.title.toLowerCase().includes('prevent') || 
@@ -452,7 +476,7 @@ export function PlanComparisonTable() {
           Please go back to the recommendations page and select plans to compare.
         </p>
         <a 
-          href="/plans" 
+          href="/recommendations" 
           className="inline-flex items-center px-6 py-3 bg-primary text-white rounded-lg shadow-md hover:bg-primary-dark transition-colors"
         >
           View Recommendations

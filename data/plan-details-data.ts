@@ -323,105 +323,6 @@ export const planDetailsData: Record<string, PlanDetailsData> = {
   },
   
   // Sedera plans
-  'sedera-select+': {
-    overview: {
-      whatWeLove: [
-        "Sedera offers a **well-established healthcare sharing community** with strong member satisfaction",
-        "**Transparent sharing guidelines** make it easy to understand what's eligible",
-        "**Excellent member support** throughout the medical need process"
-      ],
-      keyFeatures: [
-        "**Flexible Initial Unshared Amount** options to fit your budget",
-        "**Unlimited sharing** for eligible medical needs",
-        "**Medical bill negotiation** services included"
-      ],
-      providerInfo: "Founded in 2014, Sedera is a healthcare sharing community that has helped thousands of members share millions in medical expenses."
-    },
-    coverageDetails: {
-      iuaExplanation: "**Per-need Initial Unshared Amount** with options ranging from $500 to $5,000.",
-      networkInfo: "Sedera HealthShare is not health insurance, and they have no network limitations. However, wherever possible, it is suggested that you find a provider with fair-market prices. Their Medical Advocacy team can also assist you in identifying a provider in your area and making prepayments, or you can use their online portal to find a provider in your area.",
-      includedServices: [
-        {
-          title: "Medical Cost Sharing",
-          description: "**Unlimited sharing** for eligible medical needs after IUA"
-        },
-        {
-          title: "Expert Medical Opinion",
-          description: "**Second opinion service** for complex medical conditions"
-        },
-        {
-          title: "Bill Negotiation",
-          description: "**Professional negotiators** work to reduce your medical bills"
-        }
-      ],
-      pregnancy: "Maternity expenses eligible for sharing after 10-month waiting period."
-    },
-    medicalServices: {
-      emergencyCare: "**Eligible for sharing** after Initial Unshared Amount. Includes emergency room visits and ambulance services.",
-      surgeryAndTreatment: "**Eligible for sharing** after Initial Unshared Amount. Includes surgeries, hospital stays, and follow-up care.",
-      prescriptionDrugs: "**Prescription discount program** included. Medications for eligible medical needs shareable for 120 days.",
-      pregnancy: "Maternity expenses eligible for sharing after 10-month waiting period."
-    },
-    providerDetails: {
-      yearEstablished: 2014,
-      memberCount: "**70,000+**",
-      memberSatisfaction: "4.8/5",
-      averageTenure: "3.2 years",
-      ratings: {
-        overall: 4.8,
-        reviewCount: 320,
-        bbbRating: "**A+**"
-      },
-      processingTime: "**10-14 business days**",
-      costTransparency: {
-        medicalCostSharing: 82,
-        administrativeCosts: 13,
-        operationalReserves: 5
-      },
-      savingsVsInsurance: {
-        averageMonthlySavings: "**35%** (per 2023 member survey)"
-      }
-    },
-    testimonials: [
-      {
-        text: "**Sedera helped me navigate a complex surgery** and negotiated my bills down by 45%. Their support was incredible.",
-        author: "James T.",
-        highlight: "Excellent support",
-        tenure: "Member for 3 years",
-        avatar: "J",
-        rating: 5
-      },
-      {
-        text: "**I've saved over $12,000** compared to my previous insurance plan. The process is simple and transparent.",
-        author: "Rebecca M.",
-        highlight: "Significant savings",
-        tenure: "Member for 2 years",
-        avatar: "R",
-        rating: 5
-      }
-    ],
-    keyPlanFeatures: [
-      {
-        text: "Pre-Existing Conditions: **36-month waiting period**",
-        isPositive: false,
-        icon: "AlertCircle",
-        tooltip: "Conditions treated in past 36 months have graduated sharing eligibility"
-      },
-      {
-        text: "Mental Health: **Limited sharing**",
-        isPositive: false,
-        icon: "AlertCircle",
-        tooltip: "Limited to $3,000 per need"
-      },
-      {
-        text: "Unlimited Sharing: **No annual or lifetime caps**",
-        isPositive: true,
-        icon: "Check",
-        tooltip: "No maximum limits on eligible medical needs"
-      }
-    ]
-  },
-  
   'sedera-access+': {
     overview: {
       whatWeLove: [
@@ -454,7 +355,7 @@ export const planDetailsData: Record<string, PlanDetailsData> = {
           description: "**24/7 access** to virtual doctor visits included at no extra cost with your membership"
         }
       ],
-      pregnancy: "You must be a member for 12 months before conceiving, for your pregnancy related needs to be eligible for sharing. Services available for sharing include pre-natal, delivery (including birthing centers and home-births), post-natal, and miscarriage. Regardless of your chosen IUA, there is a $5,000 IUA applied to normal vaginal deliveries and emergency C-Section deliveries. There is a $7,500 IUA applied to elective/planned C-Section deliveries.",
+      pregnancy: "You must be a member for 3 months before conceiving, for your pregnancy related needs to be eligible for sharing. Services available for sharing include pre-natal, delivery (including birthing centers and home-births), post-natal, and miscarriage. Regardless of your chosen IUA, there is a $5,000 IUA applied to normal vaginal deliveries and emergency C-Section deliveries. There is a $7,500 IUA applied to elective/planned C-Section deliveries.",
       preExistingConditions: "Starting from the membership start date, there is a one-year waiting period before pre-membership medical conditions are eligible for sharing. After the waiting period, the amount eligible for sharing increases with each membership year:<br/><br/>**Year One**: $0 (waiting period)<br/>**Year Two**: $15,000 maximum per sharing request<br/>**Year Three**: $30,000 maximum per sharing request<br/>**Year Four**: Fully Shareable"
     },
     medicalServices: {
@@ -549,10 +450,6 @@ export const planDetailsData: Record<string, PlanDetailsData> = {
       networkInfo: "Sedera HealthShare is not health insurance, and they have no network limitations. However, wherever possible, it is suggested that you find a provider with fair-market prices. Their Medical Advocacy team can also assist you in identifying a provider in your area and making prepayments, or you can use their online portal to find a provider in your area.",
       includedServices: [
         {
-          title: "Preventive Care",
-          description: "• **Annual Provider Visit**<br/>• **Colorectal Cancer Screening**<br/>• **Mammograms**<br/>• **Youth Immunizations**<br/>• **Adult Flu Shots**<br/><br/>Some of these are only available in certain circumstances. We highly recommend reading through the membership guidelines to ensure you know the details of each of these as well as what's in the rest of the plan"
-        },
-        {
           title: "Medical Advocacy",
           description: "The Sedera **Medical Advocacy team** is there to help you find high quality, fair-market providers in your area for anything from a primary care visit to a serious surgery. And if you ever get a huge bill, they are there to help negotiate the price down on your behalf."
         },
@@ -561,7 +458,7 @@ export const planDetailsData: Record<string, PlanDetailsData> = {
           description: "**24/7 access** to virtual doctor visits included at no extra cost with your membership"
         }
       ],
-      pregnancy: "You must be a member for 12 months before conceiving, for your pregnancy related needs to be eligible for sharing. Services available for sharing include pre-natal, delivery (including birthing centers and home-births), post-natal, and miscarriage. Regardless of your chosen IUA, there is a $5,000 IUA applied to normal vaginal deliveries and emergency C-Section deliveries. There is a $7,500 IUA applied to elective/planned C-Section deliveries.",
+      pregnancy: "You must be a member for 3 months before conceiving, for your pregnancy related needs to be eligible for sharing. Services available for sharing include pre-natal, delivery (including birthing centers and home-births), post-natal, and miscarriage. Regardless of your chosen IUA, there is a $5,000 IUA applied to normal vaginal deliveries and emergency C-Section deliveries. There is a $7,500 IUA applied to elective/planned C-Section deliveries.",
       preExistingConditions: "Starting from the membership start date, there is a one-year waiting period before pre-membership medical conditions are eligible for sharing. After the waiting period, the amount eligible for sharing increases with each membership year:<br/><br/>**Year One**: $0 (waiting period)<br/>**Year Two**: $15,000 maximum per sharing request<br/>**Year Three**: $30,000 maximum per sharing request<br/>**Year Four**: Fully Shareable"
     },
     medicalServices: {
