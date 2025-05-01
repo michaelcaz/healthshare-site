@@ -3,8 +3,7 @@ import { Info, Building, CreditCard, Heart, CheckCircle, Star, AlertCircle } fro
 import React from 'react'
 import { getPlanCost } from '@/lib/utils/plan-costs'
 import { calculateAnnualCost, getVisitFrequencyCost } from '@/utils/plan-utils'
-import { planDetailsData } from '@/data/plan-details-data'
-import { defaultPlanDetailsData } from '@/types/plan-details'
+import { getPlanDetailsData } from '@/lib/utils/plan-data'
 import { markdownToBold } from '@/lib/utils'
 import { type QuestionnaireResponse } from '@/types/questionnaire'
 import { cn } from '@/lib/utils'
@@ -27,15 +26,14 @@ export const Overview: React.FC<OverviewProps> = ({
   visitFrequency = 'just_checkups',
   questionnaire
 }) => {
-  // Get plan-specific details or fall back to default data
-  const planData = planDetailsData[plan.plan.id] || defaultPlanDetailsData;
+  // Get plan-specific details using the utility function
+  const planData = getPlanDetailsData(plan.plan);
   
   // Enhanced debug logs
   console.log('Overview Component - Plan ID:', plan.plan.id);
   console.log('Overview Component - Provider Name:', plan.plan.providerName);
   console.log('Overview Component - Plan Name:', plan.plan.planName);
-  console.log('Overview Component - Available Plan Detail Keys:', Object.keys(planDetailsData));
-  console.log('Overview Component - Plan Data Found:', !!planDetailsData[plan.plan.id]);
+  console.log('Overview Component - Plan Data Found:', !!planData);
   
   // Get costs using the getPlanCost function
   const costs = getPlanCost(

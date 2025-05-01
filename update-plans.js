@@ -218,6 +218,57 @@ function updateProviderPlans(filePath, outputPath) {
     // Validate plans
     validatePlans(plans);
     
+    // Debug output for Sedera ACCESS+ +DPC/VPC
+    console.log("\n=== SEDERA ACCESS+ +DPC/VPC DEBUG ===");
+    const sederaDpcVpcPlan = plans.find(p => p.id.toLowerCase() === 'sedera-access+-+dpc/vpc');
+    
+    if (sederaDpcVpcPlan) {
+      console.log(`Found plan: ${sederaDpcVpcPlan.id}`);
+      console.log(`Matrix entries: ${sederaDpcVpcPlan.planMatrix.length}`);
+      
+      // Log all matrix entries
+      console.log("Matrix entries:");
+      sederaDpcVpcPlan.planMatrix.forEach((matrix, index) => {
+        console.log(`  ${index + 1}. ${matrix.ageBracket}/${matrix.householdType} - ${matrix.costs.length} cost options`);
+      });
+      
+      // Check specifically for 30-39 age bracket
+      const age3039Entries = sederaDpcVpcPlan.planMatrix.filter(m => m.ageBracket === '30-39');
+      console.log(`Found ${age3039Entries.length} entries for 30-39 age bracket:`);
+      age3039Entries.forEach((matrix, index) => {
+        console.log(`  ${index + 1}. ${matrix.householdType} - ${matrix.costs.length} cost options`);
+      });
+      
+      // Check specifically for Member & Family household type
+      const familyEntries = sederaDpcVpcPlan.planMatrix.filter(m => m.householdType === 'Member & Family');
+      console.log(`Found ${familyEntries.length} entries for Member & Family household type:`);
+      familyEntries.forEach((matrix, index) => {
+        console.log(`  ${index + 1}. ${matrix.ageBracket} - ${matrix.costs.length} cost options`);
+      });
+      
+      // Look for 30-39/Member & Family specifically
+      const specificEntry = sederaDpcVpcPlan.planMatrix.find(
+        m => m.ageBracket === '30-39' && m.householdType === 'Member & Family'
+      );
+      console.log(`Found 30-39/Member & Family entry: ${specificEntry ? 'YES' : 'NO'}`);
+      
+      // Check raw data for 30-39/Member & Family for Sedera DPC/VPC
+      console.log("\nChecking raw data for Sedera ACCESS+ +DPC/VPC with 30-39/Member & Family:");
+      const rawData = data.filter(row => {
+        return (row['Provider Name'] === 'Sedera' && 
+                row['Plan Name'] && row['Plan Name'].includes('+DPC/VPC') &&
+                row['Age Bracket'] === '30-39' && 
+                row['Household Size'] === 'Member & Family');
+      });
+      console.log(`Found ${rawData.length} matching raw data rows`);
+      if (rawData.length > 0) {
+        console.log("Example raw data:", JSON.stringify(rawData[0], null, 2));
+      }
+    } else {
+      console.log("Sedera ACCESS+ +DPC/VPC plan not found!");
+    }
+    console.log("=== END SEDERA DEBUG ===\n");
+    
     // Default output path if not specified
     const finalOutputPath = outputPath || path.join(process.cwd(), 'data', 'provider-plans.ts');
     

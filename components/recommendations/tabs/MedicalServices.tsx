@@ -4,14 +4,19 @@ import React from 'react'
 import { planDetailsData } from '@/data/plan-details-data'
 import { defaultPlanDetailsData } from '@/types/plan-details'
 import { markdownToBold } from '@/lib/utils'
+import { getPlanDetailsData } from '@/lib/utils/plan-data'
 
 interface MedicalServicesProps {
   plan: PlanRecommendation
 }
 
 export const MedicalServices: React.FC<MedicalServicesProps> = ({ plan }) => {
-  // Get plan-specific details or fall back to default data
-  const planData = planDetailsData[plan.plan.id] || defaultPlanDetailsData;
+  // Get plan-specific details using the utility function
+  const planData = getPlanDetailsData(plan.plan);
+  
+  // Add debug logs
+  console.log('MedicalServices - Plan ID:', plan.plan.id);
+  console.log('MedicalServices - Plan Data Found:', !!planData);
 
   return (
     <div className="space-y-8">

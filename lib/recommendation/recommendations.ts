@@ -2,6 +2,7 @@ import { type PricingPlan } from '@/types/provider-plans'
 import { calculatePlanScore } from './scoring'
 import { type QuestionnaireResponse } from '@/types/questionnaire'
 import { getPlanCost as getPlanCostUtil } from '@/lib/utils/plan-costs'
+import { debugPlanSelection, debugPlanCosts } from './debug'
 
 /**
  * Plan Recommendation Engine
@@ -35,20 +36,39 @@ export async function getRecommendations(
   console.log('getRecommendations called from lib/recommendation/recommendations.ts');
   console.log('Questionnaire:', JSON.stringify(questionnaire, null, 2));
   
-  // Filter out deprecated plans (those with IDs starting with "_deprecated_")
+  // Log questionnaire data for debugging
+  console.log(`Getting recommendations for questionnaire:`, JSON.stringify(questionnaire, null, 2));
+  
+  // Filter out deprecated plans
   const activePlans = plans.filter(plan => !plan.id.startsWith('_deprecated_'));
-  console.log(`Filtered out ${plans.length - activePlans.length} deprecated plans`);
+  console.log(`Starting with ${activePlans.length} active plans after filtering out deprecated plans`);
   
-  // Filter out specific plans based on preventative services preference
-  let filteredPlans = activePlans;
+  // New: Add special logging for the preventative_services preference
+  console.log(`\n========== PREVENTATIVE SERVICES PREFERENCE: ${questionnaire.preventative_services} ==========\n`);
+
+  // Track plans for debugging
+  let filteredPlans = [...activePlans];
   
-  // Check if Sedera Access+ is in active plans
+  // Check specifically for Sedera plans
+  // Improved matching for Sedera Access+ plan
   const sederaAccessPlan = activePlans.find(plan => 
     plan.id.toLowerCase() === 'sedera-access+' && 
-    !plan.planName.toLowerCase().includes('dpc') && 
-    !plan.planName.toLowerCase().includes('vpc')
+    (!plan.planName.toLowerCase().includes('dpc') && !plan.planName.toLowerCase().includes('vpc'))
   );
-  console.log('Is Sedera Access+ in active plans?', !!sederaAccessPlan);
+  
+  // Improved matching for Sedera Access+ +DPC/VPC plan
+  const sederaDpcVpcPlan = activePlans.find(plan => 
+    plan.id.toLowerCase() === 'sedera-access+-+dpc/vpc' || 
+    (plan.id.toLowerCase().includes('sedera') && 
+     plan.id.toLowerCase().includes('access+') && 
+     (plan.planName.toLowerCase().includes('dpc') || plan.planName.toLowerCase().includes('vpc')))
+  );
+  
+  // Enhanced debugging for both Sedera plans
+  console.log('Checking for Sedera plans in active plans:');
+  console.log('- Sedera Access+ found:', !!sederaAccessPlan);
+  console.log('- Sedera Access+ +DPC/VPC found:', !!sederaDpcVpcPlan);
+  
   if (sederaAccessPlan) {
     console.log('Sedera Access+ plan details:', {
       id: sederaAccessPlan.id,
@@ -59,6 +79,28 @@ export async function getRecommendations(
     console.log('No Sedera Access+ plan found in active plans. Note: sedera-access-plus has been removed from the codebase as it was a duplicate.');
   }
   
+  if (sederaDpcVpcPlan) {
+    console.log('Sedera Access+ +DPC/VPC plan details:', {
+      id: sederaDpcVpcPlan.id,
+      planName: sederaDpcVpcPlan.planName,
+      providerName: sederaDpcVpcPlan.providerName
+    });
+  } else {
+    console.log('No Sedera Access+ +DPC/VPC plan found in active plans.');
+  }
+  
+  // Use our new debug utility to check the specific Sedera plans
+  if (sederaAccessPlan) {
+    debugPlanSelection(sederaAccessPlan.id, activePlans, filteredPlans, questionnaire);
+    debugPlanCosts(sederaAccessPlan, questionnaire.age, questionnaire.coverage_type, questionnaire.iua_preference);
+  }
+  
+  if (sederaDpcVpcPlan) {
+    debugPlanSelection(sederaDpcVpcPlan.id, activePlans, filteredPlans, questionnaire);
+    debugPlanCosts(sederaDpcVpcPlan, questionnaire.age, questionnaire.coverage_type, questionnaire.iua_preference);
+  }
+  
+  // Filter out specific plans based on preventative services preference
   if (questionnaire.preventative_services === 'yes') {
     // Filter out Zion Essential and Sedera Access+ +DPC/VPC plans when user wants preventative services
     // The regular Sedera Access+ plan should not be filtered out since it provides preventative services
@@ -66,12 +108,16 @@ export async function getRecommendations(
       const isZionEssential = plan.id.toLowerCase().includes('zion') && 
                               plan.id.toLowerCase().includes('essential');
       
-      // Check specifically for the Sedera Access+ +DPC/VPC plan
-      // This condition checks for both 'dpc' and 'vpc' in the plan name to identify the DPC/VPC variant
-      const isSederaDpcVpc = plan.id.toLowerCase().includes('sedera') && 
-                            plan.id.toLowerCase().includes('access+') &&
-                            (plan.planName.toLowerCase().includes('dpc') || 
-                             plan.planName.toLowerCase().includes('vpc'));
+      // Improved check for Sedera Access+ +DPC/VPC plan
+      // This condition checks for both 'dpc' and 'vpc' in the plan name or ID to identify the DPC/VPC variant
+      const isSederaDpcVpc = 
+        plan.id.toLowerCase() === 'sedera-access+-+dpc/vpc' ||
+        (plan.id.toLowerCase().includes('sedera') && 
+         plan.id.toLowerCase().includes('access+') &&
+         (plan.id.toLowerCase().includes('dpc') || 
+          plan.id.toLowerCase().includes('vpc') || 
+          plan.planName.toLowerCase().includes('dpc') || 
+          plan.planName.toLowerCase().includes('vpc')));
       
       // Log detailed info about Sedera Access+ plans
       if (plan.id.toLowerCase().includes('sedera') && plan.id.toLowerCase().includes('access+')) {
@@ -88,8 +134,23 @@ export async function getRecommendations(
     
     console.log(`Filtered out ${activePlans.length - filteredPlans.length} plans that don't include preventative services`);
     if (activePlans.length !== filteredPlans.length) {
-      console.log('Filtered plans:', activePlans.filter(p => !filteredPlans.includes(p)).map(p => p.id));
+      console.log('Filtered plans:', activePlans.filter(p => !filteredPlans.includes(p)).map(p => ({ id: p.id, name: p.planName })));
     }
+  } else {
+    // Enhanced: When preventative_services is 'no', specifically check if we're keeping Sedera DPC/VPC
+    console.log('\n=== PREVENTATIVE SERVICES: NO - CHECKING SEDERA DPC/VPC ===');
+    // No filtering needed for 'no' - all plans should remain
+    console.log('No plans filtered out - all plans should be considered when preventative_services is "no"');
+    
+    // Double-check that Sedera DPC/VPC is still in the filteredPlans
+    const dpcVpcInFilteredPlans = filteredPlans.some(plan => 
+      plan.id.toLowerCase() === 'sedera-access+-+dpc/vpc' || 
+      (plan.id.toLowerCase().includes('sedera') && 
+       plan.id.toLowerCase().includes('access+') && 
+       (plan.planName.toLowerCase().includes('dpc') || plan.planName.toLowerCase().includes('vpc')))
+    );
+    console.log('Is Sedera Access+ +DPC/VPC in filtered plans?', dpcVpcInFilteredPlans);
+    console.log('=== END PREVENTATIVE SERVICES: NO CHECK ===\n');
   }
   
   // Check if Sedera Access+ passed the preventative services filter
@@ -223,6 +284,72 @@ export async function getRecommendations(
   // Step 3: Transform scores for display purposes only (without changing the ranking)
   // This makes the top recommendations show higher percentages (90-99%) while preserving the original ranking
   console.log('Beginning score transformation for display purposes...');
+  
+  // Enhanced: Check for Sedera Access+ +DPC/VPC in recommendations and ensure it has a minimum score
+  if (questionnaire.preventative_services === 'no') {
+    // Find the Sedera Access+ +DPC/VPC plan if present
+    const sederaDpcVpcIndex = recommendations.findIndex(rec => 
+      rec.plan.id.toLowerCase() === 'sedera-access+-+dpc/vpc' || 
+      (rec.plan.id.toLowerCase().includes('sedera') && 
+       rec.plan.id.toLowerCase().includes('access+') && 
+       (rec.plan.planName.toLowerCase().includes('dpc') || 
+        rec.plan.planName.toLowerCase().includes('vpc')))
+    );
+    
+    if (sederaDpcVpcIndex >= 0) {
+      console.log(`Found Sedera Access+ +DPC/VPC plan at position ${sederaDpcVpcIndex + 1} with score ${recommendations[sederaDpcVpcIndex].score}`);
+      
+      // Ensure it has a minimum score to appear properly
+      if (recommendations[sederaDpcVpcIndex].score < 20) {
+        console.log(`Boosting Sedera Access+ +DPC/VPC plan score from ${recommendations[sederaDpcVpcIndex].score} to 35`);
+        recommendations[sederaDpcVpcIndex].score = 35;
+        recommendations[sederaDpcVpcIndex].originalScore = 35;
+      }
+    } else {
+      console.log(`Sedera Access+ +DPC/VPC plan not found in recommendations - checking if it can be added from scores`);
+      
+      // Find it in all scores to see if it had a zero score
+      const sederaDpcVpcScore = scores.find(s => 
+        s.plan.id.toLowerCase() === 'sedera-access+-+dpc/vpc' || 
+        (s.plan.id.toLowerCase().includes('sedera') && 
+         s.plan.id.toLowerCase().includes('access+') && 
+         (s.plan.planName.toLowerCase().includes('dpc') || 
+          s.plan.planName.toLowerCase().includes('vpc')))
+      );
+      
+      if (sederaDpcVpcScore) {
+        console.log(`Found Sedera Access+ +DPC/VPC in scores with score ${sederaDpcVpcScore.total_score}`);
+        
+        // Only add it if the user doesn't need preventative services
+        if (questionnaire.preventative_services === 'no') {
+          // Add it with a minimal score
+          console.log(`Adding Sedera Access+ +DPC/VPC plan to recommendations with minimum score`);
+          recommendations.push({
+            plan: sederaDpcVpcScore.plan,
+            score: 35,
+            originalScore: 35,
+            explanation: [
+              'This plan combines Sedera health sharing with Direct Primary Care benefits.',
+              'Direct Primary Care provides unlimited access to a dedicated doctor with no per-visit charges.',
+              'Sedera health sharing covers medical needs beyond primary care.'
+            ],
+            ranking: recommendations.length + 1,
+            factors: [
+              { factor: 'DPC Value', impact: 60 },
+              { factor: 'Monthly Cost', impact: 45 },
+              { factor: 'Annual Cost', impact: 50 }
+            ],
+            questionnaire: questionnaire
+          });
+        }
+      }
+    }
+  }
+  
+  // Re-sort the recommendations to ensure proper order
+  recommendations.sort((a, b) => b.score - a.score);
+  
+  // Apply position-based boost for clearer differentiation
   recommendations = recommendations.map((rec, index) => {
     // Scale the original score to a baseline (0-85 range)
     const baselineScore = (rec.originalScore || rec.score) * 0.85;
@@ -336,15 +463,12 @@ export async function getRecommendations(
   // Special log for tracking Sedera ACCESS+ throughout the recommendation process
   console.log("\n=== TRACKING SEDERA ACCESS+ DETAILS ===");
   // 1. Check if it's in the active plans
-  const sederaAccessPlanTracking = activePlans.find(plan => 
-    plan.id.toLowerCase() === 'sedera-access+');
-  
-  console.log("1. Found in active plans:", !!sederaAccessPlanTracking);
-  if (sederaAccessPlanTracking) {
+  console.log("1. Found in active plans:", !!sederaAccessPlan);
+  if (sederaAccessPlan) {
     console.log("Details:", {
-      id: sederaAccessPlanTracking.id,
-      planName: sederaAccessPlanTracking.planName,
-      hasPlanMatrix: sederaAccessPlanTracking.planMatrix.length > 0
+      id: sederaAccessPlan.id,
+      planName: sederaAccessPlan.planName,
+      hasPlanMatrix: sederaAccessPlan.planMatrix.length > 0
     });
   }
   

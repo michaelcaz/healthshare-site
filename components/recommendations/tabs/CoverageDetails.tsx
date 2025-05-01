@@ -6,6 +6,7 @@ import { planDetailsData } from '@/data/plan-details-data'
 import { defaultPlanDetailsData } from '@/types/plan-details'
 import { calculateAnnualCost, getVisitFrequencyCost } from '@/utils/plan-utils'
 import { markdownToBold } from '@/lib/utils'
+import { getPlanDetailsData } from '@/lib/utils/plan-data'
 
 interface CoverageDetailsProps {
   plan: PlanRecommendation
@@ -22,12 +23,20 @@ export const CoverageDetails: React.FC<CoverageDetailsProps> = ({
   iuaPreference = '2500',
   visitFrequency = 'just_checkups'
 }) => {
-  // Get plan-specific details or fall back to default data
-  const planData = planDetailsData[plan.plan.id] || defaultPlanDetailsData;
+  // Log the plan ID to help with debugging
+  console.log('CoverageDetails - Plan ID:', plan.plan.id);
+  console.log('CoverageDetails - Plan Name:', plan.plan.planName);
+  
+  // Get plan-specific details using the utility function
+  const planData = getPlanDetailsData(plan.plan);
+  
+  // Debug log to verify the plan data was retrieved
+  console.log('CoverageDetails - Plan data retrieved successfully');
+  console.log('CoverageDetails - Included services count:', planData.coverageDetails.includedServices?.length || 0);
   
   // Get costs using the getPlanCost function
   const costs = getPlanCost(
-    plan.plan.id,
+    plan.plan.id, // Use original ID for costs
     age,
     coverageType as any,
     iuaPreference
