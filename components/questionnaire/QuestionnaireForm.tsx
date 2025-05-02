@@ -736,14 +736,9 @@ export const QuestionnaireForm = () => {
         return; // Stop further processing
       }
       
+      // Set these flags but don't display the loader
       setIsSubmitting(true);
       setFormSubmitted(true);
-      
-      // Scroll to top of the page
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      });
       
       setFormError(null);
       
@@ -846,7 +841,7 @@ export const QuestionnaireForm = () => {
           timestamp: new Date().toISOString()
         }));
         
-        // Redirect to email capture page instead of recommendations
+        // Immediately redirect to email capture page without showing loader
         router.push('/questionnaire/email-capture');
       } else {
         console.error("Validation failed:", validationResult.error);
@@ -870,8 +865,9 @@ export const QuestionnaireForm = () => {
     }
   };
 
-  // Add a check for isSubmitting to show the loading state
-  if (isSubmitting && formSubmitted && currentStep === questionnaireSections.length - 1) {
+  // Comment out or remove the loading screen in QuestionnaireForm
+  // Instead, we'll rely completely on the loading screen in the email-capture page
+  /* if (isSubmitting && formSubmitted && currentStep === questionnaireSections.length - 1) {
     return (
       <div className="min-h-screen bg-gray-50 py-8">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -882,7 +878,7 @@ export const QuestionnaireForm = () => {
         </div>
       </div>
     );
-  }
+  } */
 
   if (isLoading) {
     return (

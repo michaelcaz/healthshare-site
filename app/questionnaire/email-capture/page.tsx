@@ -161,6 +161,12 @@ export default function EmailCapturePage() {
       setShowLoading(false);
     }, 3000);
     
+    // Ensure we scroll to the top for the loading experience
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+    
     return () => clearTimeout(timer);
   }, []);
   
