@@ -30,10 +30,10 @@ export function ComparisonModal({ isOpen, onClose, questionnaire }: ComparisonMo
             <Button 
               variant="outline" 
               size="sm" 
-              className="bg-white text-primary hover:bg-primary/5 hover:text-primary-dark border-primary/30 font-medium flex items-center gap-1 shadow-sm rounded-md px-4 py-2"
+              className="bg-primary text-white hover:bg-primary-dark border-primary/30 font-medium flex items-center gap-1.5 shadow-sm rounded-md px-4 py-2"
             >
-              <ChevronLeft className="h-4 w-4" />
-              Back to Recommendations
+              <ChevronLeft className="h-4 w-4 inline-block" />
+              <span>Back to Recommendations</span>
             </Button>
           </DialogClose>
         </div>

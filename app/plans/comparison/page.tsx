@@ -4,6 +4,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { PlanComparisonTable } from '@/components/plans/comparison/PlanComparisonTable';
 import { ChevronLeft } from 'lucide-react';
 import { useEffect } from 'react';
+import { Button } from '@/components/ui/button';
 
 // Note: In Next.js 13+, metadata can't be defined in client components.
 // It's a server-side feature, but we'll keep the page as a client component.
@@ -82,14 +83,16 @@ export default function PlanComparisonPage() {
   return (
     <div className="container mx-auto px-4 py-8 max-w-7xl">
       <div className="mb-6">
-        <button
+        <Button
           onClick={handleBackClick}
-          className="inline-flex items-center text-gray-600 hover:text-gray-900 transition-colors"
+          variant="outline"
+          size="sm"
+          className="bg-white text-primary hover:bg-primary/5 hover:text-primary-dark border-primary/30 font-medium flex items-center gap-1 shadow-sm rounded-md"
           data-testid="back-button"
         >
-          <ChevronLeft className="h-4 w-4 mr-1" />
-          <span>Back to Recommendations</span>
-        </button>
+          <ChevronLeft className="h-4 w-4" />
+          Back to Recommendations
+        </Button>
       </div>
       
       <h1 className="text-3xl font-bold text-gray-900 mb-4">Plan Comparison</h1>
