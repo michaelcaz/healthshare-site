@@ -351,23 +351,31 @@ export async function getRecommendations(
   
   // Apply position-based boost for clearer differentiation
   recommendations = recommendations.map((rec, index) => {
-    // Scale the original score to a baseline (0-85 range)
-    const baselineScore = (rec.originalScore || rec.score) * 0.85;
+    // Scale the original score to a baseline (0-92 range)
+    // Increase the baseline multiplier to start from a higher base value
+    const baselineScore = (rec.originalScore || rec.score) * 0.92; // Increased from 0.85 to 0.92
     
     // Apply position-based boost for clearer differentiation
-    // REDUCED BOOST VALUES to make recommendations more accurate
+    // Use a more gradual scaling for position boosts
     let positionBoost = 0;
-    if (index === 0) positionBoost = 10; // Reduced from 20 to 10
-    else if (index === 1) positionBoost = 5; // Reduced from 10 to 5
-    else if (index === 2) positionBoost = 3; // Reduced from 5 to 3
-    else positionBoost = 1; // Reduced from 2 to 1
+    if (index === 0) positionBoost = 15; // Top recommendation gets a significant boost
+    else if (index === 1) positionBoost = 10; // Second recommendation gets a strong boost
+    else if (index === 2) positionBoost = 7; // Third recommendation gets a medium boost
+    else positionBoost = Math.max(4, 12 - (index * 2)); // Gradually decreasing boost
     
     // Calculate display score with cap at 99%
     const displayScore = Math.min(baselineScore + positionBoost, 99);
     
-    // Ensure minimum score of 70% for any recommendation shown
-    // For the top recommendation, ensure a minimum of 85% (reduced from 90%)
-    const minimumScore = index === 0 ? 85 : 70;
+    // Create a sliding scale for minimum scores
+    // This ensures higher-ranked plans always have higher scores
+    // while maintaining the 80% minimum
+    let minimumScore;
+    if (index === 0) minimumScore = 90; // Top plan: minimum 90%
+    else if (index === 1) minimumScore = 86; // Second plan: minimum 86%
+    else if (index === 2) minimumScore = 83; // Third plan: minimum 83%
+    else if (index === 3) minimumScore = 82; // Fourth plan: minimum 82%
+    else minimumScore = 80; // All others: minimum 80%
+    
     const finalScore = Math.max(Math.round(displayScore), minimumScore);
     
     console.log(`Plan ${rec.plan.id} - Transformation: Original=${rec.originalScore?.toFixed(2)}, Baseline=${baselineScore.toFixed(2)}, Boost=${positionBoost}, Display=${displayScore.toFixed(2)}, Minimum=${minimumScore}, Final=${finalScore}`);
@@ -378,6 +386,8 @@ export async function getRecommendations(
       matchExplanation = 'This plan is an excellent match for your needs based on your questionnaire responses.';
     } else if (finalScore >= 90) {
       matchExplanation = 'This plan is a very good match for your needs based on your questionnaire responses.';
+    } else if (finalScore >= 85) {
+      matchExplanation = 'This plan is a strong match for your needs based on your questionnaire responses.';
     } else if (finalScore >= 80) {
       matchExplanation = 'This plan is a good match for your needs based on your questionnaire responses.';
     } else {
