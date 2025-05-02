@@ -946,35 +946,33 @@ export const QuestionnaireForm = () => {
             )}
             
             {/* Navigation buttons */}
-            <div className="flex justify-between items-center">
+            <div className="flex justify-end items-center">
               {currentStep > 0 && (
                 <button
                   type="button"
                   onClick={() => setCurrentStep(currentStep - 1)}
-                  className="flex items-center px-4 py-2 text-gray-600 hover:text-primary transition-colors"
+                  className="flex items-center px-4 py-2 text-gray-600 hover:text-primary transition-colors mr-auto"
                 >
                   <span className="mr-1">←</span> Back
                 </button>
               )}
               
-              <div className={`${currentStep > 0 ? 'ml-auto' : ''}`}>
-                {currentStep < questionnaireSections.length - 1 ? (
-                  <button
-                    type="submit"
-                    className="btn-primary px-8"
-                  >
-                    Continue
-                  </button>
-                ) : (
-                  <button
-                    type="submit"
-                    className="btn-primary px-8"
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? 'Submitting...' : 'Continue'}
-                  </button>
-                )}
-              </div>
+              {currentStep < questionnaireSections.length - 1 ? (
+                <button
+                  type="submit"
+                  className="btn-primary px-8"
+                >
+                  Continue
+                </button>
+              ) : (
+                <button
+                  type="submit"
+                  className="btn-primary px-8"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? 'Submitting...' : 'Continue'}
+                </button>
+              )}
             </div>
           </div>
         </form>
