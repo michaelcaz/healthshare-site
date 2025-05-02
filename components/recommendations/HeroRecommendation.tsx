@@ -119,17 +119,23 @@ export function HeroRecommendation({
     <div className="max-w-4xl mx-auto fade-in">
       <div className="bg-gradient-to-br from-white to-[#F9F7FF] rounded-2xl shadow-lg border border-gray-100/80 p-8 relative overflow-hidden plan-card">
         {/* Top Recommendation Banner - Completely Redesigned */}
-        <div className="flex flex-wrap items-center gap-3 mb-8">
-          <div className="bg-gradient-to-r from-[#6366F1]/90 to-[#5A51E5]/90 text-white rounded-full px-3 py-1.5 flex items-center gap-1.5">
-            <Sparkles className="h-4 w-4 text-white/90" />
-            <span className="text-sm font-semibold">Top Recommendation</span>
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-8">
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="bg-gradient-to-r from-[#6366F1]/90 to-[#5A51E5]/90 text-white rounded-full px-3 py-1.5 flex items-center gap-1.5">
+              <Sparkles className="h-4 w-4 text-white/90" />
+              <span className="text-sm font-semibold">Top Recommendation</span>
+            </div>
+            <div className="text-xs font-medium text-gray-700 bg-gray-100/80 rounded-full px-3 py-1.5 flex items-center">
+              <span>
+                {hasLowestMonthlyPayment 
+                  ? "Lowest Monthly Payment" 
+                  : "Lowest Out of Pocket in Case of Emergency"}
+              </span>
+            </div>
           </div>
-          <div className="text-xs font-medium text-gray-700 bg-gray-100/80 rounded-full px-3 py-1.5 flex items-center">
-            <span>
-              {hasLowestMonthlyPayment 
-                ? "Lowest Monthly Payment" 
-                : "Lowest Out of Pocket in Case of Emergency"}
-            </span>
+          <div className="text-xs font-medium text-green-700 bg-green-100/80 rounded-full px-3 py-1.5 flex items-center gap-1.5">
+            <Star className="h-3.5 w-3.5 text-green-600" fill="currentColor" />
+            <span>{badges.matchScore}% Match</span>
           </div>
         </div>
         
