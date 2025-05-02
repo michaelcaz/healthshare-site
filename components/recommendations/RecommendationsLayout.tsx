@@ -15,6 +15,7 @@ import { Separator } from '@/components/ui/separator'
 import { PregnancyAlert } from './PregnancyAlert'
 import { planDetailsData } from '@/data/plan-details-data'
 import { ComparisonBanner } from './ComparisonBanner'
+import { ComparisonModal } from '@/components/plans/comparison/ComparisonModal'
 
 export function RecommendationsLayout({ 
   recommendations, 
@@ -24,7 +25,7 @@ export function RecommendationsLayout({
   console.log('RecommendationsLayout - Visit Frequency:', questionnaire?.visit_frequency);
   console.log('RecommendationsLayout - Coverage Type:', questionnaire?.coverage_type);
   const [selectedPlanId, setSelectedPlanId] = useState<string | undefined>()
-  const { selectedPlans, removePlan } = useSelectedPlans()
+  const { selectedPlans, removePlan, isComparisonModalOpen, closeComparisonModal } = useSelectedPlans()
   const [isLoading, setIsLoading] = useState(false)
   const [detailsPlan, setDetailsPlan] = useState<PlanRecommendation | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -189,6 +190,13 @@ export function RecommendationsLayout({
           questionnaire={questionnaire}
         />
       )}
+      
+      {/* Comparison Modal */}
+      <ComparisonModal 
+        isOpen={isComparisonModalOpen}
+        onClose={closeComparisonModal}
+        questionnaire={questionnaire}
+      />
       
       {/* Comparison Banner */}
       <ComparisonBanner />

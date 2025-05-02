@@ -9,6 +9,9 @@ interface SelectedPlansContextType {
   togglePlanSelection: (plan: PlanRecommendation) => void
   removePlan: (planId: string) => void
   canAddMore: boolean
+  isComparisonModalOpen: boolean
+  openComparisonModal: () => void
+  closeComparisonModal: () => void
   navigateToComparison: () => void
 }
 
@@ -19,6 +22,7 @@ export function SelectedPlansProvider({ children, maxPlans = 3 }: {
   maxPlans?: number 
 }) {
   const [selectedPlans, setSelectedPlans] = useState<PlanRecommendation[]>([])
+  const [isComparisonModalOpen, setIsComparisonModalOpen] = useState(false)
   const router = useRouter()
 
   const togglePlanSelection = (plan: PlanRecommendation) => {
@@ -63,43 +67,51 @@ export function SelectedPlansProvider({ children, maxPlans = 3 }: {
     setSelectedPlans(current => current.filter(p => p.plan.id !== planId))
   }
 
+  const openComparisonModal = () => {
+    if (selectedPlans.length > 0) {
+      // Store selected plans in localStorage for the comparison component
+      localStorage.setItem('selected-plans', JSON.stringify(selectedPlans))
+      setIsComparisonModalOpen(true)
+    }
+  }
+
+  const closeComparisonModal = () => {
+    setIsComparisonModalOpen(false)
+  }
+
   const navigateToComparison = () => {
     if (selectedPlans.length > 0) {
       // Store selected plans in localStorage for the comparison page
       localStorage.setItem('selected-plans', JSON.stringify(selectedPlans))
       
-      // Get the questionnaire data from localStorage
+      // Check if we have the questionnaire data to build parameters
+      let url = '/plans/comparison';
       const questionnaire = localStorage.getItem('questionnaire-data');
-      let visitFrequency = 'just_checkups';
-      let coverageType = 'just_me';
-      let age = '34'; // Default age
-      let iua = '5000'; // Default IUA
       
       if (questionnaire) {
         try {
           const parsedQuestionnaire = JSON.parse(questionnaire);
+          const data = parsedQuestionnaire.response || parsedQuestionnaire;
           
-          // Extract questionnaire response data
-          const responseData = parsedQuestionnaire.response || parsedQuestionnaire;
+          // Build query parameters based on questionnaire data
+          const params = new URLSearchParams();
           
-          visitFrequency = responseData.visit_frequency || 'just_checkups';
-          coverageType = responseData.coverage_type || 'just_me';
-          age = responseData.age?.toString() || '34';
-          iua = responseData.iua_preference || '5000';
+          if (data.age) params.append('age', String(data.age));
+          if (data.coverage_type) params.append('coverageType', data.coverage_type);
+          if (data.visit_frequency) params.append('visitFrequency', data.visit_frequency);
+          if (data.iua_preference) params.append('iua', data.iua_preference);
           
-          console.log('Questionnaire data for comparison:', {
-            visitFrequency,
-            coverageType,
-            age,
-            iua
-          });
+          // Add the parameters to the URL
+          if (params.toString()) {
+            url = `${url}?${params.toString()}`;
+          }
         } catch (error) {
-          console.error('Error parsing questionnaire data:', error);
+          console.error('Error parsing questionnaire data for navigation:', error);
         }
       }
       
-      // Navigate to the comparison page with all necessary query parameters
-      router.push(`/plans/comparison?visitFrequency=${visitFrequency}&coverageType=${coverageType}&age=${age}&iua=${iua}`)
+      // Navigate to the comparison page
+      router.push(url);
     }
   }
 
@@ -109,6 +121,9 @@ export function SelectedPlansProvider({ children, maxPlans = 3 }: {
       togglePlanSelection,
       removePlan,
       canAddMore: selectedPlans.length < maxPlans,
+      isComparisonModalOpen,
+      openComparisonModal,
+      closeComparisonModal,
       navigateToComparison
     }}>
       {children}

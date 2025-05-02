@@ -314,7 +314,7 @@ const getProviderLogoPath = (providerName: string): string => {
   return `${baseUrl}/images/logo.svg`;
 };
 
-export function PlanComparisonTable() {
+export function PlanComparisonTable({ questionnaire }: { questionnaire?: any }) {
   const searchParams = useSearchParams()
   const [plans, setPlans] = useState<PlanData[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -335,21 +335,73 @@ export function PlanComparisonTable() {
       try {
         const parsedPlans = JSON.parse(storedPlans)
         
-        // Extract query parameters
-        const visitFrequency = searchParams.get('visitFrequency') || 'just_checkups'
-        const coverageType = searchParams.get('coverageType') || 'just_me'
-        const ageParam = searchParams.get('age') || '34'
-        const iuaPreference = searchParams.get('iua') || '5000'
+        // First try to use the passed questionnaire prop if available
+        let questionnaireData = questionnaire || null;
+        
+        // If no prop was passed, get questionnaire data from the first plan if available
+        if (!questionnaireData) {
+          for (const plan of parsedPlans) {
+            if (plan.questionnaire) {
+              questionnaireData = plan.questionnaire;
+              console.log('Found questionnaire data in plan:', questionnaireData);
+              break;
+            }
+          }
+        }
+        
+        // Extract query parameters as fallback
+        const visitFrequency = searchParams.get('visitFrequency') || 
+                              (questionnaireData?.visit_frequency) || 
+                              'just_checkups'
+        
+        const coverageType = searchParams.get('coverageType') || 
+                            (questionnaireData?.coverage_type) || 
+                            'just_me'
+        
+        const ageParam = searchParams.get('age') || 
+                        (questionnaireData?.age ? String(questionnaireData.age) : '34')
+        
+        const iuaPreference = searchParams.get('iua') || 
+                             (questionnaireData?.iua_preference) || 
+                             '5000'
+        
+        // If we still don't have questionnaire data, try to get it from localStorage
+        if (!questionnaireData) {
+          const storedQuestionnaire = localStorage.getItem('questionnaire-data');
+          if (storedQuestionnaire) {
+            try {
+              const parsed = JSON.parse(storedQuestionnaire);
+              questionnaireData = parsed.response || parsed;
+              console.log('Using questionnaire data from localStorage:', questionnaireData);
+            } catch (error) {
+              console.error('Error parsing questionnaire data from localStorage:', error);
+            }
+          }
+        }
+        
+        // If we have questionnaire data but no URL params, store it for the back button
+        if (questionnaireData && 
+            (!searchParams.get('visitFrequency') || 
+             !searchParams.get('coverageType') || 
+             !searchParams.get('age') || 
+             !searchParams.get('iua'))) {
+          
+          // Store the data in localStorage for the back button
+          localStorage.setItem('questionnaire-data', JSON.stringify({ 
+            response: questionnaireData 
+          }));
+        }
         
         // Parse age as a number for the getPlanCost function
         const age = parseInt(ageParam, 10)
         
-        // Log URL parameters for debugging
-        console.log('PlanComparisonTable - URL Parameters:', { 
+        // Log parameters for debugging
+        console.log('PlanComparisonTable - Parameters:', { 
           visitFrequency, 
           coverageType, 
           age: ageParam, 
-          iua: iuaPreference 
+          iua: iuaPreference,
+          questionnaireData: !!questionnaireData
         })
         
         // Transform the plans data to match our component's needs
@@ -374,15 +426,9 @@ export function PlanComparisonTable() {
             iuaPreference
           )
           
-          // Log the getPlanCost result
-          console.log(`getPlanCost result for ${planId}:`, planCosts)
-          
           // If we have valid plan costs, calculate the annual cost
           let annualCost = 0
           if (planCosts) {
-            // Check if this is a DPC plan
-            const isDpcPlan = planId.includes('dpc') || planId.includes('vpc')
-            
             // Calculate annual cost using the getDisplayAnnualCost utility
             annualCost = getDisplayAnnualCost(
               planId,
@@ -391,16 +437,6 @@ export function PlanComparisonTable() {
               visitFrequency,
               coverageType
             )
-            
-            console.log(`Annual cost calculation for ${planId}:`, {
-              monthlyPremium: planCosts.monthlyPremium,
-              initialUnsharedAmount: planCosts.initialUnsharedAmount,
-              annualPremium: planCosts.monthlyPremium * 12,
-              visitFrequency,
-              coverageType,
-              isDpcPlan,
-              annualCost
-            })
           } else {
             console.error(`Failed to get costs for plan ${planId}`)
           }
@@ -425,9 +461,6 @@ export function PlanComparisonTable() {
         })
         
         setPlans(formattedPlans)
-        
-        // Log the formatted plans for debugging
-        console.log('Formatted plans for comparison:', formattedPlans)
       } catch (error) {
         console.error('Error parsing selected plans:', error)
       }
@@ -469,18 +502,30 @@ export function PlanComparisonTable() {
   }
 
   if (plans.length === 0) {
+    // Check if we have questionnaire data in localStorage to enable a better redirect
+    const hasQuestionnaireData = !!localStorage.getItem('questionnaire-data');
+    
     return (
       <div className="text-center py-16 max-w-2xl mx-auto">
         <h2 className="text-2xl font-semibold mb-4 text-gray-900">No plans selected for comparison</h2>
         <p className="text-gray-600 mb-8">
           Please go back to the recommendations page and select plans to compare.
         </p>
-        <a 
-          href="/recommendations" 
-          className="inline-flex items-center px-6 py-3 bg-primary text-white rounded-lg shadow-md hover:bg-primary-dark transition-colors"
-        >
-          View Recommendations
-        </a>
+        {hasQuestionnaireData ? (
+          <a 
+            href="/recommendations" 
+            className="inline-flex items-center px-6 py-3 bg-primary text-white rounded-lg shadow-md hover:bg-primary-dark transition-colors"
+          >
+            Return to Recommendations
+          </a>
+        ) : (
+          <a 
+            href="/questionnaire" 
+            className="inline-flex items-center px-6 py-3 bg-primary text-white rounded-lg shadow-md hover:bg-primary-dark transition-colors"
+          >
+            Start Questionnaire
+          </a>
+        )}
       </div>
     )
   }

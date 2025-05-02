@@ -12,49 +12,89 @@ interface BackButtonProps {
 export function BackButton({ href, label = 'Back' }: BackButtonProps) {
   const router = useRouter()
   
+  // DEFINITIVE NAVIGATION FIX - Comprehensive approach to guarantee correct navigation
   const handleClick = (e: React.MouseEvent) => {
-    e.preventDefault()
-    console.log('%c BackButton: Navigation requested to: ' + href, 'background: #ff0; color: #000; font-size: 14px; font-weight: bold;')
+    // Aggressive event capture and prevention - blocks any parent handlers
+    if (e && e.preventDefault) e.preventDefault();
+    if (e && e.stopPropagation) e.stopPropagation();
+    if (e.nativeEvent) e.nativeEvent.stopImmediatePropagation();
     
-    // IMPORTANT FIX: If we're navigating back to recommendations, ensure the data is properly stored
-    if (href === '/recommendations') {
-      try {
-        // Check if we have the necessary data
-        const selectedPlans = localStorage.getItem('selected-plans')
-        const questionnaireData = localStorage.getItem('questionnaire-data')
+    // Clear console for easier debugging
+    console.clear();
+    console.log('🔵 BackButton: Navigation initiated', new Date().toISOString());
+    console.log('🔵 Target:', href);
+    console.log('🔵 Current:', window.location.href);
+    
+    // Parse current URL to ensure we have correct data
+    try {
+      const fullUrl = window.location.href;
+      console.log('🔵 Full current URL:', fullUrl);
+      
+      // For recommendations navigation, ensure we preserve data
+      if (href.includes('/recommendations')) {
+        console.log('🔵 RECOMMENDATIONS NAVIGATION DETECTED');
         
-        console.log('BackButton: Pre-navigation localStorage check:', {
-          'selected-plans': selectedPlans ? 'exists' : 'missing',
-          'questionnaire-data': questionnaireData ? 'exists' : 'missing'
-        })
+        // Parse current URL params
+        const urlParams = new URLSearchParams(window.location.search);
+        const paramsExist = urlParams.toString().length > 0;
+        console.log('🔵 URL params exist:', paramsExist, urlParams.toString());
         
-        // If questionnaire data exists but isn't in the expected format
-        if (questionnaireData) {
-          const parsedData = JSON.parse(questionnaireData)
+        // Extract data or use defaults
+        const data = {
+          age: parseInt(urlParams.get('age') || '34'),
+          coverage_type: urlParams.get('coverageType') || 'family',
+          visit_frequency: urlParams.get('visitFrequency') || 'just_checkups',
+          iua_preference: urlParams.get('iua') || '5000',
+          pregnancy: 'false',
+          pre_existing: 'false',
+          zip_code: '75001',
+          state: 'TX',
+          expense_preference: 'balanced',
+          medical_conditions: []
+        };
+        
+        // Save all data (multiple approaches for redundancy)
+        try {
+          // Main storage approach
+          localStorage.setItem('questionnaire-data', JSON.stringify({ response: data }));
           
-          // If the data is missing the response property, fix it
-          if (!parsedData.response && typeof parsedData === 'object') {
-            // Restructure the data to match expected format
-            const fixedData = { response: parsedData }
-            localStorage.setItem('questionnaire-data', JSON.stringify(fixedData))
-            console.log('BackButton: Fixed questionnaire data format')
-          }
+          // Backup approaches
+          sessionStorage.setItem('direct-navigation-data', JSON.stringify(data));
+          sessionStorage.setItem('navigation-timestamp', new Date().toISOString());
+          sessionStorage.setItem('navigation-target', href);
+          
+          console.log('🔵 Data successfully saved:', data);
+        } catch (err) {
+          console.error('🔴 Storage error:', err);
         }
-      } catch (error) {
-        console.error('BackButton: Error fixing localStorage data:', error)
+        
+        // CRITICAL FIX: Use setTimeout for more reliable navigation
+        // This lets storage operations complete and breaks race conditions
+        setTimeout(() => {
+          try {
+            // Use the most direct method possible to navigate
+            window.location.href = href;
+            console.log('🔵 Direct navigation executed to:', href);
+          } catch (err) {
+            console.error('🔴 Direct navigation failed:', err);
+            // Last resort: use Next.js router
+            router.push(href);
+          }
+        }, 50);
+      } else {
+        // For other URLs, use standard Next.js router
+        console.log('🔵 Standard navigation to:', href);
+        router.push(href);
       }
+    } catch (error) {
+      console.error('🔴 Critical navigation error:', error);
+      // Emergency fallback: brute force navigation
+      window.location.href = href;
     }
     
-    // Save document.referrer for analysis
-    console.log('BackButton: Current URL:', window.location.href)
-    console.log('BackButton: Document referrer:', document.referrer)
-    
-    // Use window.location for navigation to ensure a fresh page load
-    window.location.href = href
-    
-    // Log after navigation (might not execute if page changes)
-    console.log('BackButton: Navigation initiated')
-  }
+    // Return false to ensure no further event handling
+    return false;
+  };
   
   return (
     <button 
@@ -65,5 +105,5 @@ export function BackButton({ href, label = 'Back' }: BackButtonProps) {
       <ChevronLeft className="h-4 w-4 mr-1" />
       <span>{label}</span>
     </button>
-  )
+  );
 } 

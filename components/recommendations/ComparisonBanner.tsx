@@ -8,7 +8,7 @@ import { useState } from 'react'
 import { cn } from '@/lib/utils'
 
 export function ComparisonBanner() {
-  const { selectedPlans, removePlan, navigateToComparison, canAddMore } = useSelectedPlans()
+  const { selectedPlans, removePlan, openComparisonModal, canAddMore } = useSelectedPlans()
   const [isExpanded, setIsExpanded] = useState(false)
   
   // Only show the banner if there are selected plans
@@ -48,7 +48,7 @@ export function ComparisonBanner() {
             
             <div className="flex items-center gap-4">
               <Button 
-                onClick={navigateToComparison}
+                onClick={openComparisonModal}
                 className="bg-amber-500 hover:bg-amber-600 text-white px-6 flex items-center"
                 size="lg"
               >
