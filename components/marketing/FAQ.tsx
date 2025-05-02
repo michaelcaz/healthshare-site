@@ -18,7 +18,7 @@ export function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const handleFindMyPlan = () => {
-    router.push('/account-check?redirectTo=/questionnaire');
+    router.push('/questionnaire');
   };
 
   const faqs = [

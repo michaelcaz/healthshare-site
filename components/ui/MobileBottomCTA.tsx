@@ -10,7 +10,7 @@ export function MobileBottomCTA() {
   const [lastScrollY, setLastScrollY] = useState(0);
 
   const handleFindMyPlan = () => {
-    router.push('/account-check?redirectTo=/questionnaire');
+    router.push('/questionnaire');
   };
 
   useEffect(() => {

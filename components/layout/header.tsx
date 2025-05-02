@@ -84,7 +84,7 @@ export function Header() {
   }, [supabase.auth])
 
   const handleGetStarted = () => {
-    router.push('/account-check?redirectTo=/questionnaire')
+    router.push('/questionnaire')
   }
 
   const handleContinueAsGuest = () => {

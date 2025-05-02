@@ -15,6 +15,21 @@ export default function RecommendationsPage() {
   const [questionnaire, setQuestionnaire] = useState<QuestionnaireResponse | null>(null)
   const [recommendations, setRecommendations] = useState<any[] | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [hasCompletedEmailCapture, setHasCompletedEmailCapture] = useState<boolean>(false)
+
+  // Check if email capture is complete and redirect if not
+  useEffect(() => {
+    const emailCaptureComplete = localStorage.getItem('email-capture-complete');
+    setHasCompletedEmailCapture(!!emailCaptureComplete);
+    
+    // If they haven't completed email capture and we have questionnaire data, redirect them
+    if (!emailCaptureComplete) {
+      const questionnaireData = localStorage.getItem('questionnaire-data');
+      if (questionnaireData) {
+        router.push('/questionnaire/email-capture');
+      }
+    }
+  }, [router]);
 
   // Simple data loading with clean error handling
   useEffect(() => {
@@ -65,8 +80,11 @@ export default function RecommendationsPage() {
       }
     }
     
-    loadData()
-  }, [router, searchParams])
+    // Only load data if email capture is complete
+    if (hasCompletedEmailCapture) {
+      loadData()
+    }
+  }, [router, searchParams, hasCompletedEmailCapture])
 
   // Render loading state
   if (isLoading) {

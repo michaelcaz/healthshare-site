@@ -10,7 +10,7 @@ export function HeroCta({
   const router = useRouter()
   
   const handleGetStarted = () => {
-    router.push('/account-check?redirectTo=/questionnaire')
+    router.push('/questionnaire')
   }
   
   return (

@@ -414,6 +414,10 @@ export const QuestionnaireForm = () => {
   const { toast } = useToast();
   const [formData, setFormData] = useState<Partial<FormValues>>({});
   
+  // Add state for tracking potential bot detection
+  const [isPotentialBot, setIsPotentialBot] = useState(false);
+  const [honeypotValue, setHoneypotValue] = useState('');
+  
   // Define the steps for the questionnaire
   const questionnaireSections = [
     {
@@ -439,22 +443,20 @@ export const QuestionnaireForm = () => {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      age: '',  // Initialize with empty string instead of undefined
+      age: '',
       coverage_type: undefined,
-      zip_code: '',
       iua_preference: undefined,
       pregnancy: undefined,
       pre_existing: undefined,
-      state: '',
+      zip_code: '',
       expense_preference: undefined,
       pregnancy_planning: undefined,
       visit_frequency: undefined,
       financial_capacity: undefined,
       risk_preference: undefined,
       pre_existing_approach: undefined,
-      preventative_services: undefined,
-    },
-    mode: 'onSubmit', // Change to onSubmit to prevent premature validation
+      preventative_services: undefined
+    }
   });
   
   // Scroll to top when the component loads and load existing data
@@ -717,6 +719,23 @@ export const QuestionnaireForm = () => {
     console.log("onSubmit function called with data:", data);
     
     try {
+      // Check if the honeypot field has been filled - indicates a bot
+      if (honeypotValue.length > 0) {
+        console.log("Bot detected through honeypot field");
+        
+        // Pretend to submit the form but don't actually do anything with the data
+        setIsSubmitting(true);
+        setFormSubmitted(true);
+        
+        // Simulate processing time then redirect to avoid letting bots know they were detected
+        setTimeout(() => {
+          // We redirect to recommendations but the data isn't actually saved
+          router.push('/recommendations');
+        }, 3000);
+        
+        return; // Stop further processing
+      }
+      
       setIsSubmitting(true);
       setFormSubmitted(true);
       
@@ -827,11 +846,8 @@ export const QuestionnaireForm = () => {
           timestamp: new Date().toISOString()
         }));
         
-        // Show loading state for a few seconds before redirecting
-        setTimeout(() => {
-          // Redirect to recommendations page
-          router.push('/recommendations');
-        }, 3000);
+        // Redirect to email capture page instead of recommendations
+        router.push('/questionnaire/email-capture');
       } else {
         console.error("Validation failed:", validationResult.error);
         setFormError("Please check your answers and try again.");
@@ -900,40 +916,75 @@ export const QuestionnaireForm = () => {
             {getCurrentStepFields().map(fieldName => 
               renderFormField(fieldName as keyof FormValues, form)
             )}
-          </div>
-          
-          <div className="flex justify-between pt-6">
-            {currentStep > 0 && (
-              <button
-                type="button"
-                onClick={() => setCurrentStep(currentStep - 1)}
-                className="questionnaire-button questionnaire-button-secondary"
-              >
-                Back
-              </button>
+            
+            {/* Honeypot field - invisible to humans, but bots might fill it */}
+            <div 
+              aria-hidden="true" 
+              style={{ 
+                position: 'absolute', 
+                left: '-9999px', 
+                height: '1px', 
+                width: '1px', 
+                overflow: 'hidden' 
+              }}
+            >
+              <label htmlFor="website">Website (leave this empty)</label>
+              <input
+                type="text"
+                id="website"
+                name="website"
+                autoComplete="off"
+                tabIndex={-1} 
+                value={honeypotValue}
+                onChange={(e) => setHoneypotValue(e.target.value)}
+              />
+            </div>
+            
+            {/* Error message */}
+            {formError && (
+              <div className="text-red-500 text-center mt-4">{formError}</div>
             )}
-            {currentStep < questionnaireSections.length - 1 ? (
-              <button
-                type="button"
-                onClick={handleNextClick}
-                className="questionnaire-button questionnaire-button-primary questionnaire-button-with-arrow"
-              >
-                Continue
-              </button>
-            ) : (
-              <button
-                type="submit"
-                className="questionnaire-button questionnaire-button-primary"
-              >
-                Get My Recommendations
-              </button>
-            )}
+            
+            {/* Navigation buttons */}
+            <div className="flex justify-between items-center">
+              {currentStep > 0 && (
+                <button
+                  type="button"
+                  onClick={() => setCurrentStep(currentStep - 1)}
+                  className="flex items-center px-4 py-2 text-gray-600 hover:text-primary transition-colors"
+                >
+                  <span className="mr-1">←</span> Back
+                </button>
+              )}
+              
+              <div className={`${currentStep > 0 ? 'ml-auto' : ''}`}>
+                {currentStep < questionnaireSections.length - 1 ? (
+                  <button
+                    type="submit"
+                    className="btn-primary px-8"
+                  >
+                    Continue
+                  </button>
+                ) : (
+                  <button
+                    type="submit"
+                    className="btn-primary px-8"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? 'Submitting...' : 'Continue'}
+                  </button>
+                )}
+              </div>
+            </div>
           </div>
         </form>
-      </div>
-      
-      <div className="mt-8 text-center text-sm text-gray-500">
-        <p>Your information is secure and will never be shared without your permission.</p>
+        
+        <div className="mt-8">
+          <TrustBadges />
+          <div className="text-xs text-center text-gray-500 mt-4">
+            Your privacy is important to us. See our <a href="/privacy" className="underline hover:text-gray-700">Privacy Policy</a>.
+          </div>
+        </div>
       </div>
     </div>
   );

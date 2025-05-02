@@ -67,7 +67,7 @@ export function ComparisonTable() {
   const [showLoginModal, setShowLoginModal] = useState(false);
 
   const handleFindMyPlan = () => {
-    router.push('/account-check?redirectTo=/questionnaire');
+    router.push('/questionnaire');
   };
 
   const handleContinueAsGuest = () => {

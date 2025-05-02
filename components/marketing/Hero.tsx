@@ -16,8 +16,8 @@ export function Hero() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (zipCode) {
-      // Redirect to account-check page with zip code as a parameter
-      router.push(`/account-check?redirectTo=${encodeURIComponent(`/questionnaire?zip=${zipCode}`)}`);
+      // Redirect directly to questionnaire page with zip code as a parameter
+      router.push(`/questionnaire?zip=${zipCode}`);
     }
   };
 
