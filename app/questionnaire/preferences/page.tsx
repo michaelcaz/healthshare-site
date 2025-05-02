@@ -58,7 +58,7 @@ export default function PreferencesPage() {
       // Scroll to top before navigation
       window.scrollTo(0, 0);
       
-      router.push('/questionnaire/review');
+      router.push('/questionnaire/email-capture');
     } catch (error) {
       console.error('Error submitting form:', error);
     }

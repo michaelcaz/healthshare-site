@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -9,6 +9,7 @@ import { TrustBadges } from '@/components/ui/TrustBadges';
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { toast } from '@/components/ui/use-toast';
+import { PlansLoader } from '@/app/components/questionnaire';
 
 // Define form schema for validation
 const formSchema = z.object({
@@ -155,6 +156,32 @@ function EmailForm() {
 }
 
 export default function EmailCapturePage() {
+  const [showLoading, setShowLoading] = useState(true);
+  
+  useEffect(() => {
+    // Force the loading screen to show for exactly 3 seconds
+    const timer = setTimeout(() => {
+      setShowLoading(false);
+    }, 3000);
+    
+    return () => clearTimeout(timer);
+  }, []);
+  
+  // If we're still in the loading state, show the loader
+  if (showLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 py-8">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <PlansLoader 
+            totalPlans={22}
+            durationMs={3000}
+          />
+        </div>
+      </div>
+    );
+  }
+  
+  // Otherwise show the email capture form
   return (
     <div className="questionnaire-container">
       <div className="questionnaire-card">
