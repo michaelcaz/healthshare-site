@@ -3,7 +3,6 @@
 import { useAffiliateTracking } from '@/hooks/useAffiliateTracking';
 import { Button } from '@/components/ui/button';
 import { trackPotentialConversion } from '@/lib/analytics/conversion-tracking';
-import { TrustBadges } from '@/components/ui/TrustBadges';
 
 interface PlanCTAProps {
   providerId: string;
@@ -43,9 +42,6 @@ export function PlanCTA({ providerId, affiliateUrl, userId, questionnaireId, pla
       >
         {isTracking ? 'Redirecting...' : 'Get This Plan'}
       </Button>
-      <div className="mt-4">
-        <TrustBadges types={['security', 'rating', 'compliance']} variant="subtle" />
-      </div>
     </div>
   );
 } 

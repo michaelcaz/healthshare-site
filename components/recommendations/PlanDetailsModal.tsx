@@ -124,20 +124,15 @@ export function PlanDetailsModal({
             
             <div className="flex flex-col">
               <div className="flex items-center">
-                <span className="font-medium">BBB Rating:</span>
+                <span className="font-medium">Member Satisfaction:</span>
                 <span className="ml-2 font-bold text-green-600">
-                  {(() => {
-                    const rating = planData && planData.providerDetails 
-                      ? planData.providerDetails.ratings?.bbbRating 
-                      : "A";
-                    return rating.replace(/\*\*/g, '');
-                  })()}
+                  {planData && planData.providerDetails && planData.providerDetails.memberSatisfaction 
+                    ? planData.providerDetails.memberSatisfaction 
+                    : "4.7/5"}
                 </span>
               </div>
               <span className="text-xs text-gray-500 mt-1">
-                {planData && planData.providerDetails && planData.providerDetails.memberSatisfaction 
-                  ? `${planData.providerDetails.memberSatisfaction} member satisfaction`
-                  : "Member satisfaction rating"}
+                Based on member reviews
               </span>
             </div>
           </div>

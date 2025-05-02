@@ -58,8 +58,7 @@ export const planDetailsData: Record<string, PlanDetailsData> = {
       averageTenure: "2.8 years",
       ratings: {
         overall: 4.7,
-        reviewCount: 952,
-        bbbRating: "**A+**"
+        reviewCount: 952
       },
       processingTime: "**typically 3-5 business days**",
       costTransparency: {
@@ -160,8 +159,7 @@ export const planDetailsData: Record<string, PlanDetailsData> = {
       averageTenure: "2.8 years",
       ratings: {
         overall: 4.7,
-        reviewCount: 952,
-        bbbRating: "**A+**"
+        reviewCount: 952
       },
       processingTime: "**typically 3-5 business days**",
       costTransparency: {
@@ -261,8 +259,7 @@ export const planDetailsData: Record<string, PlanDetailsData> = {
       averageTenure: "1.5 years",
       ratings: {
         overall: 4.8,
-        reviewCount: 450,
-        bbbRating: "**A-**"
+        reviewCount: 450
       },
       processingTime: "**5-10 business days**",
       costTransparency: {
@@ -370,8 +367,7 @@ export const planDetailsData: Record<string, PlanDetailsData> = {
       averageTenure: "3.0 years",
       ratings: {
         overall: 4.48,
-        reviewCount: 200,
-        bbbRating: "**A+**"
+        reviewCount: 200
       },
       processingTime: "**14-60 business days**",
       costTransparency: {
@@ -473,8 +469,7 @@ export const planDetailsData: Record<string, PlanDetailsData> = {
       averageTenure: "3.2 years",
       ratings: {
         overall: 4.48,
-        reviewCount: 200,
-        bbbRating: "**A+**"
+        reviewCount: 200
       },
       processingTime: "**14-60 business days**",
       costTransparency: {
@@ -578,8 +573,7 @@ export const planDetailsData: Record<string, PlanDetailsData> = {
       averageTenure: "3 years",
       ratings: {
         overall: 4.7,
-        reviewCount: 137,
-        bbbRating: "A"
+        reviewCount: 137
       },
       processingTime: "7-14 business days",
       savingsVsInsurance: {
@@ -680,8 +674,7 @@ export const planDetailsData: Record<string, PlanDetailsData> = {
       averageTenure: "4.5 years",
       ratings: {
         overall: 4.7,
-        reviewCount: 280,
-        bbbRating: "**A+**"
+        reviewCount: 280
       },
       processingTime: "**10-14 business days**",
       costTransparency: {
@@ -778,8 +771,7 @@ export const planDetailsData: Record<string, PlanDetailsData> = {
       averageTenure: "4.5 years",
       ratings: {
         overall: 4.6,
-        reviewCount: 280,
-        bbbRating: "**A+**"
+        reviewCount: 280
       },
       processingTime: "**10-14 business days**",
       costTransparency: {
@@ -876,8 +868,7 @@ export const planDetailsData: Record<string, PlanDetailsData> = {
       averageTenure: "4.5 years",
       ratings: {
         overall: 4.7,
-        reviewCount: 280,
-        bbbRating: "**A+**"
+        reviewCount: 280
       },
       processingTime: "**10-14 business days**",
       costTransparency: {
@@ -974,8 +965,7 @@ export const planDetailsData: Record<string, PlanDetailsData> = {
       averageTenure: "4.5 years",
       ratings: {
         overall: 4.8,
-        reviewCount: 280,
-        bbbRating: "**A+**"
+        reviewCount: 280
       },
       processingTime: "**10-14 business days**",
       costTransparency: {
@@ -1072,8 +1062,7 @@ export const planDetailsData: Record<string, PlanDetailsData> = {
       averageTenure: "4.5 years",
       ratings: {
         overall: 4.8,
-        reviewCount: 280,
-        bbbRating: "**A+**"
+        reviewCount: 280
       },
       processingTime: "**10-14 business days**",
       costTransparency: {

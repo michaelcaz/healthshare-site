@@ -196,7 +196,6 @@ export default function EmailCapturePage() {
         <EmailForm />
         
         <div className="mt-10">
-          <TrustBadges />
           <div className="text-xs text-center text-gray-500 mt-4">
             Your privacy is important to us. See our <a href="/privacy" className="underline hover:text-gray-700 transition-colors">Privacy Policy</a>.
           </div>

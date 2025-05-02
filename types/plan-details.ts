@@ -33,7 +33,7 @@ export interface PlanDetailsData {
     ratings: {
       overall: number;
       reviewCount: number;
-      bbbRating: string;
+      bbbRating?: string;
     };
     processingTime: string;
     costTransparency?: {
