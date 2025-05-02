@@ -5,7 +5,6 @@ import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
-import { ProgressIndicator } from '@/components/questionnaire/progress-indicator';
 import { TrustBadges } from '@/components/ui/TrustBadges';
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
@@ -158,17 +157,6 @@ function EmailForm() {
 export default function EmailCapturePage() {
   return (
     <div className="questionnaire-container">
-      <ProgressIndicator 
-        currentPage={4}
-        totalPages={4}
-        steps={[
-          { label: 'Basic Info' },
-          { label: 'Health Status' },
-          { label: 'Preferences' },
-          { label: 'Results' }
-        ]}
-      />
-      
       <div className="questionnaire-card">
         <h1 className="questionnaire-step-title">Get Your Personalized Results</h1>
         <p className="questionnaire-step-description">
