@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { Disclaimers } from '@/components/layout/Disclaimers';
 
 export function Footer() {
   return (
@@ -48,9 +49,14 @@ export function Footer() {
             </ul>
           </div>
         </div>
-
-        <div className="mt-8 pt-8 border-t text-sm text-center text-gray-600">
-          © {new Date().getFullYear()} All rights reserved.
+        
+        {/* Disclaimers Section */}
+        <div className="mt-8 pt-8 border-t">
+          <Disclaimers variant="footer" className="mb-4" />
+          
+          <div className="text-sm text-center text-gray-600">
+            © {new Date().getFullYear()} All rights reserved.
+          </div>
         </div>
       </div>
     </footer>

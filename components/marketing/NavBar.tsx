@@ -206,12 +206,6 @@ export function NavBar() {
               About
             </Link>
             <Link 
-              href="/blog"
-              className="text-lg font-medium text-gray-warm/90 hover:text-gray-warm transition-colors"
-            >
-              Blog
-            </Link>
-            <Link 
               href="/what-is-healthshare"
               className="text-lg font-medium text-gray-warm/90 hover:text-gray-warm transition-colors"
             >

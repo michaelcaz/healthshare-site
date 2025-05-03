@@ -21,7 +21,6 @@ export function Header() {
         
         <nav className="hidden sm:flex space-x-8">
           <a href="/about" className="hover:text-gray-600">About</a>
-          <a href="/blog" className="hover:text-gray-600">Blog</a>
           <a href="/#what-is-healthshare" className="hover:text-gray-600">What's a Healthshare?</a>
           <a href="/contact" className="hover:text-gray-600">Contact</a>
           <a href="/questionnaire" className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">

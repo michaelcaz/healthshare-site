@@ -120,6 +120,7 @@ export function ComparisonTable() {
                         <img 
                           src="/images/logo.svg" 
                           alt="ShareWell" 
+                          loading="lazy"
                           className="comparison-logo-mobile w-auto h-6"
                         />
                       </div>
@@ -157,6 +158,7 @@ export function ComparisonTable() {
                   <img 
                     src="/images/logo.svg" 
                     alt="ShareWell" 
+                    loading="lazy"
                     className="comparison-logo w-auto h-10"
                   />
                 </div>

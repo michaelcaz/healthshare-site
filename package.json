@@ -16,7 +16,10 @@
     "test:watch": "vitest watch",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "cypress run",
-    "test:e2e:dev": "cypress open"
+    "test:e2e:dev": "cypress open",
+    "test:no-auth": "vitest run --exclude '**/*auth*/**' --exclude '**/*supabase*/**'",
+    "security-scan": "node scripts/security-scan.js",
+    "backup-monitor": "node scripts/backup-monitor.js"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.0",
@@ -42,6 +45,7 @@
     "@supabase/supabase-js": "^2.48.1",
     "@tanstack/react-table": "^8.20.6",
     "@types/js-cookie": "^3.0.6",
+    "chalk": "^4.1.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dotenv": "^16.4.7",
@@ -85,6 +89,7 @@
     "tailwindcss": "^3.3.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3",
-    "vitest": "^3.0.5"
+    "vitest": "^3.0.5",
+    "vitest-mock-extended": "^3.1.0"
   }
 }

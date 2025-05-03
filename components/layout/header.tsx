@@ -134,6 +134,7 @@ export function Header() {
               <img 
                 src="/images/logo.svg" 
                 alt="ShareWell" 
+                loading="lazy"
                 className="h-[13.125rem] w-auto"
               />
             </Link>
@@ -144,12 +145,6 @@ export function Header() {
                 className="text-base font-medium text-gray-warm/90 hover:text-gray-warm transition-colors"
               >
                 About
-              </Link>
-              <Link 
-                href="/blog"
-                className="text-base font-medium text-gray-warm/90 hover:text-gray-warm transition-colors"
-              >
-                Blog
               </Link>
               <Link 
                 href="/#understanding-healthcare-sharing"
@@ -242,13 +237,6 @@ export function Header() {
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   About
-                </Link>
-                <Link 
-                  href="/blog"
-                  className="text-base font-medium text-gray-warm/90 hover:text-gray-warm transition-colors py-2"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  Blog
                 </Link>
                 <Link 
                   href="/#understanding-healthcare-sharing"

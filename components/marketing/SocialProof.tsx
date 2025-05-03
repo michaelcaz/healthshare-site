@@ -23,6 +23,7 @@ const TestimonialCard = ({ image, name, role, quote, savings }: TestimonialCardP
         <img 
           src={image} 
           alt={name} 
+          loading="lazy"
           className="w-14 h-14 rounded-full object-cover border-2 border-white shadow-sm" 
         />
         <div className="absolute inset-0 rounded-full shadow-inner" />

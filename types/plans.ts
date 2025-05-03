@@ -67,13 +67,46 @@ export type HealthsharePlanCamelCase = HealthsharePlan & {
  * This interface contains only the essential information needed for plan comparison.
  */
 export interface Plan {
-  id: string;  // Unique identifier for the plan
-  maternity_coverage: boolean;  // Whether maternity is covered
-  maternity_waiting_period: number;  // Waiting period for maternity coverage (in months)
-  monthly_cost: number;  // Monthly payment to maintain coverage
-  incident_cost: number;  // Amount paid before sharing begins (per incident)
-  pre_existing_conditions: boolean;  // Whether pre-existing conditions are covered
-  pre_existing_waiting_period: number;  // Waiting period for pre-existing conditions (in months)
+  id: string;
+  name: string;
+  provider: string;
+  monthlyCost: number;
+  iua: number;
+  sharingPercentage: string;
+  annualMemberResponsibility: number | null;
+  applicationFee: number;
+  annualRenewalFee: number;
+  otherFees?: Array<{
+    name: string;
+    amount: number;
+  }>;
+  waitingPeriods?: {
+    accident: string;
+    illness: string;
+    maternity: string;
+    preventive: string;
+  };
+  networkType: 'PPO' | 'Open' | 'Limited';
+  networkDetails?: string;
+  prescriptionCoverage: 'Full' | 'Limited' | 'None';
+  prescriptionDetails?: string;
+  maternity: boolean;
+  maternityDetails?: string;
+  preventiveCare: boolean;
+  preventiveCareDetails?: string;
+  specialistCare: boolean;
+  specialistCareDetails?: string;
+  mentalHealth: boolean;
+  mentalHealthDetails?: string;
+  preExistingConditions: 'Eligible' | 'Limited' | 'Not Eligible';
+  preExistingConditionsDetails?: string;
+  eligibilityRestrictions?: string[];
+  matchScore?: number;
+  matchReasons?: string[];
+  logoUrl?: string;
+  websiteUrl?: string;
+  trustScore?: number;
+  reviewCount?: number;
 }
 
 export interface HealthshareCoverage {
