@@ -1,16 +1,17 @@
 import { useCallback, useMemo } from 'react';
-import { PricingPlan, AgeBracket, HouseholdType } from '@/types/provider-plans';
+import { PricingPlan, HouseholdType } from '@/types/provider-plans';
 import { findPlanCosts, calculateAnnualCost } from '@/utils/plan-utils';
+import { AgeBracket } from '@/types/plans';
 
 export function usePlanCosts(
   plan: PricingPlan,
-  ageBracket: AgeBracket,
+  ageBracket: string,
   householdType: HouseholdType,
   visitFrequency?: string,
   coverageType?: string
 ) {
   const costs = useMemo(() => 
-    findPlanCosts(plan, ageBracket, householdType),
+    findPlanCosts(plan, ageBracket as AgeBracket, householdType),
     [plan, ageBracket, householdType]
   );
 

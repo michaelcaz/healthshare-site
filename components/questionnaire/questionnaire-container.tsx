@@ -1,7 +1,6 @@
 'use client'
 
 import { ReactNode } from 'react'
-import { BackgroundPattern } from '@/components/ui/background-pattern'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -15,7 +14,7 @@ export function QuestionnaireContainer({
   showLogo = true
 }: QuestionnaireContainerProps) {
   return (
-    <BackgroundPattern pattern="dots" intensity="light" className="min-h-screen py-8">
+    <div className="min-h-screen py-8 bg-gray-50">
       <div className="questionnaire-container">
         {showLogo && (
           <div className="flex justify-center mb-8">
@@ -41,6 +40,6 @@ export function QuestionnaireContainer({
           </p>
         </div>
       </div>
-    </BackgroundPattern>
+    </div>
   )
 } 

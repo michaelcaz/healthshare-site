@@ -468,14 +468,6 @@ For details on debugging test failures and adding new tests, see `cypress/README
 - [ ] Verify tracking systems
 - [ ] Test backup systems
 - [ ] Create launch checklist
-- [ ] Set up SendGrid SMTP for Supabase email confirmation:
-  - [ ] Register with SendGrid using domain email
-  - [ ] Configure domain verification
-  - [ ] Create API key
-  - [ ] Set up Supabase to use SendGrid SMTP
-  - [ ] Re-enable email confirmation in Supabase
-  - [ ] Test email verification flow
-  - [ ] Test password reset flow
 
 #### 12. Launch
 - [ ] Deploy to production

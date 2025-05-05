@@ -1,7 +1,6 @@
 'use client'
 
 import { ReactNode } from 'react'
-import { BackgroundPattern } from '@/components/ui/background-pattern'
 import Image from 'next/image'
 import Link from 'next/link'
 import { EnhancedButton } from '@/components/ui/enhanced-button'
@@ -51,14 +50,14 @@ export function ResultsLayout({
       {/* Main Content */}
       <main>
         {/* Page Header */}
-        <BackgroundPattern pattern="dots" intensity="light" className="py-12 border-b border-gray-100">
+        <div className="py-12 border-b border-gray-100 bg-gray-50">
           <div className="results-header">
             <h1 className="results-title">{title}</h1>
             {subtitle && (
               <p className="results-subtitle">{subtitle}</p>
             )}
           </div>
-        </BackgroundPattern>
+        </div>
         
         {/* Content */}
         <div className="results-container">

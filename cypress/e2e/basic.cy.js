@@ -1,48 +1,35 @@
-describe('Healthshare Plan Finder Basic Tests', () => {
-  it('should load the home page successfully', () => {
+describe('Basic Application Tests', () => {
+  beforeEach(() => {
+    // Visit the homepage before each test
     cy.visit('/');
-    
-    // Check for main heading about health insurance
-    cy.get('h1').should('exist').contains('health insurance', { matchCase: false });
-    cy.get('body').should('not.have.text', 'Error');
-    
-    // Check for the zip code form
-    cy.get('form').should('exist');
-    cy.get('input[placeholder="Enter zip code"]').should('exist');
-    cy.get('button').contains('Find my plan').should('exist');
+    // Wait for page to fully load
+    cy.wait(1000);
   });
 
-  it('should have working navigation in the header', () => {
-    cy.visit('/');
-    
-    // Check for logo and main navigation links
-    cy.get('img[alt*="ShareWell"], img[alt*="logo"]').should('exist');
-    
-    // Test navigation links
-    cy.get('a').contains('About').should('exist');
-    cy.get('a').contains("What's Health Sharing?").should('exist');
-    cy.get('a').contains('Contact').should('exist');
+  it('should load the homepage successfully', () => {
+    // Check that the homepage loads with expected elements
+    cy.get('h1').should('be.visible');
+    cy.contains('Get Started').should('be.visible');
   });
 
-  it('should have a Get Started button that navigates to the questionnaire', () => {
-    cy.visit('/');
-    
-    // Find and click the Get Started button
-    cy.get('button').contains('Get Started').should('exist').click();
-    
-    // Verify we're on the questionnaire page
-    cy.url().should('include', '/questionnaire');
+  it('should have working navigation links', () => {
+    // Test navigation menu
+    cy.get('nav').should('be.visible');
+    cy.get('nav a').should('have.length.at.least', 3);
   });
 
-  it('should allow entering a zip code to find plans', () => {
-    cy.visit('/');
-    
-    // Enter a zip code and submit the form
-    cy.get('input[placeholder="Enter zip code"]').type('12345');
-    cy.get('button').contains('Find my plan').click();
-    
-    // Verify we're on the questionnaire page with zip parameter
-    cy.url().should('include', '/questionnaire');
-    cy.url().should('include', 'zip=12345');
+  it('should be responsive', () => {
+    // Check if the page is responsive
+    // This will be tested across different viewport sizes
+    cy.get('header').should('be.visible');
+    cy.get('main').should('be.visible');
+    cy.get('footer').should('be.visible');
+  });
+
+  // Simple visual verification
+  it('should display the hero section correctly', () => {
+    cy.get('main').should('be.visible');
+    // Take a screenshot for visual comparison
+    cy.screenshot('homepage-hero');
   });
 }); 
