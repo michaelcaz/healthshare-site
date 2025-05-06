@@ -465,7 +465,9 @@ export const QuestionnaireForm = () => {
     setIsSubmitting(false);
     setFormSubmitted(false);
     
-    window.scrollTo(0, 0);
+    if (typeof window !== 'undefined') {
+      window.scrollTo(0, 0);
+    }
     
     console.log("Attempting to load existing questionnaire data...");
     
@@ -619,7 +621,9 @@ export const QuestionnaireForm = () => {
         if (validationResult.success) {
           console.log("First step is valid, proceeding to next step");
           // Scroll to top before changing step
-          window.scrollTo(0, 0);
+          if (typeof window !== 'undefined') {
+            window.scrollTo(0, 0);
+          }
           setCurrentStep(1);
         } else {
           console.log("First step validation errors:", validationResult.error.format());
@@ -672,7 +676,9 @@ export const QuestionnaireForm = () => {
         
         if (currentStep < questionnaireSections.length - 1) {
           // Scroll to top before changing step
-          window.scrollTo(0, 0);
+          if (typeof window !== 'undefined') {
+            window.scrollTo(0, 0);
+          }
           // Move to the next step
           setCurrentStep(currentStep + 1);
         } else {

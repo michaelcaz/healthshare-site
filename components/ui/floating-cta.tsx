@@ -11,10 +11,15 @@ export function FloatingCTA({
   const [isVisible, setIsVisible] = useState(false)
   
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
     const handleScroll = () => {
       // Show after scrolling down 500px
       setIsVisible(window.scrollY > 500)
     }
+    
+    // Set initial state
+    handleScroll()
     
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)

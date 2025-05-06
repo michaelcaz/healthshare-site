@@ -54,12 +54,18 @@ export function NavBar() {
 
   useEffect(() => {
     console.log('🔍 NavBar scroll effect setup');
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
-    };
+    
+    if (typeof window !== 'undefined') {
+      const handleScroll = () => {
+        setIsScrolled(window.scrollY > 10);
+      };
+      
+      // Set initial state
+      handleScroll();
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+      window.addEventListener('scroll', handleScroll);
+      return () => window.removeEventListener('scroll', handleScroll);
+    }
   }, []);
 
   useEffect(() => {

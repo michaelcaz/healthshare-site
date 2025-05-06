@@ -14,6 +14,8 @@ export function MobileBottomCTA() {
   };
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       
@@ -27,6 +29,9 @@ export function MobileBottomCTA() {
       setLastScrollY(currentScrollY);
     };
 
+    // Set initial state
+    handleScroll();
+    
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollY]);

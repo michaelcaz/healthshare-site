@@ -14,10 +14,14 @@ export function BackButton({ href, label = 'Back' }: BackButtonProps) {
   
   // DEFINITIVE NAVIGATION FIX - Comprehensive approach to guarantee correct navigation
   const handleClick = (e: React.MouseEvent) => {
-    // Aggressive event capture and prevention - blocks any parent handlers
-    if (e && e.preventDefault) e.preventDefault();
-    if (e && e.stopPropagation) e.stopPropagation();
+    e.preventDefault();
     if (e.nativeEvent) e.nativeEvent.stopImmediatePropagation();
+    
+    // Check if window is defined (client-side only)
+    if (typeof window === 'undefined') {
+      router.push(href);
+      return false;
+    }
     
     // Clear console for easier debugging
     console.clear();

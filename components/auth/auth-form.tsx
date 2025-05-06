@@ -109,7 +109,11 @@ export function AuthForm({ type, termsAccepted = false }: AuthFormProps) {
           // Refresh the session first
           router.refresh()
           // Use window.location for a full page navigation without loading state
-          window.location.href = '/questionnaire'
+          if (typeof window !== 'undefined') {
+            window.location.href = '/questionnaire'
+          } else {
+            router.push('/questionnaire')
+          }
         }, 1500)
       } else {
         // For signup, we need to handle the flow differently
@@ -153,7 +157,11 @@ export function AuthForm({ type, termsAccepted = false }: AuthFormProps) {
         // Use window.location for a full page navigation without loading state
         setTimeout(() => {
           router.refresh()
-          window.location.href = redirectTo
+          if (typeof window !== 'undefined') {
+            window.location.href = redirectTo
+          } else {
+            router.push(redirectTo)
+          }
         }, 1500)
       }
     } catch (error) {
