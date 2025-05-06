@@ -1,0 +1,807 @@
+{
+  "timestamp": "2025-05-06T01:45:27.528Z",
+  "baseUrl": "http://localhost:3001",
+  "cspViolations": [
+    {
+      "message": "Refused to load the script 'https://www.googletagmanager.com/gtag/js?id=undefined' because it violates the following Content Security Policy directive: \"script-src 'self' 'unsafe-eval' 'unsafe-inline' https://*.sentry.io https://*.launchdarkly.com\". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback.\n",
+      "location": "http://localhost:3001/"
+    },
+    {
+      "message": "Refused to load the script 'https://www.googletagmanager.com/gtag/js?id=undefined' because it violates the following Content Security Policy directive: \"script-src 'self' 'unsafe-eval' 'unsafe-inline' https://*.sentry.io https://*.launchdarkly.com\". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback.\n",
+      "location": "http://localhost:3001/"
+    },
+    {
+      "message": "Refused to load the script 'https://www.googletagmanager.com/gtag/js?id=undefined' because it violates the following Content Security Policy directive: \"script-src 'self' 'unsafe-eval' 'unsafe-inline' https://*.sentry.io https://*.launchdarkly.com\". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback.\n",
+      "location": "http://localhost:3001/questionnaire"
+    },
+    {
+      "message": "Refused to load the script 'https://www.googletagmanager.com/gtag/js?id=undefined' because it violates the following Content Security Policy directive: \"script-src 'self' 'unsafe-eval' 'unsafe-inline' https://*.sentry.io https://*.launchdarkly.com\". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback.\n",
+      "location": "http://localhost:3001/questionnaire"
+    },
+    {
+      "message": "Refused to load the script 'https://www.googletagmanager.com/gtag/js?id=undefined' because it violates the following Content Security Policy directive: \"script-src 'self' 'unsafe-eval' 'unsafe-inline' https://*.sentry.io https://*.launchdarkly.com\". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback.\n",
+      "location": "http://localhost:3001/questionnaire/coverage"
+    },
+    {
+      "message": "Refused to load the script 'https://www.googletagmanager.com/gtag/js?id=undefined' because it violates the following Content Security Policy directive: \"script-src 'self' 'unsafe-eval' 'unsafe-inline' https://*.sentry.io https://*.launchdarkly.com\". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback.\n",
+      "location": "http://localhost:3001/questionnaire/coverage"
+    },
+    {
+      "message": "Refused to load the script 'https://www.googletagmanager.com/gtag/js?id=undefined' because it violates the following Content Security Policy directive: \"script-src 'self' 'unsafe-eval' 'unsafe-inline' https://*.sentry.io https://*.launchdarkly.com\". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback.\n",
+      "location": "http://localhost:3001/questionnaire/preferences"
+    },
+    {
+      "message": "Refused to load the script 'https://www.googletagmanager.com/gtag/js?id=undefined' because it violates the following Content Security Policy directive: \"script-src 'self' 'unsafe-eval' 'unsafe-inline' https://*.sentry.io https://*.launchdarkly.com\". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback.\n",
+      "location": "http://localhost:3001/questionnaire/preferences"
+    },
+    {
+      "message": "Refused to load the script 'https://www.googletagmanager.com/gtag/js?id=undefined' because it violates the following Content Security Policy directive: \"script-src 'self' 'unsafe-eval' 'unsafe-inline' https://*.sentry.io https://*.launchdarkly.com\". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback.\n",
+      "location": "http://localhost:3001/questionnaire/results"
+    },
+    {
+      "message": "Refused to load the script 'https://www.googletagmanager.com/gtag/js?id=undefined' because it violates the following Content Security Policy directive: \"script-src 'self' 'unsafe-eval' 'unsafe-inline' https://*.sentry.io https://*.launchdarkly.com\". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback.\n",
+      "location": "http://localhost:3001/questionnaire/results"
+    },
+    {
+      "message": "Refused to load the script 'https://www.googletagmanager.com/gtag/js?id=undefined' because it violates the following Content Security Policy directive: \"script-src 'self' 'unsafe-eval' 'unsafe-inline' https://*.sentry.io https://*.launchdarkly.com\". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback.\n",
+      "location": "http://localhost:3001/recommendations"
+    },
+    {
+      "message": "Refused to load the script 'https://www.googletagmanager.com/gtag/js?id=undefined' because it violates the following Content Security Policy directive: \"script-src 'self' 'unsafe-eval' 'unsafe-inline' https://*.sentry.io https://*.launchdarkly.com\". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback.\n",
+      "location": "http://localhost:3001/recommendations"
+    },
+    {
+      "message": "Refused to load the script 'https://www.googletagmanager.com/gtag/js?id=undefined' because it violates the following Content Security Policy directive: \"script-src 'self' 'unsafe-eval' 'unsafe-inline' https://*.sentry.io https://*.launchdarkly.com\". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback.\n",
+      "location": "http://localhost:3001/plans/comparison"
+    },
+    {
+      "message": "Refused to load the script 'https://www.googletagmanager.com/gtag/js?id=undefined' because it violates the following Content Security Policy directive: \"script-src 'self' 'unsafe-eval' 'unsafe-inline' https://*.sentry.io https://*.launchdarkly.com\". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback.\n",
+      "location": "http://localhost:3001/plans/comparison"
+    },
+    {
+      "message": "Refused to load the script 'https://www.googletagmanager.com/gtag/js?id=undefined' because it violates the following Content Security Policy directive: \"script-src 'self' 'unsafe-eval' 'unsafe-inline' https://*.sentry.io https://*.launchdarkly.com\". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback.\n",
+      "location": "http://localhost:3001/about"
+    },
+    {
+      "message": "Refused to load the script 'https://www.googletagmanager.com/gtag/js?id=undefined' because it violates the following Content Security Policy directive: \"script-src 'self' 'unsafe-eval' 'unsafe-inline' https://*.sentry.io https://*.launchdarkly.com\". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback.\n",
+      "location": "http://localhost:3001/about"
+    },
+    {
+      "message": "Refused to load the script 'https://www.googletagmanager.com/gtag/js?id=undefined' because it violates the following Content Security Policy directive: \"script-src 'self' 'unsafe-eval' 'unsafe-inline' https://*.sentry.io https://*.launchdarkly.com\". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback.\n",
+      "location": "http://localhost:3001/contact"
+    },
+    {
+      "message": "Refused to load the script 'https://www.googletagmanager.com/gtag/js?id=undefined' because it violates the following Content Security Policy directive: \"script-src 'self' 'unsafe-eval' 'unsafe-inline' https://*.sentry.io https://*.launchdarkly.com\". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback.\n",
+      "location": "http://localhost:3001/contact"
+    }
+  ],
+  "imageIssues": [
+    {
+      "route": "Home",
+      "brokenImages": [
+        {
+          "src": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=150&h=150",
+          "alt": "Sarah Johnson"
+        },
+        {
+          "src": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=150&h=150",
+          "alt": "Michael Chen"
+        },
+        {
+          "src": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150&h=150",
+          "alt": "Emily Rodriguez"
+        }
+      ]
+    }
+  ],
+  "fontIssues": [
+    {
+      "route": "Home",
+      "issues": [
+        {
+          "element": "P",
+          "text": "Interested? Hop on the phone with a team member no...",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "H1",
+          "text": "It's not health insurance. That's the point.",
+          "fontFamily": "Inter, -apple-system, sans-serif"
+        },
+        {
+          "element": "P",
+          "text": "Hot take: healthier people should pay less for a s...",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "P",
+          "text": "Just now",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "P",
+          "text": "Active Healthshare Members",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "P",
+          "text": "Pioneers wanted",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "P",
+          "text": "Avg. Monthly Savings",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "H2",
+          "text": "Our health share plans have been featured in...",
+          "fontFamily": "Inter, -apple-system, sans-serif"
+        },
+        {
+          "element": "H2",
+          "text": "See the Difference",
+          "fontFamily": "Inter, -apple-system, sans-serif"
+        },
+        {
+          "element": "P",
+          "text": "A side-by-side look at what makes us different.",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "H2",
+          "text": "Why Choose Healthshare?",
+          "fontFamily": "Inter, -apple-system, sans-serif"
+        },
+        {
+          "element": "H3",
+          "text": "Share Don't Insure",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "P",
+          "text": "Stop padding corporate pockets. Pay 30-50% less by...",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "H3",
+          "text": "Choose Anyone, Save Big",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "P",
+          "text": "See any provider you want and pay cash – instantly...",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "H3",
+          "text": "Yes, It's 100% Legal",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "P",
+          "text": "Health share plans have been around for decades an...",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "H2",
+          "text": "Understanding Healthcare Sharing",
+          "fontFamily": "Inter, -apple-system, sans-serif"
+        },
+        {
+          "element": "H3",
+          "text": "The Basics",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "H3",
+          "text": "Why This Works",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "H3",
+          "text": "How It Works",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "H2",
+          "text": "Ditch Insurance, Build Your Safety Net",
+          "fontFamily": "Inter, -apple-system, sans-serif"
+        },
+        {
+          "element": "P",
+          "text": "Watch how members slash costs on everyday care",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "P",
+          "text": "Pick a plan with $1,000 Initial Unshared Amount—or...",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "H3",
+          "text": "Emergency Room Visit",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "H3",
+          "text": "Accident",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "H3",
+          "text": "Planned Surgery",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "P",
+          "text": "Join a crew of savvy, healthy folks who've got you...",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "H2",
+          "text": "Real Members Real Savings",
+          "fontFamily": "Inter, -apple-system, sans-serif"
+        },
+        {
+          "element": "P",
+          "text": "Join thousands who made the switch and never looke...",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "H3",
+          "text": "Sarah Johnson",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "P",
+          "text": "Self-employed Designer",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "P",
+          "text": "\"Switching to healthshare was the best decision fo...",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "P",
+          "text": "Saved $4,800 annually",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "H3",
+          "text": "Michael Chen",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "P",
+          "text": "Small Business Owner",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "P",
+          "text": "\"The transparency and community aspect really sets...",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "P",
+          "text": "Saved $3,600 annually",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "H3",
+          "text": "Emily Rodriguez",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "P",
+          "text": "Freelance Developer",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "P",
+          "text": "\"I love how simple everything is. No more confusio...",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "P",
+          "text": "Saved $5,200 annually",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "H2",
+          "text": "Worried? We Get It—Here's Why Health Shares Beat t...",
+          "fontFamily": "Inter, -apple-system, sans-serif"
+        },
+        {
+          "element": "P",
+          "text": "We get it. Here's our honest take on the three big...",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "H3",
+          "text": "Will they really cover me if 💩 hits the fan?",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "P",
+          "text": "Traditional insurance offers a legal contract. In ...",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "P",
+          "text": "",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "P",
+          "text": "Reality tells a different story. Insurance compani...",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "P",
+          "text": "",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "P",
+          "text": "There are thousands of examples of people that hav...",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "P",
+          "text": "Would you rather have the 98%+ needs approval rati...",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "P",
+          "text": "Taylor Chamness",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "P",
+          "text": "Financial Advisor, Father of two",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "H3",
+          "text": "Is this just some sketchy, untested idea?",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "P",
+          "text": "No - it's a proven concept with decades of success...",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "P",
+          "text": "",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "P",
+          "text": "Your friends might raise eyebrows. 'Sounds like a ...",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "P",
+          "text": "",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "P",
+          "text": "Remember Airbnb? 'You're letting strangers sleep i...",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "P",
+          "text": "",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "P",
+          "text": "Health sharing communities have been operating suc...",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "P",
+          "text": "The rebels always seem crazy before they're consid...",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "P",
+          "text": "Josie Fickell",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "P",
+          "text": "Counselor, Mother",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "H3",
+          "text": "Do I have to handle my own medical bills?",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "P",
+          "text": "With insurance, you just hand over your card. With...",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "P",
+          "text": "",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "P",
+          "text": "It's an extra step. But here's the thing: This ste...",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "P",
+          "text": "The 2 minutes you spend uploading a receipt can sa...",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "P",
+          "text": "Karielle Silk",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "P",
+          "text": "Director, Playwright, Mother of three",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "H2",
+          "text": "Frequently Asked Questions",
+          "fontFamily": "Inter, -apple-system, sans-serif"
+        },
+        {
+          "element": "H3",
+          "text": "What exactly is a healthshare?",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "H3",
+          "text": "Is it really cheaper than insurance?",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "H3",
+          "text": "What's the catch?",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "H3",
+          "text": "How is an IUA different from a deductible?",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "H3",
+          "text": "What counts as a separate 'medical need'?",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "H3",
+          "text": "How do healthshares handle pre-existing conditions...",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "H3",
+          "text": "How is pregnancy handled?",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        }
+      ]
+    },
+    {
+      "route": "Questionnaire Start",
+      "issues": [
+        {
+          "element": "P",
+          "text": "Interested? Hop on the phone with a team member no...",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "H1",
+          "text": "Basic Information",
+          "fontFamily": "Inter, -apple-system, sans-serif"
+        },
+        {
+          "element": "P",
+          "text": "Let's start with some basic information to find th...",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        }
+      ]
+    },
+    {
+      "route": "Coverage Step",
+      "issues": [
+        {
+          "element": "P",
+          "text": "Interested? Hop on the phone with a team member no...",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        }
+      ]
+    },
+    {
+      "route": "Preferences Step",
+      "issues": [
+        {
+          "element": "P",
+          "text": "Interested? Hop on the phone with a team member no...",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "H2",
+          "text": "What type of healthcare do you prefer?",
+          "fontFamily": "Inter, -apple-system, sans-serif"
+        },
+        {
+          "element": "P",
+          "text": "Some health sharing ministries have different leve...",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "H2",
+          "text": "How important is price in your decision?",
+          "fontFamily": "Inter, -apple-system, sans-serif"
+        },
+        {
+          "element": "P",
+          "text": "This helps us prioritize plans that match your bud...",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "H2",
+          "text": "What's your preference regarding doctors?",
+          "fontFamily": "Inter, -apple-system, sans-serif"
+        },
+        {
+          "element": "P",
+          "text": "Some plans have specific networks while others all...",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        }
+      ]
+    },
+    {
+      "route": "Results Page",
+      "issues": [
+        {
+          "element": "P",
+          "text": "Interested? Hop on the phone with a team member no...",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "H2",
+          "text": "Finding Plans",
+          "fontFamily": "Inter, -apple-system, sans-serif"
+        },
+        {
+          "element": "P",
+          "text": "Did you know? Every plan is required to provide so...",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        }
+      ]
+    },
+    {
+      "route": "Recommendations",
+      "issues": [
+        {
+          "element": "P",
+          "text": "Interested? Hop on the phone with a team member no...",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "H2",
+          "text": "Loading your recommendations...",
+          "fontFamily": "Inter, -apple-system, sans-serif"
+        }
+      ]
+    },
+    {
+      "route": "Plan Comparison",
+      "issues": [
+        {
+          "element": "P",
+          "text": "Interested? Hop on the phone with a team member no...",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "H1",
+          "text": "Plan Comparison",
+          "fontFamily": "Inter, -apple-system, sans-serif"
+        },
+        {
+          "element": "P",
+          "text": "Compare your selected plans side by side to find t...",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "H2",
+          "text": "No plans selected for comparison",
+          "fontFamily": "Inter, -apple-system, sans-serif"
+        },
+        {
+          "element": "P",
+          "text": "Please go back to the recommendations page and sel...",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        }
+      ]
+    },
+    {
+      "route": "About Page",
+      "issues": [
+        {
+          "element": "P",
+          "text": "Interested? Hop on the phone with a team member no...",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "H1",
+          "text": "About ShareWell",
+          "fontFamily": "Inter, -apple-system, sans-serif"
+        },
+        {
+          "element": "H2",
+          "text": "Our Mission",
+          "fontFamily": "Inter, -apple-system, sans-serif"
+        },
+        {
+          "element": "P",
+          "text": "At ShareWell, our mission is to help individuals a...",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "P",
+          "text": "We've created a platform that simplifies the proce...",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "H2",
+          "text": "Why Choose Us",
+          "fontFamily": "Inter, -apple-system, sans-serif"
+        },
+        {
+          "element": "H2",
+          "text": "Our Story",
+          "fontFamily": "Inter, -apple-system, sans-serif"
+        },
+        {
+          "element": "P",
+          "text": "ShareWell was founded by healthcare industry profe...",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "P",
+          "text": "We've worked with numerous healthshare ministries ...",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        }
+      ]
+    },
+    {
+      "route": "Contact Page",
+      "issues": [
+        {
+          "element": "P",
+          "text": "Interested? Hop on the phone with a team member no...",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "H1",
+          "text": "Contact Us",
+          "fontFamily": "Inter, -apple-system, sans-serif"
+        },
+        {
+          "element": "P",
+          "text": "Have questions about healthshare plans or need sup...",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "H2",
+          "text": "Get in Touch",
+          "fontFamily": "Inter, -apple-system, sans-serif"
+        },
+        {
+          "element": "H2",
+          "text": "Contact Information",
+          "fontFamily": "Inter, -apple-system, sans-serif"
+        },
+        {
+          "element": "H3",
+          "text": "Email",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "P",
+          "text": "support@sharewell.com",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "H3",
+          "text": "Phone",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "P",
+          "text": "(555) 123-4567",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "P",
+          "text": "Monday-Friday, 9am-5pm EST",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "H3",
+          "text": "Office",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        },
+        {
+          "element": "P",
+          "text": "123 Health Avenue\nSuite 456\nNashville, TN 37203",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        }
+      ]
+    }
+  ],
+  "pageLoadTimes": [
+    {
+      "route": "Home",
+      "path": "/",
+      "loadTime": 2572
+    },
+    {
+      "route": "Questionnaire Start",
+      "path": "/questionnaire",
+      "loadTime": 611
+    },
+    {
+      "route": "Coverage Step",
+      "path": "/questionnaire/coverage",
+      "loadTime": 587
+    },
+    {
+      "route": "Preferences Step",
+      "path": "/questionnaire/preferences",
+      "loadTime": 590
+    },
+    {
+      "route": "Results Page",
+      "path": "/questionnaire/results",
+      "loadTime": 628
+    },
+    {
+      "route": "Recommendations",
+      "path": "/recommendations",
+      "loadTime": 595
+    },
+    {
+      "route": "Plan Comparison",
+      "path": "/plans/comparison",
+      "loadTime": 593
+    },
+    {
+      "route": "About Page",
+      "path": "/about",
+      "loadTime": 586
+    },
+    {
+      "route": "Contact Page",
+      "path": "/contact",
+      "loadTime": 607
+    }
+  ],
+  "screenshots": [
+    "/Users/Mike/healthshare-site/reports/csp-check-screenshots/about-page.png",
+    "/Users/Mike/healthshare-site/reports/csp-check-screenshots/contact-page.png",
+    "/Users/Mike/healthshare-site/reports/csp-check-screenshots/coverage-step.png",
+    "/Users/Mike/healthshare-site/reports/csp-check-screenshots/home.png",
+    "/Users/Mike/healthshare-site/reports/csp-check-screenshots/plan-comparison.png",
+    "/Users/Mike/healthshare-site/reports/csp-check-screenshots/preferences-step.png",
+    "/Users/Mike/healthshare-site/reports/csp-check-screenshots/questionnaire-start.png",
+    "/Users/Mike/healthshare-site/reports/csp-check-screenshots/recommendations.png",
+    "/Users/Mike/healthshare-site/reports/csp-check-screenshots/results-page.png"
+  ]
+}

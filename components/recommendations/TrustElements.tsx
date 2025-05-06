@@ -28,9 +28,8 @@ interface TrustElementsProps {
 export function TrustElements({ recommendation, planDetails = defaultPlanDetailsData }: TrustElementsProps) {
   const { plan, score, factors } = recommendation
   
-  // Get provider details and testimonials from planDetails or use defaults
+  // Get provider details from planDetails or use defaults
   const providerDetails = planDetails?.providerDetails || defaultPlanDetailsData.providerDetails!;
-  const planTestimonials = planDetails?.testimonials || defaultPlanDetailsData.testimonials!;
 
   return (
     <TooltipProvider>
@@ -132,51 +131,6 @@ export function TrustElements({ recommendation, planDetails = defaultPlanDetails
               </div>
             </div>
           </Card>
-        </div>
-
-        {/* Testimonials Section */}
-        <div>
-          <h3 className="text-xl font-semibold mb-8 text-gray-900">Member Testimonials</h3>
-          <div className="grid md:grid-cols-3 gap-8">
-            {planTestimonials.map((testimonial, i) => (
-              <div key={i} className="testimonial-card">
-                <div className="flex items-center gap-4 mb-5">
-                  <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center overflow-hidden">
-                    {testimonial.avatar ? (
-                      <div className="h-full w-full text-center flex items-center justify-center">
-                        {testimonial.avatar.startsWith('/') ? (
-                          <Image 
-                            src={testimonial.avatar} 
-                            alt={testimonial.author}
-                            width={48}
-                            height={48}
-                            className="h-full w-full object-cover"
-                          />
-                        ) : (
-                          <span className="text-blue-700 font-medium">{testimonial.avatar}</span>
-                        )}
-                      </div>
-                    ) : null}
-                  </div>
-                  <div>
-                    <p className="font-semibold text-gray-800">{testimonial.author}</p>
-                    <p className="text-sm text-primary">{testimonial.highlight}</p>
-                    <p className="text-xs text-gray-500">{testimonial.tenure}</p>
-                  </div>
-                </div>
-                <div className="mb-3">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <Star 
-                      key={star}
-                      className="inline-block h-4 w-4 text-yellow-400 mr-0.5"
-                      fill="currentColor"
-                    />
-                  ))}
-                </div>
-                <p className="text-gray-600 text-sm" dangerouslySetInnerHTML={{ __html: testimonial.text }} />
-              </div>
-            ))}
-          </div>
         </div>
       </div>
     </TooltipProvider>

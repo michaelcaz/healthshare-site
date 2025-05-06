@@ -3,8 +3,6 @@ import { FAQ } from '@/components/marketing/FAQ';
 import { WhyHealthshare } from '@/components/marketing/WhyHealthshare';
 import { ProgressiveLearning } from '@/components/marketing/ProgressiveLearning';
 import { SafetyNet } from '@/components/marketing/SafetyNet';
-import { SocialProof } from '@/components/marketing/SocialProof';
-import { RealTalk } from '@/components/marketing/RealTalk';
 import { ComparisonTable } from '@/components/marketing/ComparisonTable';
 
 export default function Home() {
@@ -15,8 +13,6 @@ export default function Home() {
       <WhyHealthshare />
       <ProgressiveLearning />
       <SafetyNet />
-      <SocialProof />
-      <RealTalk />
       <FAQ />
     </div>
   );
