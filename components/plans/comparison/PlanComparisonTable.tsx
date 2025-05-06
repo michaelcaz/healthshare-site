@@ -290,28 +290,23 @@ const StarRating = ({ rating }: { rating: number }) => {
 
 // Helper function to get the correct logo path for providers
 const getProviderLogoPath = (providerName: string): string => {
-  // Base URL 
-  const baseUrl = process.env.NODE_ENV === 'development' 
-    ? 'http://localhost:3000' 
-    : 'https://healthshare-site.vercel.app';
-  
   // Normalize the provider name (lowercase and remove spaces)
   const normalizedName = providerName.toLowerCase();
   
   // Check for each provider by substring to handle variations in naming
   if (normalizedName.includes('zion')) {
-    return `${baseUrl}/images/logos/zion.svg`;
+    return `/images/logos/zion.svg`;
   } else if (normalizedName.includes('sedera')) {
-    return `${baseUrl}/images/logos/sedera.svg`;
+    return `/images/logos/sedera.svg`;
   } else if (normalizedName.includes('knew')) {
-    return `${baseUrl}/images/logos/knew.svg`;
+    return `/images/logos/knew.svg`;
   } else if (normalizedName.includes('crowd')) {
-    return `${baseUrl}/images/logos/crowd-health.svg`;
+    return `/images/logos/crowd-health.svg`;
   }
   
   // Fallback to site logo
   console.warn(`No logo mapping found for provider: ${providerName}`);
-  return `${baseUrl}/images/logo.svg`;
+  return `/images/logo.svg`;
 };
 
 export function PlanComparisonTable({ questionnaire }: { questionnaire?: any }) {
