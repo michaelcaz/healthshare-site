@@ -34,7 +34,7 @@ export default function RootLayout({
       <head>
         <GoogleAnalytics />
       </head>
-      <body suppressHydrationWarning className={`${inter.variable} ${montserrat.variable} ${caveat.variable} font-sans`} style={{ background: 'var(--color-cream-bg)' }}>
+      <body suppressHydrationWarning className={`${inter.variable} ${montserrat.variable} ${caveat.variable} font-sans bg-warm`}>
         <TooltipProvider>
           <ScrollRestoration />
           <AnnouncementBar 
