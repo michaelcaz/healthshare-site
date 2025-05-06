@@ -169,6 +169,7 @@ export function Hero() {
                 width={96}
                 height={32}
                 className="h-6 md:h-8 w-auto opacity-60 grayscale"
+                style={{ width: 'auto' }}
               />
               <Image
                 src="/images/logos/pbs.svg"
@@ -176,6 +177,7 @@ export function Hero() {
                 width={96}
                 height={32}
                 className="h-6 md:h-8 w-auto opacity-60 grayscale"
+                style={{ width: 'auto' }}
               />
               <Image
                 src="/images/logos/forbes.svg"
@@ -183,6 +185,7 @@ export function Hero() {
                 width={96}
                 height={32}
                 className="h-6 md:h-8 w-auto opacity-60 grayscale"
+                style={{ width: 'auto' }}
               />
               <Image
                 src="/images/logos/vox.svg"
@@ -204,6 +207,7 @@ export function Hero() {
                 width={96}
                 height={32}
                 className="h-6 md:h-8 w-auto opacity-60 grayscale"
+                style={{ width: 'auto' }}
               />
             </div>
           </div>

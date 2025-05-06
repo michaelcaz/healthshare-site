@@ -25,6 +25,7 @@ export function QuestionnaireContainer({
                 width={180}
                 height={48}
                 className="h-12 w-auto"
+                style={{ width: 'auto' }}
               />
             </Link>
           </div>

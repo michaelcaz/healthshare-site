@@ -37,7 +37,7 @@ export function OnboardingLayout({ children, title, description }: OnboardingLay
               width={150} 
               height={40}
               className="h-10 w-auto"
-              style={{ height: 'auto' }}
+              style={{ height: 'auto', width: 'auto' }}
               onLoad={(e) => {
                 console.log('Onboarding Logo loaded, element:', e.currentTarget);
                 const headerElement = document.querySelector('.bg-white.border-b.border-gray-200');
