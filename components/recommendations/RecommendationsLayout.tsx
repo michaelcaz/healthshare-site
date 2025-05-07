@@ -153,7 +153,7 @@ export function RecommendationsLayout({
     setIsLoading(true)
     try {
       // Track analytics event
-      if (window.gtag) {
+      if (typeof window !== 'undefined' && window.gtag) {
         window.gtag('event', 'select_plan', {
           plan_id: planId,
           plan_provider: recommendations.find(r => r.plan.id === planId)?.plan.providerName
@@ -167,7 +167,9 @@ export function RecommendationsLayout({
       }
 
       // Redirect to enrollment
-      window.location.href = `/enroll/${planId}`
+      if (typeof window !== 'undefined') {
+        window.location.href = `/enroll/${planId}`
+      }
     } catch (error) {
       console.error('Error selecting plan:', error)
       toast.error('Unable to select plan. Please try again.')

@@ -33,12 +33,17 @@ export function Header() {
   )
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10)
-    }
+    if (typeof window !== 'undefined') {
+      const handleScroll = () => {
+        setIsScrolled(window.scrollY > 10)
+      }
 
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
+      // Set initial scroll state
+      handleScroll()
+
+      window.addEventListener('scroll', handleScroll)
+      return () => window.removeEventListener('scroll', handleScroll)
+    }
   }, [])
 
   useEffect(() => {

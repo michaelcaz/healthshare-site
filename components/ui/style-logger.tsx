@@ -17,6 +17,8 @@ export function StyleLogger({ enable = false }: { enable?: boolean }) {
     if (!enable) return;
     setIsClient(true);
     
+    if (typeof window === 'undefined' || typeof document === 'undefined') return;
+    
     const logEntries: LogEntry[] = [];
     
     // Function to add a log entry

@@ -24,7 +24,11 @@ export function HeroCta({
         Get Started
       </motion.button>
       <motion.button
-        onClick={() => window.open(calendlyLink, '_blank')}
+        onClick={() => {
+          if (typeof window !== 'undefined') {
+            window.open(calendlyLink, '_blank')
+          }
+        }}
         whileHover={{ scale: 1.02, y: -1 }}
         whileTap={{ scale: 0.98 }}
         className="btn-secondary flex items-center justify-center gap-2 py-3 px-6 w-full sm:w-auto"

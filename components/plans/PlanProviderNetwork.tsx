@@ -93,7 +93,11 @@ export default function PlanProviderNetwork({ plan }: PlanProviderNetworkProps) 
           <Button 
             variant="outline" 
             className="mt-4"
-            onClick={() => window.open(plan.websiteUrl, '_blank')}
+            onClick={() => {
+              if (typeof window !== 'undefined') {
+                window.open(plan.websiteUrl, '_blank')
+              }
+            }}
             disabled={!plan.websiteUrl}
           >
             Visit Healthshare Website

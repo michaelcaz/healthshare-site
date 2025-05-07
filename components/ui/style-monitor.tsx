@@ -17,6 +17,8 @@ export function StyleMonitor({ enable = false }: { enable?: boolean }) {
     if (!enable) return;
     setIsClient(true);
     
+    if (typeof window === 'undefined' || typeof document === 'undefined') return;
+    
     const foundIssues: StyleIssue[] = [];
     
     // Check for animation issues

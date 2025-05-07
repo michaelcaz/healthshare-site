@@ -620,7 +620,7 @@ export const QuestionnaireForm = () => {
         
         if (validationResult.success) {
           console.log("First step is valid, proceeding to next step");
-          // Scroll to top before changing step
+          // Scroll to top for new step
           if (typeof window !== 'undefined') {
             window.scrollTo(0, 0);
           }
@@ -675,7 +675,7 @@ export const QuestionnaireForm = () => {
         console.log("Current step is valid, proceeding...");
         
         if (currentStep < questionnaireSections.length - 1) {
-          // Scroll to top before changing step
+          // Scroll to top for new step
           if (typeof window !== 'undefined') {
             window.scrollTo(0, 0);
           }

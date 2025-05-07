@@ -97,7 +97,11 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
                 Try again
               </Button>
               <Button 
-                onClick={() => window.location.href = '/'}
+                onClick={() => {
+                  if (typeof window !== 'undefined') {
+                    window.location.href = '/'
+                  }
+                }}
                 variant="default"
                 className="bg-red-700 hover:bg-red-800 text-white"
               >
