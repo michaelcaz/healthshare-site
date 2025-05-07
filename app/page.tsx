@@ -4,6 +4,7 @@ import { WhyHealthshare } from '@/components/marketing/WhyHealthshare';
 import { ProgressiveLearning } from '@/components/marketing/ProgressiveLearning';
 import { SafetyNet } from '@/components/marketing/SafetyNet';
 import { ComparisonTable } from '@/components/marketing/ComparisonTable';
+import { RealTalk } from '@/components/marketing/RealTalk';
 
 export default function Home() {
   return (
@@ -12,6 +13,7 @@ export default function Home() {
       <ComparisonTable />
       <WhyHealthshare />
       <ProgressiveLearning />
+      <RealTalk />
       <SafetyNet />
       <FAQ />
     </div>
