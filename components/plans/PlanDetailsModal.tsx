@@ -9,22 +9,22 @@ import dynamic from 'next/dynamic';
 
 // Dynamically import heavy components with loading fallbacks
 const PlanCostBreakdown = dynamic(() => import('./PlanCostBreakdown'), {
-  loading: () => <Skeleton className="h-80 w-full rounded-md" />,
+  loading: () => <div className="h-[400px] w-full bg-gray-100 animate-pulse rounded-lg" />,
   ssr: false
 });
 
 const PlanCoverageDetails = dynamic(() => import('./PlanCoverageDetails'), {
-  loading: () => <Skeleton className="h-80 w-full rounded-md" />,
+  loading: () => <div className="h-[400px] w-full bg-gray-100 animate-pulse rounded-lg" />,
   ssr: false
 });
 
 const PlanProviderNetwork = dynamic(() => import('./PlanProviderNetwork'), {
-  loading: () => <Skeleton className="h-80 w-full rounded-md" />,
+  loading: () => <div className="h-[400px] w-full bg-gray-100 animate-pulse rounded-lg" />,
   ssr: false
 });
 
 const PlanPrescriptionCoverage = dynamic(() => import('./PlanPrescriptionCoverage'), {
-  loading: () => <Skeleton className="h-80 w-full rounded-md" />,
+  loading: () => <div className="h-[400px] w-full bg-gray-100 animate-pulse rounded-lg" />,
   ssr: false
 });
 
@@ -68,25 +68,25 @@ export function PlanDetailsModal({ isOpen, onClose, plan }: PlanDetailsModalProp
           </TabsList>
           
           <TabsContent value="costs" className="mt-6">
-            <Suspense fallback={<Skeleton className="h-80 w-full rounded-md" />}>
+            <Suspense fallback={<div className="h-[400px] w-full bg-gray-100 animate-pulse rounded-lg" />}>
               <PlanCostBreakdown plan={plan} />
             </Suspense>
           </TabsContent>
           
           <TabsContent value="coverage" className="mt-6">
-            <Suspense fallback={<Skeleton className="h-80 w-full rounded-md" />}>
+            <Suspense fallback={<div className="h-[400px] w-full bg-gray-100 animate-pulse rounded-lg" />}>
               <PlanCoverageDetails plan={plan} />
             </Suspense>
           </TabsContent>
           
           <TabsContent value="network" className="mt-6">
-            <Suspense fallback={<Skeleton className="h-80 w-full rounded-md" />}>
+            <Suspense fallback={<div className="h-[400px] w-full bg-gray-100 animate-pulse rounded-lg" />}>
               <PlanProviderNetwork plan={plan} />
             </Suspense>
           </TabsContent>
           
           <TabsContent value="prescriptions" className="mt-6">
-            <Suspense fallback={<Skeleton className="h-80 w-full rounded-md" />}>
+            <Suspense fallback={<div className="h-[400px] w-full bg-gray-100 animate-pulse rounded-lg" />}>
               <PlanPrescriptionCoverage plan={plan} />
             </Suspense>
           </TabsContent>

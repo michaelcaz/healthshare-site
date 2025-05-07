@@ -6,7 +6,10 @@ import dynamic from 'next/dynamic'
 // Dynamically import the form component with no SSR
 const QuestionnaireForm = dynamic(
   () => import('@/components/questionnaire/QuestionnaireForm').then(mod => mod.QuestionnaireForm),
-  { ssr: false }
+  { 
+    ssr: false,
+    loading: () => <div className="h-[600px] w-full bg-gray-100 animate-pulse rounded-lg" />
+  }
 )
 
 export default function QuestionnairePage() {
