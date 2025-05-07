@@ -76,16 +76,18 @@ export function StyleLogger({ enable = false }: { enable?: boolean }) {
       try {
         const layoutShiftObserver = new PerformanceObserver((list) => {
           for (const entry of list.getEntries()) {
-            if (entry.entryType === 'layout-shift' && !entry.hadRecentInput) {
+            if (entry.entryType === 'layout-shift') {
               const entryAny = entry as any;
-              addLog('WARNING', `Layout shift detected: ${entryAny.value.toFixed(4)}`, {
-                score: entryAny.value,
-                sources: entryAny.sources?.map((s: any) => ({
-                  node: s.node?.nodeName,
-                  previousRect: s.previousRect,
-                  currentRect: s.currentRect
-                }))
-              });
+              if (!entryAny.hadRecentInput) {
+                addLog('WARNING', `Layout shift detected: ${entryAny.value.toFixed(4)}`, {
+                  score: entryAny.value,
+                  sources: entryAny.sources?.map((s: any) => ({
+                    node: s.node?.nodeName,
+                    previousRect: s.previousRect,
+                    currentRect: s.currentRect
+                  }))
+                });
+              }
             }
           }
         });
