@@ -50,7 +50,7 @@ export function Hero() {
             transition={{ duration: 0.8 }}
             className="flex-1 text-center lg:text-left max-w-xl lg:max-w-none pt-4 md:pt-8"
           >
-            <h1 className="text-3xl md:text-5xl lg:text-6xl leading-tight font-bold mb-4 md:mb-6 text-gray-warm">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl leading-tight font-bold mb-4 md:mb-6 text-gray-warm">
               <span className="block">It's not health <span className="whitespace-nowrap">insurance.</span></span>
               <span className="block text-[#6366F1]">That's the point.</span>
             </h1>
@@ -116,7 +116,7 @@ export function Hero() {
                   trend={{ direction: 'up', value: '8%' }}
                   position="bottom-left"
                   delay={1.2}
-                  className="-left-4 bottom-8 shadow-xl bg-white/95 backdrop-blur-sm text-xs px-2 py-1"
+                  className="left-2 bottom-2 shadow-xl bg-white/95 backdrop-blur-sm text-xs px-2 py-1"
                 />
                 <StatCard
                   value="2M+"
@@ -124,7 +124,7 @@ export function Hero() {
                   trend={{ direction: 'up', value: '12%' }}
                   position="top-right"
                   delay={0.8}
-                  className="-right-4 top-2 shadow-xl bg-white/95 backdrop-blur-sm text-xs px-2 py-1 min-w-[110px] md:min-w-[160px]"
+                  className="right-2 top-2 shadow-xl bg-white/95 backdrop-blur-sm text-xs px-2 py-1 min-w-[110px]"
                 />
               </div>
               {/* Desktop: all four cards, original layout */}
