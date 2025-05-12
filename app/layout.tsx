@@ -1,9 +1,8 @@
 import './globals.css'
 import { Inter, Montserrat, Caveat } from 'next/font/google'
 import { Header } from '@/components/layout/header'
-import { AnnouncementBar } from '@/components/layout/announcement-bar'
-import { Toaster } from "@/components/ui/toaster"
-import { TooltipProvider } from "@/components/ui/tooltip"
+import { Toaster } from '@/components/ui/toaster'
+import { TooltipProvider } from '@/components/ui/tooltip'
 import { GoogleAnalytics } from '@/components/providers/GoogleAnalytics'
 import { ScrollRestoration } from '@/components/ui/scroll-restoration'
 import { FloatingCTA } from '@/components/ui/floating-cta'
@@ -11,6 +10,7 @@ import { ExitIntentPopup } from '@/components/ui/exit-intent-popup'
 import { MobileBottomCTA } from '@/components/ui/MobileBottomCTA'
 import { headers } from 'next/headers'
 import Script from 'next/script'
+import { AnnouncementBar } from '@/components/ui/announcement-bar'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 const montserrat = Montserrat({ 
@@ -21,6 +21,8 @@ const caveat = Caveat({
   subsets: ['latin'],
   variable: '--font-handwriting'
 })
+
+console.log('Rendering layout.tsx');
 
 export default function RootLayout({
   children,
@@ -37,12 +39,9 @@ export default function RootLayout({
       <body suppressHydrationWarning className={`${inter.variable} ${montserrat.variable} ${caveat.variable} font-sans bg-warm`}>
         <TooltipProvider>
           <ScrollRestoration />
-          <AnnouncementBar 
-            phoneNumber="(225) 718-8977" 
-            calendlyLink="https://calendly.com/michaelcaz/30min" 
-          />
+          <AnnouncementBar />
           <Header />
-          <main className="pt-[calc(76px+var(--announcement-bar-height,0px))]">
+          <main>
             {children}
           </main>
           <FloatingCTA 

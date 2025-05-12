@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { X, User, LogOut } from 'lucide-react'
+import { X, User, LogOut, Menu } from 'lucide-react'
 import { LoginModal } from '@/components/auth/login-modal'
 import { createBrowserClient } from '@supabase/ssr'
 import { useToast } from '@/components/ui/toast'
@@ -26,6 +26,7 @@ export function Header() {
   const [isLoading, setIsLoading] = useState(true)
   const [isLoggingOut, setIsLoggingOut] = useState(false)
   const { toast } = useToast()
+  const [mobileOpen, setMobileOpen] = useState(false)
 
   const supabase = createBrowserClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -88,6 +89,33 @@ export function Header() {
     }
   }, [supabase.auth])
 
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setTimeout(() => {
+        const header = document.querySelector('header');
+        if (header) {
+          const headerRect = header.getBoundingClientRect();
+          const headerStyles = window.getComputedStyle(header);
+          console.log('[Header DEBUG] Header height:', headerRect.height, 'padding:', headerStyles.paddingTop, headerStyles.paddingBottom, 'margin:', headerStyles.marginTop, headerStyles.marginBottom);
+
+          const logo = header.querySelector('img');
+          if (logo) {
+            const logoRect = logo.getBoundingClientRect();
+            const logoStyles = window.getComputedStyle(logo);
+            console.log('[Header DEBUG] Logo height:', logoRect.height, 'padding:', logoStyles.paddingTop, logoStyles.paddingBottom, 'margin:', logoStyles.marginTop, logoStyles.marginBottom);
+          }
+
+          const link = header.querySelector('a[href="/about"]');
+          if (link) {
+            const linkRect = link.getBoundingClientRect();
+            const linkStyles = window.getComputedStyle(link);
+            console.log('[Header DEBUG] About link height:', linkRect.height, 'padding:', linkStyles.paddingTop, linkStyles.paddingBottom, 'margin:', linkStyles.marginTop, linkStyles.marginBottom);
+          }
+        }
+      }, 100); // Delay to ensure DOM is painted
+    }
+  }, []);
+
   const handleGetStarted = () => {
     router.push('/questionnaire')
   }
@@ -123,179 +151,66 @@ export function Header() {
 
   return (
     <>
-      <motion.header
-        className={`fixed left-0 right-0 z-50 transition-all duration-200 ${
-          isScrolled ? 'bg-white/90 backdrop-blur-md shadow-sm py-3' : 'bg-transparent py-4'
-        }`}
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.6 }}
-        style={{ top: 'var(--announcement-bar-height, 0)' }}
-      >
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between h-16">
-            <Link href="/" className="flex items-center">
-              {/* Using direct img tag which works based on the screenshot */}
-              <img 
-                src="/images/logo.svg" 
-                alt="ShareWell" 
-                loading="lazy"
-                className="h-[13.125rem] w-auto"
-              />
-            </Link>
+      <header className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md shadow-sm transition-all" style={{ top: 'var(--announcement-bar-height, 0px)' }}>
+        <nav className="container mx-auto flex items-center justify-between px-4 py-2 md:py-3">
+          {/* Logo */}
+          <Link href="/" className="flex items-center h-10 md:h-12 lg:h-14">
+            <Image
+              src="/images/logo.svg"
+              alt="ShareWell"
+              width={160}
+              height={56}
+              priority
+              className="h-full w-auto"
+            />
+          </Link>
 
-            <div className="hidden md:flex items-center gap-8 ml-auto">
-              <Link 
-                href="/about"
-                className="text-base font-medium text-gray-warm/90 hover:text-gray-warm transition-colors"
-              >
-                About
-              </Link>
-              <Link 
-                href="/#understanding-healthcare-sharing"
-                className="text-base font-medium text-gray-warm/90 hover:text-gray-warm transition-colors"
-              >
-                What's Health Sharing?
-              </Link>
-              <Link 
-                href="/contact"
-                className="text-base font-medium text-gray-warm/90 hover:text-gray-warm transition-colors"
-              >
-                Contact
-              </Link>
-              
-              {!isLoading && user ? (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button 
-                      variant="ghost" 
-                      size="sm"
-                      className="rounded-full w-10 h-10 border border-gray-200 hover:bg-gray-100 p-0"
-                    >
-                      <User className="h-5 w-5 text-gray-600" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-48">
-                    <DropdownMenuItem 
-                      onClick={() => router.push('/questionnaire')}
-                      className="cursor-pointer"
-                    >
-                      <span>My Questionnaire</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem 
-                      onClick={handleSignOut}
-                      disabled={isLoggingOut}
-                      className="cursor-pointer text-red-600"
-                    >
-                      <LogOut className="mr-2 h-4 w-4" />
-                      <span>{isLoggingOut ? 'Logging out...' : 'Sign Out'}</span>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              ) : (
-                <motion.button
-                  onClick={handleGetStarted}
-                  whileHover={{ scale: 1.02, y: -1 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="btn-primary btn-arrow py-2 px-6 ml-2"
-                >
-                  Get Started
-                </motion.button>
-              )}
-            </div>
-              
-            <button 
-              className="md:hidden p-2 rounded-lg hover:bg-gray-100/80"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            >
-              <svg
-                className="w-6 h-6 text-gray-warm"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d={isMobileMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}
-                />
-              </svg>
-            </button>
+          {/* Desktop Nav */}
+          <div className="hidden md:flex items-center gap-8">
+            <Link href="/about" className="nav-link">
+              About
+            </Link>
+            <Link href="/what-is-healthshare" className="nav-link">
+              What's Health Sharing?
+            </Link>
+            <Link href="/contact" className="nav-link">
+              Contact
+            </Link>
+            <Link href="/questionnaire">
+              <button className="btn-primary ml-2">Get Started</button>
+            </Link>
           </div>
-        </div>
+
+          {/* Mobile Hamburger */}
+          <button
+            className="md:hidden p-2 rounded-lg hover:bg-gray-100"
+            onClick={() => setMobileOpen((v) => !v)}
+            aria-label="Open menu"
+          >
+            {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
+        </nav>
 
         {/* Mobile Menu */}
-        <AnimatePresence>
-          {isMobileMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3 }}
-              className="md:hidden bg-white shadow-lg"
-            >
-              <div className="container mx-auto px-4 py-4 flex flex-col space-y-4">
-                <Link 
-                  href="/about"
-                  className="text-base font-medium text-gray-warm/90 hover:text-gray-warm transition-colors py-2"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  About
-                </Link>
-                <Link 
-                  href="/#understanding-healthcare-sharing"
-                  className="text-base font-medium text-gray-warm/90 hover:text-gray-warm transition-colors py-2"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  What's Health Sharing?
-                </Link>
-                <Link 
-                  href="/contact"
-                  className="text-base font-medium text-gray-warm/90 hover:text-gray-warm transition-colors py-2"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  Contact
-                </Link>
-                
-                {!isLoading && user ? (
-                  <>
-                    <Link 
-                      href="/questionnaire"
-                      className="text-base font-medium text-gray-warm/90 hover:text-gray-warm transition-colors py-2"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      My Questionnaire
-                    </Link>
-                    <button
-                      onClick={() => {
-                        setIsMobileMenuOpen(false)
-                        handleSignOut()
-                      }}
-                      className="text-base font-medium text-red-600 hover:text-red-700 transition-colors py-2 flex items-center"
-                    >
-                      <LogOut className="mr-2 h-4 w-4" />
-                      Sign Out
-                    </button>
-                  </>
-                ) : (
-                  <motion.button
-                    onClick={() => {
-                      setIsMobileMenuOpen(false)
-                      handleGetStarted()
-                    }}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="btn-primary btn-arrow py-2 px-6 self-start"
-                  >
-                    Get Started
-                  </motion.button>
-                )}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </motion.header>
+        {mobileOpen && (
+          <div className="md:hidden bg-white shadow-lg border-t">
+            <div className="flex flex-col gap-2 px-4 py-4">
+              <Link href="/about" className="nav-link" onClick={() => setMobileOpen(false)}>
+                About
+              </Link>
+              <Link href="/what-is-healthshare" className="nav-link" onClick={() => setMobileOpen(false)}>
+                What's Health Sharing?
+              </Link>
+              <Link href="/contact" className="nav-link" onClick={() => setMobileOpen(false)}>
+                Contact
+              </Link>
+              <Link href="/questionnaire" onClick={() => setMobileOpen(false)}>
+                <button className="btn-primary w-full mt-2">Get Started</button>
+              </Link>
+            </div>
+          </div>
+        )}
+      </header>
 
       {/* Login Modal */}
       <LoginModal 
@@ -307,3 +222,7 @@ export function Header() {
     </>
   )
 }
+
+// Tailwind styles (add to your global CSS or use with className)
+// .nav-link { @apply text-base font-medium text-gray-700 hover:text-primary transition-colors; }
+// .btn-primary { @apply bg-primary text-white px-5 py-2 rounded-lg font-semibold shadow hover:bg-primary-dark transition; }
