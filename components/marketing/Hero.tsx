@@ -50,9 +50,9 @@ export function Hero() {
             transition={{ duration: 0.8 }}
             className="flex-1 text-center lg:text-left max-w-xl lg:max-w-none pt-4 md:pt-8"
           >
-            <h1 className="text-3xl md:text-[3.5rem] leading-[1.1] font-bold mb-4 md:mb-6 text-gray-warm">
-              It's not health insurance.{' '}
-              <span className="text-[#6366F1]">That's the point.</span>
+            <h1 className="text-3xl md:text-5xl lg:text-6xl leading-tight font-bold mb-4 md:mb-6 text-gray-warm">
+              <span className="block">It's not health <span className="whitespace-nowrap">insurance.</span></span>
+              <span className="block text-[#6366F1]">That's the point.</span>
             </h1>
             <p className="text-lg md:text-xl leading-relaxed text-gray-warm/80 mb-6 md:mb-10 max-w-xl">
               Hot take: healthier people should pay less for a safety net. Why should you pay sky-high premiums to cover other people's health problems? Join 2M+ Americans saving 30-50% with healthcare plans that reward health-conscious entrepreneurs, freelancers, and independent contractors like you.
@@ -107,7 +107,27 @@ export function Hero() {
                 <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-transparent to-accent/5" />
               </div>
               
-              {/* Floating notification cards - only visible on larger screens */}
+              {/* Floating notification/stat cards - responsive for mobile and desktop */}
+              {/* Mobile: only two stat cards, smaller text, custom positions */}
+              <div className="block md:hidden">
+                <StatCard
+                  value="$487"
+                  label="Avg. Monthly Savings"
+                  trend={{ direction: 'up', value: '8%' }}
+                  position="bottom-left"
+                  delay={1.2}
+                  className="-left-4 bottom-8 shadow-xl bg-white/95 backdrop-blur-sm text-xs px-2 py-1"
+                />
+                <StatCard
+                  value="2M+"
+                  label={<span className="block md:inline">Active Healthshare<br className="block md:hidden" />Members</span>}
+                  trend={{ direction: 'up', value: '12%' }}
+                  position="top-right"
+                  delay={0.8}
+                  className="-right-4 top-2 shadow-xl bg-white/95 backdrop-blur-sm text-xs px-2 py-1 min-w-[110px] md:min-w-[160px]"
+                />
+              </div>
+              {/* Desktop: all four cards, original layout */}
               <div className="hidden md:block">
                 <NotificationCard
                   icon={<CheckCircle className="w-4 h-4 text-primary" />}
@@ -117,7 +137,6 @@ export function Hero() {
                   delay={0.6}
                   className="-left-8 top-8 shadow-xl bg-white/95 backdrop-blur-sm"
                 />
-
                 <StatCard
                   value="2M+"
                   label="Active Healthshare Members"
@@ -126,7 +145,6 @@ export function Hero() {
                   delay={0.8}
                   className="-right-8 bottom-16 shadow-xl bg-white/95 backdrop-blur-sm"
                 />
-
                 <NotificationCard
                   icon={<Users className="w-4 h-4 text-accent" />}
                   title="Healthcare Revolution"
@@ -135,7 +153,6 @@ export function Hero() {
                   delay={1}
                   className="-right-8 top-16 shadow-xl bg-white/95 backdrop-blur-sm"
                 />
-
                 <StatCard
                   value="$487"
                   label="Avg. Monthly Savings"
