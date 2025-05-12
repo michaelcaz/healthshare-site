@@ -26,8 +26,8 @@ export const AnnouncementBar = () => {
   if (!isVisible) return null;
 
   return (
-    <div className="w-full bg-primary text-white px-4 py-2 flex items-center justify-center text-center text-sm md:text-base fixed top-0 left-0 right-0 z-[60] h-[40px] shadow">
-      <span className="flex-1 text-center">
+    <div className="w-full bg-primary text-white px-2 py-1 min-h-[40px] flex items-center justify-center text-center text-xs md:text-sm md:px-4 md:py-2 fixed top-0 left-0 right-0 z-[60] shadow">
+      <span className="flex-1 text-center break-words">
         Interested? Hop on the phone with a team member now – call us at{' '}
         <a href="tel:2257188977" className="underline font-medium hover:text-white/90 transition-colors">(225) 718-8977</a>
         {' '}or{' '}
@@ -43,7 +43,7 @@ export const AnnouncementBar = () => {
       <button
         aria-label="Dismiss announcement"
         onClick={handleClose}
-        className="ml-4 text-white hover:text-white/90 transition-colors text-lg font-bold focus:outline-none"
+        className="ml-2 md:ml-4 text-white hover:text-white/90 transition-colors text-lg font-bold focus:outline-none"
       >
         ×
       </button>

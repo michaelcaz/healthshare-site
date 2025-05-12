@@ -59,7 +59,7 @@ export function Hero() {
             </p>
             <motion.form 
               onSubmit={handleSubmit} 
-              className="flex w-full max-w-[600px] h-12 md:h-16 p-1.5 bg-white rounded-full border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200 mb-4"
+              className="flex flex-row w-full max-w-[600px] h-12 md:h-16 p-1.5 bg-white rounded-full border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200 mb-4"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
@@ -69,13 +69,13 @@ export function Hero() {
                 placeholder="Enter zip code"
                 value={zipCode}
                 onChange={(e) => setZipCode(e.target.value)}
-                className="flex-1 px-4 md:px-6 bg-transparent outline-none text-base md:text-lg text-gray-600 placeholder-gray-400"
+                className="flex-1 min-w-0 px-3 md:px-6 bg-transparent outline-none text-sm md:text-base text-gray-600 placeholder-gray-400"
                 maxLength={5}
                 pattern="[0-9]*"
               />
               <motion.button
                 type="submit"
-                className="px-4 md:px-8 py-2 bg-[#FF4500] hover:bg-[#E03E00] text-white font-semibold rounded-full transition-all duration-200"
+                className="ml-2 px-4 md:px-8 py-2 bg-[#FF4500] hover:bg-[#E03E00] text-white font-semibold rounded-full transition-all duration-200 text-sm md:text-base whitespace-nowrap"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >

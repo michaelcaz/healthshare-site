@@ -1,0 +1,146 @@
+[
+  {
+    "name": "iPhone SE - /",
+    "viewport": {
+      "width": 320,
+      "height": 568,
+      "name": "iPhone SE"
+    },
+    "url": "/"
+  },
+  {
+    "name": "iPhone SE - /plans",
+    "viewport": {
+      "width": 320,
+      "height": 568,
+      "name": "iPhone SE"
+    },
+    "url": "/plans"
+  },
+  {
+    "name": "iPhone SE - /questionnaire",
+    "viewport": {
+      "width": 320,
+      "height": 568,
+      "name": "iPhone SE"
+    },
+    "url": "/questionnaire"
+  },
+  {
+    "name": "iPhone SE - /blog",
+    "viewport": {
+      "width": 320,
+      "height": 568,
+      "name": "iPhone SE"
+    },
+    "url": "/blog"
+  },
+  {
+    "name": "iPhone 8 - /",
+    "viewport": {
+      "width": 375,
+      "height": 667,
+      "name": "iPhone 8"
+    },
+    "url": "/"
+  },
+  {
+    "name": "iPhone 8 - /plans",
+    "viewport": {
+      "width": 375,
+      "height": 667,
+      "name": "iPhone 8"
+    },
+    "url": "/plans"
+  },
+  {
+    "name": "iPhone 8 - /questionnaire",
+    "viewport": {
+      "width": 375,
+      "height": 667,
+      "name": "iPhone 8"
+    },
+    "url": "/questionnaire"
+  },
+  {
+    "name": "iPhone 8 - /blog",
+    "viewport": {
+      "width": 375,
+      "height": 667,
+      "name": "iPhone 8"
+    },
+    "url": "/blog"
+  },
+  {
+    "name": "iPhone XR - /",
+    "viewport": {
+      "width": 414,
+      "height": 896,
+      "name": "iPhone XR"
+    },
+    "url": "/"
+  },
+  {
+    "name": "iPhone XR - /plans",
+    "viewport": {
+      "width": 414,
+      "height": 896,
+      "name": "iPhone XR"
+    },
+    "url": "/plans"
+  },
+  {
+    "name": "iPhone XR - /questionnaire",
+    "viewport": {
+      "width": 414,
+      "height": 896,
+      "name": "iPhone XR"
+    },
+    "url": "/questionnaire"
+  },
+  {
+    "name": "iPhone XR - /blog",
+    "viewport": {
+      "width": 414,
+      "height": 896,
+      "name": "iPhone XR"
+    },
+    "url": "/blog"
+  },
+  {
+    "name": "iPad - /",
+    "viewport": {
+      "width": 768,
+      "height": 1024,
+      "name": "iPad"
+    },
+    "url": "/"
+  },
+  {
+    "name": "iPad - /plans",
+    "viewport": {
+      "width": 768,
+      "height": 1024,
+      "name": "iPad"
+    },
+    "url": "/plans"
+  },
+  {
+    "name": "iPad - /questionnaire",
+    "viewport": {
+      "width": 768,
+      "height": 1024,
+      "name": "iPad"
+    },
+    "url": "/questionnaire"
+  },
+  {
+    "name": "iPad - /blog",
+    "viewport": {
+      "width": 768,
+      "height": 1024,
+      "name": "iPad"
+    },
+    "url": "/blog"
+  }
+]
