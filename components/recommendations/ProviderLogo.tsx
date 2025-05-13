@@ -1,7 +1,7 @@
 import React from 'react';
 import { Building } from 'lucide-react';
-import Image from 'next/image';
 import { cn } from '@/lib/utils';
+import { SvgImage } from '@/components/ui/SvgImage';
 
 interface ProviderLogoProps {
   providerName: string;
@@ -74,7 +74,7 @@ export function ProviderLogo({ providerName, size = 'md', className = '' }: Prov
       )}
       style={{ width, height }}
     >
-      <Image 
+      <SvgImage 
         src={logoPath}
         alt={`${providerName} logo`}
         width={width}

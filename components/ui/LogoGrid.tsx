@@ -1,5 +1,7 @@
-import Image from 'next/image';
+"use client";
 import { cn } from '@/lib/utils';
+import { useEffect, useRef } from 'react';
+import { SvgImage } from './SvgImage';
 
 // Define specific logo data for better maintainability
 type Logo = {
@@ -70,29 +72,50 @@ const defaultLogos: Logo[] = [
 ];
 
 export function LogoGrid({ className, logos = defaultLogos }: LogoGridProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const logoRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    if (containerRef.current) {
+      const style = window.getComputedStyle(containerRef.current);
+      // Log grid gap and padding
+      console.log('[LogoGrid] Container gap:', style.gap, 'row-gap:', style.rowGap, 'column-gap:', style.columnGap);
+      console.log('[LogoGrid] Container padding:', style.padding);
+    }
+    logoRefs.current.forEach((div, idx) => {
+      if (div) {
+        const img = div.querySelector('img');
+        if (img) {
+          const rect = img.getBoundingClientRect();
+          console.log(`[LogoGrid] Logo ${idx + 1} (${img.alt}) size:`, rect.width, 'x', rect.height, 'src:', img.src);
+        }
+      }
+    });
+  }, []);
+
   return (
-    <div className={cn(
-      "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-8 lg:gap-12 items-center justify-items-center w-full max-w-6xl mx-auto",
-      className
-    )}>
+    <div
+      ref={containerRef}
+      className={cn(
+        "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-8 lg:gap-12 items-center justify-items-center w-full max-w-6xl mx-auto",
+        className
+      )}
+    >
       {logos.map((logo, index) => (
-        <div key={`${logo.alt}-${index}`} className={cn("flex items-center", logo.containerClassName)}>
-          <Image
+        <div
+          key={`${logo.alt}-${index}`}
+          className={cn("flex items-center", logo.containerClassName)}
+          ref={el => {
+            logoRefs.current[index] = el;
+          }}
+        >
+          <SvgImage
             src={logo.src}
             alt={logo.alt}
             width={logo.width}
             height={logo.height}
             className={logo.className}
-            // Since these are SVGs, we use unoptimized to prevent next/image from 
-            // attempting to optimize them as raster images
-            unoptimized
-            // Prioritize loading visibility by setting priority on the first few logos
             priority={index < 3}
-            // Ensure SVG is displayed at correct size regardless of container constraints
-            style={{ 
-              maxWidth: '100%',
-              height: 'auto'
-            }}
           />
         </div>
       ))}

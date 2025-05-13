@@ -6,12 +6,16 @@ import Image from 'next/image';
 import { NotificationCard, StatCard } from '@/components/ui/floating-card';
 import { CheckCircle, Users } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { SvgImage } from '@/components/ui/SvgImage';
 
 export function Hero() {
   const router = useRouter();
   const parallaxRef = useRef<HTMLDivElement>(null);
   const [mounted, setMounted] = useState(false);
   const [zipCode, setZipCode] = useState('');
+  const featuredGridRef = useRef<HTMLDivElement>(null);
+  const logoRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [logosLoaded, setLogosLoaded] = useState(0);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,6 +36,25 @@ export function Hero() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  useEffect(() => {
+    if (logosLoaded === 6) {
+      if (featuredGridRef.current) {
+        const style = window.getComputedStyle(featuredGridRef.current);
+        console.log('[FeaturedLogos] Container gap:', style.gap, 'row-gap:', style.rowGap, 'column-gap:', style.columnGap);
+        console.log('[FeaturedLogos] Container padding:', style.padding);
+      }
+      logoRefs.current.forEach((div, idx) => {
+        if (div) {
+          const img = div.querySelector('img');
+          if (img) {
+            const rect = img.getBoundingClientRect();
+            console.log(`[FeaturedLogos] Logo ${idx + 1} (${img.alt}) size:`, rect.width, 'x', rect.height, 'src:', img.src);
+          }
+        }
+      });
+    }
+  }, [logosLoaded]);
 
   if (!mounted) return null;
 
@@ -168,68 +191,23 @@ export function Hero() {
       </div>
 
       {/* Social Proof Section */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.4 }}
-        className="w-full bg-white py-8 mt-8 md:mt-12"
-      >
+      <div className="w-full bg-white py-8 mt-8 md:mt-12">
         <div className="container mx-auto px-4">
           <div className="flex flex-col items-center">
             <h2 className="text-base font-medium text-gray-500 tracking-wider mb-4 md:mb-8 text-center">
               Our health share plans have been featured in...
             </h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-8 lg:gap-12 items-center justify-items-center w-full max-w-6xl mx-auto">
-              <Image
-                src="/images/logos/wsj.svg"
-                alt="Wall Street Journal"
-                width={96}
-                height={32}
-                className="h-6 md:h-8 w-auto opacity-60 grayscale"
-                style={{ width: 'auto' }}
-              />
-              <Image
-                src="/images/logos/pbs.svg"
-                alt="PBS"
-                width={96}
-                height={32}
-                className="h-6 md:h-8 w-auto opacity-60 grayscale"
-                style={{ width: 'auto' }}
-              />
-              <Image
-                src="/images/logos/forbes.svg"
-                alt="Forbes"
-                width={96}
-                height={32}
-                className="h-6 md:h-8 w-auto opacity-60 grayscale"
-                style={{ width: 'auto' }}
-              />
-              <Image
-                src="/images/logos/vox.svg"
-                alt="Vox"
-                width={144}
-                height={32}
-                className="w-24 md:w-[144px] opacity-70 grayscale"
-              />
-              <Image
-                src="/images/logos/nbcnews.svg"
-                alt="NBC News"
-                width={200}
-                height={32}
-                className="w-32 md:w-[200px] opacity-70 grayscale"
-              />
-              <Image
-                src="/images/logos/cbsnews.svg"
-                alt="CBS News"
-                width={96}
-                height={32}
-                className="h-6 md:h-8 w-auto opacity-60 grayscale"
-                style={{ width: 'auto' }}
-              />
+            <div className="grid grid-cols-3 gap-x-4 gap-y-4 md:grid-cols-3 lg:grid-cols-6 items-center justify-items-center w-full max-w-6xl mx-auto">
+              <img src="/images/logos/wsj.svg" alt="Wall Street Journal" width={140} height={46} />
+              <img src="/images/logos/pbs.svg" alt="PBS" width={96} height={32} />
+              <img src="/images/logos/forbes.svg" alt="Forbes" width={96} height={32} />
+              <img src="/images/logos/vox.svg" alt="Vox" width={144} height={32} />
+              <img src="/images/logos/nbcnews.svg" alt="NBC News" width={200} height={32} />
+              <img src="/images/logos/cbsnews.svg" alt="CBS News" width={140} height={46} />
             </div>
           </div>
         </div>
-      </motion.div>
+      </div>
     </section>
   );
 } 
