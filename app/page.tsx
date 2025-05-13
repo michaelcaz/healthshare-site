@@ -8,7 +8,7 @@ import { RealTalk } from '@/components/marketing/RealTalk';
 
 export default function Home() {
   return (
-    <div className="pt-16">
+    <div className="pt-[calc(var(--announcement-bar-height,40px)+56px)] md:pt-[calc(var(--announcement-bar-height,40px)+64px)]">
       <Hero />
       <ComparisonTable />
       <WhyHealthshare />

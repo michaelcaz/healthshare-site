@@ -40,7 +40,7 @@ export default function RootLayout({
         <ScrollRestoration />
         <AnnouncementBar />
         <Header />
-        <main className="pt-[calc(var(--announcement-bar-height,40px)+64px)]">
+        <main>
           {children}
         </main>
         <FloatingCTA 

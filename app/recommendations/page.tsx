@@ -160,10 +160,12 @@ export default function RecommendationsPage() {
   // Render successful state
   return (
     <SelectedPlansProvider>
-      <RecommendationsLayout 
-        recommendations={recommendations}
-        questionnaire={questionnaire}
-      />
+      <div className="pt-[calc(var(--announcement-bar-height,40px)+56px)] md:pt-[calc(var(--announcement-bar-height,40px)+64px)]">
+        <RecommendationsLayout 
+          recommendations={recommendations}
+          questionnaire={questionnaire}
+        />
+      </div>
     </SelectedPlansProvider>
   )
 } 
