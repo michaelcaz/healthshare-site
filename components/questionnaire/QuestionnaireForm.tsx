@@ -396,14 +396,6 @@ const renderFormField = (fieldName: keyof FormValues, form: UseFormReturn<FormVa
             <FormLabel className="text-lg font-medium text-gray-900 mb-2">
               {getFieldLabel(fieldName)}
             </FormLabel>
-            {/* Add tooltip if available, but skip for pre_existing and pre_existing_approach */}
-            {!(fieldName === 'pre_existing' || fieldName === 'pre_existing_approach') && getTooltip(fieldName as keyof z.infer<typeof formSchema>) && (
-              <Tooltip content={getTooltip(fieldName as keyof z.infer<typeof formSchema>)}>
-                <span tabIndex={0} className="ml-2 focus:outline-none">
-                  <InfoIcon className="h-5 w-5 text-gray-400 cursor-help" />
-                </span>
-              </Tooltip>
-            )}
           </div>
           <FormControl>
             {renderFormControl(fieldName, field, form)}

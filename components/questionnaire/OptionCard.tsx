@@ -49,13 +49,6 @@ export const OptionCard: React.FC<OptionCardProps> = ({
           <div className="option-card-description">{description}</div>
         )}
       </div>
-      {tooltipText && (
-        <Tooltip content={tooltipText}>
-          <span tabIndex={0} className="ml-2 focus:outline-none">
-            <InfoIcon className="tooltip-icon" />
-          </span>
-        </Tooltip>
-      )}
     </label>
   );
 };

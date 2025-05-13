@@ -96,8 +96,7 @@ export default function PreferencesPage() {
                     { 
                       value: 'alternative', 
                       label: 'Alternative care', 
-                      description: 'Naturopaths, chiropractors',
-                      tooltipText: "Some health sharing ministries have different levels of coverage for alternative care providers."
+                      description: 'Naturopaths, chiropractors'
                     },
                     { 
                       value: 'both', 
