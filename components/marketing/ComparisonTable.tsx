@@ -98,8 +98,8 @@ export function ComparisonTable() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl p-4 sm:p-6 border border-gray-100"
           >
-            {/* Mobile View: Feature List */}
-            <div className="md:hidden flex flex-col gap-3">
+            {/* Mobile & Tablet View: Feature List */}
+            <div className="lg:hidden flex flex-col gap-3">
               {features.map((feature, index) => (
                 <div
                   key={feature.name}
@@ -155,7 +155,7 @@ export function ComparisonTable() {
             </div>
 
             {/* Desktop View: Grid Layout */}
-            <div className="hidden md:block">
+            <div className="hidden lg:block">
               <div className="grid grid-cols-3 gap-6 mb-4">
                 <div className="font-bold text-xl text-gray-900 pl-20"></div>
                 <div className="flex items-center">
@@ -187,7 +187,6 @@ export function ComparisonTable() {
                     {feature.Sharewize}
                   </div>
                   <div className="text-orange-600 text-lg flex items-center px-5 leading-8">{feature.insurance}</div>
-                  
                   {hoveredFeature === index && (
                     <motion.div 
                       initial={{ opacity: 0, y: -10 }}
