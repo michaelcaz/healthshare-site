@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { Scissors, Stethoscope, Activity, ArrowRight, Info } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Scissors, Stethoscope, Activity, ArrowRight, Info, ChevronDown, ChevronUp } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
@@ -50,6 +50,19 @@ export function SafetyNet() {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 },
   };
+  // State for expanded card (mobile/tablet)
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+  // Responsive desktop state
+  const [isDesktop, setIsDesktop] = useState<boolean>(false);
+
+  useEffect(() => {
+    const checkDesktop = () => {
+      setIsDesktop(window.innerWidth >= 1024);
+    };
+    checkDesktop();
+    window.addEventListener('resize', checkDesktop);
+    return () => window.removeEventListener('resize', checkDesktop);
+  }, []);
 
   return (
     <section className="relative py-24 overflow-hidden">
@@ -72,7 +85,7 @@ export function SafetyNet() {
             fontSize: 'var(--h2)',
             color: 'var(--color-warm-gray)' 
           }}>
-            Ditch Insurance, Build Your Safety Net
+            {"Ditch Insurance, Build Your Safety\u00A0Net"}
           </h2>
           <div className="w-24 h-1 bg-[#6366F1] mx-auto rounded-full" />
           <div className="mt-8 mb-6">
@@ -89,40 +102,63 @@ export function SafetyNet() {
         </motion.div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {cards.map((card, index) => (
-            <motion.div
-              key={index}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              variants={fadeInUpVariants}
-            >
-              <div className={cn(
-                "bg-white/90 backdrop-blur-sm rounded-xl p-6 transition-all border border-gray-100"
-              )}>
-                <div className="mb-4">
-                  <card.icon className={cn("w-8 h-8", card.iconColor)} />
-                </div>
-                
-                <h3 className="text-xl font-semibold mb-4 text-gray-900">{card.title}</h3>
-                
-                <div className="space-y-4">
-                  <div>
-                    <div className="text-indigo-600 font-medium">{card.coverage}</div>
+          {cards.map((card, index) => {
+            // Determine if this card is open (expanded)
+            const isOpen = isDesktop || openIndex === index;
+            return (
+              <motion.div
+                key={index}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                variants={fadeInUpVariants}
+              >
+                <div className={cn(
+                  "bg-white/90 backdrop-blur-sm rounded-xl p-6 transition-all border border-gray-100",
+                  !isOpen && 'cursor-pointer'
+                )}
+                  onClick={() => {
+                    if (!isDesktop) {
+                      setOpenIndex(openIndex === index ? null : index);
+                    }
+                  }}
+                >
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-3">
+                      <card.icon className={cn("w-8 h-8", card.iconColor)} />
+                      <h3 className="text-xl font-semibold text-gray-900">{card.title}</h3>
+                    </div>
+                    {/* Show arrow on mobile/tablet only */}
+                    {!isDesktop && (
+                      <div className="ml-2">
+                        {isOpen ? (
+                          <ChevronUp className="w-6 h-6 text-indigo-600" />
+                        ) : (
+                          <ChevronDown className="w-6 h-6 text-gray-500" />
+                        )}
+                      </div>
+                    )}
                   </div>
-                  
-                  <div>
-                    <div className="text-sm text-gray-500">IMAGINED EXAMPLE</div>
-                    <div 
-                      className="text-sm mt-1 text-gray-700"
-                      dangerouslySetInnerHTML={{ __html: formatPrices(card.example) }}
-                    />
-                  </div>
+                  {/* Expandable content */}
+                  {(isOpen || isDesktop) && (
+                    <div className="space-y-4">
+                      <div>
+                        <div className="text-indigo-600 font-medium">{card.coverage}</div>
+                      </div>
+                      <div>
+                        <div className="text-sm text-gray-500">IMAGINED EXAMPLE</div>
+                        <div
+                          className="text-sm mt-1 text-gray-700"
+                          dangerouslySetInnerHTML={{ __html: formatPrices(card.example) }}
+                        />
+                      </div>
+                    </div>
+                  )}
                 </div>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            );
+          })}
         </div>
 
         <motion.div

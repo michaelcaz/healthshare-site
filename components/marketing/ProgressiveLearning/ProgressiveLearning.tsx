@@ -146,10 +146,9 @@ export function ProgressiveLearning() {
           variants={fadeInUpVariants}
           className="text-center mb-12"
         >
-          <h2 className="mb-4 font-bold leading-tight" style={{ 
-            fontSize: 'var(--h2)',
-            color: 'var(--color-warm-gray)' 
-          }}>
+          <h2
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-6xl font-bold leading-tight tracking-tight text-balance text-center mb-4 text-gray-warm max-w-xs sm:max-w-none mx-auto"
+          >
             Understanding Healthcare Sharing
           </h2>
           <div className="w-24 h-1 bg-[#6366F1] mx-auto rounded-full" />

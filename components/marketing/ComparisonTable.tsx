@@ -3,7 +3,7 @@
 import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import { Info, DollarSign, Building2, Calendar, CheckSquare, Users, Shield } from 'lucide-react';
+import { Info, DollarSign, Building2, Calendar, CheckSquare, Users, Shield, ChevronDown } from 'lucide-react';
 import { Alert, AlertDescription } from '../ui/alert';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
@@ -15,42 +15,42 @@ const features = [
   {
     icon: <DollarSign className="w-9 h-9 text-emerald-500 stroke-[2.5]" />,
     name: 'Monthly Cost',
-    ShareWell: '30-50% less',
+    Sharewize: '30-50% less',
     insurance: 'Sky-high premiums',
     description: 'Save significantly on your monthly healthcare costs while maintaining quality coverage. Yeah we know it sounds too good to be true (that\'s sincerely what we thought at first too). We explain how this is achieved below in the "Understanding Healthcare Sharing" section.'
   },
   {
     icon: <Shield className="w-9 h-9 text-emerald-500 stroke-[2.5]" />,
     name: 'Personal Responsibility',
-    ShareWell: '$500-$5000 IUA',
+    Sharewize: '$500-$5000 IUA',
     insurance: '$500-$18,000 deductible',
     description: 'Initial Unshared Amount (IUA) is the amount you pay before your health share plan kicks in. For example, if you have a $1000 IUA and get an injury that results in $2300 of medical bills, you pay the first $1000, and the health share community pays the other $1300. Healthy people rarely hit their insurance deductible, meaning you pay high premiums for coverage you never use. With healthshares, lower monthly costs mean you save money even if you do pay your IUA occasionally.'
   },
   {
     icon: <Building2 className="w-9 h-9 text-emerald-500 stroke-[2.5]" />,
     name: 'Network Restrictions',
-    ShareWell: 'Any provider',
+    Sharewize: 'Any provider',
     insurance: 'Restrictive networks',
     description: 'Choose your preferred healthcare providers without network restrictions.'
   },
   {
     icon: <Calendar className="w-9 h-9 text-emerald-500 stroke-[2.5]" />,
     name: 'Enrollment Period',
-    ShareWell: 'Join anytime',
+    Sharewize: 'Join anytime',
     insurance: 'Once yearly',
     description: 'You can cancel your insurance and join any health share plan at any time.'
   },
   {
     icon: <CheckSquare className="w-9 h-9 text-emerald-500 stroke-[2.5]" />,
     name: 'Medical Need Approval',
-    ShareWell: '98% approval',
+    Sharewize: '98% approval',
     insurance: '49%-85% approval',
     description: 'Higher likelihood of medical need approval means more peace of mind.'
   },
   {
     icon: <Users className="w-9 h-9 text-emerald-500 stroke-[2.5]" />,
     name: 'Best For',
-    ShareWell: 'Healthy folks',
+    Sharewize: 'Healthy folks',
     insurance: 'Sick folks',
     description: 'Healthshare plans are ideal for generally healthy individuals looking for affordable coverage.'
   }
@@ -96,42 +96,46 @@ export function ComparisonTable() {
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl p-6 border border-gray-100"
+            className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl p-4 sm:p-6 border border-gray-100"
           >
             {/* Mobile View: Feature List */}
-            <div className="md:hidden space-y-6">
+            <div className="md:hidden flex flex-col gap-3">
               {features.map((feature, index) => (
                 <div
                   key={feature.name}
-                  className={`space-y-5 p-5 rounded-xl transition-all duration-300 min-w-[320px] border border-gray-100
-                    ${hoveredFeature === index ? 'bg-gray-50/80 shadow-md' : 'hover:bg-gray-50/40'}`}
+                  className={`w-full space-y-3 p-3 rounded-xl transition-all duration-200 border border-gray-100 focus:outline-none focus:ring-2 focus:ring-emerald-400 active:scale-95 relative ${hoveredFeature === index ? 'bg-gray-50/80 shadow-md' : 'hover:bg-gray-50/40'}`}
                   onClick={() => setHoveredFeature(hoveredFeature === index ? null : index)}
+                  tabIndex={0}
+                  aria-expanded={hoveredFeature === index}
                 >
-                  <div className="flex items-center gap-4">
-                    <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center">
-                      {feature.icon}
+                  <div className="flex items-center gap-3 justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center">{feature.icon}</div>
+                      <span className="font-semibold text-base text-gray-900 leading-7">{feature.name}</span>
                     </div>
-                    <span className="font-bold text-base text-gray-900 leading-8">{feature.name}</span>
+                    {/* Chevron icon, animated */}
+                    <ChevronDown
+                      className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${hoveredFeature === index ? 'rotate-180' : 'rotate-0'}`}
+                      aria-hidden="true"
+                    />
                   </div>
-                  
-                  <div className="grid grid-cols-2 gap-6">
+                  <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <div className="text-sm font-medium text-emerald-600 mb-2">
+                      <div className="text-xs font-medium text-emerald-600 mb-1">
                         <img 
-                          src="/images/logo.svg" 
-                          alt="ShareWell" 
+                          src="/images/sharewizelogo.svg" 
+                          alt="Sharewize" 
                           loading="lazy"
-                          className="comparison-logo-mobile w-auto h-6"
+                          className="comparison-logo-mobile w-auto h-5"
                         />
                       </div>
-                      <div className="text-emerald-600 font-bold text-lg leading-8">{feature.ShareWell}</div>
+                      <div className="text-emerald-600 font-bold text-base leading-7">{feature.Sharewize}</div>
                     </div>
                     <div>
-                      <div className="text-sm font-medium text-orange-600 mb-2">Insurance</div>
-                      <div className="text-orange-600 text-lg leading-8">{feature.insurance}</div>
+                      <div className="text-xs font-medium text-orange-600 mb-1">Insurance</div>
+                      <div className="text-orange-600 text-base leading-7">{feature.insurance}</div>
                     </div>
                   </div>
-                  
                   {hoveredFeature === index && (
                     <motion.div 
                       initial={{ opacity: 0, y: -10 }}
@@ -156,8 +160,8 @@ export function ComparisonTable() {
                 <div className="font-bold text-xl text-gray-900 pl-20"></div>
                 <div className="flex items-center">
                   <img 
-                    src="/images/logo.svg" 
-                    alt="ShareWell" 
+                    src="/images/sharewizelogo.svg" 
+                    alt="Sharewize" 
                     loading="lazy"
                     className="comparison-logo w-auto h-10"
                   />
@@ -180,7 +184,7 @@ export function ComparisonTable() {
                     <span className="font-bold text-base text-gray-900 leading-8">{feature.name}</span>
                   </div>
                   <div className="text-emerald-600 font-bold text-lg flex items-center px-5 leading-8">
-                    {feature.ShareWell}
+                    {feature.Sharewize}
                   </div>
                   <div className="text-orange-600 text-lg flex items-center px-5 leading-8">{feature.insurance}</div>
                   
@@ -204,17 +208,33 @@ export function ComparisonTable() {
             </div>
           </motion.div>
 
+          {/* Sticky CTA for mobile */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="mt-16 text-center px-4 sm:px-0"
+            className="block md:hidden"
+          >
+            <div className="fixed bottom-0 left-0 w-full z-40 px-4 pb-4 pointer-events-none">
+              <button 
+                onClick={handleFindMyPlan}
+                className="w-full h-14 bg-emerald-500 text-white rounded-xl text-lg font-bold shadow-lg border border-emerald-400 transition-all duration-200 active:scale-95 focus:outline-none focus:ring-2 focus:ring-emerald-400 pointer-events-auto"
+              >
+                Find My Plan →
+              </button>
+            </div>
+          </motion.div>
+
+          {/* Desktop CTA */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="hidden md:block mt-16 text-center px-4 sm:px-0"
           >
             <button 
               onClick={handleFindMyPlan}
-              className="w-full sm:w-[200px] h-12 bg-emerald-500 text-white px-8 py-3 rounded-xl 
-                       text-lg font-bold hover:bg-emerald-600 transition-all duration-300 
-                       hover:scale-105 hover:shadow-lg border border-emerald-400"
+              className="w-full sm:w-[200px] h-12 bg-emerald-500 text-white px-8 py-3 rounded-xl text-lg font-bold hover:bg-emerald-600 transition-all duration-300 hover:scale-105 hover:shadow-lg border border-emerald-400"
             >
               Find My Plan →
             </button>

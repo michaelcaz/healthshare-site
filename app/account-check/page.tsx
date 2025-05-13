@@ -278,7 +278,7 @@ export default function AccountCheckPage() {
           <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
             {/* Card Header */}
             <div className="p-6 pb-4">
-              <h1 className="text-2xl font-bold text-gray-900 mb-1">Create your ShareWell account</h1>
+              <h1 className="text-2xl font-bold text-gray-900 mb-1">Create your Sharewize account</h1>
               <p className="text-gray-600 text-sm">
                 <span>Have an account? </span>
                 <button 

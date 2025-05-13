@@ -306,7 +306,7 @@ const getProviderLogoPath = (providerName: string): string => {
   
   // Fallback to site logo
   console.warn(`No logo mapping found for provider: ${providerName}`);
-  return `/images/logo.svg`;
+  return `/images/sharewizelogo.svg`;
 };
 
 export function PlanComparisonTable({ questionnaire }: { questionnaire?: any }) {

@@ -27,7 +27,7 @@ export function AccountCheckPage() {
   return (
     <OnboardingLayout 
       title="Hey! I'm Michael."
-      description="Do you already have a ShareWell account?"
+      description="Do you already have a Sharewize account?"
     >
       <div className="space-y-6">
         <div className="space-y-4">

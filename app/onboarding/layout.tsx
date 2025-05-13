@@ -14,7 +14,7 @@ const caveat = Caveat({
 })
 
 export const metadata = {
-  title: 'ShareWell - Onboarding',
+  title: 'Sharewize - Onboarding',
   description: 'Find the right healthshare plan for you',
 }
 

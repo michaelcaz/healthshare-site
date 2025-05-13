@@ -34,8 +34,8 @@ export function TermsModal({ isOpen, onClose }: TermsModalProps) {
           <section>
             <h3 className="font-semibold text-base mb-2">1. Introduction</h3>
             <p>
-              Welcome to ShareWell. These Terms and Conditions govern your use of our website and services.
-              By accessing or using ShareWell, you agree to be bound by these Terms. If you disagree with any part
+              Welcome to Sharewize. These Terms and Conditions govern your use of our website and services.
+              By accessing or using Sharewize, you agree to be bound by these Terms. If you disagree with any part
               of these terms, you may not access our service.
             </p>
           </section>
@@ -43,7 +43,7 @@ export function TermsModal({ isOpen, onClose }: TermsModalProps) {
           <section>
             <h3 className="font-semibold text-base mb-2">2. Use of Our Services</h3>
             <p>
-              ShareWell provides a platform to help individuals find and compare health insurance plans.
+              Sharewize provides a platform to help individuals find and compare health insurance plans.
               Our service is intended to provide information and resources to assist in the decision-making
               process, but we do not provide medical advice or insurance recommendations.
             </p>

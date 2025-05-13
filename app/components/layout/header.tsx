@@ -40,8 +40,8 @@ export function Header() {
           {/* Logo/Brand */}
           <Link href="/" className="flex items-center">
             <img 
-              src="/images/logo.svg" 
-              alt="ShareWell" 
+              src="/images/sharewizelogo.svg" 
+              alt="Sharewize" 
               className="h-10 w-auto"
             />
           </Link>

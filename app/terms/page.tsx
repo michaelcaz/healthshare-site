@@ -1,8 +1,8 @@
 import Link from 'next/link'
 
 export const metadata = {
-  title: 'Terms and Conditions | ShareWell',
-  description: 'Terms and conditions for using ShareWell services',
+  title: 'Terms and Conditions | Sharewize',
+  description: 'Terms and conditions for using Sharewize services',
 }
 
 export default function TermsPage() {
@@ -26,14 +26,14 @@ export default function TermsPage() {
         <div className="prose max-w-none">
           <h2>1. Introduction</h2>
           <p>
-            Welcome to ShareWell. These Terms and Conditions govern your use of our website and services.
-            By accessing or using ShareWell, you agree to be bound by these Terms. If you disagree with any part
+            Welcome to Sharewize. These Terms and Conditions govern your use of our website and services.
+            By accessing or using Sharewize, you agree to be bound by these Terms. If you disagree with any part
             of these terms, you may not access our service.
           </p>
 
           <h2>2. Use of Our Services</h2>
           <p>
-            ShareWell provides a platform to help individuals find and compare health insurance plans.
+            Sharewize provides a platform to help individuals find and compare health insurance plans.
             Our service is intended to provide information and resources to assist in the decision-making
             process, but we do not provide medical advice or insurance recommendations.
           </p>
@@ -47,7 +47,7 @@ export default function TermsPage() {
 
           <h2>4. Privacy Policy</h2>
           <p>
-            Your use of ShareWell is also governed by our Privacy Policy, which is incorporated by reference into these Terms.
+            Your use of Sharewize is also governed by our Privacy Policy, which is incorporated by reference into these Terms.
             Please review our Privacy Policy to understand our practices regarding your personal information.
           </p>
 
@@ -61,7 +61,7 @@ export default function TermsPage() {
 
           <h2>6. Limitation of Liability</h2>
           <p>
-            ShareWell will not be liable for any damages arising out of or in connection with the use of our platform.
+            Sharewize will not be liable for any damages arising out of or in connection with the use of our platform.
             This includes, without limitation, damages for loss of data or profit, or due to business interruption.
           </p>
 

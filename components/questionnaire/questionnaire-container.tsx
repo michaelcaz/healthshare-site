@@ -20,8 +20,8 @@ export function QuestionnaireContainer({
           <div className="flex justify-center mb-8">
             <Link href="/" className="inline-block">
               <Image
-                src="/images/logo.svg"
-                alt="ShareWell"
+                src="/images/sharewizelogo.svg"
+                alt="Sharewize"
                 width={180}
                 height={48}
                 className="h-12 w-auto"
@@ -37,7 +37,7 @@ export function QuestionnaireContainer({
         
         <div className="mt-8 text-center text-sm text-gray-500">
           <p>
-            Need help? <a href="mailto:support@sharewell.com" className="text-primary hover:underline">Contact support</a>
+            Need help? <a href="mailto:support@sharewize.com" className="text-primary hover:underline">Contact support</a>
           </p>
         </div>
       </div>

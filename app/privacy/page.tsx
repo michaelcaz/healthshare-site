@@ -1,8 +1,8 @@
 import Link from 'next/link'
 
 export const metadata = {
-  title: 'Privacy Policy | ShareWell',
-  description: 'Privacy policy for using ShareWell services',
+  title: 'Privacy Policy | Sharewize',
+  description: 'Privacy policy for using Sharewize services',
 }
 
 export default function PrivacyPage() {
@@ -27,7 +27,7 @@ export default function PrivacyPage() {
           <section className="mb-12">
             <h2 className="text-2xl font-semibold text-gray-800 mb-4">1. Introduction</h2>
             <p className="leading-relaxed">
-              At ShareWell, we take your privacy seriously. This Privacy Policy explains how we collect, use, disclose, 
+              At Sharewize, we take your privacy seriously. This Privacy Policy explains how we collect, use, disclose, 
               and safeguard your information when you visit our website or use our services. Please read this privacy policy carefully. 
               If you do not agree with the terms of this privacy policy, please do not access the site.
             </p>
@@ -104,8 +104,8 @@ export default function PrivacyPage() {
               If you have questions or comments about this Privacy Policy, please contact us at:
             </p>
             <p className="mt-4">
-              <strong>ShareWell</strong><br />
-              Email: privacy@sharewell.com<br />
+              <strong>Sharewize</strong><br />
+              Email: privacy@sharewize.com<br />
               Phone: (225) 718-8977
             </p>
           </section>

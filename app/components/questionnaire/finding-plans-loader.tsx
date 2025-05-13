@@ -82,7 +82,7 @@ export const FindingPlansLoader = ({
             {/* Flag */}
             <rect x="-5" y="-60" width="2" height="30" fill="#333" />
             <polygon points="-3,-60 -3,-45 12,-52.5" fill="#4F46E5" />
-            <text x="-2" y="-50" fontSize="6" fill="white" transform="rotate(-15)">SHAREWELL</text>
+            <text x="-2" y="-50" fontSize="6" fill="white" transform="rotate(-15)">SHAREWIZE</text>
           </g>
         </svg>
       </div>

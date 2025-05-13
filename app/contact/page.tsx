@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import { ContactForm } from '@/components/contact/contact-form'
 
 export const metadata: Metadata = {
-  title: 'Contact Us | ShareWell',
+  title: 'Contact Us | Sharewize',
   description: 'Get in touch with our team for questions about healthshare plans or support with your membership.',
 }
 
@@ -31,7 +31,7 @@ export default function ContactPage() {
             <div className="space-y-6">
               <div>
                 <h3 className="text-base font-medium text-gray-900">Email</h3>
-                <p className="mt-1 text-gray-600">support@sharewell.com</p>
+                <p className="mt-1 text-gray-600">support@sharewize.com</p>
               </div>
               
               <div>

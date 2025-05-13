@@ -10,8 +10,8 @@ export function Footer() {
           <div>
             <div className="mb-4">
               <img 
-                src="/images/logo.svg" 
-                alt="ShareWell" 
+                src="/images/sharewizelogo.svg" 
+                alt="Sharewize" 
                 className="h-14 w-auto"
               />
             </div>

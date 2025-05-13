@@ -27,8 +27,8 @@ export function ResultsLayout({
         <div className="container mx-auto px-4 flex justify-between items-center">
           <Link href="/" className="inline-block">
             <Image
-              src="/images/logo.svg"
-              alt="ShareWell"
+              src="/images/sharewizelogo.svg"
+              alt="Sharewize"
               width={160}
               height={40}
               className="h-10 w-auto"
@@ -70,7 +70,7 @@ export function ResultsLayout({
       <footer className="bg-gray-50 py-8 mt-16">
         <div className="container mx-auto px-4 text-center">
           <p className="text-sm text-gray-500">
-            Have questions about your recommendations? <a href="mailto:support@sharewell.com" className="text-primary hover:underline">Contact our team</a>
+            Have questions about your recommendations? <a href="mailto:support@sharewize.com" className="text-primary hover:underline">Contact our team</a>
           </p>
         </div>
       </footer>

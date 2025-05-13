@@ -32,8 +32,8 @@ export function OnboardingLayout({ children, title, description }: OnboardingLay
         <div className="container mx-auto px-4 py-3">
           <Link href="/" className="block">
             <Image 
-              src="/images/logo.svg" 
-              alt="ShareWell Logo" 
+              src="/images/sharewizelogo.svg" 
+              alt="Sharewize Logo" 
               width={150} 
               height={40}
               className="h-10 w-auto"

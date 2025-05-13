@@ -156,12 +156,12 @@ export function Header() {
           {/* Logo */}
           <Link href="/" className="flex items-center h-10 md:h-12 lg:h-14">
             <Image
-              src="/images/logo.svg"
-              alt="ShareWell"
-              width={160}
-              height={56}
+              src="/images/sharewizelogo.svg"
+              alt="Sharewize"
+              width={120}
+              height={32}
               priority
-              className="h-full w-auto"
+              className="h-8 w-auto"
             />
           </Link>
 
