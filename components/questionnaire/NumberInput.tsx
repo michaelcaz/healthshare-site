@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { InfoIcon, Plus, Minus } from 'lucide-react';
+import { Tooltip } from '@/components/ui/tooltip';
 
 interface NumberInputProps {
   id: string;
@@ -73,10 +74,11 @@ export const NumberInput: React.FC<NumberInputProps> = ({
             {label}
           </label>
           {tooltipText && (
-            <div className="tooltip">
-              <InfoIcon className="tooltip-icon" />
-              <div className="tooltip-content">{tooltipText}</div>
-            </div>
+            <Tooltip content={tooltipText}>
+              <span tabIndex={0} className="ml-2 focus:outline-none">
+                <InfoIcon className="tooltip-icon" />
+              </span>
+            </Tooltip>
           )}
         </div>
       )}

@@ -5,7 +5,7 @@ import { Progress } from '../ui/progress'
 import { type PlanRecommendation } from './types'
 import { CheckCircle, Star, Shield, Clock, Users, Award, Calendar, TrendingUp, DollarSign, Unlock, Headset, Heart, Info, Search, Lock, Users2 } from 'lucide-react'
 import { Badge } from '../ui/badge'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import { Tooltip } from '@/components/ui/tooltip'
 import Image from 'next/image'
 import { PlanDetailsData, defaultPlanDetailsData } from '@/types/plan-details'
 
@@ -32,7 +32,7 @@ export function TrustElements({ recommendation, planDetails = defaultPlanDetails
   const providerDetails = planDetails?.providerDetails || defaultPlanDetailsData.providerDetails!;
 
   return (
-    <TooltipProvider>
+    <>
       <div className="space-y-10">
         <h2 className="text-2xl font-bold text-gray-900">Why Members Love {plan.providerName}</h2>
         
@@ -133,6 +133,6 @@ export function TrustElements({ recommendation, planDetails = defaultPlanDetails
           </Card>
         </div>
       </div>
-    </TooltipProvider>
+    </>
   )
 } 

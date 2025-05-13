@@ -2,7 +2,6 @@ import './globals.css'
 import { Inter, Montserrat, Caveat } from 'next/font/google'
 import { Header } from '@/components/layout/header'
 import { Toaster } from '@/components/ui/toaster'
-import { TooltipProvider } from '@/components/ui/tooltip'
 import { GoogleAnalytics } from '@/components/providers/GoogleAnalytics'
 import { ScrollRestoration } from '@/components/ui/scroll-restoration'
 import { FloatingCTA } from '@/components/ui/floating-cta'
@@ -38,24 +37,21 @@ export default function RootLayout({
         <GoogleAnalytics />
       </head>
       <body suppressHydrationWarning className={`${inter.variable} ${montserrat.variable} ${caveat.variable} font-sans bg-warm`}>
-        <TooltipProvider>
-          <ScrollRestoration />
-          <AnnouncementBar />
-          <Header />
-          <main>
-            {children}
-          </main>
-          <FloatingCTA 
-            phoneNumber="(225) 718-8977" 
-            calendlyLink="https://calendly.com/michaelcaz/30min" 
-          />
-          <ExitIntentPopup 
-            phoneNumber="(225) 718-8977" 
-            calendlyLink="https://calendly.com/michaelcaz/30min" 
-          />
-          <MobileBottomCTA />
-        </TooltipProvider>
-        <Toaster />
+        <ScrollRestoration />
+        <AnnouncementBar />
+        <Header />
+        <main>
+          {children}
+        </main>
+        <FloatingCTA 
+          phoneNumber="(225) 718-8977" 
+          calendlyLink="https://calendly.com/michaelcaz/30min" 
+        />
+        <ExitIntentPopup 
+          phoneNumber="(225) 718-8977" 
+          calendlyLink="https://calendly.com/michaelcaz/30min" 
+        />
+        <MobileBottomCTA />
       </body>
     </html>
   )

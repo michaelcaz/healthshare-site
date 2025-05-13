@@ -5,7 +5,7 @@ import { Checkbox } from '../ui/checkbox'
 import { useSelectedPlans } from './SelectedPlansContext'
 import { type PlanRecommendation } from './types'
 import { CheckCircle, Info, ChevronRight, Sparkles, Star, StarHalf } from 'lucide-react'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import { Tooltip } from '@/components/ui/tooltip'
 import { cn } from '@/lib/utils'
 import { PlanRecommendation as PlanRecommendationType } from '@/lib/recommendation/recommendations'
 import { QuestionnaireResponse } from '@/types/questionnaire'
@@ -134,7 +134,7 @@ export function PlanComparisonGrid({
   };
 
   return (
-    <TooltipProvider>
+    <>
       <div className="mt-16">
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-2xl font-bold text-gray-900">Compare Alternative Plans</h2>
@@ -306,6 +306,6 @@ export function PlanComparisonGrid({
           ))}
         </div>
       </div>
-    </TooltipProvider>
+    </>
   )
 } 

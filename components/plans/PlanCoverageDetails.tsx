@@ -2,7 +2,7 @@
 
 import { Plan } from '@/types/plans';
 import { CheckCircle2, XCircle, AlertCircle, Clock, InfoIcon } from 'lucide-react';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { Tooltip } from '@/components/ui/tooltip';
 
 interface PlanCoverageDetailsProps {
   plan: Plan;
@@ -16,16 +16,9 @@ export default function PlanCoverageDetails({ plan }: PlanCoverageDetailsProps) 
           <CheckCircle2 className="h-5 w-5 text-green-500 mr-2" />
           <span className="font-medium">Included</span>
           {details && (
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <InfoIcon className="h-4 w-4 text-gray-400 ml-2 cursor-help" />
-                </TooltipTrigger>
-                <TooltipContent className="max-w-xs">
-                  <p>{details}</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+            <Tooltip content={details}>
+              <InfoIcon className="h-4 w-4 text-gray-400 ml-2 cursor-help" />
+            </Tooltip>
           )}
         </div>
       );
@@ -36,16 +29,9 @@ export default function PlanCoverageDetails({ plan }: PlanCoverageDetailsProps) 
         <XCircle className="h-5 w-5 text-red-500 mr-2" />
         <span className="font-medium">Not included</span>
         {details && (
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <InfoIcon className="h-4 w-4 text-gray-400 ml-2 cursor-help" />
-              </TooltipTrigger>
-              <TooltipContent className="max-w-xs">
-                <p>{details}</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          <Tooltip content={details}>
+            <InfoIcon className="h-4 w-4 text-gray-400 ml-2 cursor-help" />
+          </Tooltip>
         )}
       </div>
     );
@@ -66,16 +52,9 @@ export default function PlanCoverageDetails({ plan }: PlanCoverageDetailsProps) 
         <Icon className={`h-5 w-5 ${status.color} mr-2`} />
         <span className="font-medium">{status.label}</span>
         {plan.preExistingConditionsDetails && (
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <InfoIcon className="h-4 w-4 text-gray-400 ml-2 cursor-help" />
-              </TooltipTrigger>
-              <TooltipContent className="max-w-xs">
-                <p>{plan.preExistingConditionsDetails}</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          <Tooltip content={plan.preExistingConditionsDetails}>
+            <InfoIcon className="h-4 w-4 text-gray-400 ml-2 cursor-help" />
+          </Tooltip>
         )}
       </div>
     );

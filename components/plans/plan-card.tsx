@@ -3,12 +3,7 @@
 import { useState } from 'react'
 import { EnhancedButton } from '@/components/ui/enhanced-button'
 import { Check, Info } from 'lucide-react'
-import { 
-  Tooltip, 
-  TooltipContent, 
-  TooltipProvider, 
-  TooltipTrigger 
-} from '@/components/ui/tooltip'
+import { Tooltip } from '@/components/ui/tooltip'
 import { AnimatedCounter } from '@/components/ui/animated-counter'
 import { Badge } from '@/components/ui/badge'
 
@@ -100,18 +95,9 @@ export function PlanCard({
         <div>
           <div className="flex items-center">
             <p className="plan-card-price-label">Initial Unshared Amount</p>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger>
-                  <Info className="h-4 w-4 text-gray-400 ml-1" />
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p className="max-w-xs text-sm">
-                    The amount you pay before the healthshare begins to share in your medical expenses.
-                  </p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+            <Tooltip content={"The amount you pay before the healthshare begins to share in your medical expenses."}>
+              <Info className="h-4 w-4 text-gray-400 ml-1" />
+            </Tooltip>
           </div>
           <p className="plan-card-price">${initialUnsharedAmount}</p>
         </div>
@@ -127,16 +113,9 @@ export function PlanCard({
                 {feature.name}
               </span>
               {feature.description && (
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <Info className="h-3 w-3 text-gray-400 ml-1 inline" />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p className="max-w-xs text-sm">{feature.description}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                <Tooltip content={feature.description}>
+                  <Info className="h-3 w-3 text-gray-400 ml-1 inline" />
+                </Tooltip>
               )}
             </div>
           </div>

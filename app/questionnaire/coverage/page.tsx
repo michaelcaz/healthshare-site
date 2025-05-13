@@ -13,6 +13,7 @@ import { QuestionnaireResponse } from '@/types/questionnaire';
 import { QuestionnaireData } from '@/lib/types';
 import { saveQuestionnaireResponse } from '@/lib/actions/questionnaire';
 import { PlansLoader } from '../../components/questionnaire';
+import { Tooltip } from '@/components/ui/tooltip';
 
 const formSchema = z.object({
   expense_preference: z.enum(['lower_monthly', 'higher_monthly']).optional().refine(val => val !== undefined, {
@@ -216,12 +217,11 @@ export default function CoveragePage() {
                   <label className="block text-gray-800 font-medium mb-2">
                     What is your typical annual healthcare spending?
                   </label>
-                  <span className="tooltip ml-2">
-                    <InfoIcon className="w-5 h-5 text-gray-400" />
-                    <div className="tooltip-content">
-                      IUA (Initial Unshared Amount) is the amount you pay during an accident, emergency, prognosis, etc. before sharing begins.
-                    </div>
-                  </span>
+                  <Tooltip content={"IUA (Initial Unshared Amount) is the amount you pay during an accident, emergency, prognosis, etc. before sharing begins."}>
+                    <span tabIndex={0} className="ml-2 focus:outline-none">
+                      <InfoIcon className="w-5 h-5 text-gray-400" />
+                    </span>
+                  </Tooltip>
                 </div>
                 <select
                   {...form.register('iua_preference')}

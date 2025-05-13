@@ -3,6 +3,7 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { InfoIcon } from 'lucide-react';
+import { Tooltip } from '@/components/ui/tooltip';
 
 interface OptionCardProps {
   id: string;
@@ -49,10 +50,11 @@ export const OptionCard: React.FC<OptionCardProps> = ({
         )}
       </div>
       {tooltipText && (
-        <div className="tooltip">
-          <InfoIcon className="tooltip-icon" />
-          <div className="tooltip-content">{tooltipText}</div>
-        </div>
+        <Tooltip content={tooltipText}>
+          <span tabIndex={0} className="ml-2 focus:outline-none">
+            <InfoIcon className="tooltip-icon" />
+          </span>
+        </Tooltip>
       )}
     </label>
   );

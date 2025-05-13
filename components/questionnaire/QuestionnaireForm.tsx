@@ -27,6 +27,8 @@ import { OptionCardGroup } from '@/components/questionnaire/OptionCard';
 import { InfoIcon } from 'lucide-react';
 import { PregnancyQuestion } from './PregnancyQuestion';
 import { PlansLoader } from '../../app/components/questionnaire';
+import { Tooltip } from '@/components/ui/tooltip';
+import { PregnancyQuestionAlert } from './PregnancyQuestionAlert';
 
 const COOKIE_KEY = 'questionnaire-form-data';
 const COOKIE_OPTIONS = {
@@ -332,6 +334,57 @@ const renderFormField = (fieldName: keyof FormValues, form: UseFormReturn<FormVa
   }
   
   // Regular handling for other fields
+  if (fieldName === 'pregnancy_planning') {
+    return (
+      <>
+        <FormField
+          key={fieldName}
+          control={form.control}
+          name={fieldName}
+          render={({ field }) => (
+            <FormItem className="mb-6">
+              <div className="flex justify-between items-start">
+                <FormLabel className="text-lg font-medium text-gray-900 mb-2">
+                  {getFieldLabel(fieldName)}
+                </FormLabel>
+              </div>
+              <FormControl>
+                <OptionCardGroup
+                  name={fieldName}
+                  options={getRadioOptions(fieldName as keyof FormValues).map(option => ({
+                    value: option.value,
+                    label: option.label,
+                    description: undefined,
+                    tooltipText: undefined
+                  }))}
+                  value={field.value || ''}
+                  onChange={(value) => field.onChange(value)}
+                  layout="vertical"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        {(form.watch('pregnancy_planning') === 'yes' || form.watch('pregnancy_planning') === 'maybe') && (
+          <PregnancyQuestionAlert isVisible={true}>
+            <>
+              <h3 className="text-sm font-medium text-amber-800">Important Information About Pregnancy Coverage</h3>
+              <div className="mt-2 text-sm text-amber-700">
+                <p>
+                  Please note that all health sharing plans have waiting periods for maternity coverage (typically 3-12 months starting the day of sign up). No health sharing plan will cover your pregnancy or birth related medical needs if you get pregnant before the end of the waiting period.
+                </p>
+                <p className="mt-2">
+                  We'll still provide recommendations based on your other health needs, but this is an essential point to understand.
+                </p>
+              </div>
+            </>
+          </PregnancyQuestionAlert>
+        )}
+      </>
+    );
+  }
+  
   return (
     <FormField
       key={fieldName}
@@ -343,14 +396,13 @@ const renderFormField = (fieldName: keyof FormValues, form: UseFormReturn<FormVa
             <FormLabel className="text-lg font-medium text-gray-900 mb-2">
               {getFieldLabel(fieldName)}
             </FormLabel>
-            {/* Add tooltip if available */}
-            {getTooltip(fieldName as keyof z.infer<typeof formSchema>) && (
-              <div className="relative group">
-                <InfoIcon className="h-5 w-5 text-gray-400 cursor-help" />
-                <div className="absolute right-0 w-64 p-2 mt-2 text-xs text-white bg-gray-800 rounded-md opacity-0 group-hover:opacity-100 transition-opacity z-10">
-                  {getTooltip(fieldName as keyof z.infer<typeof formSchema>)}
-                </div>
-              </div>
+            {/* Add tooltip if available, but skip for pre_existing and pre_existing_approach */}
+            {!(fieldName === 'pre_existing' || fieldName === 'pre_existing_approach') && getTooltip(fieldName as keyof z.infer<typeof formSchema>) && (
+              <Tooltip content={getTooltip(fieldName as keyof z.infer<typeof formSchema>)}>
+                <span tabIndex={0} className="ml-2 focus:outline-none">
+                  <InfoIcon className="h-5 w-5 text-gray-400 cursor-help" />
+                </span>
+              </Tooltip>
             )}
           </div>
           <FormControl>
@@ -549,6 +601,9 @@ export const QuestionnaireForm = () => {
       form.setValue('pregnancy_planning', undefined);
     }
   }, [watchPregnancy, form]);
+  
+  // Watch the pregnancy_planning field to show alert if 'yes'
+  const watchPregnancyPlanning = form.watch('pregnancy_planning');
   
   // Dynamically determine fields for the current step
   const getCurrentStepFields = () => {
