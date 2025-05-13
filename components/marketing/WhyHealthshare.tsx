@@ -48,7 +48,7 @@ export const WhyHealthshare = () => {
   ];
 
   return (
-    <section className="relative py-24 bg-white">
+    <section id="healthshare-explainer" className="relative py-24 bg-white">
       <div className="absolute left-[10%] top-[20%] w-[500px] h-[500px] rounded-full bg-[#FFF1EC] opacity-50 blur-3xl" />
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div

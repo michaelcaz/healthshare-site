@@ -4,7 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import { X, User, LogOut, Menu } from 'lucide-react'
 import { LoginModal } from '@/components/auth/login-modal'
 import { createBrowserClient } from '@supabase/ssr'
@@ -19,6 +19,7 @@ import { Button } from '@/components/ui/button'
 
 export function Header() {
   const router = useRouter()
+  const pathname = usePathname()
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [showLoginModal, setShowLoginModal] = useState(false)
@@ -149,6 +150,27 @@ export function Header() {
     }
   }
 
+  // Smooth scroll handler for Health Sharing section
+  const handleHealthSharingClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    const sectionId = 'healthshare-explainer';
+    if (pathname === '/') {
+      const header = document.querySelector('header');
+      const section = document.getElementById(sectionId);
+      if (section && header) {
+        const headerHeight = header.getBoundingClientRect().height;
+        const sectionTop = section.getBoundingClientRect().top + window.scrollY;
+        window.scrollTo({
+          top: sectionTop - headerHeight - 8, // 8px extra spacing
+          behavior: 'smooth',
+        });
+      }
+    } else {
+      router.push('/#' + sectionId);
+    }
+    setMobileOpen(false);
+  };
+
   return (
     <>
       <header className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md shadow-sm transition-all" style={{ top: 'var(--announcement-bar-height, 0px)' }}>
@@ -170,9 +192,9 @@ export function Header() {
             <Link href="/about" className="nav-link">
               About
             </Link>
-            <Link href="/what-is-healthshare" className="nav-link">
+            <a href="#healthshare-explainer" className="nav-link" onClick={handleHealthSharingClick}>
               What's Health Sharing?
-            </Link>
+            </a>
             <Link href="/contact" className="nav-link">
               Contact
             </Link>
@@ -198,9 +220,9 @@ export function Header() {
               <Link href="/about" className="nav-link" onClick={() => setMobileOpen(false)}>
                 About
               </Link>
-              <Link href="/what-is-healthshare" className="nav-link" onClick={() => setMobileOpen(false)}>
+              <a href="#healthshare-explainer" className="nav-link" onClick={handleHealthSharingClick}>
                 What's Health Sharing?
-              </Link>
+              </a>
               <Link href="/contact" className="nav-link" onClick={() => setMobileOpen(false)}>
                 Contact
               </Link>
