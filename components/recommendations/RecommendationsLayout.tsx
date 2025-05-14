@@ -16,7 +16,7 @@ import { PregnancyAlert } from './PregnancyAlert'
 import { planDetailsData } from '@/data/plan-details-data'
 import { ComparisonBanner } from './ComparisonBanner'
 import { ComparisonModal } from '@/components/plans/comparison/ComparisonModal'
-import { MobileBottomCTAAction } from '@/components/ui/MobileBottomCTAAction'
+import { BottomCTAAction } from '@/components/ui/MobileBottomCTAAction'
 
 export function RecommendationsLayout({ 
   recommendations, 
@@ -201,14 +201,29 @@ export function RecommendationsLayout({
         questionnaire={questionnaire}
       />
       
-      {/* Mobile sticky CTA for /rec page */}
-      <MobileBottomCTAAction 
-        onClick={() => window.location.href = `/enroll/${topPlan.plan.id}`}
+      {/* Universal sticky CTA for all devices */}
+      <BottomCTAAction
+        mode={selectedPlans.length >= 2 ? 'compare' : 'signup'}
+        onSignup={() => window.location.href = `/enroll/${topPlan.plan.id}`}
+        onCompare={() => {
+          // Store selected plans in localStorage for the comparison page
+          localStorage.setItem('selected-plans', JSON.stringify(selectedPlans));
+          // Build the comparison URL with questionnaire params if available
+          let url = '/plans/comparison';
+          if (questionnaire) {
+            const params = new URLSearchParams();
+            if (questionnaire.age) params.append('age', String(questionnaire.age));
+            if (questionnaire.coverage_type) params.append('coverageType', questionnaire.coverage_type);
+            if (questionnaire.visit_frequency) params.append('visitFrequency', questionnaire.visit_frequency);
+            if (questionnaire.iua_preference) params.append('iua', questionnaire.iua_preference);
+            if (params.toString()) url = `${url}?${params.toString()}`;
+          }
+          window.location.href = url;
+        }}
+        compareCount={selectedPlans.length}
         label="Sign up now"
+        isVisible={true}
       />
-      
-      {/* Comparison Banner */}
-      <ComparisonBanner />
       
       {/* Main Content */}
       <div className="bg-gray-50 min-h-screen pb-20">

@@ -11,6 +11,8 @@ export function ComparisonBanner() {
   const { selectedPlans, removePlan, openComparisonModal, canAddMore } = useSelectedPlans()
   const [isExpanded, setIsExpanded] = useState(false)
   
+  // Debug log
+  console.log('[ComparisonBanner] Rendered. selectedPlans.length:', selectedPlans.length)
   // Only show the banner if there are selected plans
   if (selectedPlans.length === 0) {
     return null

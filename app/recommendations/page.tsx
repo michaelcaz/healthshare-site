@@ -89,7 +89,10 @@ export default function RecommendationsPage() {
   // Render loading state
   if (isLoading) {
     return (
-      <div className="max-w-7xl mx-auto px-4 py-12">
+      <div
+        className="max-w-7xl mx-auto px-4 py-12"
+        style={{ paddingTop: 'calc(var(--announcement-bar-height, 40px) + 56px)' }}
+      >
         <h2 className="text-2xl font-bold text-gray-900">
           Loading your recommendations...
         </h2>
@@ -100,7 +103,10 @@ export default function RecommendationsPage() {
   // Handle error state
   if (error) {
     return (
-      <div className="max-w-7xl mx-auto px-4 py-12">
+      <div
+        className="max-w-7xl mx-auto px-4 py-12"
+        style={{ paddingTop: 'calc(var(--announcement-bar-height, 40px) + 56px)' }}
+      >
         <h2 className="text-2xl font-bold text-red-600">
           Something went wrong
         </h2>
@@ -120,7 +126,10 @@ export default function RecommendationsPage() {
   // Handle no data state
   if (!questionnaire || !recommendations) {
     return (
-      <div className="max-w-7xl mx-auto px-4 py-12">
+      <div
+        className="max-w-7xl mx-auto px-4 py-12"
+        style={{ paddingTop: 'calc(var(--announcement-bar-height, 40px) + 56px)' }}
+      >
         <h2 className="text-2xl font-bold text-gray-900">
           No questionnaire data found
         </h2>
