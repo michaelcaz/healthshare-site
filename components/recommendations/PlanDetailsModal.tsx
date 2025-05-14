@@ -11,6 +11,7 @@ import { MedicalServices } from './tabs/MedicalServices'
 import { planDetailsData } from '@/data/plan-details-data'
 import { RatingStars } from '@/components/ui/rating-stars'
 import { MatchScore } from '@/components/ui/match-score'
+import { ProviderLogo } from './ProviderLogo'
 
 interface PlanDetailsModalProps {
   plan: PlanRecommendation
@@ -48,99 +49,112 @@ export function PlanDetailsModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 h-screen">
       {/* Modal */}
       <div className="relative z-50 w-full max-w-4xl bg-white rounded-lg shadow-xl max-h-[100dvh] flex flex-col h-full mt-10 sm:mt-0">
-        <div className="flex justify-between items-center p-6 border-b sticky top-0 bg-white z-10">
-          <div className="flex items-center gap-4">
-            {/* For Knew Health and Crowd Health plans, don't show plan name */}
-            {(plan.plan.id?.toLowerCase().includes('knew') || plan.plan.id?.toLowerCase().includes('crowd')) ? (
-              <h2 className="text-2xl font-bold">{plan.plan.providerName}</h2>
-            ) : (
-              <h2 className="text-2xl font-bold">{plan.plan.planName}</h2>
-            )}
-          </div>
-          <button 
-            onClick={onClose} 
-            className="text-gray-500 hover:text-gray-700"
-            aria-label="Close dialog"
-          >
-            <X className="h-5 w-5" />
-          </button>
-        </div>
-        
-        {/* Rating Section - Updated to use new components */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between px-6 py-3 bg-gray-50 gap-4 sm:gap-0">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-6 w-full">
-            <div className="flex flex-col items-center sm:items-start flex-1 min-w-0">
-              <div className="flex items-center justify-center sm:justify-start w-full">
-                <MatchScore score={plan.score} size="lg" showLabel={true} />
-              </div>
-              <span className="text-xs text-gray-500 mt-1 text-center sm:text-left">Based on your preferences</span>
-            </div>
-
-            <div className="hidden sm:block h-10 border-l border-gray-300 mx-4"></div>
-
-            <div className="flex flex-col items-center sm:items-start flex-1 min-w-0 mt-4 sm:mt-0">
-              <div className="flex items-center justify-center sm:justify-start w-full">
-                {/* Hard-code rating values for Knew Health */}
-                {isKnewHealthPlan ? (
-                  <RatingStars 
-                    rating={4.7} 
-                    size="lg"
-                    showValue={true}
-                    reviewCount={137}
-                  />
+        {/* Sticky header + tabs block */}
+        <div className="sticky top-0 z-10 bg-white">
+          {/* Header */}
+          <div className="flex justify-between items-center p-4 sm:p-6 border-b">
+            <div className="flex items-center gap-4 min-w-0 w-full">
+              <ProviderLogo providerName={plan.plan.providerName} size="lg" className="flex-shrink-0" />
+              <div className="min-w-0 flex flex-col">
+                {(plan.plan.id?.toLowerCase().includes('knew') || plan.plan.id?.toLowerCase().includes('crowd')) ? (
+                  <h2 className="text-xl sm:text-2xl font-bold break-words whitespace-normal leading-tight truncate sm:whitespace-normal sm:truncate-0">{plan.plan.providerName}</h2>
                 ) : (
-                  <RatingStars 
-                    rating={planData && planData.providerDetails ? planData.providerDetails.ratings?.overall || 4.5 : 4.5} 
-                    size="lg"
-                    showValue={true}
-                    reviewCount={planData && planData.providerDetails ? planData.providerDetails.ratings?.reviewCount || 150 : 150}
-                  />
+                  <h2 className="text-xl sm:text-2xl font-bold break-words whitespace-normal leading-tight truncate sm:whitespace-normal sm:truncate-0">{plan.plan.planName}</h2>
                 )}
               </div>
-              <span className="text-xs text-gray-500 mt-1 text-center sm:text-left">Member rating</span>
             </div>
-
-            <div className="hidden sm:block h-10 border-l border-gray-300 mx-4"></div>
-
-            <div className="flex flex-col items-center sm:items-start flex-1 min-w-0 mt-4 sm:mt-0">
-              <div className="flex items-center justify-center sm:justify-start w-full">
-                <Building className="h-5 w-5 text-blue-600 mr-1.5" />
-                <span className="font-medium text-lg">
-                  {planData && planData.providerDetails ? 
-                    new Date().getFullYear() - planData.providerDetails.yearEstablished : 
-                    "5+"} Years
-                </span>
-              </div>
-              <span className="text-xs text-gray-500 mt-1 text-center sm:text-left">In operation</span>
-            </div>
+            <button 
+              onClick={onClose} 
+              className="text-gray-500 hover:text-gray-700 ml-2 flex-shrink-0"
+              aria-label="Close dialog"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          </div>
+          {/* Tabs */}
+          <div className="flex border-b px-0 sm:px-6">
+            {[
+              { id: 'overview', label: 'Overview' },
+              { id: 'coverage', label: 'Coverage Details' },
+              { id: 'medical', label: 'Medical Services' }
+            ].map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={cn(
+                  'px-4 py-2 font-medium',
+                  activeTab === tab.id 
+                    ? 'border-b-2 border-blue-500 text-blue-600' 
+                    : 'text-gray-600 hover:text-gray-900'
+                )}
+              >
+                {tab.label}
+              </button>
+            ))}
           </div>
         </div>
-        
-        <div className="flex border-b px-6 sticky top-[131px] bg-white z-10">
-          {[
-            { id: 'overview', label: 'Overview' },
-            { id: 'coverage', label: 'Coverage Details' },
-            { id: 'medical', label: 'Medical Services' }
-          ].map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={cn(
-                'px-4 py-2 font-medium',
-                activeTab === tab.id 
-                  ? 'border-b-2 border-blue-500 text-blue-600' 
-                  : 'text-gray-600 hover:text-gray-900'
-              )}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
-        
-        <div className="p-6 flex-1 min-h-0 overflow-y-auto pb-20 sm:pb-8">
+        {/* Scrollable content: trust row and main content */}
+        <div className="p-4 sm:p-6 flex-1 min-h-0 overflow-y-auto pb-32 sm:pb-8">
+          {/* Trust row */}
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-0 border-b border-gray-200 mb-4 pb-2">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-6 w-full">
+              <div className="flex flex-col items-center sm:items-start flex-1 min-w-0">
+                <div className="flex items-center justify-center sm:justify-start w-full">
+                  <MatchScore score={plan.score} size="lg" showLabel={true} />
+                </div>
+                <span className="text-xs text-gray-500 mt-1 text-center sm:text-left">Based on your preferences</span>
+              </div>
+              <div className="hidden sm:block h-10 border-l border-gray-300 mx-4"></div>
+              <div className="flex flex-col items-center sm:items-start flex-1 min-w-0 mt-4 sm:mt-0">
+                <div className="flex items-center justify-center sm:justify-start w-full">
+                  {isKnewHealthPlan ? (
+                    <RatingStars 
+                      rating={4.7} 
+                      size="lg"
+                      showValue={true}
+                      reviewCount={137}
+                    />
+                  ) : (
+                    <RatingStars 
+                      rating={planData && planData.providerDetails ? planData.providerDetails.ratings?.overall || 4.5 : 4.5} 
+                      size="lg"
+                      showValue={true}
+                      reviewCount={planData && planData.providerDetails ? planData.providerDetails.ratings?.reviewCount || 150 : 150}
+                    />
+                  )}
+                </div>
+                <span className="text-xs text-gray-500 mt-1 text-center sm:text-left">Member rating</span>
+              </div>
+              <div className="hidden sm:block h-10 border-l border-gray-300 mx-4"></div>
+              <div className="flex flex-col items-center sm:items-start flex-1 min-w-0 mt-4 sm:mt-0">
+                <div className="flex items-center justify-center sm:justify-start w-full">
+                  <Building className="h-5 w-5 text-blue-600 mr-1.5" />
+                  <span className="font-medium text-lg">
+                    {planData && planData.providerDetails ? 
+                      new Date().getFullYear() - planData.providerDetails.yearEstablished : 
+                      "5+"} Years
+                  </span>
+                </div>
+                <span className="text-xs text-gray-500 mt-1 text-center sm:text-left">In operation</span>
+              </div>
+            </div>
+          </div>
+          {/* Main tab content */}
           {activeTab === 'overview' && <Overview plan={plan} age={age} coverageType={coverageType} iuaPreference={iuaPreference} visitFrequency={visitFrequency} questionnaire={questionnaire} />}
           {activeTab === 'coverage' && <CoverageDetails plan={plan} age={age} coverageType={coverageType} iuaPreference={iuaPreference} visitFrequency={visitFrequency} />}
           {activeTab === 'medical' && <MedicalServices plan={plan} />}
+        </div>
+      </div>
+      {/* Mobile sticky CTA (Sign Up Now) - fixed at viewport bottom */}
+      <div className="fixed left-0 right-0 bottom-0 z-50 md:hidden pointer-events-none">
+        <div className="flex justify-center items-center p-4 bg-white border-t border-gray-200 shadow-lg pointer-events-auto">
+          <button
+            className="w-full bg-[#6366F1] text-white px-6 py-3 rounded-lg font-medium text-base transition-all duration-200 hover:bg-[#4F46E5] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            onClick={() => {/* TODO: Replace with actual sign up logic, e.g., router.push(`/enroll/${plan.plan.id}`) */}}
+            aria-label="Sign Up Now"
+          >
+            Sign Up Now
+          </button>
         </div>
       </div>
     </div>
