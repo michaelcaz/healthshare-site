@@ -24,10 +24,10 @@ export function MatchScore({
     return "text-gray-600 bg-gray-50 border-gray-200"
   }
   
-  const sizesClass = {
-    sm: 'text-xs px-1.5 py-0.5',
-    md: 'text-sm px-2 py-1',
-    lg: 'text-base px-3 py-1.5'
+  const circleSizes = {
+    sm: 'w-10 h-10 min-w-[2.5rem] min-h-[2.5rem] text-xs',
+    md: 'w-12 h-12 min-w-[3rem] min-h-[3rem] text-base',
+    lg: 'w-16 h-16 min-w-[4rem] min-h-[4rem] text-lg'
   }
   
   const iconSizes = {
@@ -39,14 +39,16 @@ export function MatchScore({
   return (
     <div
       className={cn(
-        "inline-flex items-center gap-1 rounded-full border font-medium",
-        sizesClass[size],
+        "flex items-center justify-center rounded-full border font-bold aspect-square",
+        circleSizes[size],
         getColorClass(),
         className
       )}
+      style={{ lineHeight: 1.1 }}
     >
-      <CheckCircle className={cn("flex-shrink-0", iconSizes[size])} />
-      <span>{score}%{showLabel ? " Match" : ""}</span>
+      <span className="block text-center w-full leading-tight">
+        {score}%{showLabel ? <span className="block text-xs font-medium sm:text-sm"> Match</span> : null}
+      </span>
     </div>
   )
 } 

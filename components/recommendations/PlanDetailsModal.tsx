@@ -45,15 +45,9 @@ export function PlanDetailsModal({
                            plan.plan.providerName?.toLowerCase().includes('knew');
   
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto pt-10 pb-10">
-      {/* Backdrop */}
-      <div 
-        className="fixed inset-0 bg-black/50" 
-        onClick={onClose}
-      />
-      
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 h-screen">
       {/* Modal */}
-      <div className="relative z-50 w-full max-w-4xl bg-white rounded-lg shadow-xl max-h-[90vh] flex flex-col">
+      <div className="relative z-50 w-full max-w-4xl bg-white rounded-lg shadow-xl max-h-[100dvh] flex flex-col h-full mt-10 sm:mt-0">
         <div className="flex justify-between items-center p-6 border-b sticky top-0 bg-white z-10">
           <div className="flex items-center gap-4">
             {/* For Knew Health and Crowd Health plans, don't show plan name */}
@@ -73,19 +67,19 @@ export function PlanDetailsModal({
         </div>
         
         {/* Rating Section - Updated to use new components */}
-        <div className="flex items-center justify-between px-6 py-3 bg-gray-50">
-          <div className="flex items-center space-x-6">
-            <div className="flex flex-col">
-              <div className="flex items-center">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between px-6 py-3 bg-gray-50 gap-4 sm:gap-0">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-6 w-full">
+            <div className="flex flex-col items-center sm:items-start flex-1 min-w-0">
+              <div className="flex items-center justify-center sm:justify-start w-full">
                 <MatchScore score={plan.score} size="lg" showLabel={true} />
               </div>
-              <span className="text-xs text-gray-500 mt-1">Based on your preferences</span>
+              <span className="text-xs text-gray-500 mt-1 text-center sm:text-left">Based on your preferences</span>
             </div>
 
-            <div className="h-10 border-l border-gray-300"></div>
-            
-            <div className="flex flex-col">
-              <div className="flex items-center">
+            <div className="hidden sm:block h-10 border-l border-gray-300 mx-4"></div>
+
+            <div className="flex flex-col items-center sm:items-start flex-1 min-w-0 mt-4 sm:mt-0">
+              <div className="flex items-center justify-center sm:justify-start w-full">
                 {/* Hard-code rating values for Knew Health */}
                 {isKnewHealthPlan ? (
                   <RatingStars 
@@ -103,13 +97,13 @@ export function PlanDetailsModal({
                   />
                 )}
               </div>
-              <span className="text-xs text-gray-500 mt-1">Member rating</span>
+              <span className="text-xs text-gray-500 mt-1 text-center sm:text-left">Member rating</span>
             </div>
 
-            <div className="h-10 border-l border-gray-300"></div>
-            
-            <div className="flex flex-col">
-              <div className="flex items-center">
+            <div className="hidden sm:block h-10 border-l border-gray-300 mx-4"></div>
+
+            <div className="flex flex-col items-center sm:items-start flex-1 min-w-0 mt-4 sm:mt-0">
+              <div className="flex items-center justify-center sm:justify-start w-full">
                 <Building className="h-5 w-5 text-blue-600 mr-1.5" />
                 <span className="font-medium text-lg">
                   {planData && planData.providerDetails ? 
@@ -117,23 +111,7 @@ export function PlanDetailsModal({
                     "5+"} Years
                 </span>
               </div>
-              <span className="text-xs text-gray-500 mt-1">In operation</span>
-            </div>
-
-            <div className="h-10 border-l border-gray-300"></div>
-            
-            <div className="flex flex-col">
-              <div className="flex items-center">
-                <span className="font-medium">Member Satisfaction:</span>
-                <span className="ml-2 font-bold text-green-600">
-                  {planData && planData.providerDetails && planData.providerDetails.memberSatisfaction 
-                    ? planData.providerDetails.memberSatisfaction 
-                    : "4.7/5"}
-                </span>
-              </div>
-              <span className="text-xs text-gray-500 mt-1">
-                Based on member reviews
-              </span>
+              <span className="text-xs text-gray-500 mt-1 text-center sm:text-left">In operation</span>
             </div>
           </div>
         </div>
@@ -159,7 +137,7 @@ export function PlanDetailsModal({
           ))}
         </div>
         
-        <div className="p-6 overflow-y-auto">
+        <div className="p-6 flex-1 min-h-0 overflow-y-auto pb-20 sm:pb-8">
           {activeTab === 'overview' && <Overview plan={plan} age={age} coverageType={coverageType} iuaPreference={iuaPreference} visitFrequency={visitFrequency} questionnaire={questionnaire} />}
           {activeTab === 'coverage' && <CoverageDetails plan={plan} age={age} coverageType={coverageType} iuaPreference={iuaPreference} visitFrequency={visitFrequency} />}
           {activeTab === 'medical' && <MedicalServices plan={plan} />}
