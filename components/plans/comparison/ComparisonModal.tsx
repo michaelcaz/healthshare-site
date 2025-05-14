@@ -8,6 +8,7 @@ import { PlanRecommendation } from '@/lib/recommendation/recommendations';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { planDetailsData } from '@/data/plan-details-data';
 
 interface ComparisonModalProps {
   isOpen: boolean;
@@ -16,36 +17,62 @@ interface ComparisonModalProps {
 }
 
 export function ComparisonModal({ isOpen, onClose, questionnaire }: ComparisonModalProps) {
+  const { selectedPlans } = useSelectedPlans();
+
+  // Map PlanRecommendation[] to PlanData[] for the table
+  const mappedPlans = selectedPlans.map((rec) => {
+    const plan = rec.plan;
+    // Find a representative cost (e.g., first available, or for 30-39/Member Only)
+    const matrix = plan.planMatrix.find(
+      m => m.ageBracket === '30-39' && m.householdType === 'Member Only'
+    ) || plan.planMatrix[0];
+    const costs = matrix?.costs[0] || { monthlyPremium: 0, initialUnsharedAmount: 0 };
+    return {
+      id: plan.id,
+      planName: plan.planName,
+      providerName: plan.providerName,
+      monthlyCost: costs.monthlyPremium,
+      iua: costs.initialUnsharedAmount,
+      estAnnualCost: costs.monthlyPremium * 12,
+      avgReviews: '4.5', // fallback, or get from planDetailsData if available
+      reviewCount: 100, // fallback, or get from planDetailsData if available
+      details: (planDetailsData as any)[plan.id] || {},
+    };
+  });
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent 
         className={cn(
-          "max-w-7xl w-[90vw] max-h-[80vh] overflow-y-auto",
-          "!translate-y-[-50%] !top-[45%]" // Finding the perfect middle ground
+          "w-full max-w-7xl h-[90vh] max-h-[90vh] overflow-y-auto p-0 bg-white",
+          "!translate-y-[-50%] !top-[45%]",
+          "sm:rounded-xl rounded-none"
         )}
       >
-        {/* Custom back button that replaces the X */}
-        <div className="absolute right-4 top-4 z-50">
+        {/* Back button, styled and positioned as on the old page */}
+        <div className="flex items-center px-2 pt-4 pb-2 md:px-4 md:pt-8">
           <DialogClose asChild>
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className="bg-primary text-white hover:bg-primary-dark border-primary/30 font-medium flex items-center gap-1.5 shadow-sm rounded-md px-4 py-2"
+            <Button
+              variant="outline"
+              size="sm"
+              className="bg-white text-primary hover:bg-primary/5 hover:text-primary-dark border-primary/30 font-medium flex items-center gap-1 shadow-sm rounded-md"
+              data-testid="back-button"
             >
-              <ChevronLeft className="h-4 w-4 inline-block" />
-              <span>Back to Recommendations</span>
+              <ChevronLeft className="h-4 w-4" />
+              <span className="text-sm md:text-base">Back to Recommendations</span>
             </Button>
           </DialogClose>
         </div>
-        
-        <DialogHeader className="flex flex-col items-center justify-center mb-2 pt-10">
-          <DialogTitle className="text-2xl font-bold text-gray-900">Plan Comparison</DialogTitle>
-          <p className="text-lg text-gray-700 mt-2">
+        {/* Title and subtitle */}
+        <div className="px-2 md:px-4">
+          <h1 className="text-xl md:text-3xl font-bold text-gray-900 mb-2 md:mb-4">Plan Comparison</h1>
+          <p className="text-base md:text-lg text-gray-700 mb-4 md:mb-8">
             Compare your selected plans side by side to find the best option for your needs.
           </p>
-        </DialogHeader>
-        <div className="p-2">
-          <PlanComparisonTable questionnaire={questionnaire} />
+        </div>
+        {/* Table/content area */}
+        <div className="px-0 md:px-4 pb-4 md:pb-8 overflow-x-auto">
+          <PlanComparisonTable selectedPlans={mappedPlans} />
         </div>
       </DialogContent>
     </Dialog>

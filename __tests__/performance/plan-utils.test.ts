@@ -7,7 +7,7 @@ describe('Performance Tests', () => {
     getPlanComparison('30-39', 'Member Only');
     
     const duration = performance.now() - start;
-    expect(duration).toBeLessThan(100);
+    expect(duration).lessThan(100);
   });
 
   test('handles large number of comparisons efficiently', () => {
@@ -19,6 +19,6 @@ describe('Performance Tests', () => {
     }
     
     const duration = performance.now() - start;
-    expect(duration / iterations).toBeLessThan(1); // Less than 1ms per iteration
+    expect(duration / iterations).lessThan(1); // Less than 1ms per iteration
   });
 }); 

@@ -1,14 +1,15 @@
 import { FC } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useSelectedPlans } from '@/components/recommendations/SelectedPlansContext';
 
 interface CompareSnackbarProps {
   compareCount: number;
-  onCompare: () => void;
   onClose: () => void;
   isVisible: boolean;
 }
 
-export const CompareSnackbar: FC<CompareSnackbarProps> = ({ compareCount, onCompare, onClose, isVisible }) => {
+export const CompareSnackbar: FC<CompareSnackbarProps> = ({ compareCount, onClose, isVisible }) => {
+  const { openComparisonModal } = useSelectedPlans();
   return (
     <AnimatePresence>
       {isVisible && (
@@ -24,7 +25,7 @@ export const CompareSnackbar: FC<CompareSnackbarProps> = ({ compareCount, onComp
           <div className="rounded-xl shadow-2xl bg-white border border-gray-200 px-6 py-4 flex items-center gap-4">
             <button
               className="bg-amber-500 text-white px-6 py-2 rounded-lg font-medium text-base transition-all duration-200 hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-500"
-              onClick={onCompare}
+              onClick={openComparisonModal}
               aria-label={`Compare ${compareCount} plans`}
             >
               Compare {compareCount} Plan{compareCount !== 1 ? 's' : ''}

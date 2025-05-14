@@ -27,6 +27,10 @@ interface PlanData {
   details: PlanDetailsData
 }
 
+interface PlanComparisonTableProps {
+  selectedPlans: PlanData[];
+}
+
 // Helper Components
 const StarRating = ({ rating }: { rating: number }) => {
   const fullStars = Math.floor(rating)
@@ -49,7 +53,7 @@ const StarRating = ({ rating }: { rating: number }) => {
 // Helper Functions
 const getProviderLogoPath = (providerName: string): string => {
   const normalizedName = providerName.toLowerCase().replace(/\s+/g, '-')
-  return `/images/providers/${normalizedName}.png`
+  return `/images/providers/${normalizedName}.svg`
 }
 
 const extractPrescriptionInfo = (planDetails: PlanDetailsData) => {
@@ -192,72 +196,21 @@ const extractLifetimeLimit = (planDetails: PlanDetailsData, planData?: PlanData)
 }
 
 // Main Component
-export function PlanComparisonTable({ questionnaire }: { questionnaire?: any }) {
-  const searchParams = useSearchParams()
-  const [selectedPlans, setSelectedPlans] = useState<PlanData[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+export function PlanComparisonTable({ selectedPlans }: PlanComparisonTableProps) {
+  if (!selectedPlans || selectedPlans.length === 0) {
+    return <div className="text-gray-600 text-center py-8">No plans selected for comparison</div>;
+  }
 
-  useEffect(() => {
-    const loadPlans = async () => {
-      try {
-        // Get plan IDs from URL parameters
-        const planIds = searchParams.get('plans')?.split(',') || []
-        
-        // Filter plan details data based on selected plan IDs
-        const plans = planIds
-          .map(planId => {
-            const planDetails = planDetailsData[planId]
-            const pricingPlan = providerPlans.find(p => p.id === planId)
-            
-            if (!planDetails || !pricingPlan) return null
-            
-            // Get the first pricing option for the 18-29 age bracket and Member Only household type
-            const pricingMatrix = pricingPlan.planMatrix.find(
-              m => m.ageBracket === '18-29' && m.householdType === 'Member Only'
-            )
-            
-            const costs = pricingMatrix?.costs[0] || { monthlyPremium: 0, initialUnsharedAmount: 0 }
-            
-            return {
-              id: planId,
-              planName: pricingPlan.planName,
-              providerName: pricingPlan.providerName,
-              monthlyCost: costs.monthlyPremium,
-              iua: costs.initialUnsharedAmount,
-              estAnnualCost: costs.monthlyPremium * 12,
-              avgReviews: "4.5",
-              reviewCount: 100,
-              details: planDetails
-            }
-          })
-          .filter((plan): plan is PlanData => plan !== null)
-
-        setSelectedPlans(plans)
-      } catch (error) {
-        console.error('Error loading plans:', error)
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    loadPlans()
-  }, [searchParams])
-
+  // Remove plan handler (should be lifted to context if you want to update global state)
+  // For now, just disables the button
   const removePlan = (planId: string) => {
-    setSelectedPlans(prev => prev.filter(plan => plan.id !== planId))
-  }
-
-  if (isLoading) {
-    return <div>Loading plans...</div>
-  }
-
-  if (selectedPlans.length === 0) {
-    return <div>No plans selected for comparison</div>
-  }
+    // Optionally, you can call a context method here
+    // This is a placeholder for UI consistency
+  };
 
   return (
-    <div className="overflow-x-auto">
-      <table className="min-w-full divide-y divide-gray-200">
+    <div className="overflow-x-auto w-full">
+      <table className="min-w-full divide-y divide-gray-200 text-xs md:text-sm">
         {/* Table header */}
         <thead className="bg-gray-50">
           <tr>
@@ -265,7 +218,7 @@ export function PlanComparisonTable({ questionnaire }: { questionnaire?: any }) 
               Plan Details
             </th>
             {selectedPlans.map(plan => (
-              <th key={plan.id} scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th key={plan.id} scope="col" className="px-2 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[180px] md:min-w-[220px]">
                 <div className="flex items-center justify-between">
                   <span>{plan.planName}</span>
                   <button
@@ -288,7 +241,7 @@ export function PlanComparisonTable({ questionnaire }: { questionnaire?: any }) 
               Provider
             </td>
             {selectedPlans.map(plan => (
-              <td key={plan.id} className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              <td key={plan.id} className="px-2 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 <div className="flex items-center gap-2">
                   <Image
                     src={getProviderLogoPath(plan.providerName)}
@@ -309,7 +262,7 @@ export function PlanComparisonTable({ questionnaire }: { questionnaire?: any }) 
               Monthly Cost
             </td>
             {selectedPlans.map(plan => (
-              <td key={plan.id} className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              <td key={plan.id} className="px-2 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 {formatCurrency(plan.monthlyCost)}
               </td>
             ))}
@@ -321,7 +274,7 @@ export function PlanComparisonTable({ questionnaire }: { questionnaire?: any }) 
               Initial Unshared Amount (IUA)
             </td>
             {selectedPlans.map(plan => (
-              <td key={plan.id} className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              <td key={plan.id} className="px-2 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 {formatCurrency(plan.iua)}
               </td>
             ))}
@@ -333,7 +286,7 @@ export function PlanComparisonTable({ questionnaire }: { questionnaire?: any }) 
               Estimated Annual Cost
             </td>
             {selectedPlans.map(plan => (
-              <td key={plan.id} className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              <td key={plan.id} className="px-2 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 {formatCurrency(plan.estAnnualCost)}
               </td>
             ))}
@@ -345,7 +298,7 @@ export function PlanComparisonTable({ questionnaire }: { questionnaire?: any }) 
               Reviews
             </td>
             {selectedPlans.map(plan => (
-              <td key={plan.id} className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              <td key={plan.id} className="px-2 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 <div className="flex items-center gap-2">
                   <StarRating rating={parseFloat(plan.avgReviews)} />
                   <span>({plan.reviewCount})</span>
@@ -362,7 +315,7 @@ export function PlanComparisonTable({ questionnaire }: { questionnaire?: any }) 
             {selectedPlans.map(plan => {
               const prescriptionInfo = extractPrescriptionInfo(plan.details)
               return (
-                <td key={plan.id} className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <td key={plan.id} className="px-2 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   <div className="space-y-1">
                     <div>Generic: {prescriptionInfo.generic}</div>
                     <div>Brand: {prescriptionInfo.brand}</div>
@@ -382,7 +335,7 @@ export function PlanComparisonTable({ questionnaire }: { questionnaire?: any }) 
             {selectedPlans.map(plan => {
               const pregnancyInfo = extractPregnancyInfo(plan.details, plan)
               return (
-                <td key={plan.id} className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <td key={plan.id} className="px-2 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   <div className="space-y-1">
                     <div>Prenatal Care: {pregnancyInfo.prenatalCare}</div>
                     <div>Delivery: {pregnancyInfo.delivery}</div>
@@ -401,7 +354,7 @@ export function PlanComparisonTable({ questionnaire }: { questionnaire?: any }) 
             {selectedPlans.map(plan => {
               const preExistingInfo = extractPreExistingInfo(plan.details)
               return (
-                <td key={plan.id} className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <td key={plan.id} className="px-2 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   Waiting Period: {preExistingInfo.waitingPeriod}
                 </td>
               )
@@ -414,7 +367,7 @@ export function PlanComparisonTable({ questionnaire }: { questionnaire?: any }) 
               Alternative Medicine
             </td>
             {selectedPlans.map(plan => (
-              <td key={plan.id} className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              <td key={plan.id} className="px-2 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 {hasAlternativeMedicineCoverage(plan.details) ? (
                   <CheckCircle className="h-5 w-5 text-green-500" />
                 ) : (
@@ -430,7 +383,7 @@ export function PlanComparisonTable({ questionnaire }: { questionnaire?: any }) 
               Preventative Services
             </td>
             {selectedPlans.map(plan => (
-              <td key={plan.id} className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              <td key={plan.id} className="px-2 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 {hasPreventativeServices(plan.details, plan) ? (
                   <CheckCircle className="h-5 w-5 text-green-500" />
                 ) : (
@@ -446,7 +399,7 @@ export function PlanComparisonTable({ questionnaire }: { questionnaire?: any }) 
               Lifetime Limit
             </td>
             {selectedPlans.map(plan => (
-              <td key={plan.id} className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              <td key={plan.id} className="px-2 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 {extractLifetimeLimit(plan.details, plan)}
               </td>
             ))}
