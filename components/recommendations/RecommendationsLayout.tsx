@@ -17,6 +17,7 @@ import { planDetailsData } from '@/data/plan-details-data'
 import { ComparisonBanner } from './ComparisonBanner'
 import { ComparisonModal } from '@/components/plans/comparison/ComparisonModal'
 import { BottomCTAAction } from '@/components/ui/MobileBottomCTAAction'
+import { CompareSnackbar } from '@/components/ui/CompareSnackbar'
 
 export function RecommendationsLayout({ 
   recommendations, 
@@ -30,6 +31,7 @@ export function RecommendationsLayout({
   const [isLoading, setIsLoading] = useState(false)
   const [detailsPlan, setDetailsPlan] = useState<PlanRecommendation | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isSnackbarDismissed, setIsSnackbarDismissed] = useState(false)
 
   // Scroll to top when the component mounts
   useEffect(() => {
@@ -201,30 +203,29 @@ export function RecommendationsLayout({
         questionnaire={questionnaire}
       />
       
-      {/* Universal sticky CTA for all devices */}
-      <BottomCTAAction
-        mode={selectedPlans.length >= 2 ? 'compare' : 'signup'}
-        onSignup={() => window.location.href = `/enroll/${topPlan.plan.id}`}
-        onCompare={() => {
-          // Store selected plans in localStorage for the comparison page
-          localStorage.setItem('selected-plans', JSON.stringify(selectedPlans));
-          // Build the comparison URL with questionnaire params if available
-          let url = '/plans/comparison';
-          if (questionnaire) {
-            const params = new URLSearchParams();
-            if (questionnaire.age) params.append('age', String(questionnaire.age));
-            if (questionnaire.coverage_type) params.append('coverageType', questionnaire.coverage_type);
-            if (questionnaire.visit_frequency) params.append('visitFrequency', questionnaire.visit_frequency);
-            if (questionnaire.iua_preference) params.append('iua', questionnaire.iua_preference);
-            if (params.toString()) url = `${url}?${params.toString()}`;
-          }
-          window.location.href = url;
-        }}
-        compareCount={selectedPlans.length}
-        label="Sign up now"
-        isVisible={true}
-      />
-      
+      {/* Mobile sticky CTA for mobile only */}
+      <div className="md:hidden">
+        <BottomCTAAction
+          mode={selectedPlans.length >= 2 ? 'compare' : 'signup'}
+          onSignup={() => window.location.href = `/enroll/${topPlan.plan.id}`}
+          onCompare={() => {
+            localStorage.setItem('selected-plans', JSON.stringify(selectedPlans));
+            let url = '/plans/comparison';
+            if (questionnaire) {
+              const params = new URLSearchParams();
+              if (questionnaire.age) params.append('age', String(questionnaire.age));
+              if (questionnaire.coverage_type) params.append('coverageType', questionnaire.coverage_type);
+              if (questionnaire.visit_frequency) params.append('visitFrequency', questionnaire.visit_frequency);
+              if (questionnaire.iua_preference) params.append('iua', questionnaire.iua_preference);
+              if (params.toString()) url = `${url}?${params.toString()}`;
+            }
+            window.location.href = url;
+          }}
+          compareCount={selectedPlans.length}
+          label="Sign up now"
+          isVisible={true}
+        />
+      </div>
       {/* Main Content */}
       <div className="bg-gray-50 min-h-screen pb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -289,6 +290,25 @@ export function RecommendationsLayout({
               onPlanSelect={handleViewDetails}
               questionnaire={questionnaire}
             />
+          {/* Desktop Compare Snackbar at bottom of content */}
+          <CompareSnackbar
+            compareCount={selectedPlans.length}
+            onCompare={() => {
+              localStorage.setItem('selected-plans', JSON.stringify(selectedPlans));
+              let url = '/plans/comparison';
+              if (questionnaire) {
+                const params = new URLSearchParams();
+                if (questionnaire.age) params.append('age', String(questionnaire.age));
+                if (questionnaire.coverage_type) params.append('coverageType', questionnaire.coverage_type);
+                if (questionnaire.visit_frequency) params.append('visitFrequency', questionnaire.visit_frequency);
+                if (questionnaire.iua_preference) params.append('iua', questionnaire.iua_preference);
+                if (params.toString()) url = `${url}?${params.toString()}`;
+              }
+              window.location.href = url;
+            }}
+            onClose={() => setIsSnackbarDismissed(true)}
+            isVisible={selectedPlans.length >= 2 && !isSnackbarDismissed}
+          />
           </div>
         </div>
       </div>
