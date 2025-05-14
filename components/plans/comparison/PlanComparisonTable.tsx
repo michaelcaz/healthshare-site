@@ -13,6 +13,7 @@ import { CoverageType } from '@/types/provider-plans'
 import { getDisplayAnnualCost, formatCurrency } from '@/lib/utils/plan-display'
 import { getVisitFrequencyCost, calculateAnnualCost } from '@/utils/plan-utils'
 import { providerPlans } from '@/data/provider-plans'
+import { ProviderLogo } from '@/components/recommendations/ProviderLogo'
 
 // Types
 interface PlanData {
@@ -51,13 +52,8 @@ const StarRating = ({ rating }: { rating: number }) => {
 }
 
 // Helper Functions
-const getProviderLogoPath = (providerName: string): string => {
-  const normalizedName = providerName.toLowerCase().replace(/\s+/g, '-')
-  return `/images/providers/${normalizedName}.svg`
-}
-
 const extractPrescriptionInfo = (planDetails: PlanDetailsData) => {
-  const prescriptionText = planDetails.medicalServices.prescriptionDrugs || ''
+  const prescriptionText = planDetails.medicalServices?.prescriptionDrugs || ''
   
   const result = {
     generic: '$25/fill',
@@ -242,15 +238,8 @@ export function PlanComparisonTable({ selectedPlans }: PlanComparisonTableProps)
             </td>
             {selectedPlans.map(plan => (
               <td key={plan.id} className="px-2 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                <div className="flex items-center gap-2">
-                  <Image
-                    src={getProviderLogoPath(plan.providerName)}
-                    alt={`${plan.providerName} logo`}
-                    width={24}
-                    height={24}
-                    className="rounded-sm"
-                  />
-                  {plan.providerName}
+                <div className="flex items-center justify-center gap-2">
+                  <ProviderLogo providerName={plan.providerName} size="md" />
                 </div>
               </td>
             ))}
