@@ -32,12 +32,12 @@ export function OnboardingLayout({ children, title, description }: OnboardingLay
         <div className="container mx-auto px-4 py-3">
           <Link href="/" className="block">
             <Image 
-              src="/images/sharewizelogo.svg" 
+              src="/images/sharewizelogofull.svg" 
               alt="Sharewize Logo" 
-              width={150} 
+              width={140}
               height={40}
               className="h-10 w-auto"
-              style={{ height: 'auto', width: 'auto' }}
+              priority
               onLoad={(e) => {
                 console.log('Onboarding Logo loaded, element:', e.currentTarget);
                 const headerElement = document.querySelector('.bg-white.border-b.border-gray-200');

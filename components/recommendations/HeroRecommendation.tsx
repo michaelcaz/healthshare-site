@@ -291,7 +291,7 @@ export function HeroRecommendation({
             disabled={isLoading}
             className="cta-button"
           >
-            Get This Plan
+            Sign up now
             <ArrowRight className="h-4 w-4 ml-2 inline" />
           </button>
           <button

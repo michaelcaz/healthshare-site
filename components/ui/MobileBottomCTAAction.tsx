@@ -1,41 +1,15 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { FC } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useRouter } from 'next/navigation';
 
-export function MobileBottomCTAHome() {
-  const router = useRouter();
-  const [isVisible, setIsVisible] = useState(false);
-  const [lastScrollY, setLastScrollY] = useState(0);
+interface MobileBottomCTAActionProps {
+  onClick: () => void;
+  label?: string;
+  isVisible?: boolean;
+}
 
-  const handleFindMyPlan = () => {
-    router.push('/questionnaire');
-  };
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      
-      // Show CTA when user has scrolled at least 300px
-      if (currentScrollY > 300) {
-        setIsVisible(true);
-      } else {
-        setIsVisible(false);
-      }
-      
-      setLastScrollY(currentScrollY);
-    };
-
-    // Set initial state
-    handleScroll();
-    
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollY]);
-
+export const MobileBottomCTAAction: FC<MobileBottomCTAActionProps> = ({ onClick, label = 'Sign up now', isVisible = true }) => {
   return (
     <AnimatePresence>
       {isVisible && (
@@ -48,9 +22,9 @@ export function MobileBottomCTAHome() {
           <div className="flex items-center justify-between p-4">
             <button 
               className="bg-[#6366F1] text-white px-6 py-3 rounded-lg font-medium flex-grow mr-2 transition-all duration-200 hover:bg-[#4F46E5]"
-              onClick={handleFindMyPlan}
+              onClick={onClick}
             >
-              Find my plan
+              {label}
             </button>
             <a 
               href="tel:2257188977" 
@@ -65,4 +39,4 @@ export function MobileBottomCTAHome() {
       )}
     </AnimatePresence>
   );
-} 
+}; 

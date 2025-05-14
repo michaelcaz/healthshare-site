@@ -20,12 +20,12 @@ export function QuestionnaireContainer({
           <div className="flex justify-center mb-8">
             <Link href="/" className="inline-block">
               <Image
-                src="/images/sharewizelogo.svg"
+                src="/images/sharewizelogofull.svg"
                 alt="Sharewize"
-                width={180}
-                height={48}
+                width={140}
+                height={40}
+                priority
                 className="h-12 w-auto"
-                style={{ width: 'auto' }}
               />
             </Link>
           </div>

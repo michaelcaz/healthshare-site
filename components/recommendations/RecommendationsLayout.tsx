@@ -16,6 +16,7 @@ import { PregnancyAlert } from './PregnancyAlert'
 import { planDetailsData } from '@/data/plan-details-data'
 import { ComparisonBanner } from './ComparisonBanner'
 import { ComparisonModal } from '@/components/plans/comparison/ComparisonModal'
+import { MobileBottomCTAAction } from '@/components/ui/MobileBottomCTAAction'
 
 export function RecommendationsLayout({ 
   recommendations, 
@@ -198,6 +199,12 @@ export function RecommendationsLayout({
         isOpen={isComparisonModalOpen}
         onClose={closeComparisonModal}
         questionnaire={questionnaire}
+      />
+      
+      {/* Mobile sticky CTA for /rec page */}
+      <MobileBottomCTAAction 
+        onClick={() => window.location.href = `/enroll/${topPlan.plan.id}`}
+        label="Sign up now"
       />
       
       {/* Comparison Banner */}

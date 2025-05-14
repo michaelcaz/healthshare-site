@@ -78,12 +78,12 @@ export function QuestionnaireHeader() {
       <div className="container mx-auto px-4 flex justify-between items-center">
         <Link href="/" className="flex items-center">
           <Image
-            src="/images/sharewizelogo.svg"
+            src="/images/sharewizelogofull.svg"
             alt="Sharewize"
-            width={150}
-            height={50}
+            width={140}
+            height={40}
             priority
-            className="max-h-12"
+            className="h-10 w-auto"
           />
         </Link>
         

@@ -27,12 +27,12 @@ export function ResultsLayout({
         <div className="container mx-auto px-4 flex justify-between items-center">
           <Link href="/" className="inline-block">
             <Image
-              src="/images/sharewizelogo.svg"
+              src="/images/sharewizelogofull.svg"
               alt="Sharewize"
-              width={160}
+              width={140}
               height={40}
+              priority
               className="h-10 w-auto"
-              style={{ width: 'auto' }}
             />
           </Link>
           

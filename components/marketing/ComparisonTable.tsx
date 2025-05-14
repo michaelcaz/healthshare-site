@@ -123,10 +123,10 @@ export function ComparisonTable() {
                     <div>
                       <div className="text-xs font-medium text-emerald-600 mb-1">
                         <img 
-                          src="/images/sharewizelogo.svg" 
+                          src="/images/sharewizelogofull.svg" 
                           alt="Sharewize" 
                           loading="lazy"
-                          className="comparison-logo-mobile w-auto h-5"
+                          className="comparison-logo-mobile w-auto h-6"
                         />
                       </div>
                       <div className="text-emerald-600 font-bold text-base leading-7">{feature.Sharewize}</div>
@@ -160,10 +160,10 @@ export function ComparisonTable() {
                 <div className="font-bold text-xl text-gray-900 pl-20"></div>
                 <div className="flex items-center">
                   <img 
-                    src="/images/sharewizelogo.svg" 
+                    src="/images/sharewizelogofull.svg" 
                     alt="Sharewize" 
                     loading="lazy"
-                    className="comparison-logo w-auto h-10"
+                    className="comparison-logo w-auto h-12"
                   />
                 </div>
                 <div className="font-bold text-2xl text-orange-600 pl-5 flex items-center">Insurance</div>

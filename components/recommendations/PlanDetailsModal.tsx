@@ -12,6 +12,8 @@ import { planDetailsData } from '@/data/plan-details-data'
 import { RatingStars } from '@/components/ui/rating-stars'
 import { MatchScore } from '@/components/ui/match-score'
 import { ProviderLogo } from './ProviderLogo'
+import { useRouter } from 'next/navigation'
+import { MobileBottomCTAAction } from '@/components/ui/MobileBottomCTAAction'
 
 interface PlanDetailsModalProps {
   plan: PlanRecommendation
@@ -27,6 +29,7 @@ export function PlanDetailsModal({
   questionnaire
 }: PlanDetailsModalProps) {
   const [activeTab, setActiveTab] = useState('overview')
+  const router = useRouter();
   
   if (!isOpen) return null
   
@@ -146,17 +149,10 @@ export function PlanDetailsModal({
         </div>
       </div>
       {/* Mobile sticky CTA (Sign Up Now) - fixed at viewport bottom */}
-      <div className="fixed left-0 right-0 bottom-0 z-50 md:hidden pointer-events-none">
-        <div className="flex justify-center items-center p-4 bg-white border-t border-gray-200 shadow-lg pointer-events-auto">
-          <button
-            className="w-full bg-[#6366F1] text-white px-6 py-3 rounded-lg font-medium text-base transition-all duration-200 hover:bg-[#4F46E5] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-            onClick={() => {/* TODO: Replace with actual sign up logic, e.g., router.push(`/enroll/${plan.plan.id}`) */}}
-            aria-label="Sign Up Now"
-          >
-            Sign Up Now
-          </button>
-        </div>
-      </div>
+      <MobileBottomCTAAction 
+        onClick={() => router.push(`/enroll/${plan.plan.id}`)} 
+        label="Sign up now"
+      />
     </div>
   )
 } 
