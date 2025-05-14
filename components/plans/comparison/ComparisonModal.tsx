@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { ChevronLeft } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { planDetailsData } from '@/data/plan-details-data';
+import { getPlanDisplayData } from '@/lib/utils/plan-display';
 
 interface ComparisonModalProps {
   isOpen: boolean;
@@ -22,18 +23,20 @@ export function ComparisonModal({ isOpen, onClose, questionnaire }: ComparisonMo
   // Map PlanRecommendation[] to PlanData[] for the table
   const mappedPlans = selectedPlans.map((rec) => {
     const plan = rec.plan;
-    // Find a representative cost (e.g., first available, or for 30-39/Member Only)
-    const matrix = plan.planMatrix.find(
-      m => m.ageBracket === '30-39' && m.householdType === 'Member Only'
-    ) || plan.planMatrix[0];
-    const costs = matrix?.costs[0] || { monthlyPremium: 0, initialUnsharedAmount: 0 };
+    const displayData = getPlanDisplayData(
+      rec,
+      questionnaire.age,
+      questionnaire.coverage_type,
+      questionnaire.iua_preference,
+      questionnaire.visit_frequency
+    );
     return {
       id: plan.id,
       planName: plan.planName,
       providerName: plan.providerName,
-      monthlyCost: costs.monthlyPremium,
-      iua: costs.initialUnsharedAmount,
-      estAnnualCost: costs.monthlyPremium * 12,
+      monthlyCost: displayData.monthlyPremium,
+      iua: displayData.initialUnsharedAmount,
+      estAnnualCost: displayData.annualCost,
       avgReviews: '4.5', // fallback, or get from planDetailsData if available
       reviewCount: 100, // fallback, or get from planDetailsData if available
       details: (planDetailsData as any)[plan.id] || {},
