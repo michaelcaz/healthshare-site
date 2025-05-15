@@ -14,6 +14,8 @@ import { getDisplayAnnualCost, formatCurrency } from '@/lib/utils/plan-display'
 import { getVisitFrequencyCost, calculateAnnualCost } from '@/utils/plan-utils'
 import { providerPlans } from '@/data/provider-plans'
 import { ProviderLogo } from '@/components/recommendations/ProviderLogo'
+import { planData } from '@/lib/plan-data'
+import { PlanComparisonRow } from './PlanComparisonRow'
 
 // Types
 interface PlanData {
@@ -194,11 +196,44 @@ const extractLifetimeLimit = (planDetails: PlanDetailsData, planData?: PlanData)
 // Helper to round up to nearest 0.5
 const roundUpToHalf = (num: number) => Math.ceil(num * 2) / 2;
 
+const comparisonRows = [
+  { label: 'Emergency Services', key: 'emergencyServices' },
+  { label: 'Surgical Procedures and Treatment', key: 'surgicalProcedures' },
+  { label: 'Preventative Services', key: 'preventativeServices' },
+  { label: 'Maternity Coverage', key: 'maternityCoverage' },
+  { label: 'Pregnancy Waiting Period', key: 'pregnancyWaitingPeriod' },
+  { label: 'Pre-existing Condition Waiting Period', key: 'preExistingConditionWaitingPeriod' },
+  { label: 'Alternative Medicine', key: 'alternativeMedicine' },
+  { label: 'Telemedicine', key: 'telemedicine' },
+  { label: 'Prescription Drugs Eligible for Sharing After Meeting IUA', key: 'prescriptionDrugsAfterIUA' },
+  { label: 'Lifetime Limit', key: 'lifetimeLimit' },
+];
+
+// Mapping from selectedPlans planName to planData planName
+const PLAN_NAME_MAP: Record<string, string> = {
+  'Direct Membership': 'Zion Direct',
+  'Essential': 'Zion Essential',
+  'ACCESS+': 'Sedera Access+',
+  'ACCESS+ DPC': 'Sedera Access+ DPC',
+  'Crowd Health': 'Crowd Health',
+  'Premium HSA': 'Knew Health',
+  // Add more mappings as needed
+};
+
 // Main Component
 export function PlanComparisonTable({ selectedPlans }: PlanComparisonTableProps) {
   if (!selectedPlans || selectedPlans.length === 0) {
     return <div className="text-gray-600 text-center py-8">No plans selected for comparison</div>;
   }
+
+  // Map each selected plan to its corresponding planData entry using the mapping
+  const filteredPlanData = selectedPlans.map(selPlan => {
+    const mappedName = PLAN_NAME_MAP[selPlan.planName] || selPlan.planName;
+    const match = planData.find(
+      staticPlan => staticPlan.planName === mappedName
+    );
+    return match || null;
+  });
 
   // Remove plan handler (should be lifted to context if you want to update global state)
   // For now, just disables the button
@@ -305,103 +340,13 @@ export function PlanComparisonTable({ selectedPlans }: PlanComparisonTableProps)
             })}
           </tr>
 
-          {/* Prescription Drugs Row */}
-          <tr>
-            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-              Prescription Drugs
-            </td>
-            {selectedPlans.map(plan => {
-              const prescriptionInfo = extractPrescriptionInfo(plan.details)
-              return (
-                <td key={plan.id} className="px-2 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  <div className="space-y-1">
-                    <div>Generic: {prescriptionInfo.generic}</div>
-                    <div>Brand: {prescriptionInfo.brand}</div>
-                    <div>Preferred Brand: {prescriptionInfo.preferredBrand}</div>
-                    <div>Specialty: {prescriptionInfo.specialty}</div>
-                  </div>
-                </td>
-              )
-            })}
-          </tr>
-
-          {/* Pregnancy Coverage Row */}
-          <tr>
-            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-              Pregnancy Coverage
-            </td>
-            {selectedPlans.map(plan => {
-              const pregnancyInfo = extractPregnancyInfo(plan.details, plan)
-              return (
-                <td key={plan.id} className="px-2 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  <div className="space-y-1">
-                    <div>Prenatal Care: {pregnancyInfo.prenatalCare}</div>
-                    <div>Delivery: {pregnancyInfo.delivery}</div>
-                    <div>Waiting Period: {pregnancyInfo.waitingPeriod}</div>
-                  </div>
-                </td>
-              )
-            })}
-          </tr>
-
-          {/* Pre-existing Conditions Row */}
-          <tr>
-            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-              Pre-existing Conditions
-            </td>
-            {selectedPlans.map(plan => {
-              const preExistingInfo = extractPreExistingInfo(plan.details)
-              return (
-                <td key={plan.id} className="px-2 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  Waiting Period: {preExistingInfo.waitingPeriod}
-                </td>
-              )
-            })}
-          </tr>
-
-          {/* Alternative Medicine Row */}
-          <tr>
-            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-              Alternative Medicine
-            </td>
-            {selectedPlans.map(plan => (
-              <td key={plan.id} className="px-2 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {hasAlternativeMedicineCoverage(plan.details) ? (
-                  <CheckCircle className="h-5 w-5 text-green-500" />
-                ) : (
-                  <X className="h-5 w-5 text-red-500" />
-                )}
-              </td>
-            ))}
-          </tr>
-
-          {/* Preventative Services Row */}
-          <tr>
-            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-              Preventative Services
-            </td>
-            {selectedPlans.map(plan => (
-              <td key={plan.id} className="px-2 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {hasPreventativeServices(plan.details, plan) ? (
-                  <CheckCircle className="h-5 w-5 text-green-500" />
-                ) : (
-                  <X className="h-5 w-5 text-red-500" />
-                )}
-              </td>
-            ))}
-          </tr>
-
-          {/* Lifetime Limit Row */}
-          <tr>
-            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-              Lifetime Limit
-            </td>
-            {selectedPlans.map(plan => (
-              <td key={plan.id} className="px-2 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {extractLifetimeLimit(plan.details, plan)}
-              </td>
-            ))}
-          </tr>
+          {comparisonRows.map(row => (
+            <PlanComparisonRow
+              key={row.key}
+              label={row.label}
+              values={filteredPlanData.map(plan => plan ? plan[row.key as keyof typeof plan] : '')}
+            />
+          ))}
         </tbody>
       </table>
     </div>
