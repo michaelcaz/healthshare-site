@@ -1,6 +1,6 @@
 'use client'
 
-import { Star } from 'lucide-react'
+import { Star, StarHalf } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 interface RatingStarsProps {
@@ -35,19 +35,33 @@ export function RatingStars({
   return (
     <div className={cn("flex items-center", className)}>
       <div className="flex">
-        {Array.from({ length: maxRating }).map((_, i) => (
-          <Star 
-            key={i}
-            className={cn(
-              starSizes[size],
-              i < Math.floor(rating)
-                ? "text-yellow-400 fill-yellow-400" // Full star
-                : i < Math.floor(rating + 0.5)
-                  ? "text-yellow-400 fill-yellow-400 opacity-50" // Half star
-                  : "text-gray-300" // Empty star
-            )}
-          />
-        ))}
+        {Array.from({ length: maxRating }).map((_, i) => {
+          if (i < Math.floor(rating)) {
+            // Full star
+            return (
+              <Star
+                key={i}
+                className={cn(starSizes[size], "text-yellow-400 fill-yellow-400")}
+              />
+            );
+          } else if (i === Math.floor(rating) && rating % 1 >= 0.5) {
+            // Half star
+            return (
+              <StarHalf
+                key={i}
+                className={cn(starSizes[size], "text-yellow-400 fill-yellow-400")}
+              />
+            );
+          } else {
+            // Empty star
+            return (
+              <Star
+                key={i}
+                className={cn(starSizes[size], "text-gray-300")}
+              />
+            );
+          }
+        })}
       </div>
       
       {showValue && (

@@ -6,7 +6,6 @@ import { GoogleAnalytics } from '@/components/providers/GoogleAnalytics'
 import { ScrollRestoration } from '@/components/ui/scroll-restoration'
 import { FloatingCTA } from '@/components/ui/floating-cta'
 import { ExitIntentPopup } from '@/components/ui/exit-intent-popup'
-import { MobileBottomCTAHome } from '@/components/ui/MobileBottomCTA'
 import { headers } from 'next/headers'
 import Script from 'next/script'
 import { AnnouncementBar } from '@/components/ui/announcement-bar'
@@ -51,7 +50,6 @@ export default function RootLayout({
           phoneNumber="(225) 718-8977" 
           calendlyLink="https://calendly.com/michaelcaz/30min" 
         />
-        <MobileBottomCTAHome />
       </body>
     </html>
   )

@@ -110,7 +110,14 @@ export function PlanDetailsModal({
               <div className="hidden sm:block h-10 border-l border-gray-300 mx-4"></div>
               <div className="flex flex-col items-center sm:items-start flex-1 min-w-0 mt-4 sm:mt-0">
                 <div className="flex items-center justify-center sm:justify-start w-full">
-                  {isKnewHealthPlan ? (
+                  {plan.plan.id?.toLowerCase().includes('crowd') && planDetailsData['crowdhealth-membership'] && planDetailsData['crowdhealth-membership'].providerDetails ? (
+                    <RatingStars
+                      rating={planDetailsData['crowdhealth-membership'].providerDetails.ratings?.overall ?? 4.8}
+                      size="lg"
+                      showValue={true}
+                      reviewCount={planDetailsData['crowdhealth-membership'].providerDetails.ratings?.reviewCount ?? 450}
+                    />
+                  ) : isKnewHealthPlan ? (
                     <RatingStars 
                       rating={4.7} 
                       size="lg"
@@ -149,7 +156,7 @@ export function PlanDetailsModal({
         </div>
       </div>
       {/* Mobile sticky CTA (Sign Up Now) - fixed at viewport bottom */}
-      <BottomCTAAction 
+      <BottomCTAAction
         mode="signup"
         onSignup={() => router.push(`/enroll/${plan.plan.id}`)}
         label="Sign up now"

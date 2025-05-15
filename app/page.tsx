@@ -5,6 +5,7 @@ import { ProgressiveLearning } from '@/components/marketing/ProgressiveLearning'
 import { SafetyNet } from '@/components/marketing/SafetyNet';
 import { ComparisonTable } from '@/components/marketing/ComparisonTable';
 import { RealTalk } from '@/components/marketing/RealTalk';
+import { MobileBottomCTAHome } from '@/components/ui/MobileBottomCTA'
 
 export default function Home() {
   return (
@@ -16,6 +17,7 @@ export default function Home() {
       <RealTalk />
       <SafetyNet />
       <FAQ />
+      <MobileBottomCTAHome />
     </div>
   );
 }

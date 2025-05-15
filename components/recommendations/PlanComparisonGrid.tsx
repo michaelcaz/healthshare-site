@@ -278,7 +278,13 @@ export function PlanComparisonGrid({
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-gray-700">Avg. Reviews</span>
                     <div className="flex items-center gap-2">
-                      {getPlanDetails(plan.plan.id)?.providerDetails?.ratings && (
+                      {(plan.plan.id.includes('crowdhealth')) ? (
+                        <>
+                          <StarRating rating={4.8} />
+                          <span className="font-semibold text-gray-900">4.8</span>
+                          <span className="text-xs text-gray-500">(450)</span>
+                        </>
+                      ) : getPlanDetails(plan.plan.id)?.providerDetails?.ratings && (
                         <>
                           <StarRating rating={getPlanDetails(plan.plan.id)?.providerDetails?.ratings.overall || 0} />
                           <span className="font-semibold text-gray-900">
@@ -294,8 +300,7 @@ export function PlanComparisonGrid({
                 </div>
                 
                 {/* Action Button */}
-                <Button
-                  variant="outline"
+                <button
                   onClick={() => {
                     console.log('Alternative plan button clicked:', {
                       planId: plan.plan.id,
@@ -304,11 +309,11 @@ export function PlanComparisonGrid({
                     });
                     onPlanSelect(plan.plan.id);
                   }}
-                  className="w-full mt-4"
+                  className="w-full mt-4 details-button"
                 >
                   View Details
-                  <ChevronRight className="h-4 w-4 ml-1" />
-                </Button>
+                  <ChevronRight className="h-4 w-4 ml-1 inline" />
+                </button>
                 
                 {renderCompareCheckbox(plan)}
               </div>

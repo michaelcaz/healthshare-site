@@ -203,17 +203,19 @@ export function RecommendationsLayout({
         questionnaire={questionnaire}
       />
       
-      {/* Mobile sticky CTA for mobile only */}
-      <div className="md:hidden">
-        <BottomCTAAction
-          mode={selectedPlans.length >= 2 ? 'compare' : 'signup'}
-          onSignup={() => window.location.href = `/enroll/${topPlan.plan.id}`}
-          onCompare={openComparisonModal}
-          compareCount={selectedPlans.length}
-          label="Sign up now"
-          isVisible={true}
-        />
-      </div>
+      {/* Mobile sticky CTA for mobile only (hide when modal is open) */}
+      {!isModalOpen && (
+        <div className="md:hidden">
+          <BottomCTAAction
+            mode={selectedPlans.length >= 2 ? 'compare' : 'signup'}
+            onSignup={() => window.location.href = `/enroll/${topPlan.plan.id}`}
+            onCompare={openComparisonModal}
+            compareCount={selectedPlans.length}
+            label="Sign up now"
+            isVisible={true}
+          />
+        </div>
+      )}
       {/* Main Content */}
       <div className="bg-gray-50 min-h-screen pb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
