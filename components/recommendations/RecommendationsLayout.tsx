@@ -204,7 +204,7 @@ export function RecommendationsLayout({
       />
       
       {/* Mobile sticky CTA for mobile only (hide when modal is open) */}
-      {!isModalOpen && (
+      {!isModalOpen && !isComparisonModalOpen && (
         <div className="md:hidden">
           <BottomCTAAction
             mode={selectedPlans.length >= 2 ? 'compare' : 'signup'}

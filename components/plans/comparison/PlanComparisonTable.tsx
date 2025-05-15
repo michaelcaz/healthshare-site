@@ -16,6 +16,8 @@ import { providerPlans } from '@/data/provider-plans'
 import { ProviderLogo } from '@/components/recommendations/ProviderLogo'
 import { planData } from '@/lib/plan-data'
 import { PlanComparisonRow } from './PlanComparisonRow'
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table'
+import { RatingStars } from '@/components/ui/rating-stars'
 
 // Types
 interface PlanData {
@@ -243,112 +245,91 @@ export function PlanComparisonTable({ selectedPlans }: PlanComparisonTableProps)
   };
 
   return (
-    <div className="overflow-x-auto w-full">
-      <table className="min-w-full divide-y divide-gray-200 text-xs md:text-sm">
-        {/* Table header */}
-        <thead className="bg-gray-50">
-          <tr>
-            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Plan Details
-            </th>
-            {selectedPlans.map(plan => (
-              <th key={plan.id} scope="col" className="px-2 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[180px] md:min-w-[220px]">
-                <div className="flex items-center justify-between">
-                  <span>{plan.planName}</span>
-                  <button
-                    onClick={() => removePlan(plan.id)}
-                    className="text-gray-400 hover:text-gray-500"
-                  >
-                    <X className="h-4 w-4" />
-                  </button>
-                </div>
-              </th>
-            ))}
-          </tr>
-        </thead>
-        
-        {/* Table body */}
-        <tbody className="bg-white divide-y divide-gray-200">
-          {/* Provider Row */}
-          <tr>
-            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-              Provider
-            </td>
-            {selectedPlans.map(plan => (
-              <td key={plan.id} className="px-2 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                <div className="flex items-center justify-center gap-2">
-                  <ProviderLogo providerName={plan.providerName} size="md" />
-                </div>
-              </td>
-            ))}
-          </tr>
-
-          {/* Monthly Cost Row */}
-          <tr>
-            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-              Monthly Cost
-            </td>
-            {selectedPlans.map(plan => (
-              <td key={plan.id} className="px-2 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {formatCurrency(plan.monthlyCost)}
-              </td>
-            ))}
-          </tr>
-
-          {/* IUA Row */}
-          <tr>
-            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-              Initial Unshared Amount (IUA)
-            </td>
-            {selectedPlans.map(plan => (
-              <td key={plan.id} className="px-2 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {formatCurrency(plan.iua)}
-              </td>
-            ))}
-          </tr>
-
-          {/* Estimated Annual Cost Row */}
-          <tr>
-            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-              Estimated Annual Cost
-            </td>
-            {selectedPlans.map(plan => (
-              <td key={plan.id} className="px-2 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {formatCurrency(plan.estAnnualCost)}
-              </td>
-            ))}
-          </tr>
-
-          {/* Reviews Row */}
-          <tr>
-            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-              Reviews
-            </td>
-            {selectedPlans.map(plan => {
-              const ratings = plan.details.providerDetails?.ratings;
-              const avgReviewsRaw = ratings?.overall ?? parseFloat(plan.avgReviews);
-              const avgReviews = roundUpToHalf(avgReviewsRaw);
-              const reviewCount = ratings?.reviewCount ?? plan.reviewCount;
-              return (
-                <td key={plan.id} className="px-2 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  <div className="flex items-center gap-2">
-                    <StarRating rating={avgReviews} />
-                    <span>({reviewCount})</span>
+    <div className="w-full">
+      <div className="hidden md:block overflow-x-auto">
+        <Table className="min-w-full border-separate border-spacing-y-2">
+          <TableHeader>
+            <TableRow>
+              <TableHead className="sticky left-0 z-10 bg-white/95 backdrop-blur border-r border-gray-100 min-w-[160px]">Plan Details</TableHead>
+              {selectedPlans.map((plan, idx) => (
+                <TableHead key={plan.id} className="text-center min-w-[200px]">
+                  <div className="flex flex-col items-center gap-2">
+                    {idx === 0 && (
+                      <Badge variant="primary" size="sm" className="mb-1">Top Recommendation</Badge>
+                    )}
+                    <ProviderLogo providerName={plan.providerName} size="md" />
+                    <span className="font-semibold text-base">{plan.planName}</span>
                   </div>
-                </td>
-              );
-            })}
-          </tr>
-
-          {comparisonRows.map(row => (
-            <PlanComparisonRow
-              key={row.key}
-              label={row.label}
-              values={filteredPlanData.map(plan => plan ? plan[row.key as keyof typeof plan] : '')}
-            />
-          ))}
-        </tbody>
-      </table>
+                </TableHead>
+              ))}
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow>
+              <TableCell className="sticky left-0 z-10 bg-white/95 border-r border-gray-100 font-medium">Monthly Cost</TableCell>
+              {selectedPlans.map(plan => (
+                <TableCell key={plan.id} className="text-center font-medium">{formatCurrency(plan.monthlyCost)}</TableCell>
+              ))}
+            </TableRow>
+            <TableRow>
+              <TableCell className="sticky left-0 z-10 bg-white/95 border-r border-gray-100 font-medium">IUA</TableCell>
+              {selectedPlans.map(plan => (
+                <TableCell key={plan.id} className="text-center">{formatCurrency(plan.iua)}</TableCell>
+              ))}
+            </TableRow>
+            <TableRow>
+              <TableCell className="sticky left-0 z-10 bg-white/95 border-r border-gray-100 font-medium">Estimated Annual Cost</TableCell>
+              {selectedPlans.map(plan => (
+                <TableCell key={plan.id} className="text-center">{formatCurrency(plan.estAnnualCost)}</TableCell>
+              ))}
+            </TableRow>
+            <TableRow>
+              <TableCell className="sticky left-0 z-10 bg-white/95 border-r border-gray-100 font-medium">Reviews</TableCell>
+              {selectedPlans.map(plan => (
+                <TableCell key={plan.id} className="text-center">
+                  <RatingStars rating={parseFloat(plan.avgReviews)} reviewCount={plan.reviewCount} size="md" showValue />
+                </TableCell>
+              ))}
+            </TableRow>
+            {/* Feature rows */}
+            {comparisonRows.map(row => (
+              <PlanComparisonRow
+                key={row.key}
+                label={row.label}
+                values={filteredPlanData.map(plan => plan ? String(plan[row.key as keyof typeof plan] ?? '') : '')}
+              />
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+      {/* Mobile card view */}
+      <div className="md:hidden flex flex-col gap-6">
+        {selectedPlans.map((plan, idx) => (
+          <div key={plan.id} className="bg-white rounded-xl shadow p-4 border border-gray-100">
+            <div className="flex items-center gap-3 mb-2">
+              {idx === 0 && (
+                <Badge variant="primary" size="sm" className="mb-1">Top Recommendation</Badge>
+              )}
+              <ProviderLogo providerName={plan.providerName} size="sm" />
+              <div>
+                <div className="font-semibold text-lg">{plan.planName}</div>
+              </div>
+            </div>
+            <div className="flex flex-col gap-1 text-sm">
+              <div className="flex justify-between"><span>Monthly Cost</span><span className="font-medium">{formatCurrency(plan.monthlyCost)}</span></div>
+              <div className="flex justify-between"><span>IUA</span><span>{formatCurrency(plan.iua)}</span></div>
+              <div className="flex justify-between"><span>Est. Annual Cost</span><span>{formatCurrency(plan.estAnnualCost)}</span></div>
+              <div className="flex justify-between"><span>Reviews</span><RatingStars rating={parseFloat(plan.avgReviews)} reviewCount={plan.reviewCount} size="sm" showValue /></div>
+              {comparisonRows.map(row => (
+                <div key={row.key} className="flex justify-between">
+                  <span>{row.label}</span>
+                  <span>{filteredPlanData[idx] ? String((filteredPlanData[idx] as any)[row.key] ?? '') : ''}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
-  )
+  );
 } 

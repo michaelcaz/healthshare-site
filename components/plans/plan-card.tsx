@@ -139,7 +139,7 @@ export function PlanCard({
           onClick={onViewDetails}
           className="w-full"
         >
-          View Details
+          Sign up now
         </EnhancedButton>
       </div>
     </div>

@@ -54,7 +54,7 @@ export function ComparisonBanner() {
                 className="bg-amber-500 hover:bg-amber-600 text-white px-6 flex items-center"
                 size="lg"
               >
-                Compare Plans <ChevronRight className="ml-1 h-4 w-4 inline-block" />
+                Sign up now <ChevronRight className="ml-1 h-4 w-4 inline-block" />
               </Button>
             </div>
           </div>

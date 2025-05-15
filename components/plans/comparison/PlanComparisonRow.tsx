@@ -11,9 +11,9 @@ export const PlanComparisonRow: React.FC<PlanComparisonRowProps> = ({ label, val
     {values.map((value, idx) => (
       <td key={idx} className="text-center py-2 px-4">
         {value === 'check' ? (
-          <span aria-label="Included" title="Included" className="text-green-600" role="img">✔️</span>
+          <span role="img" aria-label="Included" className="text-lg">✅</span>
         ) : value === 'x' ? (
-          <span aria-label="Not included" title="Not included" className="text-red-500" role="img">✖️</span>
+          <span role="img" aria-label="Not included" className="text-lg">❌</span>
         ) : (
           <span>{value}</span>
         )}
