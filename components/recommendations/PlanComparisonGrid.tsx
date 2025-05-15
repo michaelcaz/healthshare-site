@@ -294,13 +294,21 @@ export function PlanComparisonGrid({
                 </div>
                 
                 {/* Action Button */}
-                <button
-                  onClick={() => onPlanSelect(plan.plan.id)}
-                  className="w-full mt-4 details-button"
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    console.log('Alternative plan button clicked:', {
+                      planId: plan.plan.id,
+                      planName: plan.plan.planName,
+                      providerName: plan.plan.providerName
+                    });
+                    onPlanSelect(plan.plan.id);
+                  }}
+                  className="w-full mt-4"
                 >
                   View Details
-                  <ChevronRight className="h-4 w-4 ml-1 inline" />
-                </button>
+                  <ChevronRight className="h-4 w-4 ml-1" />
+                </Button>
                 
                 {renderCompareCheckbox(plan)}
               </div>

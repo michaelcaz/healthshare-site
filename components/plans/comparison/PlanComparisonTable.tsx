@@ -191,6 +191,9 @@ const extractLifetimeLimit = (planDetails: PlanDetailsData, planData?: PlanData)
   return "None"
 }
 
+// Helper to round up to nearest 0.5
+const roundUpToHalf = (num: number) => Math.ceil(num * 2) / 2;
+
 // Main Component
 export function PlanComparisonTable({ selectedPlans }: PlanComparisonTableProps) {
   if (!selectedPlans || selectedPlans.length === 0) {
@@ -286,14 +289,20 @@ export function PlanComparisonTable({ selectedPlans }: PlanComparisonTableProps)
             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
               Reviews
             </td>
-            {selectedPlans.map(plan => (
-              <td key={plan.id} className="px-2 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                <div className="flex items-center gap-2">
-                  <StarRating rating={parseFloat(plan.avgReviews)} />
-                  <span>({plan.reviewCount})</span>
-                </div>
-              </td>
-            ))}
+            {selectedPlans.map(plan => {
+              const ratings = plan.details.providerDetails?.ratings;
+              const avgReviewsRaw = ratings?.overall ?? parseFloat(plan.avgReviews);
+              const avgReviews = roundUpToHalf(avgReviewsRaw);
+              const reviewCount = ratings?.reviewCount ?? plan.reviewCount;
+              return (
+                <td key={plan.id} className="px-2 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <div className="flex items-center gap-2">
+                    <StarRating rating={avgReviews} />
+                    <span>({reviewCount})</span>
+                  </div>
+                </td>
+              );
+            })}
           </tr>
 
           {/* Prescription Drugs Row */}

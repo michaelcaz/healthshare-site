@@ -13,7 +13,7 @@ import { RatingStars } from '@/components/ui/rating-stars'
 import { MatchScore } from '@/components/ui/match-score'
 import { ProviderLogo } from './ProviderLogo'
 import { useRouter } from 'next/navigation'
-import { MobileBottomCTAAction } from '@/components/ui/MobileBottomCTAAction'
+import { BottomCTAAction } from '@/components/ui/MobileBottomCTAAction'
 
 interface PlanDetailsModalProps {
   plan: PlanRecommendation
@@ -149,9 +149,11 @@ export function PlanDetailsModal({
         </div>
       </div>
       {/* Mobile sticky CTA (Sign Up Now) - fixed at viewport bottom */}
-      <MobileBottomCTAAction 
-        onClick={() => router.push(`/enroll/${plan.plan.id}`)} 
+      <BottomCTAAction 
+        mode="signup"
+        onSignup={() => router.push(`/enroll/${plan.plan.id}`)}
         label="Sign up now"
+        isVisible={true}
       />
     </div>
   )

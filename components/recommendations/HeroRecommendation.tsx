@@ -286,21 +286,36 @@ export function HeroRecommendation({
 
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-4">
-          <button
-            onClick={onGetPlan}
+          <Button
+            onClick={() => {
+              console.log('Hero recommendation button clicked:', {
+                planId: plan.id,
+                planName: plan.planName,
+                providerName: plan.providerName
+              });
+              onGetPlan();
+            }}
             disabled={isLoading}
             className="cta-button"
           >
             Sign up now
-            <ArrowRight className="h-4 w-4 ml-2 inline" />
-          </button>
-          <button
-            onClick={onViewDetails}
+            <ArrowRight className="h-4 w-4 ml-2" />
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => {
+              console.log('Hero recommendation details button clicked:', {
+                planId: plan.id,
+                planName: plan.planName,
+                providerName: plan.providerName
+              });
+              onViewDetails();
+            }}
             className="details-button"
           >
             View Plan Details
-            <ChevronRight className="h-4 w-4 ml-1 inline" />
-          </button>
+            <ChevronRight className="h-4 w-4 ml-1" />
+          </Button>
         </div>
       </div>
     </div>
