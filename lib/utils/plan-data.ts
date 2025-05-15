@@ -24,6 +24,24 @@ export function getPlanDetailsData(plan: PricingPlan | string): PlanDetailsData 
   // Try to normalize the plan ID
   console.log(`Plan data not found directly for ID: ${planId}, attempting to find match...`);
   
+  // Handle special cases for Knew Health plans
+  if (planId.toLowerCase().includes('knew')) {
+    console.log(`This is a Knew Health plan: ${planId}`);
+    if (planDetailsData['knew-health']) {
+      console.log(`Using knew-health plan data for ${planId}`);
+      return planDetailsData['knew-health'];
+    }
+  }
+  
+  // Handle special cases for Crowd Health plans
+  if (planId.toLowerCase().includes('crowd')) {
+    console.log(`This is a Crowd Health plan: ${planId}`);
+    if (planDetailsData['crowdhealth-membership']) {
+      console.log(`Using crowdhealth-membership plan data for ${planId}`);
+      return planDetailsData['crowdhealth-membership'];
+    }
+  }
+  
   // Handle special cases for Sedera plans
   if (planId.toLowerCase().includes('sedera')) {
     console.log(`This is a Sedera plan: ${planId}`);

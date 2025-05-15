@@ -49,9 +49,9 @@ export function PlanDetailsModal({
                            plan.plan.providerName?.toLowerCase().includes('knew');
   
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 h-screen">
+    <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/50 h-screen">
       {/* Modal */}
-      <div className="relative z-50 w-full max-w-4xl bg-white rounded-lg shadow-xl max-h-[100dvh] flex flex-col h-full mt-10 sm:mt-0">
+      <div className="relative z-50 w-full max-w-4xl bg-white rounded-lg shadow-xl max-h-[100dvh] flex flex-col h-full mt-6 md:mt-10 sm:mt-0">
         {/* Sticky header + tabs block */}
         <div className="sticky top-0 z-10 bg-white">
           {/* Header */}
@@ -97,7 +97,7 @@ export function PlanDetailsModal({
           </div>
         </div>
         {/* Scrollable content: trust row and main content */}
-        <div className="p-4 sm:p-6 flex-1 min-h-0 overflow-y-auto pb-32 sm:pb-8">
+        <div className="p-4 sm:p-6 flex-1 min-h-0 overflow-y-auto pb-32 sm:pb-8 md:pb-44">
           {/* Trust row */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-0 border-b border-gray-200 mb-4 pb-2">
             <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-6 w-full">
