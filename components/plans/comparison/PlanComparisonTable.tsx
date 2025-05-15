@@ -211,15 +211,35 @@ const comparisonRows = [
   { label: 'Lifetime Limit', key: 'lifetimeLimit' },
 ];
 
-// Mapping from selectedPlans planName to planData planName
-const PLAN_NAME_MAP: Record<string, string> = {
-  'Direct Membership': 'Zion Direct',
-  'Essential': 'Zion Essential',
-  'ACCESS+': 'Sedera Access+',
-  'ACCESS+ DPC': 'Sedera Access+ DPC',
-  'Crowd Health': 'Crowd Health',
-  'Premium HSA': 'Knew Health',
-  // Add more mappings as needed
+const hasDetails = (obj: any): obj is { details: any } => obj && typeof obj === 'object' && 'details' in obj;
+
+const getDetailsData = (plan: PlanData) => {
+  // Try direct match
+  if (planDetailsData[plan.id]) return planDetailsData[plan.id];
+  // Crowd Health fallback
+  if (plan.id.toLowerCase().includes('crowd')) return planDetailsData['crowdhealth-membership'];
+  // Knew Health fallback
+  if (plan.id.toLowerCase().includes('knew')) return planDetailsData['knew-health'];
+  // Sedera Access+ DPC/VPC fallback
+  if (plan.id.toLowerCase().includes('dpc') || plan.id.toLowerCase().includes('vpc')) return planDetailsData['sedera-access+-+dpc/vpc'];
+  // Sedera Access+ fallback
+  if (plan.id.toLowerCase().includes('sedera-access+')) return planDetailsData['sedera-access+'];
+  // Zion Essential fallback
+  if (plan.id.toLowerCase().includes('essential')) return planDetailsData['zion-healthshare-essential-membership'];
+  // Zion Direct fallback
+  if (plan.id.toLowerCase().includes('direct')) return planDetailsData['zion-healthshare-direct-membership'];
+  return undefined;
+};
+
+const getFeatureData = (plan: PlanData) => {
+  if (plan.id.toLowerCase().includes('crowd')) return planData.find(p => p.planName === 'Crowd Health');
+  if (plan.id.toLowerCase().includes('knew')) return planData.find(p => p.planName === 'Knew Health');
+  if (plan.id.toLowerCase().includes('sedera-access+') && (plan.id.toLowerCase().includes('dpc') || plan.id.toLowerCase().includes('vpc')))
+    return planData.find(p => p.planName === 'Sedera Access+ DPC');
+  if (plan.id.toLowerCase().includes('sedera-access+')) return planData.find(p => p.planName === 'Sedera Access+');
+  if (plan.id.toLowerCase().includes('essential')) return planData.find(p => p.planName === 'Zion Essential');
+  if (plan.id.toLowerCase().includes('direct')) return planData.find(p => p.planName === 'Zion Direct');
+  return planData.find(p => p.planName === plan.planName);
 };
 
 // Main Component
@@ -228,37 +248,21 @@ export function PlanComparisonTable({ selectedPlans }: PlanComparisonTableProps)
     return <div className="text-gray-600 text-center py-8">No plans selected for comparison</div>;
   }
 
-  // Map each selected plan to its corresponding planData entry using the mapping
-  const filteredPlanData = selectedPlans.map(selPlan => {
-    const mappedName = PLAN_NAME_MAP[selPlan.planName] || selPlan.planName;
-    const match = planData.find(
-      staticPlan => staticPlan.planName === mappedName
-    );
-    return match || null;
-  });
-
-  // Remove plan handler (should be lifted to context if you want to update global state)
-  // For now, just disables the button
-  const removePlan = (planId: string) => {
-    // Optionally, you can call a context method here
-    // This is a placeholder for UI consistency
-  };
-
   return (
     <div className="w-full">
       <div className="hidden md:block overflow-x-auto">
-        <Table className="min-w-full border-separate border-spacing-y-2">
+        <Table className="min-w-full border-separate border-spacing-y-2 font-sans" style={{ fontFamily: 'Inter, Lato, Work Sans, sans-serif' }}>
           <TableHeader>
             <TableRow>
-              <TableHead className="sticky left-0 z-10 bg-white/95 backdrop-blur border-r border-gray-100 min-w-[160px]">Plan Details</TableHead>
+              <TableHead className="sticky left-0 z-10 bg-gradient-to-r from-blue-50 via-white to-white/80 backdrop-blur border-r border-gray-100 min-w-[160px] text-gray-700 text-base font-semibold rounded-tl-xl">Plan Details</TableHead>
               {selectedPlans.map((plan, idx) => (
-                <TableHead key={plan.id} className="text-center min-w-[200px]">
+                <TableHead key={plan.id} className="text-center min-w-[220px] bg-gradient-to-b from-white via-blue-50 to-white/80 rounded-tr-xl">
                   <div className="flex flex-col items-center gap-2">
                     {idx === 0 && (
-                      <Badge variant="primary" size="sm" className="mb-1">Top Recommendation</Badge>
+                      <span className="inline-block px-3 py-1 rounded-full bg-gradient-to-r from-indigo-100 via-blue-100 to-blue-50 text-indigo-700 font-semibold text-xs shadow-sm mb-1 animate-fade-in">Top Recommendation</span>
                     )}
-                    <ProviderLogo providerName={plan.providerName} size="md" />
-                    <span className="font-semibold text-base">{plan.planName}</span>
+                    <ProviderLogo providerName={plan.providerName} size="md" className="mb-1 drop-shadow-md" />
+                    <span className="font-bold text-lg text-gray-900 tracking-tight">{plan.planName}</span>
                   </div>
                 </TableHead>
               ))}
@@ -266,37 +270,46 @@ export function PlanComparisonTable({ selectedPlans }: PlanComparisonTableProps)
           </TableHeader>
           <TableBody>
             <TableRow>
-              <TableCell className="sticky left-0 z-10 bg-white/95 border-r border-gray-100 font-medium">Monthly Cost</TableCell>
+              <TableCell className="sticky left-0 z-10 bg-gradient-to-r from-blue-50 via-white to-white/80 border-r border-gray-100 font-medium text-gray-700">Monthly Cost</TableCell>
               {selectedPlans.map(plan => (
-                <TableCell key={plan.id} className="text-center font-medium">{formatCurrency(plan.monthlyCost)}</TableCell>
+                <TableCell key={plan.id} className="text-center font-bold text-indigo-700 text-base">{formatCurrency(plan.monthlyCost)}</TableCell>
               ))}
             </TableRow>
             <TableRow>
-              <TableCell className="sticky left-0 z-10 bg-white/95 border-r border-gray-100 font-medium">IUA</TableCell>
+              <TableCell className="sticky left-0 z-10 bg-gradient-to-r from-blue-50 via-white to-white/80 border-r border-gray-100 font-medium text-gray-700">IUA</TableCell>
               {selectedPlans.map(plan => (
-                <TableCell key={plan.id} className="text-center">{formatCurrency(plan.iua)}</TableCell>
+                <TableCell key={plan.id} className="text-center font-semibold text-gray-800">{formatCurrency(plan.iua)}</TableCell>
               ))}
             </TableRow>
             <TableRow>
-              <TableCell className="sticky left-0 z-10 bg-white/95 border-r border-gray-100 font-medium">Estimated Annual Cost</TableCell>
+              <TableCell className="sticky left-0 z-10 bg-gradient-to-r from-blue-50 via-white to-white/80 border-r border-gray-100 font-medium text-gray-700">Estimated Annual Cost</TableCell>
               {selectedPlans.map(plan => (
-                <TableCell key={plan.id} className="text-center">{formatCurrency(plan.estAnnualCost)}</TableCell>
+                <TableCell key={plan.id} className="text-center font-semibold text-gray-800">{formatCurrency(plan.estAnnualCost)}</TableCell>
               ))}
             </TableRow>
             <TableRow>
-              <TableCell className="sticky left-0 z-10 bg-white/95 border-r border-gray-100 font-medium">Reviews</TableCell>
-              {selectedPlans.map(plan => (
-                <TableCell key={plan.id} className="text-center">
-                  <RatingStars rating={parseFloat(plan.avgReviews)} reviewCount={plan.reviewCount} size="md" showValue />
-                </TableCell>
-              ))}
+              <TableCell className="sticky left-0 z-10 bg-gradient-to-r from-blue-50 via-white to-white/80 border-r border-gray-100 font-medium text-gray-700">Reviews</TableCell>
+              {selectedPlans.map((plan) => {
+                const details = getDetailsData(plan);
+                const avgReviews = details?.providerDetails?.ratings?.overall || plan.avgReviews;
+                const reviewCount = details?.providerDetails?.ratings?.reviewCount || plan.reviewCount;
+                return (
+                  <TableCell key={plan.id} className="text-center">
+                    <RatingStars rating={parseFloat(String(avgReviews))} reviewCount={Number(reviewCount)} size="md" showValue />
+                  </TableCell>
+                );
+              })}
             </TableRow>
             {/* Feature rows */}
             {comparisonRows.map(row => (
               <PlanComparisonRow
                 key={row.key}
                 label={row.label}
-                values={filteredPlanData.map(plan => plan ? String(plan[row.key as keyof typeof plan] ?? '') : '')}
+                values={selectedPlans.map(plan => {
+                  const featureData = getFeatureData(plan);
+                  const value = featureData ? String((featureData as any)[row.key] ?? '') : '';
+                  return value;
+                })}
               />
             ))}
           </TableBody>
@@ -304,31 +317,48 @@ export function PlanComparisonTable({ selectedPlans }: PlanComparisonTableProps)
       </div>
       {/* Mobile card view */}
       <div className="md:hidden flex flex-col gap-6">
-        {selectedPlans.map((plan, idx) => (
-          <div key={plan.id} className="bg-white rounded-xl shadow p-4 border border-gray-100">
-            <div className="flex items-center gap-3 mb-2">
-              {idx === 0 && (
-                <Badge variant="primary" size="sm" className="mb-1">Top Recommendation</Badge>
-              )}
-              <ProviderLogo providerName={plan.providerName} size="sm" />
-              <div>
-                <div className="font-semibold text-lg">{plan.planName}</div>
+        {selectedPlans.map((plan, idx) => {
+          // Get accurate plan details for reviews and features
+          const details = getDetailsData(plan);
+          const avgReviews = details?.providerDetails?.ratings?.overall || plan.avgReviews;
+          const reviewCount = details?.providerDetails?.ratings?.reviewCount || plan.reviewCount;
+          return (
+            <div key={plan.id} className="bg-gradient-to-br from-blue-50 via-white to-blue-100 rounded-2xl shadow-lg p-5 border border-gray-100 hover:shadow-xl transition-shadow duration-200">
+              <div className="flex items-center gap-3 mb-3">
+                {idx === 0 && (
+                  <span className="inline-block px-2 py-0.5 rounded-full bg-gradient-to-r from-indigo-100 via-blue-100 to-blue-50 text-indigo-700 font-semibold text-[11px] shadow-sm animate-fade-in max-w-[90px] break-words leading-tight whitespace-nowrap text-center">Top Pick</span>
+                )}
+                <ProviderLogo providerName={plan.providerName} size="lg" className="mb-1 drop-shadow-md" />
+                <div>
+                  <div className="font-bold text-lg text-gray-900 tracking-tight">{plan.planName}</div>
+                </div>
+              </div>
+              <div className="flex flex-col gap-2 text-sm">
+                <div className="flex justify-between"><span className="text-gray-600 text-xs font-medium" style={{maxWidth:'40%',wordBreak:'break-word',whiteSpace:'normal'}}>Monthly Cost</span><span className="font-bold text-indigo-700">{formatCurrency(plan.monthlyCost)}</span></div>
+                <div className="flex justify-between"><span className="text-gray-600 text-xs font-medium" style={{maxWidth:'40%',wordBreak:'break-word',whiteSpace:'normal'}}>IUA</span><span className="font-semibold text-gray-800">{formatCurrency(plan.iua)}</span></div>
+                <div className="flex justify-between"><span className="text-gray-600 text-xs font-medium" style={{maxWidth:'40%',wordBreak:'break-word',whiteSpace:'normal'}}>Est. Annual Cost</span><span className="font-semibold text-gray-800">{formatCurrency(plan.estAnnualCost)}</span></div>
+                <div className="flex justify-between items-center"><span className="text-gray-600 text-xs font-medium" style={{maxWidth:'40%',wordBreak:'break-word',whiteSpace:'normal'}}>Reviews</span><RatingStars rating={parseFloat(String(avgReviews))} reviewCount={Number(reviewCount)} size="sm" showValue /></div>
+                {comparisonRows.map(row => {
+                  const value = getFeatureData(plan) ? String((getFeatureData(plan) as any)[row.key] ?? '') : '';
+                  return (
+                    <div key={row.key} className="flex justify-between items-center py-1 border-b border-gray-100 last:border-b-0">
+                      <span className="text-gray-600 text-xs font-medium" style={{maxWidth:'40%',wordBreak:'break-word',whiteSpace:'normal'}}>{row.label}</span>
+                      <span className="font-semibold text-gray-800 text-sm flex items-center gap-1">
+                        {value === 'check' ? (
+                          <svg className="inline-block text-emerald-500 w-5 h-5 align-middle" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="none"/><path d="M9 12l2 2l4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                        ) : value === 'x' ? (
+                          <svg className="inline-block text-gray-300 w-5 h-5 align-middle" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="none"/><path d="M15 9l-6 6M9 9l6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                        ) : (
+                          value
+                        )}
+                      </span>
+                    </div>
+                  );
+                })}
               </div>
             </div>
-            <div className="flex flex-col gap-1 text-sm">
-              <div className="flex justify-between"><span>Monthly Cost</span><span className="font-medium">{formatCurrency(plan.monthlyCost)}</span></div>
-              <div className="flex justify-between"><span>IUA</span><span>{formatCurrency(plan.iua)}</span></div>
-              <div className="flex justify-between"><span>Est. Annual Cost</span><span>{formatCurrency(plan.estAnnualCost)}</span></div>
-              <div className="flex justify-between"><span>Reviews</span><RatingStars rating={parseFloat(plan.avgReviews)} reviewCount={plan.reviewCount} size="sm" showValue /></div>
-              {comparisonRows.map(row => (
-                <div key={row.key} className="flex justify-between">
-                  <span>{row.label}</span>
-                  <span>{filteredPlanData[idx] ? String((filteredPlanData[idx] as any)[row.key] ?? '') : ''}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

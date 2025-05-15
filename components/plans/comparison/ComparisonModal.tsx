@@ -65,15 +65,6 @@ export function ComparisonModal({ isOpen, onClose, questionnaire }: ComparisonMo
           <PlanComparisonTable selectedPlans={mappedPlans} />
         </div>
       </DialogContent>
-      {/* Mobile CTA at the bottom of the modal, outside scrollable content */}
-      {topPlanId && (
-        <BottomCTAAction
-          mode="signup"
-          onSignup={() => window.location.href = `/enroll/${topPlanId}`}
-          label="Sign up now"
-          isVisible={true}
-        />
-      )}
     </Dialog>
   );
 } 
