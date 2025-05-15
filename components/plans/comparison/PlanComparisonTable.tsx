@@ -255,17 +255,22 @@ export function PlanComparisonTable({ selectedPlans }: PlanComparisonTableProps)
           <TableHeader>
             <TableRow>
               <TableHead className="sticky left-0 z-10 bg-gradient-to-r from-blue-50 via-white to-white/80 backdrop-blur border-r border-gray-100 min-w-[160px] text-gray-700 text-base font-semibold rounded-tl-xl">Plan Details</TableHead>
-              {selectedPlans.map((plan, idx) => (
-                <TableHead key={plan.id} className="text-center min-w-[220px] bg-gradient-to-b from-white via-blue-50 to-white/80 rounded-tr-xl">
-                  <div className="flex flex-col items-center gap-2">
-                    {idx === 0 && (
-                      <span className="inline-block px-3 py-1 rounded-full bg-gradient-to-r from-indigo-100 via-blue-100 to-blue-50 text-indigo-700 font-semibold text-xs shadow-sm mb-1 animate-fade-in">Top Recommendation</span>
-                    )}
-                    <ProviderLogo providerName={plan.providerName} size="md" className="mb-1 drop-shadow-md" />
-                    <span className="font-bold text-lg text-gray-900 tracking-tight">{plan.planName}</span>
-                  </div>
-                </TableHead>
-              ))}
+              {selectedPlans.map((plan, idx) => {
+                const canonicalName = getFeatureData(plan)?.planName?.toLowerCase();
+                return (
+                  <TableHead key={plan.id} className="text-center min-w-[220px] bg-gradient-to-b from-white via-blue-50 to-white/80 rounded-tr-xl">
+                    <div className="flex flex-col items-center gap-2">
+                      {idx === 0 && (
+                        <span className="inline-block px-3 py-1 rounded-full bg-gradient-to-r from-indigo-100 via-blue-100 to-blue-50 text-indigo-700 font-semibold text-xs shadow-sm mb-1 animate-fade-in">Top Recommendation</span>
+                      )}
+                      <ProviderLogo providerName={plan.providerName} size="md" className="mb-1 drop-shadow-md" />
+                      {canonicalName !== 'crowd health' && canonicalName !== 'knew health' && (
+                        <span className="font-bold text-lg text-gray-900 tracking-tight">{plan.planName}</span>
+                      )}
+                    </div>
+                  </TableHead>
+                );
+              })}
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -322,6 +327,7 @@ export function PlanComparisonTable({ selectedPlans }: PlanComparisonTableProps)
           const details = getDetailsData(plan);
           const avgReviews = details?.providerDetails?.ratings?.overall || plan.avgReviews;
           const reviewCount = details?.providerDetails?.ratings?.reviewCount || plan.reviewCount;
+          const canonicalName = getFeatureData(plan)?.planName?.toLowerCase();
           return (
             <div key={plan.id} className="bg-gradient-to-br from-blue-50 via-white to-blue-100 rounded-2xl shadow-lg p-5 border border-gray-100 hover:shadow-xl transition-shadow duration-200">
               <div className="flex items-center gap-3 mb-3">
@@ -329,9 +335,9 @@ export function PlanComparisonTable({ selectedPlans }: PlanComparisonTableProps)
                   <span className="inline-block px-2 py-0.5 rounded-full bg-gradient-to-r from-indigo-100 via-blue-100 to-blue-50 text-indigo-700 font-semibold text-[11px] shadow-sm animate-fade-in max-w-[90px] break-words leading-tight whitespace-nowrap text-center">Top Pick</span>
                 )}
                 <ProviderLogo providerName={plan.providerName} size="lg" className="mb-1 drop-shadow-md" />
-                <div>
+                {canonicalName !== 'crowd health' && canonicalName !== 'knew health' && (
                   <div className="font-bold text-lg text-gray-900 tracking-tight">{plan.planName}</div>
-                </div>
+                )}
               </div>
               <div className="flex flex-col gap-2 text-sm">
                 <div className="flex justify-between"><span className="text-gray-600 text-xs font-medium" style={{maxWidth:'40%',wordBreak:'break-word',whiteSpace:'normal'}}>Monthly Cost</span><span className="font-bold text-indigo-700">{formatCurrency(plan.monthlyCost)}</span></div>
