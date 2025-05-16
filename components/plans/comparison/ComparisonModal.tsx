@@ -12,6 +12,7 @@ import { planDetailsData } from '@/data/plan-details-data';
 import { getPlanDisplayData } from '@/lib/utils/plan-display';
 import { BottomCTAAction } from '@/components/ui/MobileBottomCTAAction';
 import Image from 'next/image';
+import React from 'react';
 
 interface ComparisonModalProps {
   isOpen: boolean;
@@ -20,8 +21,19 @@ interface ComparisonModalProps {
   topRecommendationId: string;
 }
 
+type LogoSize = 'sm' | 'md' | 'lg' | 'xl';
+
 // Local logo component for comparison modal only
-function ComparisonProviderLogo({ src, alt, width, height, className = '', style = {} }) {
+interface ComparisonProviderLogoProps {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+  className?: string;
+  style?: React.CSSProperties;
+}
+
+function ComparisonProviderLogo({ src, alt, width, height, className = '', style = {} }: ComparisonProviderLogoProps) {
   return (
     <div
       className={cn(
@@ -45,8 +57,8 @@ function ComparisonProviderLogo({ src, alt, width, height, className = '', style
 }
 
 // Helper to get logo path and style (copied from ProviderLogo)
-function getComparisonLogoProps(providerName, size = 'md') {
-  const dimensions = {
+function getComparisonLogoProps(providerName: string, size: LogoSize = 'md') {
+  const dimensions: Record<LogoSize, { width: number; height: number }> = {
     sm: { width: 40, height: 40 },
     md: { width: 100, height: 60 },
     lg: { width: 120, height: 80 },
@@ -59,9 +71,9 @@ function getComparisonLogoProps(providerName, size = 'md') {
   else if (normalizedName.includes('sedera')) src = '/images/logos/sedera.svg';
   else if (normalizedName.includes('knew')) src = '/images/logos/knew.svg';
   else if (normalizedName.includes('crowd')) src = '/images/logos/crowd-health.svg';
-  let style = { maxWidth: '100%', maxHeight: '100%' };
+  let style: React.CSSProperties = { maxWidth: '100%', maxHeight: '100%' };
   if (normalizedName.includes('crowd')) {
-    const scales = { sm: 0.9, md: 0.95, lg: 1.0, xl: 1.05 };
+    const scales: Record<LogoSize, number> = { sm: 0.9, md: 0.95, lg: 1.0, xl: 1.05 };
     style = {
       maxWidth: '85%',
       maxHeight: '85%',
@@ -128,7 +140,7 @@ export function ComparisonModal({ isOpen, onClose, questionnaire, topRecommendat
           <PlanComparisonTable 
             selectedPlans={mappedPlans} 
             topRecommendationId={topRecommendationId}
-            renderLogo={(providerName, size = 'md') => {
+            renderLogo={(providerName: string, size: LogoSize = 'md') => {
               const logoProps = getComparisonLogoProps(providerName, size);
               return <ComparisonProviderLogo {...logoProps} />;
             }}
