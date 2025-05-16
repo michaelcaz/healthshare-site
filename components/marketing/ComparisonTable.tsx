@@ -83,10 +83,10 @@ export function ComparisonTable() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h2 className="text-5xl font-bold text-white mb-4 font-display">
+          <h2 className="text-5xl font-bold text-white mb-4 font-display break-keep">
             See the Difference
           </h2>
-          <p className="text-xl text-gray-200 italic font-light">
+          <p className="text-xl text-gray-200 italic font-light break-keep">
             A side-by-side look at what makes us different.
           </p>
         </motion.div>
@@ -120,19 +120,22 @@ export function ComparisonTable() {
                     />
                   </div>
                   <div className="grid grid-cols-2 gap-3">
-                    <div>
-                      <div className="text-xs font-medium text-emerald-600 mb-1">
+                    <div className="flex flex-col justify-start">
+                      <div className="flex items-center h-6 mb-1">
                         <img 
                           src="/images/sharewizelogofull.svg" 
                           alt="Sharewize" 
                           loading="lazy"
-                          className="comparison-logo-mobile w-auto h-6"
+                          className="w-auto h-5"
+                          style={{ display: 'block' }}
                         />
                       </div>
                       <div className="text-emerald-600 font-bold text-base leading-7">{feature.Sharewize}</div>
                     </div>
-                    <div>
-                      <div className="text-xs font-medium text-orange-600 mb-1">Insurance</div>
+                    <div className="flex flex-col justify-start">
+                      <div className="flex items-center h-6 mb-1">
+                        <span className="text-xs font-medium text-orange-600">Insurance</span>
+                      </div>
                       <div className="text-orange-600 text-base leading-7">{feature.insurance}</div>
                     </div>
                   </div>
@@ -166,7 +169,7 @@ export function ComparisonTable() {
                     className="comparison-logo w-auto h-12"
                   />
                 </div>
-                <div className="font-bold text-2xl text-orange-600 pl-5 flex items-center">Insurance</div>
+                <div className="font-bold text-2xl text-orange-600 pl-5 flex items-center break-keep">Insurance</div>
               </div>
 
               {features.map((feature, index) => (

@@ -134,7 +134,7 @@ export function FAQ() {
           animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.6, delay: 0.4 }}
         >
-          <div className="mt-12 text-center">
+          <div className="mt-12 text-center hidden md:block">
             <button 
               onClick={handleFindMyPlan}
               className="bg-primary hover:bg-primary/90 text-white font-medium py-3 px-8 rounded-lg transition-all duration-300"
