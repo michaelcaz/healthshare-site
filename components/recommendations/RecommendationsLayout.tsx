@@ -201,6 +201,7 @@ export function RecommendationsLayout({
         isOpen={isComparisonModalOpen}
         onClose={closeComparisonModal}
         questionnaire={questionnaire}
+        topRecommendationId={topPlan.plan.id}
       />
       
       {/* Mobile sticky CTA for mobile only (hide when modal is open) */}

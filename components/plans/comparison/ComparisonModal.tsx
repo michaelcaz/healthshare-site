@@ -16,9 +16,10 @@ interface ComparisonModalProps {
   isOpen: boolean;
   onClose: () => void;
   questionnaire: QuestionnaireResponse;
+  topRecommendationId: string;
 }
 
-export function ComparisonModal({ isOpen, onClose, questionnaire }: ComparisonModalProps) {
+export function ComparisonModal({ isOpen, onClose, questionnaire, topRecommendationId }: ComparisonModalProps) {
   const { selectedPlans } = useSelectedPlans();
 
   // Map PlanRecommendation[] to PlanData[] for the table
@@ -62,7 +63,7 @@ export function ComparisonModal({ isOpen, onClose, questionnaire }: ComparisonMo
           <p className="text-base text-gray-700 mb-4">
             Compare your selected plans side by side to find the best option for your needs.
           </p>
-          <PlanComparisonTable selectedPlans={mappedPlans} />
+          <PlanComparisonTable selectedPlans={mappedPlans} topRecommendationId={topRecommendationId} />
         </div>
       </DialogContent>
     </Dialog>
