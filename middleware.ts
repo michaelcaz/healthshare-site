@@ -124,7 +124,8 @@ export async function middleware(req: NextRequest) {
       https://*.sentry.io
       https://*.launchdarkly.com
       https://events.launchdarkly.com
-      wss://*.supabase.co;
+      wss://*.supabase.co
+      https://formspree.io;
     frame-ancestors 'self';
     form-action 'self';
     base-uri 'self';

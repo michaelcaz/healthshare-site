@@ -50,6 +50,7 @@ export default function RootLayout({
           phoneNumber="(225) 718-8977" 
           calendlyLink="https://calendly.com/michaelcaz/30min" 
         />
+        <Toaster />
       </body>
     </html>
   )

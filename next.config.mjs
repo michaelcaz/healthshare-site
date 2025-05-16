@@ -65,7 +65,7 @@ const nextConfig = {
         },
         {
           key: 'Content-Security-Policy',
-          value: "default-src 'self'; script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https://cdn.sanity.io https://lrwewkxwfgmzkvhozdin.supabase.co; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://vitals.vercel-insights.com https://*.sentry.io https://*.supabase.co https://cdn.sanity.io; manifest-src 'self'; base-uri 'self'; form-action 'self';"
+          value: "default-src 'self'; script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https://cdn.sanity.io https://lrwewkxwfgmzkvhozdin.supabase.co; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://vitals.vercel-insights.com https://*.sentry.io https://*.supabase.co https://cdn.sanity.io https://formspree.io; manifest-src 'self'; base-uri 'self'; form-action 'self';"
         }
       ],
     },
