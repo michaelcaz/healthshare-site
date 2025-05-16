@@ -244,6 +244,8 @@ const getFeatureData = (plan: PlanData) => {
 
 // Main Component
 export function PlanComparisonTable({ selectedPlans }: PlanComparisonTableProps) {
+  console.log('PlanComparisonTable received selectedPlans:', selectedPlans);
+
   if (!selectedPlans || selectedPlans.length === 0) {
     return <div className="text-gray-600 text-center py-8">No plans selected for comparison</div>;
   }

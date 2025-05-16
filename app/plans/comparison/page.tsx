@@ -3,15 +3,75 @@
 import { useSearchParams, useRouter } from 'next/navigation';
 import { PlanComparisonTable } from '@/components/plans/comparison/PlanComparisonTable';
 import { ChevronLeft } from 'lucide-react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { getPlanDisplayData } from '@/lib/utils/plan-display';
+import { planDetailsData } from '@/data/plan-details-data';
 
 // Note: In Next.js 13+, metadata can't be defined in client components.
 // It's a server-side feature, but we'll keep the page as a client component.
 
+// Define the PlanData interface to match the one in PlanComparisonTable
+interface PlanData {
+  id: string;
+  planName: string;
+  providerName: string;
+  monthlyCost: number;
+  iua: number;
+  estAnnualCost: number;
+  avgReviews: string;
+  reviewCount: number;
+  details: any; // Using any for now since we don't have the full PlanDetailsData type
+}
+
 export default function PlanComparisonPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const [selectedPlans, setSelectedPlans] = useState<PlanData[]>([]);
+  
+  useEffect(() => {
+    // Get selected plans from localStorage
+    const storedPlans = localStorage.getItem('selected-plans');
+    if (storedPlans) {
+      try {
+        const parsedPlans = JSON.parse(storedPlans);
+        console.log('Parsed plans from localStorage:', parsedPlans);
+        
+        // Map the plans to the format expected by PlanComparisonTable
+        const mappedPlans = parsedPlans.map((rec: any) => {
+          const plan = rec.plan;
+          const questionnaire = rec.questionnaire;
+          
+          const displayData = getPlanDisplayData(
+            rec,
+            questionnaire.age,
+            questionnaire.coverage_type,
+            questionnaire.iua_preference,
+            questionnaire.visit_frequency
+          );
+          
+          const mappedPlan = {
+            id: plan.id,
+            planName: plan.planName,
+            providerName: plan.providerName,
+            monthlyCost: displayData.monthlyPremium,
+            iua: displayData.initialUnsharedAmount,
+            estAnnualCost: displayData.annualCost,
+            avgReviews: '4.5', // fallback, or get from planDetailsData if available
+            reviewCount: 100, // fallback, or get from planDetailsData if available
+            details: (planDetailsData as any)[plan.id] || {},
+          };
+          console.log('Mapped plan:', mappedPlan);
+          return mappedPlan;
+        });
+        
+        console.log('Final mapped plans:', mappedPlans);
+        setSelectedPlans(mappedPlans);
+      } catch (error) {
+        console.error('Error parsing stored plans:', error);
+      }
+    }
+  }, []);
   
   // Build the recommendations URL with the current parameters
   let recommendationsUrl = '/recommendations';
@@ -100,7 +160,8 @@ export default function PlanComparisonPage() {
         Compare your selected plans side by side to find the best option for your needs.
       </p>
       
-      <PlanComparisonTable />
+      {/* Ensure selectedPlans is always an array to prevent type errors */}
+      <PlanComparisonTable selectedPlans={selectedPlans || []} />
     </div>
   );
 } 

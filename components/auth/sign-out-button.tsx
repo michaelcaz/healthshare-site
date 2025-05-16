@@ -8,7 +8,7 @@ import { LogOut } from 'lucide-react'
 import { useToast } from '@/components/ui/toast'
 
 interface SignOutButtonProps {
-  variant?: 'default' | 'outline' | 'secondary' | 'ghost' | 'link' | 'primary'
+  variant?: 'default' | 'outline' | 'secondary' | 'ghost' | 'link' | 'destructive'
   size?: 'default' | 'sm' | 'lg'
   className?: string
 }
