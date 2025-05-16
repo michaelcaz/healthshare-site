@@ -81,6 +81,7 @@ export function ProviderLogo({ providerName, size = 'md', className = '' }: Prov
         height={height}
         className="object-contain p-2"
         style={getLogoStyle()}
+        loading="eager"
         onError={(e) => {
           // Fallback to default provider logo if specific logo not found
           (e.target as HTMLImageElement).src = '/images/providers/default-provider.svg';

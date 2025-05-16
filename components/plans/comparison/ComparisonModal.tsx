@@ -55,8 +55,16 @@ export function ComparisonModal({ isOpen, onClose, questionnaire, topRecommendat
           'w-full max-w-5xl h-[90vh] max-h-[90vh] overflow-y-auto p-0 bg-white',
           'sm:rounded-2xl rounded-none border border-gray-200 shadow-2xl'
         )}
+        style={{
+          paddingTop: 'env(safe-area-inset-top, 0px)',
+        }}
       >
-        <DialogHeader className="bg-white/95 backdrop-blur border-b border-gray-100 px-4 py-3 flex flex-row items-center justify-between">
+        <DialogHeader 
+          className="bg-white/95 backdrop-blur border-b border-gray-100 px-4 py-3 flex flex-row items-center justify-between"
+          style={{
+            paddingTop: 'calc(env(safe-area-inset-top, 0px) + 0.75rem)', // 0.75rem = py-3
+          }}
+        >
           <DialogTitle className="text-2xl font-bold text-gray-900">Plan Comparison</DialogTitle>
         </DialogHeader>
         <div className="px-4 pt-2 pb-6">

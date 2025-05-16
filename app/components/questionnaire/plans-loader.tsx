@@ -64,8 +64,8 @@ export const PlansLoader = ({
       {/* Custom loading state image */}
       <div className="mb-8 w-64 h-64 relative">
         <Image 
-          src="/images/illustrations/Loading state image.svg"
-          alt="Person searching for health plans"
+          src="/images/illustrations/sharewizelogovector.svg"
+          alt="Sharewize logo vector"
           width={256}
           height={256}
           className="w-full h-auto"
@@ -85,10 +85,6 @@ export const PlansLoader = ({
           style={{ width: `${progress}%` }}
         ></div>
       </div>
-      
-      <p className="text-gray-600 text-center">
-        Did you know? Every plan is required to provide some health care services for free. Check out plan details to see what each plan offers.
-      </p>
     </div>
   );
 }; 

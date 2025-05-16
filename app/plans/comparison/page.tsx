@@ -28,10 +28,13 @@ export default function PlanComparisonPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [selectedPlans, setSelectedPlans] = useState<PlanData[]>([]);
+  const [topRecommendationId, setTopRecommendationId] = useState<string>('');
   
   useEffect(() => {
     // Get selected plans from localStorage
     const storedPlans = localStorage.getItem('selected-plans');
+    const storedTopRecommendation = localStorage.getItem('top-recommendation');
+    
     if (storedPlans) {
       try {
         const parsedPlans = JSON.parse(storedPlans);
@@ -67,6 +70,20 @@ export default function PlanComparisonPage() {
         
         console.log('Final mapped plans:', mappedPlans);
         setSelectedPlans(mappedPlans);
+
+        // Only set topRecommendationId if it matches one of the selected plans
+        if (storedTopRecommendation) {
+          try {
+            const parsed = JSON.parse(storedTopRecommendation);
+            const topId = parsed.id || '';
+            // Check if the top recommendation is in the selected plans
+            const isTopPlanSelected = mappedPlans.some((plan: PlanData) => plan.id === topId);
+            setTopRecommendationId(isTopPlanSelected ? topId : '');
+          } catch (error) {
+            console.error('Error parsing stored top recommendation:', error);
+            setTopRecommendationId('');
+          }
+        }
       } catch (error) {
         console.error('Error parsing stored plans:', error);
       }
@@ -161,7 +178,10 @@ export default function PlanComparisonPage() {
       </p>
       
       {/* Ensure selectedPlans is always an array to prevent type errors */}
-      <PlanComparisonTable selectedPlans={selectedPlans || []} />
+      <PlanComparisonTable 
+        selectedPlans={selectedPlans || []} 
+        topRecommendationId={topRecommendationId}
+      />
     </div>
   );
 } 

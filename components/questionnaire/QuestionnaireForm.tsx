@@ -169,7 +169,7 @@ const getSelectOptions = (fieldName: keyof z.infer<typeof formSchema>): SelectOp
     case 'preventative_services':
       return [
         { value: 'yes', label: 'Yes, I want preventative services included in my plan' },
-        { value: 'no', label: 'No, I have or plan to get a Direct Primary Membership, or plan to invest in my health in other ways.' }
+        { value: 'no', label: 'No, I have or plan to get a Direct Primary Membership.' }
       ];
     case 'expense_preference':
       return [
