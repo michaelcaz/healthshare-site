@@ -18,39 +18,6 @@ interface EmailCaptureResult {
 
 export async function submitEmailCapture(data: EmailCaptureData): Promise<EmailCaptureResult> {
   try {
-    // Save questionnaire response with email in Supabase
-    if (data.questionnaireData) {
-      const cookieStore = cookies();
-      const supabase = createServerClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-        {
-          cookies: {
-            get(name: string) {
-              return cookieStore.get(name)?.value;
-            },
-          },
-        }
-      );
-      
-      // Insert anonymous questionnaire response with email
-      const { error } = await supabase
-        .from('questionnaire_responses')
-        .insert([{
-          ...data.questionnaireData,
-          email: data.email,
-          first_name: data.firstName,
-          marketing_consent: data.marketingConsent,
-          created_at: new Date().toISOString(),
-          user_id: null // Anonymous submission
-        }]);
-        
-      if (error) {
-        console.error('Supabase error:', error);
-        throw new Error(`Failed to save response: ${error.message}`);
-      }
-    }
-    
     // Only subscribe to ConvertKit if user gave consent and env variables are set
     if (data.marketingConsent) {
       if (process.env.CONVERTKIT_API_KEY && process.env.CONVERTKIT_FORM_ID) {
@@ -69,7 +36,10 @@ export async function submitEmailCapture(data: EmailCaptureData): Promise<EmailC
         });
       }
     }
-    
+
+    // Optionally, set a cookie to indicate email capture (if needed)
+    // cookies().set('email-capture-complete', 'true', { path: '/', httpOnly: true });
+
     return { success: true };
   } catch (error) {
     console.error('Error in email capture:', error);
@@ -89,11 +59,18 @@ async function subscribeToConvertKit({
   firstName: string;
   questionnaireInfo: QuestionnaireResponse | null;
 }) {
+  // Log environment variables for debugging
+  console.log('ENV CHECK', {
+    apiKey: process.env.CONVERTKIT_API_KEY,
+    formId: process.env.CONVERTKIT_FORM_ID,
+  });
+  
   // Get these from ConvertKit
   const formId = process.env.CONVERTKIT_FORM_ID;
   const apiKey = process.env.CONVERTKIT_API_KEY;
   
   if (!formId || !apiKey) {
+    console.error('Missing ConvertKit configuration:', { formId: !!formId, apiKey: !!apiKey });
     throw new Error('Missing ConvertKit configuration');
   }
   
@@ -114,28 +91,51 @@ async function subscribeToConvertKit({
     customFields.age = questionnaireInfo.age.toString();
     customFields.coverage_type = questionnaireInfo.coverage_type;
     customFields.zip_code = questionnaireInfo.zip_code;
-    // Add other fields as needed
   }
   
-  // Make API request to ConvertKit
-  const response = await fetch(`https://api.convertkit.com/v3/forms/${formId}/subscribe`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      api_key: apiKey,
-      email,
-      first_name: firstName,
-      fields: customFields,
-      tags: tags
-    })
+  const requestBody = {
+    api_key: apiKey,
+    email,
+    first_name: firstName,
+    fields: customFields,
+    tags: tags
+  };
+
+  console.log('Attempting to subscribe to ConvertKit:', {
+    formId,
+    email,
+    firstName,
+    tags,
+    customFields
   });
   
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}));
-    throw new Error(`ConvertKit API error: ${response.status} - ${JSON.stringify(errorData)}`);
+  try {
+    // Make API request to ConvertKit
+    const response = await fetch(`https://api.convertkit.com/v3/forms/${formId}/subscribe`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(requestBody)
+    });
+    
+    const responseData = await response.json();
+    
+    if (!response.ok) {
+      console.error('ConvertKit API error:', {
+        status: response.status,
+        statusText: response.statusText,
+        response: responseData
+      });
+      throw new Error(`ConvertKit API error: ${response.status} - ${JSON.stringify(responseData)}`);
+    }
+    
+    console.log('Successfully subscribed to ConvertKit:', responseData);
+    return responseData;
+  } catch (error) {
+    console.error('Error in ConvertKit subscription:', error);
+    // Don't throw the error, just log it and return null
+    // This way the form submission can still succeed even if ConvertKit fails
+    return null;
   }
-  
-  return await response.json();
 }

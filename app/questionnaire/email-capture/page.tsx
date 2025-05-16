@@ -10,6 +10,7 @@ import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/comp
 import { Input } from '@/components/ui/input';
 import { toast } from '@/components/ui/use-toast';
 import { PlansLoader } from '@/app/components/questionnaire';
+import { submitEmailCapture } from '@/lib/actions/email-capture';
 
 // Define form schema for validation
 const formSchema = z.object({
@@ -61,29 +62,21 @@ function EmailForm() {
       }
       
       // Create the API request with the required fields
-      const apiRequest: EmailCaptureApiRequest = {
+      const emailCaptureData = {
         firstName: data.firstName,
         email: data.email,
-        marketingConsent: false, // Default value since we removed the checkbox
+        marketingConsent: true, // Always true since we're using ConvertKit
         questionnaireData: questionnaireResponse
       };
       
-      // Submit to server
-      const response = await fetch('/api/email-capture', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(apiRequest),
-      });
+      // Submit using server action
+      const result = await submitEmailCapture(emailCaptureData);
       
-      const responseData = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(responseData.message || 'Failed to submit information');
+      if (!result.success) {
+        throw new Error(result.error || 'Failed to submit information');
       }
       
-      // Mark email capture as complete in localStorage even if it's a development environment
+      // Mark email capture as complete in localStorage
       localStorage.setItem('email-capture-complete', 'true');
       
       // Navigate to results page
