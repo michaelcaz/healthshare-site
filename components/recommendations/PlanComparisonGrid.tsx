@@ -89,13 +89,18 @@ export function PlanComparisonGrid({
   }
 
   // Get plan details and ratings
-  const getPlanDetails = (planId: string) => {
-    // Special handling for Knew Health plans
-    if (planId?.toLowerCase().includes('knew') || 
-        topPlan.plan.providerName?.toLowerCase().includes('knew') ||
-        alternativePlans.some(p => p.plan.id === planId && 
-                              p.plan.providerName?.toLowerCase().includes('knew'))) {
+  const getPlanDetails = (planId: string, providerName?: string) => {
+    if (planId?.toLowerCase().includes('knew') || providerName?.toLowerCase().includes('knew')) {
       return planDetailsData['knew-health'];
+    }
+    if (planId?.toLowerCase().includes('crowd') || providerName?.toLowerCase().includes('crowd')) {
+      return planDetailsData['crowdhealth-membership'];
+    }
+    if (planId?.toLowerCase().includes('sedera-access+')) {
+      return planDetailsData['sedera-access+'];
+    }
+    if (planId?.toLowerCase().includes('zion-healthshare-direct-membership')) {
+      return planDetailsData['zion-healthshare-direct-membership'];
     }
     return planDetailsData[planId] || null;
   }
@@ -200,14 +205,14 @@ export function PlanComparisonGrid({
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-gray-700">Avg. Reviews</span>
                   <div className="flex items-center gap-2">
-                    {getPlanDetails(topPlan.plan.id)?.providerDetails?.ratings && (
+                    {getPlanDetails(topPlan.plan.id, topPlan.plan.providerName)?.providerDetails?.ratings && (
                       <>
-                        <StarRating rating={getPlanDetails(topPlan.plan.id)?.providerDetails?.ratings.overall || 0} />
+                        <StarRating rating={getPlanDetails(topPlan.plan.id, topPlan.plan.providerName)?.providerDetails?.ratings.overall || 0} />
                         <span className="font-semibold text-gray-900">
-                          {getPlanDetails(topPlan.plan.id)?.providerDetails?.ratings.overall.toFixed(1)}
+                          {getPlanDetails(topPlan.plan.id, topPlan.plan.providerName)?.providerDetails?.ratings.overall.toFixed(1)}
                         </span>
                         <span className="text-xs text-gray-500">
-                          ({getPlanDetails(topPlan.plan.id)?.providerDetails?.ratings.reviewCount})
+                          ({getPlanDetails(topPlan.plan.id, topPlan.plan.providerName)?.providerDetails?.ratings.reviewCount})
                         </span>
                       </>
                     )}
@@ -278,20 +283,14 @@ export function PlanComparisonGrid({
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-gray-700">Avg. Reviews</span>
                     <div className="flex items-center gap-2">
-                      {(plan.plan.id.includes('crowdhealth')) ? (
+                      {getPlanDetails(plan.plan.id, plan.plan.providerName)?.providerDetails?.ratings && (
                         <>
-                          <StarRating rating={4.8} />
-                          <span className="font-semibold text-gray-900">4.8</span>
-                          <span className="text-xs text-gray-500">(450)</span>
-                        </>
-                      ) : getPlanDetails(plan.plan.id)?.providerDetails?.ratings && (
-                        <>
-                          <StarRating rating={getPlanDetails(plan.plan.id)?.providerDetails?.ratings.overall || 0} />
+                          <StarRating rating={getPlanDetails(plan.plan.id, plan.plan.providerName)?.providerDetails?.ratings.overall || 0} />
                           <span className="font-semibold text-gray-900">
-                            {getPlanDetails(plan.plan.id)?.providerDetails?.ratings.overall.toFixed(1)}
+                            {getPlanDetails(plan.plan.id, plan.plan.providerName)?.providerDetails?.ratings.overall.toFixed(1)}
                           </span>
                           <span className="text-xs text-gray-500">
-                            ({getPlanDetails(plan.plan.id)?.providerDetails?.ratings.reviewCount})
+                            ({getPlanDetails(plan.plan.id, plan.plan.providerName)?.providerDetails?.ratings.reviewCount})
                           </span>
                         </>
                       )}

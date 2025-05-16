@@ -35,6 +35,7 @@ interface PlanData {
 interface PlanComparisonTableProps {
   selectedPlans: PlanData[];
   topRecommendationId: string;
+  renderLogo?: (providerName: string, size?: 'sm' | 'md' | 'lg' | 'xl') => React.ReactNode;
 }
 
 // Helper Components
@@ -244,7 +245,7 @@ const getFeatureData = (plan: PlanData) => {
 };
 
 // Main Component
-export function PlanComparisonTable({ selectedPlans, topRecommendationId }: PlanComparisonTableProps) {
+export function PlanComparisonTable({ selectedPlans, topRecommendationId, renderLogo }: PlanComparisonTableProps) {
   console.log('PlanComparisonTable received selectedPlans:', selectedPlans);
 
   if (!selectedPlans || selectedPlans.length === 0) {
@@ -266,7 +267,9 @@ export function PlanComparisonTable({ selectedPlans, topRecommendationId }: Plan
                       {plan.id === topRecommendationId && (
                         <span className="inline-block px-3 py-1 rounded-full bg-gradient-to-r from-indigo-100 via-blue-100 to-blue-50 text-indigo-700 font-semibold text-xs shadow-sm mb-1 animate-fade-in">Top Recommendation</span>
                       )}
-                      <ProviderLogo providerName={plan.providerName} size="md" className="mb-1 drop-shadow-md" />
+                      {renderLogo
+                        ? renderLogo(plan.providerName, 'md')
+                        : <ProviderLogo providerName={plan.providerName} size="md" className="mb-1 drop-shadow-md" />}
                       {canonicalName !== 'crowd health' && canonicalName !== 'knew health' && (
                         <span className="font-bold text-lg text-gray-900 tracking-tight">{plan.planName}</span>
                       )}
@@ -337,7 +340,9 @@ export function PlanComparisonTable({ selectedPlans, topRecommendationId }: Plan
                 {plan.id === topRecommendationId && (
                   <span className="inline-block px-2 py-0.5 rounded-full bg-gradient-to-r from-indigo-100 via-blue-100 to-blue-50 text-indigo-700 font-semibold text-[11px] shadow-sm animate-fade-in max-w-[90px] break-words leading-tight whitespace-nowrap text-center">Top Pick</span>
                 )}
-                <ProviderLogo providerName={plan.providerName} size="lg" className="mb-1 drop-shadow-md" />
+                {renderLogo
+                  ? renderLogo(plan.providerName, 'lg')
+                  : <ProviderLogo providerName={plan.providerName} size="lg" className="mb-1 drop-shadow-md" />}
                 {canonicalName !== 'crowd health' && canonicalName !== 'knew health' && (
                   <div className="font-bold text-lg text-gray-900 tracking-tight">{plan.planName}</div>
                 )}

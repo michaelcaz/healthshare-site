@@ -11,12 +11,66 @@ import { cn } from '@/lib/utils';
 import { planDetailsData } from '@/data/plan-details-data';
 import { getPlanDisplayData } from '@/lib/utils/plan-display';
 import { BottomCTAAction } from '@/components/ui/MobileBottomCTAAction';
+import Image from 'next/image';
 
 interface ComparisonModalProps {
   isOpen: boolean;
   onClose: () => void;
   questionnaire: QuestionnaireResponse;
   topRecommendationId: string;
+}
+
+// Local logo component for comparison modal only
+function ComparisonProviderLogo({ src, alt, width, height, className = '', style = {} }) {
+  return (
+    <div
+      className={cn(
+        'bg-white rounded-md flex items-center justify-center overflow-hidden',
+        className
+      )}
+      style={{ width, height }}
+    >
+      <Image
+        src={src}
+        alt={alt}
+        width={width}
+        height={height}
+        className="object-contain p-2"
+        style={style}
+        priority
+        unoptimized
+      />
+    </div>
+  );
+}
+
+// Helper to get logo path and style (copied from ProviderLogo)
+function getComparisonLogoProps(providerName, size = 'md') {
+  const dimensions = {
+    sm: { width: 40, height: 40 },
+    md: { width: 100, height: 60 },
+    lg: { width: 120, height: 80 },
+    xl: { width: 140, height: 90 },
+  };
+  const { width, height } = dimensions[size];
+  const normalizedName = providerName.toLowerCase();
+  let src = '/images/providers/default-provider.svg';
+  if (normalizedName.includes('zion')) src = '/images/logos/zion.svg';
+  else if (normalizedName.includes('sedera')) src = '/images/logos/sedera.svg';
+  else if (normalizedName.includes('knew')) src = '/images/logos/knew.svg';
+  else if (normalizedName.includes('crowd')) src = '/images/logos/crowd-health.svg';
+  let style = { maxWidth: '100%', maxHeight: '100%' };
+  if (normalizedName.includes('crowd')) {
+    const scales = { sm: 0.9, md: 0.95, lg: 1.0, xl: 1.05 };
+    style = {
+      maxWidth: '85%',
+      maxHeight: '85%',
+      transform: `scale(${scales[size]})`,
+      transformOrigin: 'center',
+      padding: '0px',
+    };
+  }
+  return { src, alt: `${providerName} logo`, width, height, style };
 }
 
 export function ComparisonModal({ isOpen, onClose, questionnaire, topRecommendationId }: ComparisonModalProps) {
@@ -71,7 +125,14 @@ export function ComparisonModal({ isOpen, onClose, questionnaire, topRecommendat
           <p className="text-base text-gray-700 mb-4">
             Compare your selected plans side by side to find the best option for your needs.
           </p>
-          <PlanComparisonTable selectedPlans={mappedPlans} topRecommendationId={topRecommendationId} />
+          <PlanComparisonTable 
+            selectedPlans={mappedPlans} 
+            topRecommendationId={topRecommendationId}
+            renderLogo={(providerName, size = 'md') => {
+              const logoProps = getComparisonLogoProps(providerName, size);
+              return <ComparisonProviderLogo {...logoProps} />;
+            }}
+          />
         </div>
       </DialogContent>
     </Dialog>

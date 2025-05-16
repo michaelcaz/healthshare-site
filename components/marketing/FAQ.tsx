@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import React from 'react';
+import { Heading } from '@/components/ui/Heading';
 
 export function FAQ() {
   const router = useRouter();
@@ -62,12 +63,9 @@ export function FAQ() {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          <h2 className="mb-4 font-bold leading-tight" style={{ 
-            fontSize: 'var(--h2)',
-            color: 'var(--color-warm-gray)' 
-          }}>
+          <Heading level={2} className="mb-4" style={{ color: 'var(--color-warm-gray)' }}>
             Frequently Asked Questions
-          </h2>
+          </Heading>
         </motion.div>
 
         <div className="space-y-4">
