@@ -61,7 +61,7 @@ export const WhyHealthshare = () => {
         >
           <h2 className="mb-4 font-bold leading-tight" style={{ 
             fontSize: 'var(--h2)',
-            color: 'var(--color-warm-gray)' 
+            color: 'var(--color-warm-gray)'
           }}>
             Why Choose Healthshare?
           </h2>

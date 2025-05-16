@@ -201,7 +201,7 @@ export function HeroRecommendation({
             <ProviderLogo providerName={plan.providerName} size="xl" />
           </div>
           <div className="w-full sm:w-auto flex flex-col items-center sm:items-start">
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-2 text-center sm:text-left break-keep"><span className="whitespace-nowrap">{plan.providerName} {plan.planName}</span></h2>
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-2 text-center sm:text-left">{plan.providerName} {plan.planName}</h2>
             {/* Feature badges */}
             <div className="flex flex-wrap gap-3 mt-3 justify-center sm:justify-start w-full">
               {isDpcCompatible && (

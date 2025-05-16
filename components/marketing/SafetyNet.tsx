@@ -83,7 +83,7 @@ export function SafetyNet() {
         >
           <h2 className="mb-4 font-bold leading-tight" style={{ 
             fontSize: 'var(--h2)',
-            color: 'var(--color-warm-gray)' 
+            color: 'var(--color-warm-gray)'
           }}>
             {"Ditch Insurance, Build Your Safety\u00A0Net"}
           </h2>
