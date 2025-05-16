@@ -210,23 +210,6 @@ export function ComparisonTable() {
             </div>
           </motion.div>
 
-          {/* Sticky CTA for mobile */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="block md:hidden"
-          >
-            <div className="fixed bottom-0 left-0 w-full z-40 px-4 pb-4 pointer-events-none">
-              <button 
-                onClick={handleFindMyPlan}
-                className="w-full h-14 bg-emerald-500 text-white rounded-xl text-lg font-bold shadow-lg border border-emerald-400 transition-all duration-200 active:scale-95 focus:outline-none focus:ring-2 focus:ring-emerald-400 pointer-events-auto"
-              >
-                Find My Plan →
-              </button>
-            </div>
-          </motion.div>
-
           {/* Desktop CTA */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}

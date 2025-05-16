@@ -151,7 +151,7 @@ export function Hero() {
               transition={{ duration: 0.8 }}
               className="flex-1 text-center lg:text-left max-w-xl lg:max-w-none pt-4 md:pt-8"
             >
-              <h1 className="text-3xl md:text-4xl lg:text-5xl leading-tight font-bold mb-4 md:mb-6 text-gray-warm">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl leading-tight font-bold mb-4 md:mb-6 text-gray-warm break-keep">
                 <span className="block">It's not health <span className="whitespace-nowrap">insurance.</span></span>
                 <span className="block text-[#6366F1]">That's the point.</span>
               </h1>
