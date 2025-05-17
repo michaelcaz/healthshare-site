@@ -7,9 +7,11 @@ interface ProviderLogoProps {
   providerName: string;
   size?: 'sm' | 'md' | 'lg' | 'xl';
   className?: string;
+  style?: React.CSSProperties;
+  svgStyle?: React.CSSProperties;
 }
 
-export function ProviderLogo({ providerName, size = 'md', className = '' }: ProviderLogoProps) {
+export function ProviderLogo({ providerName, size = 'md', className = '', style, svgStyle }: ProviderLogoProps) {
   const dimensions = {
     sm: { width: 40, height: 40 },
     md: { width: 100, height: 60 },
@@ -72,15 +74,15 @@ export function ProviderLogo({ providerName, size = 'md', className = '' }: Prov
         "bg-white rounded-md flex items-center justify-center overflow-hidden",
         className
       )}
-      style={{ width, height }}
+      style={{ width, height, ...style }}
     >
       <SvgImage 
         src={logoPath}
         alt={`${providerName} logo`}
         width={width}
         height={height}
-        className="object-contain p-2"
-        style={getLogoStyle()}
+        className="object-contain p-0"
+        style={svgStyle || getLogoStyle()}
         loading="eager"
         onError={(e) => {
           // Fallback to default provider logo if specific logo not found

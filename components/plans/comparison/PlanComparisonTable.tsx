@@ -252,6 +252,33 @@ export function PlanComparisonTable({ selectedPlans, topRecommendationId, render
     return <div className="text-gray-600 text-center py-8">No plans selected for comparison</div>;
   }
 
+  // Custom logo renderer for the comparison grid only
+  const prominentLogo = (providerName: string, size: 'sm' | 'md' | 'lg' | 'xl' = 'md') => {
+    // Use the same dimensions as ProviderLogo
+    const dimensions = {
+      sm: { width: 40, height: 40 },
+      md: { width: 100, height: 60 },
+      lg: { width: 120, height: 80 },
+      xl: { width: 140, height: 90 },
+    };
+    const { width, height } = dimensions[size];
+    const normalizedName = providerName.toLowerCase();
+    let style: React.CSSProperties = { maxWidth: '100%', maxHeight: '100%', padding: '0px' };
+    let svgStyle: React.CSSProperties | undefined = undefined;
+
+    if (normalizedName.includes('crowd') || normalizedName.includes('knew') || normalizedName.includes('sedera')) {
+      style = { maxWidth: '110%', maxHeight: '110%', padding: '0px', transform: 'scale(1.18)', transformOrigin: 'center' };
+      svgStyle = { maxWidth: '120%', maxHeight: '120%', transform: 'scale(1.25)', padding: 0 };
+    }
+
+    return (
+      <ProviderLogo providerName={providerName} size={size} className="mb-1 drop-shadow-md" style={style} svgStyle={svgStyle} />
+    );
+  };
+
+  // Use the custom logo renderer only for the comparison grid
+  const logoRenderer = renderLogo || prominentLogo;
+
   return (
     <div className="w-full">
       <div className="hidden md:block overflow-x-auto">
@@ -267,9 +294,7 @@ export function PlanComparisonTable({ selectedPlans, topRecommendationId, render
                       {plan.id === topRecommendationId && (
                         <span className="inline-block px-3 py-1 rounded-full bg-gradient-to-r from-indigo-100 via-blue-100 to-blue-50 text-indigo-700 font-semibold text-xs shadow-sm mb-1 animate-fade-in">Top Recommendation</span>
                       )}
-                      {renderLogo
-                        ? renderLogo(plan.providerName, 'md')
-                        : <ProviderLogo providerName={plan.providerName} size="md" className="mb-1 drop-shadow-md" />}
+                      {logoRenderer(plan.providerName, 'md')}
                       {canonicalName !== 'crowd health' && canonicalName !== 'knew health' && (
                         <span className="font-bold text-lg text-gray-900 tracking-tight">{plan.planName}</span>
                       )}
@@ -340,9 +365,7 @@ export function PlanComparisonTable({ selectedPlans, topRecommendationId, render
                 {plan.id === topRecommendationId && (
                   <span className="inline-block px-2 py-0.5 rounded-full bg-gradient-to-r from-indigo-100 via-blue-100 to-blue-50 text-indigo-700 font-semibold text-[11px] shadow-sm animate-fade-in max-w-[90px] break-words leading-tight whitespace-nowrap text-center">Top Pick</span>
                 )}
-                {renderLogo
-                  ? renderLogo(plan.providerName, 'lg')
-                  : <ProviderLogo providerName={plan.providerName} size="lg" className="mb-1 drop-shadow-md" />}
+                {logoRenderer(plan.providerName, 'lg')}
                 {canonicalName !== 'crowd health' && canonicalName !== 'knew health' && (
                   <div className="font-bold text-lg text-gray-900 tracking-tight">{plan.planName}</div>
                 )}

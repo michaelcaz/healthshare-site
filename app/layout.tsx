@@ -33,6 +33,8 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <title>Sharewize</title>
+        <link rel="icon" type="image/svg+xml" href="/images/illustrations/sharewizelogovector-white.svg" />
         <GoogleAnalytics />
       </head>
       <body suppressHydrationWarning className={`${inter.variable} ${montserrat.variable} ${caveat.variable} font-sans bg-warm`}>

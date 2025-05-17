@@ -6,7 +6,7 @@ import { Card } from '@/components/ui/card'
 import { Checkbox } from '../ui/checkbox'
 import { useSelectedPlans } from './SelectedPlansContext'
 import { type PlanRecommendation } from './types'
-import { CheckCircle, Info, ChevronRight, Sparkles, Star, StarHalf } from 'lucide-react'
+import { CheckCircle, Info, ChevronRight, Sparkles, Star, StarHalf, Scale } from 'lucide-react'
 import { Tooltip } from '@/components/ui/tooltip'
 import { cn } from '@/lib/utils'
 import { PlanRecommendation as PlanRecommendationType } from '@/lib/recommendation/recommendations'
@@ -57,33 +57,30 @@ export function PlanComparisonGrid({
   const isPlanSelected = (planId: string) => 
     selectedPlans.some(p => p.plan.id === planId)
 
-  const renderCompareCheckbox = (plan: PlanRecommendationType) => {
+  const renderCompareButton = (plan: PlanRecommendationType) => {
     const isSelected = isPlanSelected(plan.plan.id)
+    const isDisabled = !isSelected && !canAddMore
     return (
-      <div className="flex items-center mt-4">
-        <div className="flex items-center w-full">
-          <div className="flex items-center">
-            <Checkbox
-              id={`compare-${plan.plan.id}`}
-              checked={isSelected}
-              disabled={!isSelected && !canAddMore}
-              onCheckedChange={() => {
-                if (isSelected || canAddMore) {
-                  togglePlanSelection(plan)
-                }
-              }}
-            />
-            <label 
-              htmlFor={`compare-${plan.plan.id}`}
-              className={cn(
-                "ml-2 text-sm cursor-pointer",
-                isSelected ? "text-primary font-medium" : !canAddMore && !isSelected ? "text-gray-400" : "text-gray-600"
-              )}
-            >
-              Compare
-            </label>
-          </div>
-        </div>
+      <div className="flex flex-col items-center mt-4 w-full">
+        <Tooltip content="Tap to compare plans side by side." side="top" className="text-xs">
+          <button
+            type="button"
+            aria-pressed={isSelected}
+            disabled={isDisabled}
+            onClick={() => {
+              if (isSelected || canAddMore) {
+                togglePlanSelection(plan)
+              }
+            }}
+            className={`w-full flex items-center justify-center rounded-lg border-2 transition font-medium py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary/50
+              ${isSelected ? 'border-primary bg-primary/10 text-primary' : isDisabled ? 'border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed' : 'border-gray-300 bg-white text-gray-700 hover:border-primary hover:bg-primary/5'}
+            `}
+          >
+            <Scale className="mr-2 h-5 w-5" />
+            {isSelected ? 'Added to Compare' : 'Compare'}
+            {isSelected && <CheckCircle className="ml-2 h-4 w-4 text-primary" />}
+          </button>
+        </Tooltip>
       </div>
     )
   }
@@ -229,7 +226,7 @@ export function PlanComparisonGrid({
                 <ChevronRight className="h-4 w-4 ml-1 inline" />
               </button>
               
-              {renderCompareCheckbox(topPlan)}
+              {renderCompareButton(topPlan)}
             </div>
           </Card>
           
@@ -314,7 +311,7 @@ export function PlanComparisonGrid({
                   <ChevronRight className="h-4 w-4 ml-1 inline" />
                 </button>
                 
-                {renderCompareCheckbox(plan)}
+                {renderCompareButton(plan)}
               </div>
             </Card>
           ))}

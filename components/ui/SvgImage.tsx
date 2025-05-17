@@ -44,10 +44,11 @@ export function SvgImage({
       alt={alt}
       width={width}
       height={height}
-      className={cn('w-auto h-auto', className)}
+      className={cn('w-full h-full object-contain', className)}
       style={{
-        maxWidth: '100%',
-        height: 'auto',
+        width: '100%',
+        height: '100%',
+        objectFit: 'contain',
         ...style,
       }}
       onLoad={onLoad}

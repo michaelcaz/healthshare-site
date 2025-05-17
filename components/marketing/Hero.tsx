@@ -13,17 +13,12 @@ export function Hero() {
   const router = useRouter();
   const parallaxRef = useRef<HTMLDivElement>(null);
   const [mounted, setMounted] = useState(false);
-  const [zipCode, setZipCode] = useState('');
   const featuredGridRef = useRef<HTMLDivElement>(null);
   const logoRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [logosLoaded, setLogosLoaded] = useState(0);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (zipCode) {
-      // Redirect directly to questionnaire page with zip code as a parameter
-      router.push(`/questionnaire?zip=${zipCode}`);
-    }
+  const handleCTA = () => {
+    router.push('/questionnaire');
   };
 
   useEffect(() => {
@@ -158,31 +153,17 @@ export function Hero() {
               <p className="text-lg md:text-xl leading-relaxed text-gray-warm/80 mb-6 md:mb-10 max-w-xl">
                 Hot take: healthier people should pay less for a safety net. Why should you pay sky-high premiums to cover other people's health problems? Join 2M+ Americans saving 30-50% with healthcare plans that reward health-conscious entrepreneurs, freelancers, and independent contractors like you.
               </p>
-              <motion.form 
-                onSubmit={handleSubmit} 
-                className="flex flex-row w-full max-w-[600px] h-12 md:h-16 p-1.5 bg-white rounded-full border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200 mb-4"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-              >
-                <input
-                  type="text"
-                  placeholder="Enter zip code"
-                  value={zipCode}
-                  onChange={(e) => setZipCode(e.target.value)}
-                  className="flex-1 min-w-0 px-3 md:px-6 bg-transparent outline-none text-sm md:text-base text-gray-600 placeholder-gray-400"
-                  maxLength={5}
-                  pattern="[0-9]*"
-                />
+              <div className="flex w-full justify-center">
                 <motion.button
-                  type="submit"
-                  className="ml-2 px-4 md:px-8 py-2 bg-[#FF4500] hover:bg-[#E03E00] text-white font-semibold rounded-full transition-all duration-200 text-sm md:text-base whitespace-nowrap"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
+                  type="button"
+                  onClick={handleCTA}
+                  className="w-full max-w-xs md:max-w-sm py-3 md:py-4 px-6 md:px-8 bg-[#FF4500] hover:bg-[#E03E00] text-white font-bold text-lg md:text-xl rounded-full shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#FF4500]"
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
                 >
                   Find my plan
                 </motion.button>
-              </motion.form>
+              </div>
             </motion.div>
 
             {/* Image Section */}
