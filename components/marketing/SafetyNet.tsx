@@ -81,11 +81,10 @@ export function SafetyNet() {
           variants={fadeInUpVariants}
           className="text-center mb-16"
         >
-          <h2 className="mb-4 font-bold leading-tight" style={{ 
-            fontSize: 'var(--h2)',
-            color: 'var(--color-warm-gray)'
-          }}>
-            {"Ditch Insurance, Build Your Safety\u00A0Net"}
+          <h2 className="mb-4 font-bold leading-tight text-4xl md:text-6xl text-center" style={{ fontSize: 'var(--h2)', color: 'var(--color-warm-gray)' }}>
+            Ditch Insurance,<br className="block sm:hidden" />
+            Build Your<br className="block sm:hidden" />
+            Safety Net
           </h2>
           <div className="w-24 h-1 bg-[#6366F1] mx-auto rounded-full" />
           <div className="mt-8 mb-6">

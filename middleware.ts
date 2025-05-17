@@ -2,6 +2,8 @@ import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import type { Database } from '@/types/supabase'
+import { Ratelimit } from '@upstash/ratelimit'
+import { Redis } from '@upstash/redis'
 
 // In-memory store for rate limiting form submissions
 // This is reset when the server restarts, which is okay for basic protection
@@ -18,6 +20,13 @@ setInterval(() => {
     }
   })
 }, CLEANUP_INTERVAL)
+
+// Create a new ratelimiter that allows 10 requests per 10 seconds
+const ratelimit = new Ratelimit({
+  redis: Redis.fromEnv(),
+  limiter: Ratelimit.slidingWindow(10, '10 s'),
+  analytics: true,
+})
 
 export async function middleware(req: NextRequest) {
   let res = NextResponse.next()
@@ -142,6 +151,22 @@ export async function middleware(req: NextRequest) {
   res.headers.set('X-Content-Type-Options', 'nosniff')
   res.headers.set('Referrer-Policy', 'origin-when-cross-origin')
   res.headers.set('X-XSS-Protection', '1; mode=block')
+
+  // Rate limit API routes
+  if (req.nextUrl.pathname.startsWith('/api/')) {
+    const { success, limit, reset, remaining } = await ratelimit.limit(ip || '127.0.0.1')
+    
+    if (!success) {
+      res = new NextResponse('Too Many Requests', {
+        status: 429,
+        headers: {
+          'X-RateLimit-Limit': limit.toString(),
+          'X-RateLimit-Remaining': remaining.toString(),
+          'X-RateLimit-Reset': reset.toString(),
+        },
+      })
+    }
+  }
 
   return res
 }

@@ -139,6 +139,82 @@ export function HeroRecommendation({
           </div>
         </div>
         
+        {/* MOBILE: Plan Logo/Name, then Trust Elements */}
+        <div className="block sm:hidden">
+          {/* Plan Logo, Name and Provider */}
+          <div className="mb-6 flex flex-col items-center">
+            <ProviderLogo providerName={plan.providerName} size="xl" />
+            <h2 className="text-2xl font-bold text-gray-900 mt-4 mb-2 text-center">{plan.providerName} {plan.planName}</h2>
+          </div>
+          {/* Trust Elements (Ratings, Reviews, Members, Est. Date) */}
+          <div className="mb-10 w-full flex flex-col items-center">
+            <div className="flex items-center gap-1 mb-1">
+              <div className="flex">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <Star key={star} className="h-5 w-5 text-[#F0B03F]" fill="currentColor" />
+                ))}
+              </div>
+              <span className="font-semibold text-sm text-gray-800 ml-1">{providerDetails.ratings.overall}/5</span>
+            </div>
+            <span className="text-sm text-gray-600">({providerDetails.ratings.reviewCount} reviews)</span>
+            <div className="flex items-center gap-2 mt-2">
+              <Users className="h-4 w-4 text-blue-600" />
+              <span className="text-sm font-medium">{providerDetails.memberCount?.replace(/\*\*/g, '')} Active Members</span>
+              <TrendingUp className="h-3 w-3 text-green-500" />
+            </div>
+            <div className="flex items-center gap-2 mt-1">
+              <Calendar className="h-4 w-4 text-blue-600" />
+              <span className="text-sm">Est. {providerDetails.yearEstablished}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* DESKTOP: Trust Elements, then Plan Logo/Name (original order) */}
+        <div className="hidden sm:block">
+          {/* Trust Elements (Ratings, Reviews, Members, Est. Date) */}
+          <div className="flex w-full flex-row items-center justify-between bg-gradient-to-r from-[#F0F4FF] to-[#F5F7FF] mb-10 py-5 px-8 border-y border-blue-100/30 gap-0">
+            <div className="flex items-center gap-3">
+              <div className="flex">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <Star key={star} className="h-5 w-5 text-[#F0B03F]" fill="currentColor" />
+                ))}
+              </div>
+              <span className="font-semibold text-sm text-gray-800 ml-1">{providerDetails.ratings.overall}/5</span>
+              <span className="text-sm text-gray-600 ml-2">({providerDetails.ratings.reviewCount} reviews)</span>
+              <div className="flex items-center gap-2 ml-6">
+                <Users className="h-4 w-4 text-blue-600" />
+                <span className="text-sm font-medium">{providerDetails.memberCount?.replace(/\*\*/g, '')} Active Members</span>
+                <TrendingUp className="h-3 w-3 text-green-500" />
+              </div>
+              <div className="flex items-center gap-2 ml-6">
+                <Calendar className="h-4 w-4 text-blue-600" />
+                <span className="text-sm">Est. {providerDetails.yearEstablished}</span>
+              </div>
+            </div>
+          </div>
+          {/* Plan Logo, Name and Provider */}
+          <div className="mb-10 flex flex-row items-center gap-4">
+            <div className="flex-shrink-0 flex justify-center w-auto">
+              <ProviderLogo providerName={plan.providerName} size="xl" />
+            </div>
+            <div className="flex flex-col items-start">
+              <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-2 text-left">{plan.providerName} {plan.planName}</h2>
+              {/* Feature badges */}
+              <div className="flex flex-wrap gap-3 mt-3 justify-start w-full">
+                {isDpcCompatible && (
+                  <div className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-[#ECFDF5] text-[#047857]">
+                    <CustomTooltip 
+                      id="dpc-compatible"
+                      trigger="DPC Compatible"
+                      content="This plan works well with Direct Primary Care memberships, which provide unlimited access to a primary care doctor for a low monthly fee."
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Pre-existing Conditions Notice Banner */}
         {showPreExistingNotice && (
           <div className="bg-[#FEF9F1] -mx-6 mb-8 py-6 px-10 rounded-md shadow-[0_2px_8px_rgba(0,0,0,0.02)] border border-amber-100/70 mx-2">
@@ -155,67 +231,6 @@ export function HeroRecommendation({
             </div>
           </div>
         )}
-
-        {/* Social Proof Banner */}
-        <div className="flex w-full flex-col sm:flex-row sm:items-center sm:justify-between bg-gradient-to-r from-[#F0F4FF] to-[#F5F7FF] mb-10 py-5 px-4 sm:px-8 border-y border-blue-100/30 gap-3 sm:gap-0">
-          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 w-full sm:w-auto">
-            <div className="flex items-center gap-1 justify-center sm:justify-start">
-              <div className="flex">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <Star 
-                    key={star}
-                    className="h-5 w-5 text-[#F0B03F]"
-                    fill="currentColor"
-                  />
-                ))}
-              </div>
-              <span className="font-semibold text-sm text-gray-800 ml-1">{providerDetails.ratings.overall}/5</span>
-            </div>
-            <span className="text-sm text-gray-600 text-center sm:text-left">({providerDetails.ratings.reviewCount} reviews)</span>
-            <div className="flex items-center gap-1 justify-center sm:hidden">
-              <Users className="h-4 w-4 text-blue-600" />
-              <span className="text-sm font-medium">{providerDetails.memberCount?.replace(/\*\*/g, '')} Active Members</span>
-              <TrendingUp className="h-3 w-3 text-green-500" />
-            </div>
-            <div className="flex items-center gap-1 justify-center sm:hidden">
-              <Calendar className="h-4 w-4 text-blue-600" />
-              <span className="text-sm">Est. {providerDetails.yearEstablished}</span>
-            </div>
-          </div>
-          <div className="hidden sm:flex items-center gap-6">
-            <div className="flex items-center gap-2">
-              <Users className="h-4 w-4 text-blue-600" />
-              <span className="text-sm font-medium">{providerDetails.memberCount?.replace(/\*\*/g, '')} Active Members</span>
-              <TrendingUp className="h-3 w-3 text-green-500" />
-            </div>
-            <div className="flex items-center gap-2">
-              <Calendar className="h-4 w-4 text-blue-600" />
-              <span className="text-sm">Est. {providerDetails.yearEstablished}</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Plan Logo, Name and Provider */}
-        <div className="mb-10 flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-0">
-          <div className="mb-2 sm:mb-0 sm:mr-5 flex-shrink-0 flex justify-center sm:block w-full sm:w-auto">
-            <ProviderLogo providerName={plan.providerName} size="xl" />
-          </div>
-          <div className="w-full sm:w-auto flex flex-col items-center sm:items-start">
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-2 text-center sm:text-left">{plan.providerName} {plan.planName}</h2>
-            {/* Feature badges */}
-            <div className="flex flex-wrap gap-3 mt-3 justify-center sm:justify-start w-full">
-              {isDpcCompatible && (
-                <div className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-[#ECFDF5] text-[#047857]">
-                  <CustomTooltip 
-                    id="dpc-compatible"
-                    trigger="DPC Compatible"
-                    content="This plan works well with Direct Primary Care memberships, which provide unlimited access to a primary care doctor for a low monthly fee."
-                  />
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
 
         {/* Cost Information */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">

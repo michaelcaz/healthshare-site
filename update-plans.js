@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const XLSX = require('xlsx');
+const ExcelJS = require('exceljs');
 
 // Define the standard and custom age rules
 const standardAgeRules = {
@@ -17,19 +17,106 @@ const crowdHealthAgeRules = {
   }
 };
 
+// Add these validation functions at the top level
+function sanitizeNumber(value) {
+  if (typeof value === 'number') return value;
+  if (typeof value === 'string') {
+    const cleaned = value.replace(/[^0-9.]/g, '');
+    const num = parseFloat(cleaned);
+    return isNaN(num) ? null : num;
+  }
+  return null;
+}
+
+function validatePlanData(plan) {
+  // Validate required fields
+  if (!plan.id || !plan.providerName) {
+    throw new Error(`Invalid plan data: missing required fields for plan ${plan.id || 'unknown'}`);
+  }
+
+  // Validate plan ID format
+  if (!/^[a-z0-9-]+$/.test(plan.id)) {
+    throw new Error(`Invalid plan ID format: ${plan.id}`);
+  }
+
+  // Validate provider name
+  if (typeof plan.providerName !== 'string' || plan.providerName.length > 100) {
+    throw new Error(`Invalid provider name: ${plan.providerName}`);
+  }
+
+  // Validate plan name
+  if (plan.planName && (typeof plan.planName !== 'string' || plan.planName.length > 100)) {
+    throw new Error(`Invalid plan name: ${plan.planName}`);
+  }
+
+  // Validate costs
+  plan.planMatrix.forEach((matrix, matrixIndex) => {
+    matrix.costs.forEach((cost, costIndex) => {
+      if (typeof cost.monthlyPremium !== 'number' || cost.monthlyPremium < 0) {
+        throw new Error(`Invalid monthly premium at matrix[${matrixIndex}].costs[${costIndex}]`);
+      }
+      if (typeof cost.initialUnsharedAmount !== 'number' || cost.initialUnsharedAmount < 0) {
+        throw new Error(`Invalid initial unshared amount at matrix[${matrixIndex}].costs[${costIndex}]`);
+      }
+    });
+  });
+}
+
 // Process Excel file
-function processExcelFile(filePath) {
-  // Read the Excel file
-  const workbook = XLSX.readFile(filePath);
-  
-  // Look for the "Cost Matrix" sheet or use the first sheet
-  const sheetName = workbook.SheetNames.find(name => name.includes("Cost Matrix")) || workbook.SheetNames[0];
-  
-  console.log(`Using sheet: ${sheetName}`);
-  const worksheet = workbook.Sheets[sheetName];
-  
-  // Convert to JSON
-  return XLSX.utils.sheet_to_json(worksheet);
+async function processExcelFile(filePath) {
+  try {
+    // Validate file exists and is readable
+    if (!fs.existsSync(filePath)) {
+      throw new Error(`File not found: ${filePath}`);
+    }
+
+    // Validate file size (e.g., 10MB limit)
+    const stats = fs.statSync(filePath);
+    const fileSizeInMB = stats.size / (1024 * 1024);
+    if (fileSizeInMB > 10) {
+      throw new Error(`File too large: ${fileSizeInMB.toFixed(2)}MB. Maximum size is 10MB.`);
+    }
+
+    const workbook = new ExcelJS.Workbook();
+    await workbook.xlsx.readFile(filePath);
+    
+    // Look for the "Cost Matrix" sheet or use the first sheet
+    const sheetName = workbook.worksheets.find(sheet => 
+      sheet.name.includes("Cost Matrix")
+    )?.name || workbook.worksheets[0].name;
+    
+    console.log(`Using sheet: ${sheetName}`);
+    const worksheet = workbook.getWorksheet(sheetName);
+    
+    // Convert to JSON with validation
+    const data = [];
+    worksheet.eachRow((row, rowNumber) => {
+      if (rowNumber === 1) return; // Skip header row
+      
+      const rowData = {};
+      row.eachCell((cell, colNumber) => {
+        const header = worksheet.getRow(1).getCell(colNumber).value;
+        if (header) {
+          // Sanitize the value
+          let value = cell.value;
+          if (typeof value === 'string') {
+            value = value.trim();
+          }
+          rowData[header] = value;
+        }
+      });
+      
+      // Only add rows that have at least a provider name
+      if (rowData['Provider Name']) {
+        data.push(rowData);
+      }
+    });
+
+    return data;
+  } catch (error) {
+    console.error('Error processing Excel file:', error.message);
+    throw error;
+  }
 }
 
 // Transform data into provider plans
@@ -68,15 +155,18 @@ function transformToProviderPlans(data) {
     // Skip rows with no plan information (after potential placeholder assignment)
     if (!currentPlan) return;
     
-    // Create plan ID
-    const planId = `${currentProvider.toLowerCase().replace(/\s+/g, '-')}-${currentPlan === '_NO_PLAN_NAME_' ? 'basic' : currentPlan.toLowerCase().replace(/\s+/g, '-')}`;
+    // Create plan ID with additional sanitization
+    const sanitizedProvider = currentProvider.toLowerCase().replace(/[^a-z0-9-]/g, '-');
+    const sanitizedPlan = currentPlan === '_NO_PLAN_NAME_' ? 'basic' : 
+      currentPlan.toLowerCase().replace(/[^a-z0-9-]/g, '-');
+    const planId = `${sanitizedProvider}-${sanitizedPlan}`;
     
     // Initialize plan if needed
     if (!providerPlans[planId]) {
       providerPlans[planId] = {
         id: planId,
         providerName: currentProvider,
-        planName: currentPlan === '_NO_PLAN_NAME_' ? '' : currentPlan, // Store empty string for display
+        planName: currentPlan === '_NO_PLAN_NAME_' ? '' : currentPlan,
         maxCoverage: safeString(row['Maximum Incident Coverage ($)']) || 'No limit',
         annualUnsharedAmount: safeString(row['Annual Unshared Amount ($)']) || 'Total of paid three IUAs in 12 months',
         sourceUrl: safeString(row['Source URL']) || '',
@@ -91,11 +181,14 @@ function transformToProviderPlans(data) {
     
     if (!monthlyPremiumStr || !initialUnsharedAmountStr || !currentAgeBracket || !currentHouseholdType) return;
     
-    // Clean price strings and convert to numbers
-    const monthlyPremium = parseFloat(monthlyPremiumStr.replace(/[$,]/g, ''));
-    const initialUnsharedAmount = parseFloat(initialUnsharedAmountStr.replace(/[$,]/g, ''));
+    // Clean price strings and convert to numbers with validation
+    const monthlyPremium = sanitizeNumber(monthlyPremiumStr);
+    const initialUnsharedAmount = sanitizeNumber(initialUnsharedAmountStr);
     
-    if (isNaN(monthlyPremium) || isNaN(initialUnsharedAmount)) return;
+    if (monthlyPremium === null || initialUnsharedAmount === null) {
+      console.warn(`Warning: Invalid price format for ${currentProvider} - ${currentPlan}`);
+      return;
+    }
     
     // Validate and convert age bracket and household type
     const ageBracket = validateAgeBracket(currentAgeBracket);
@@ -139,8 +232,12 @@ function transformToProviderPlans(data) {
       entry.costs.sort((a, b) => a.initialUnsharedAmount - b.initialUnsharedAmount);
     });
   });
+
+  // Validate all plans before returning
+  const plans = Object.values(providerPlans);
+  plans.forEach(validatePlanData);
   
-  return Object.values(providerPlans);
+  return plans;
 }
 
 // Helper function to validate age bracket
@@ -205,17 +302,10 @@ function validatePlans(plans) {
 }
 
 // Main function
-function updateProviderPlans(filePath, outputPath) {
+async function updateProviderPlans(filePath, outputPath) {
   try {
-    // Process the Excel file
-    const data = processExcelFile(filePath);
-    console.log(`Processed ${data.length} rows from Excel file`);
-    
-    // Transform the data into provider plans
+    const data = await processExcelFile(filePath);
     const plans = transformToProviderPlans(data);
-    console.log(`Generated ${plans.length} provider plans`);
-    
-    // Validate plans
     validatePlans(plans);
     
     // Debug output for Sedera ACCESS+ +DPC/VPC
@@ -307,5 +397,16 @@ export const providerPlans: PricingPlan[] = ${JSON.stringify(plans, null, 2)
   }
 }
 
-// Run the update
-updateProviderPlans('healthshare-plans.xlsx'); 
+// If this file is run directly
+if (require.main === module) {
+  const filePath = process.argv[2] || 'healthshare-plans.xlsx';
+  const outputPath = process.argv[3] || 'provider-plans.json';
+  
+  updateProviderPlans(filePath, outputPath)
+    .catch(error => {
+      console.error('Failed to update plans:', error);
+      process.exit(1);
+    });
+}
+
+module.exports = { updateProviderPlans, processExcelFile }; 

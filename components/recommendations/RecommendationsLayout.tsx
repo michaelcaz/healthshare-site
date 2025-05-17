@@ -223,7 +223,11 @@ export function RecommendationsLayout({
           <div className="py-16">
             {/* Header Section */}
             <div className="text-center mb-16">
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6 break-keep">Your Personalized <span className="whitespace-nowrap">Healthshare Recommendations</span></h1>
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6 text-center">
+                Your Personalized<br className="block sm:hidden" />
+                Healthshare<br className="block sm:hidden" />
+                Recommendations
+              </h1>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
                 Based on your needs, we've found these healthshare plans that best match your situation. 
                 Compare options and choose the one that works for you.
