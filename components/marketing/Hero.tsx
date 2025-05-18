@@ -146,9 +146,14 @@ export function Hero() {
               transition={{ duration: 0.8 }}
               className="flex-1 text-center lg:text-left max-w-xl lg:max-w-none pt-4 md:pt-8"
             >
+              {/* Logo + Brand Row */}
+              <div className="flex items-center justify-center lg:justify-start mb-4">
+                <Image src="/images/sharewizelogofull.svg" alt="Sharewize Logo" width={40} height={40} className="h-10 w-10" />
+                <span className="ml-3 text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">Sharewize</span>
+              </div>
               <h1 className="text-3xl md:text-4xl lg:text-5xl leading-tight font-bold mb-4 md:mb-6 text-gray-warm break-keep">
-                <span className="block">It's not health <span className="whitespace-nowrap">insurance.</span></span>
-                <span className="block text-[#6366F1]">That's the point.</span>
+                <span className="block">Share your health.</span>
+                <span className="block text-[#6366F1]">Save your wealth.</span>
               </h1>
               <p className="text-lg md:text-xl leading-relaxed text-gray-warm/80 mb-6 md:mb-10 max-w-xl">
                 Hot take: healthier people should pay less for a safety net. Why should you pay sky-high premiums to cover other people's health problems? Join 2M+ Americans saving 30-50% with healthcare plans that reward health-conscious entrepreneurs, freelancers, and independent contractors like you.
