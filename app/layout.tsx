@@ -9,6 +9,7 @@ import { ExitIntentPopup } from '@/components/ui/exit-intent-popup'
 import { headers } from 'next/headers'
 import Script from 'next/script'
 import { AnnouncementBar } from '@/components/ui/announcement-bar'
+import { Metadata } from 'next'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 const montserrat = Montserrat({ 
@@ -19,6 +20,37 @@ const caveat = Caveat({
   subsets: ['latin'],
   variable: '--font-handwriting'
 })
+
+export const metadata: Metadata = {
+  title: 'Sharewize - Share your health. Save your wealth.',
+  description: 'Join 2M+ Americans saving 30-50% with healthcare plans that reward health-conscious entrepreneurs, freelancers, and independent contractors.',
+  openGraph: {
+    title: 'Sharewize - Share your health. Save your wealth.',
+    description: 'Join 2M+ Americans saving 30-50% with healthcare plans that reward health-conscious entrepreneurs, freelancers, and independent contractors.',
+    url: 'https://sharewize.com',
+    siteName: 'Sharewize',
+    images: [
+      {
+        url: '/images/og-image.svg',
+        width: 1200,
+        height: 630,
+        alt: 'Sharewize - Share your health. Save your wealth.',
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Sharewize - Share your health. Save your wealth.',
+    description: 'Join 2M+ Americans saving 30-50% with healthcare plans that reward health-conscious entrepreneurs, freelancers, and independent contractors.',
+    images: ['/images/og-image.svg'],
+    creator: '@sharewize',
+  },
+  icons: {
+    icon: '/images/illustrations/sharewizelogovector-white.svg',
+  },
+}
 
 console.log('Rendering layout.tsx');
 
