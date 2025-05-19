@@ -223,9 +223,11 @@ export function RecommendationsLayout({
           <div className="py-16">
             {/* Header Section */}
             <div className="text-center mb-16">
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6 text-center" style={{ wordBreak: 'keep-all', hyphens: 'none' }}>
-                Your Personalized<br className="block sm:hidden" />
-                Healthshare<br className="block sm:hidden" />
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6 text-center break-words" style={{ hyphens: 'none' }}>
+                Your Personalized{' '}
+                <br className="block sm:hidden" />
+                Healthshare{' '}
+                <br className="block sm:hidden" />
                 Recommendations
               </h1>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
