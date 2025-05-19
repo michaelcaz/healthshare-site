@@ -21,6 +21,7 @@ import { ProviderLogo } from './ProviderLogo'
 import { useEffect, useRef, useState } from 'react'
 import { PlanDetailsData, defaultPlanDetailsData } from '@/types/plan-details'
 import { calculateAnnualCost, getVisitFrequencyCost } from '@/utils/plan-utils'
+import { planDetailsData } from '@/data/plan-details-data'
 
 interface HeroRecommendationProps {
   recommendation: PlanRecommendation
@@ -95,7 +96,10 @@ export function HeroRecommendation({
   const hasLowestOutOfPocket = badges.topReason === "Incident Cost";
 
   // Get provider details from planDetails, ensuring it's not undefined
-  const providerDetails = planDetails?.providerDetails || defaultPlanDetailsData.providerDetails!;
+  const isCrowdHealth = plan.providerName.toLowerCase().includes('crowd') || plan.planName.toLowerCase().includes('crowd');
+  const providerDetails = isCrowdHealth
+    ? planDetailsData['crowdhealth-membership'].providerDetails
+    : planDetails?.providerDetails || defaultPlanDetailsData.providerDetails!;
 
   // Custom tooltip component that matches Stride's design
   const CustomTooltip = ({ 
@@ -154,17 +158,17 @@ export function HeroRecommendation({
                   <Star key={star} className="h-5 w-5 text-[#F0B03F]" fill="currentColor" />
                 ))}
               </div>
-              <span className="font-semibold text-sm text-gray-800 ml-1">{providerDetails.ratings.overall}/5</span>
+              <span className="font-semibold text-sm text-gray-800 ml-1">{providerDetails!.ratings.overall}/5</span>
             </div>
-            <span className="text-sm text-gray-600">({providerDetails.ratings.reviewCount} reviews)</span>
+            <span className="text-sm text-gray-600">({providerDetails!.ratings.reviewCount} reviews)</span>
             <div className="flex items-center gap-2 mt-2">
               <Users className="h-4 w-4 text-blue-600" />
-              <span className="text-sm font-medium">{providerDetails.memberCount?.replace(/\*\*/g, '')} Active Members</span>
+              <span className="text-sm font-medium">{providerDetails!.memberCount?.replace(/\*\*/g, '')} Active Members</span>
               <TrendingUp className="h-3 w-3 text-green-500" />
             </div>
             <div className="flex items-center gap-2 mt-1">
               <Calendar className="h-4 w-4 text-blue-600" />
-              <span className="text-sm">Est. {providerDetails.yearEstablished}</span>
+              <span className="text-sm">Est. {providerDetails!.yearEstablished}</span>
             </div>
           </div>
         </div>
@@ -179,16 +183,16 @@ export function HeroRecommendation({
                   <Star key={star} className="h-5 w-5 text-[#F0B03F]" fill="currentColor" />
                 ))}
               </div>
-              <span className="font-semibold text-sm text-gray-800 ml-1">{providerDetails.ratings.overall}/5</span>
-              <span className="text-sm text-gray-600 ml-2">({providerDetails.ratings.reviewCount} reviews)</span>
+              <span className="font-semibold text-sm text-gray-800 ml-1">{providerDetails!.ratings.overall}/5</span>
+              <span className="text-sm text-gray-600 ml-2">({providerDetails!.ratings.reviewCount} reviews)</span>
               <div className="flex items-center gap-2 ml-6">
                 <Users className="h-4 w-4 text-blue-600" />
-                <span className="text-sm font-medium">{providerDetails.memberCount?.replace(/\*\*/g, '')} Active Members</span>
+                <span className="text-sm font-medium">{providerDetails!.memberCount?.replace(/\*\*/g, '')} Active Members</span>
                 <TrendingUp className="h-3 w-3 text-green-500" />
               </div>
               <div className="flex items-center gap-2 ml-6">
                 <Calendar className="h-4 w-4 text-blue-600" />
-                <span className="text-sm">Est. {providerDetails.yearEstablished}</span>
+                <span className="text-sm">Est. {providerDetails!.yearEstablished}</span>
               </div>
             </div>
           </div>
@@ -198,7 +202,9 @@ export function HeroRecommendation({
               <ProviderLogo providerName={plan.providerName} size="xl" />
             </div>
             <div className="flex flex-col items-start">
-              <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-2 text-left">{plan.providerName} {plan.planName}</h2>
+              <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-2 text-left" style={{ wordBreak: 'keep-all', hyphens: 'none' }}>
+                {plan.providerName} {plan.planName}
+              </h2>
               {/* Feature badges */}
               <div className="flex flex-wrap gap-3 mt-3 justify-start w-full">
                 {isDpcCompatible && (

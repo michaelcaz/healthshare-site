@@ -34,7 +34,9 @@ export function TrustElements({ recommendation, planDetails = defaultPlanDetails
   return (
     <>
       <div className="space-y-10">
-        <h2 className="text-2xl font-bold text-gray-900">Why Members Love {plan.providerName}</h2>
+        <h2 className="text-2xl font-bold text-gray-900" style={{ wordBreak: 'keep-all', hyphens: 'none' }}>
+          Why Members Love {plan.providerName}
+        </h2>
         
         {/* Trust Elements Grid - Updated with new benefits */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

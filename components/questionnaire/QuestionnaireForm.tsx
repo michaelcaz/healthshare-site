@@ -954,7 +954,9 @@ export const QuestionnaireForm = () => {
       />
       
       <div className="questionnaire-card">
-        <h1 className="questionnaire-step-title">{questionnaireSections[currentStep].title}</h1>
+        <h1 className="questionnaire-step-title" style={{ wordBreak: 'keep-all', hyphens: 'none' }}>
+          {questionnaireSections[currentStep].title}
+        </h1>
         <p className="questionnaire-step-description">
           {questionnaireSections[currentStep].description}
         </p>
