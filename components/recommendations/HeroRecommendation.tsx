@@ -148,7 +148,9 @@ export function HeroRecommendation({
           {/* Plan Logo, Name and Provider */}
           <div className="mb-6 flex flex-col items-center">
             <ProviderLogo providerName={plan.providerName} size="xl" />
-            <h2 className="text-2xl font-bold text-gray-900 mt-4 mb-2 text-center">{plan.providerName} {plan.planName}</h2>
+            {!(isCrowdHealth || plan.providerName.toLowerCase().includes('knew')) && (
+              <h2 className="text-2xl font-bold text-gray-900 mt-4 mb-2 text-center">{plan.providerName} {plan.planName}</h2>
+            )}
           </div>
           {/* Trust Elements (Ratings, Reviews, Members, Est. Date) */}
           <div className="mb-10 w-full flex flex-col items-center">
@@ -199,25 +201,33 @@ export function HeroRecommendation({
           {/* Plan Logo, Name and Provider */}
           <div className="mb-10 flex flex-row items-center gap-4">
             <div className="flex-shrink-0 flex justify-center w-auto">
-              <ProviderLogo providerName={plan.providerName} size="xl" />
+              {(isCrowdHealth || plan.providerName.toLowerCase().includes('knew')) ? (
+                <div className="hidden sm:flex" style={{ width: 180, height: 110 }}>
+                  <ProviderLogo providerName={plan.providerName} size="xl" style={{ width: '100%', height: '100%' }} />
+                </div>
+              ) : (
+                <ProviderLogo providerName={plan.providerName} size="xl" />
+              )}
             </div>
-            <div className="flex flex-col items-start">
-              <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-2 text-left" style={{ wordBreak: 'keep-all', hyphens: 'none' }}>
-                {plan.providerName} {plan.planName}
-              </h2>
-              {/* Feature badges */}
-              <div className="flex flex-wrap gap-3 mt-3 justify-start w-full">
-                {isDpcCompatible && (
-                  <div className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-[#ECFDF5] text-[#047857]">
-                    <CustomTooltip 
-                      id="dpc-compatible"
-                      trigger="DPC Compatible"
-                      content="This plan works well with Direct Primary Care memberships, which provide unlimited access to a primary care doctor for a low monthly fee."
-                    />
-                  </div>
-                )}
+            {!(isCrowdHealth || plan.providerName.toLowerCase().includes('knew')) && (
+              <div className="flex flex-col items-start">
+                <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-2 text-left" style={{ wordBreak: 'keep-all', hyphens: 'none' }}>
+                  {plan.providerName} {plan.planName}
+                </h2>
+                {/* Feature badges */}
+                <div className="flex flex-wrap gap-3 mt-3 justify-start w-full">
+                  {isDpcCompatible && (
+                    <div className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-[#ECFDF5] text-[#047857]">
+                      <CustomTooltip 
+                        id="dpc-compatible"
+                        trigger="DPC Compatible"
+                        content="This plan works well with Direct Primary Care memberships, which provide unlimited access to a primary care doctor for a low monthly fee."
+                      />
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
 
