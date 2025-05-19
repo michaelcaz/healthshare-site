@@ -122,7 +122,8 @@ export function ComparisonModal({ isOpen, onClose, questionnaire, topRecommendat
           'sm:rounded-2xl rounded-none border border-gray-200 shadow-2xl'
         )}
         style={{
-          paddingTop: 'calc(var(--announcement-bar-height, 40px) + 16px)', // 16px extra for spacing below the bar
+          top: 'var(--announcement-bar-height, 40px)', // Offset modal below announcement bar
+          position: 'fixed',
         }}
       >
         <DialogHeader 
