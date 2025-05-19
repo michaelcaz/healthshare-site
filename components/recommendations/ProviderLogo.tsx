@@ -42,10 +42,10 @@ export function ProviderLogo({ providerName, size = 'md', className = '', style,
   
   const logoPath = getLogoPath();
 
-  // Special styling for CrowdHealth logo to ensure it appears visually consistent with Zion logo
+  // Special styling for CrowdHealth and Knew Health logos to ensure they appear visually consistent with Zion logo
   const getLogoStyle = () => {
-    if (normalizedName.includes('crowd')) {
-      // Adjust scale for CrowdHealth logo based on the size prop
+    if (normalizedName.includes('crowd') || normalizedName.includes('knew')) {
+      // Adjust scale for logos based on the size prop
       const scales = {
         sm: 0.9,
         md: 0.95,
@@ -56,7 +56,7 @@ export function ProviderLogo({ providerName, size = 'md', className = '', style,
       return {
         maxWidth: '85%', 
         maxHeight: '85%',
-        transform: `scale(${scales[size]})`, // Scale the CrowdHealth logo
+        transform: `scale(${scales[size]})`, // Scale the logo
         transformOrigin: 'center',
         padding: '0px'
       };

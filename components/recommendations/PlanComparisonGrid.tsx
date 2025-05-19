@@ -46,6 +46,22 @@ const StarRating = ({ rating }: { rating: number }) => {
   );
 };
 
+// Helper for aggressive scaling
+const getAggressiveLogoStyle = (providerName: string, size: 'sm' | 'md' | 'lg' | 'xl' = 'md') => {
+  const normalizedName = providerName.toLowerCase();
+  if (normalizedName.includes('crowd') || normalizedName.includes('knew')) {
+    const scales = { sm: 1.4, md: 2.0, lg: 2.2, xl: 2.4 };
+    return {
+      maxWidth: '180%',
+      maxHeight: '180%',
+      transform: `scale(${scales[size]})`,
+      transformOrigin: 'center',
+      padding: 0,
+    };
+  }
+  return { maxWidth: '100%', maxHeight: '100%' };
+};
+
 export function PlanComparisonGrid({ 
   topPlan, 
   alternativePlans,
@@ -166,7 +182,7 @@ export function PlanComparisonGrid({
               <div>
                 <div className="flex flex-col items-center gap-3 mb-2">
                   <div className="h-[60px] flex items-center justify-center mb-2">
-                    <ProviderLogo providerName={topPlan.plan.providerName} size="md" />
+                    <ProviderLogo providerName={topPlan.plan.providerName} size="md" style={getAggressiveLogoStyle(topPlan.plan.providerName, 'md')} />
                   </div>
                   {/* Always render the container div for consistent spacing, but only show text for non-Knew/Crowd plans */}
                   <div className="text-center" style={{ minHeight: '28px' }}>
@@ -244,7 +260,7 @@ export function PlanComparisonGrid({
                 <div>
                   <div className="flex flex-col items-center gap-3 mb-2">
                     <div className="h-[60px] flex items-center justify-center mb-2">
-                      <ProviderLogo providerName={plan.plan.providerName} size="md" />
+                      <ProviderLogo providerName={plan.plan.providerName} size="md" style={getAggressiveLogoStyle(plan.plan.providerName, 'md')} />
                     </div>
                     {/* Always render the container div for consistent spacing, but only show text for non-Knew/Crowd plans */}
                     <div className="text-center" style={{ minHeight: '28px' }}>
