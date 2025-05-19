@@ -77,6 +77,7 @@ export function ProviderLogo({ providerName, size = 'md', className = '', style,
       style={{ width, height, ...style }}
     >
       <SvgImage 
+        key={normalizedName.includes('crowd') ? 'crowd-health' : undefined}
         src={logoPath}
         alt={`${providerName} logo`}
         width={width}
