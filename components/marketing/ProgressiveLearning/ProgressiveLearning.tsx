@@ -148,6 +148,7 @@ export function ProgressiveLearning() {
         >
           <h2
             className="text-4xl sm:text-5xl md:text-6xl lg:text-6xl font-bold leading-tight tracking-tight text-balance text-center mb-4 text-gray-warm max-w-xs sm:max-w-none mx-auto"
+            style={{ wordBreak: 'keep-all', hyphens: 'none' }}
           >
             Understanding Healthcare Sharing
           </h2>

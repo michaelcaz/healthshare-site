@@ -186,7 +186,7 @@ export function RealTalk() {
           transition={{ duration: 0.5 }}
           className="text-center max-w-2xl mx-auto mb-16"
         >
-          <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl mb-4">
+          <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl mb-4" style={{ wordBreak: 'keep-all', hyphens: 'none' }}>
             Real Talk About Health Sharing
           </h2>
           <div className="w-24 h-1 bg-[#6366F1] mx-auto rounded-full mb-6" />
