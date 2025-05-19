@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     siteName: 'Sharewize',
     images: [
       {
-        url: '/images/og-image.svg',
+        url: '/images/sharewizelogofulljpg.jpg',
         width: 1200,
         height: 630,
         alt: 'Sharewize - Share your health. Save your wealth.',
@@ -44,7 +44,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Sharewize - Share your health. Save your wealth.',
     description: 'Join 2M+ Americans saving 30-50% with healthcare plans that reward health-conscious entrepreneurs, freelancers, and independent contractors.',
-    images: ['/images/og-image.svg'],
+    images: ['/images/sharewizelogofulljpg.jpg'],
     creator: '@sharewize',
   },
   icons: {
