@@ -39,9 +39,9 @@ export async function getRecommendations(
   // Log questionnaire data for debugging
   console.log(`Getting recommendations for questionnaire:`, JSON.stringify(questionnaire, null, 2));
   
-  // Filter out deprecated plans
-  const activePlans = plans.filter(plan => !plan.id.startsWith('_deprecated_'));
-  console.log(`Starting with ${activePlans.length} active plans after filtering out deprecated plans`);
+  // Filter out inactive plans before any other logic
+  const activePlans = plans.filter(plan => plan.isActive !== false);
+  console.log(`Starting with ${activePlans.length} active plans after filtering out inactive plans`);
   
   // New: Add special logging for the preventative_services preference
   console.log(`\n========== PREVENTATIVE SERVICES PREFERENCE: ${questionnaire.preventative_services} ==========\n`);

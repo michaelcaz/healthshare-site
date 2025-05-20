@@ -100,6 +100,7 @@ export interface PricingPlan {
   sourceUrl: string;
   ageRules: ProviderAgeRules;
   planMatrix: PlanMatrix[];
+  isActive?: boolean;
 }
 
 export interface EligiblePlan {

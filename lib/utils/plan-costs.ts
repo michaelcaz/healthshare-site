@@ -155,6 +155,16 @@ export function getPlanCost(
     return null;
   }
   
+  // --- ADDED DEBUG LOGGING ---
+  console.log('DEBUG: Plan ID:', plan.id);
+  console.log('DEBUG: Plan Name:', plan.planName);
+  console.log('DEBUG: All matrix ageBracket/householdType pairs:');
+  plan.planMatrix.forEach((matrix, idx) => {
+    console.log(`  [${idx}] ageBracket: '${matrix.ageBracket}', householdType: '${matrix.householdType}'`);
+    console.log(`    initialUnsharedAmounts: [${matrix.costs.map(c => c.initialUnsharedAmount).join(', ')}]`);
+  });
+  // --- END DEBUG LOGGING ---
+
   console.log(`Found plan ${planId}`);
   
   // Get the appropriate age bracket
@@ -164,17 +174,24 @@ export function getPlanCost(
     return null;
   }
   
-  console.log(`Using age bracket ${ageBracket} for plan ${planId}`);
+  console.log(`Using age bracket '${ageBracket}' for plan ${planId}`);
   
   // Get the household type
   const householdType = getHouseholdType(coverageType);
-  console.log(`Using household type ${householdType} for coverage type ${coverageType}`);
+  console.log(`Using household type '${householdType}' for coverage type '${coverageType}'`);
   
   // Find all matching matrices
-  // Modified to handle non-standard age brackets like "30-49" for Zion Essential plans
   let matchingMatrices = plan.planMatrix.filter(
     matrix => matrix.ageBracket === ageBracket && matrix.householdType === householdType
   );
+  
+  console.log(`DEBUG: Found ${matchingMatrices.length} matching matrices for ageBracket='${ageBracket}' and householdType='${householdType}'`);
+  if (matchingMatrices.length > 0) {
+    matchingMatrices.forEach((matrix, idx) => {
+      console.log(`  [MATCH ${idx}] ageBracket: '${matrix.ageBracket}', householdType: '${matrix.householdType}'`);
+      console.log(`    initialUnsharedAmounts: [${matrix.costs.map(c => c.initialUnsharedAmount).join(', ')}]`);
+    });
+  }
   
   // Special handling for Zion Essential plans with non-standard age brackets
   if (matchingMatrices.length === 0 && planId.includes('essential')) {
@@ -229,6 +246,28 @@ export function getPlanCost(
     }
   }
   
+  // --- FALLBACK: Range match for any plan if no exact match ---
+  if (matchingMatrices.length === 0) {
+    matchingMatrices = plan.planMatrix.filter(matrix => {
+      if (matrix.householdType === householdType) {
+        const match = matrix.ageBracket.match(/^([0-9]+)-([0-9]+)$/);
+        if (match) {
+          const min = parseInt(match[1], 10);
+          const max = parseInt(match[2], 10);
+          return age >= min && age <= max;
+        }
+      }
+      return false;
+    });
+    if (matchingMatrices.length > 0) {
+      console.log(`Fallback: Found ${matchingMatrices.length} matrices by range for age ${age} and householdType '${householdType}'`);
+      matchingMatrices.forEach((matrix, idx) => {
+        console.log(`  [FALLBACK MATCH ${idx}] ageBracket: '${matrix.ageBracket}', householdType: '${matrix.householdType}'`);
+        console.log(`    initialUnsharedAmounts: [${matrix.costs.map(c => c.initialUnsharedAmount).join(', ')}]`);
+      });
+    }
+  }
+  
   console.log(`Found ${matchingMatrices.length} matching matrices for plan ${planId}`);
   
   if (matchingMatrices.length === 0) {
@@ -239,17 +278,18 @@ export function getPlanCost(
   // Get all costs from matching matrices
   const costs = matchingMatrices
     .flatMap(matrix => {
-      console.log(`Matrix ${matrix.ageBracket}/${matrix.householdType} has ${matrix.costs.length} cost options`);
       return matrix.costs;
     })
     .filter(cost => {
       if (!iuaPreference) return true;
       const matches = cost.initialUnsharedAmount.toString() === iuaPreference;
-      console.log(`Checking IUA ${cost.initialUnsharedAmount} against preference ${iuaPreference}: ${matches ? 'match' : 'no match'}`);
+      if (!matches) {
+        console.log(`DEBUG: IUA mismatch: cost.initialUnsharedAmount=${cost.initialUnsharedAmount}, iuaPreference=${iuaPreference}`);
+      }
       return matches;
     });
   
-  console.log(`Found ${costs.length} matching costs for plan ${planId}`);
+  console.log(`DEBUG: Found ${costs.length} matching costs for iuaPreference='${iuaPreference}'`);
   
   // Special handling for Sedera Access+ +DPC/VPC plan - apply DPC/VPC premium if needed
   if (costs.length > 0 && isSederaDpcVpc) {
@@ -307,10 +347,12 @@ export function getAllPlanCosts(
   console.log(`getAllPlanCosts called with age=${age}, coverageType=${coverageType}, iuaLevel=${iuaLevel}`);
   console.log(`Total plans in providerPlans: ${providerPlans.length}`);
   
-  const results = providerPlans.map(plan => ({
-    plan,
-    cost: getPlanCost(plan.id, age, coverageType as CoverageType, iuaLevel)
-  }));
+  const results = providerPlans
+    .filter(plan => plan.isActive !== false)
+    .map(plan => ({
+      plan,
+      cost: getPlanCost(plan.id, age, coverageType as CoverageType, iuaLevel)
+    }));
   
   const validResults = results.filter(result => result.cost !== null);
   console.log(`Found ${validResults.length} valid plan costs out of ${results.length} total plans`);

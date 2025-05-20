@@ -295,22 +295,8 @@ export function PlanComparisonTable({ selectedPlans, topRecommendationId, render
                       {plan.id === topRecommendationId && (
                         <span className="inline-block px-3 py-1 rounded-full bg-gradient-to-r from-indigo-100 via-blue-100 to-blue-50 text-indigo-700 font-semibold text-xs shadow-sm mb-1 animate-fade-in">Top Recommendation</span>
                       )}
-                      <div className="h-[48px] min-h-[48px] flex items-center justify-center overflow-visible w-full">
-                        {(() => {
-                          const normalizedName = plan.providerName.toLowerCase();
-                          if (normalizedName.includes('crowd') || normalizedName.includes('knew')) {
-                            return (
-                              <ProviderLogo
-                                providerName={plan.providerName}
-                                size="md"
-                                className="mb-1 drop-shadow-md w-full h-full"
-                                style={{ width: '90%', height: '90%', padding: 0 }}
-                                svgStyle={{ width: '90%', height: '90%', padding: 0 }}
-                              />
-                            );
-                          }
-                          return logoRenderer(plan.providerName, 'md');
-                        })()}
+                      <div className="flex items-center justify-center w-[100px] h-[60px] mx-auto mb-2">
+                        <ProviderLogo providerName={plan.providerName} size="md" />
                       </div>
                       {canonicalName !== 'crowd health' && canonicalName !== 'knew health' && (
                         <span className="font-bold text-lg text-gray-900 tracking-tight">{plan.planName}</span>
@@ -382,22 +368,8 @@ export function PlanComparisonTable({ selectedPlans, topRecommendationId, render
                 {plan.id === topRecommendationId && (
                   <span className="inline-block px-2 py-0.5 rounded-full bg-gradient-to-r from-indigo-100 via-blue-100 to-blue-50 text-indigo-700 font-semibold text-[11px] shadow-sm animate-fade-in max-w-[90px] break-words leading-tight whitespace-nowrap text-center">Top Pick</span>
                 )}
-                <div className="h-[48px] min-h-[48px] flex items-center justify-center overflow-visible w-full">
-                  {(() => {
-                    const normalizedName = plan.providerName.toLowerCase();
-                    if (normalizedName.includes('crowd') || normalizedName.includes('knew')) {
-                      return (
-                        <ProviderLogo
-                          providerName={plan.providerName}
-                          size="lg"
-                          className="mb-1 drop-shadow-md w-full h-full"
-                          style={{ width: '90%', height: '90%', padding: 0 }}
-                          svgStyle={{ width: '90%', height: '90%', padding: 0 }}
-                        />
-                      );
-                    }
-                    return logoRenderer(plan.providerName, 'lg');
-                  })()}
+                <div className="flex items-center justify-center w-[100px] h-[60px] mx-auto mb-2">
+                  <ProviderLogo providerName={plan.providerName} size="md" />
                 </div>
                 {canonicalName !== 'crowd health' && canonicalName !== 'knew health' && (
                   <div className="font-bold text-lg text-gray-900 tracking-tight">{plan.planName}</div>

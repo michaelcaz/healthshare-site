@@ -6,6 +6,7 @@ import { Check, Info } from 'lucide-react'
 import { Tooltip } from '@/components/ui/tooltip'
 import { AnimatedCounter } from '@/components/ui/animated-counter'
 import { Badge } from '@/components/ui/badge'
+import { ProviderLogo } from '@/components/recommendations/ProviderLogo'
 
 interface PlanFeature {
   name: string
@@ -70,6 +71,9 @@ export function PlanCard({
       
       <div className="plan-card-header">
         <div>
+          <div className="flex items-center justify-center w-[100px] h-[60px] mx-auto mb-2">
+            <ProviderLogo providerName={providerName} size="md" />
+          </div>
           <h3 className="plan-card-title">{planName}</h3>
           <p className="plan-card-provider">{providerName}</p>
           
