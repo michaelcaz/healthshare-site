@@ -10,6 +10,7 @@ import { headers } from 'next/headers'
 import Script from 'next/script'
 import { AnnouncementBar } from '@/components/ui/announcement-bar'
 import { Metadata } from 'next'
+import Head from 'next/head'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 const montserrat = Montserrat({ 
@@ -62,30 +63,38 @@ export default function RootLayout({
   const nonce = headers().get('x-nonce') ?? 'default-nonce'
 
   return (
-    <html lang="en">
-      <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-        <title>Sharewize</title>
-        <link rel="icon" type="image/svg+xml" href="/images/illustrations/sharewizelogovector-white.svg" />
-        <GoogleAnalytics />
-      </head>
-      <body suppressHydrationWarning className={`${inter.variable} ${montserrat.variable} ${caveat.variable} font-sans bg-warm`}>
-        <ScrollRestoration />
-        <AnnouncementBar />
-        <Header />
-        <main>
-          {children}
-        </main>
-        <FloatingCTA 
-          phoneNumber="(225) 718-8977" 
-          calendlyLink="https://calendly.com/michaelcaz/30min" 
-        />
-        <ExitIntentPopup 
-          phoneNumber="(225) 718-8977" 
-          calendlyLink="https://calendly.com/michaelcaz/30min" 
-        />
-        <Toaster />
-      </body>
-    </html>
+    <>
+      <Head>
+        <link rel="preload" as="image" href="/images/logos/zion.svg" />
+        <link rel="preload" as="image" href="/images/logos/sedera.svg" />
+        <link rel="preload" as="image" href="/images/logos/crowd-health.svg" />
+        <link rel="preload" as="image" href="/images/logos/knew.svg" />
+      </Head>
+      <html lang="en">
+        <head>
+          <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+          <title>Sharewize</title>
+          <link rel="icon" type="image/svg+xml" href="/images/illustrations/sharewizelogovector-white.svg" />
+          <GoogleAnalytics />
+        </head>
+        <body suppressHydrationWarning className={`${inter.variable} ${montserrat.variable} ${caveat.variable} font-sans bg-warm`}>
+          <ScrollRestoration />
+          <AnnouncementBar />
+          <Header />
+          <main>
+            {children}
+          </main>
+          <FloatingCTA 
+            phoneNumber="(225) 718-8977" 
+            calendlyLink="https://calendly.com/michaelcaz/30min" 
+          />
+          <ExitIntentPopup 
+            phoneNumber="(225) 718-8977" 
+            calendlyLink="https://calendly.com/michaelcaz/30min" 
+          />
+          <Toaster />
+        </body>
+      </html>
+    </>
   )
 }
