@@ -12,11 +12,12 @@ interface ProviderLogoProps {
 }
 
 export function ProviderLogo({ providerName, size = 'md', className = '', style, svgStyle }: ProviderLogoProps) {
+  // Standardize container dimensions for all sizes
   const dimensions = {
-    sm: { width: 40, height: 40 },
-    md: { width: 100, height: 60 },
-    lg: { width: 120, height: 80 },
-    xl: { width: 140, height: 90 },
+    sm: { width: 120, height: 40 },  // Wider for wide logos
+    md: { width: 180, height: 60 },  // Wider for wide logos
+    lg: { width: 240, height: 80 },  // Wider for wide logos
+    xl: { width: 300, height: 90 },  // Wider for wide logos
   };
 
   const { width, height } = dimensions[size];
@@ -35,31 +36,22 @@ export function ProviderLogo({ providerName, size = 'md', className = '', style,
     src = '/images/logos/crowd-health.svg';
   }
   
-  // Custom scaling for Crowd Health and Knew Health
-  let logoStyle: React.CSSProperties = svgStyle || style || { maxWidth: '100%', maxHeight: '100%' };
-  if (normalizedName.includes('crowd')) {
-    logoStyle = {
-      maxWidth: '100%',
-      maxHeight: '85%',
-      width: '100%',
-      height: '100%',
-      objectFit: 'contain',
-      display: 'block',
-      margin: '0 auto',
-      transform: 'scaleX(0.4)',
-      transformOrigin: 'center',
-      ...logoStyle,
-    };
-  } else if (normalizedName.includes('knew')) {
-    const scales = { sm: 0.9, md: 0.95, lg: 1.0, xl: 1.05 };
-    logoStyle = {
-      maxWidth: '85%',
-      maxHeight: '85%',
-      transform: `scale(${scales[size]})`,
-      transformOrigin: 'center',
-      padding: 0,
-      ...logoStyle,
-    };
+  // Unified scaling approach for all logos
+  const logoStyle: React.CSSProperties = {
+    maxWidth: '100%',
+    maxHeight: '100%',
+    width: 'auto',
+    height: 'auto',
+    objectFit: 'contain',
+    display: 'block',
+    margin: '0 auto',
+    ...style,
+  };
+
+  // Add specific adjustments for wide logos
+  if (normalizedName.includes('crowd') || normalizedName.includes('knew')) {
+    logoStyle.width = '85%';  // Slightly smaller width for wide logos
+    logoStyle.height = '85%'; // Maintain aspect ratio
   }
   
   // LOGGING: Rendered size and SVG viewBox
@@ -85,20 +77,17 @@ export function ProviderLogo({ providerName, size = 'md', className = '', style,
   return (
     <div 
       className={cn(
-        "bg-white rounded-md flex items-center justify-center overflow-hidden",
+        'flex items-center justify-center',
         className
       )}
-      style={{ width, height, ...style }}
+      style={{ width, height }}
     >
-      <Image
+      <img
         ref={imgRef}
         src={src}
         alt={`${providerName} logo`}
-        width={width}
-        height={height}
-        className="object-contain p-0"
         style={logoStyle}
-        priority
+        className="transition-all duration-200"
       />
     </div>
   );

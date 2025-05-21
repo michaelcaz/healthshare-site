@@ -110,6 +110,22 @@ export function PlanDetailsModal({
               <div className="hidden sm:block h-10 border-l border-gray-300 mx-4"></div>
               <div className="flex flex-col items-center sm:items-start flex-1 min-w-0 mt-4 sm:mt-0">
                 <div className="flex items-center justify-center sm:justify-start w-full">
+                  <div className="flex-shrink-0 flex justify-center w-auto">
+                    {(plan.plan.id?.toLowerCase().includes('crowd') || plan.plan.id?.toLowerCase().includes('knew')) ? (
+                      <div className="flex" style={{ width: 180, height: 110 }}>
+                        <ProviderLogo providerName={plan.plan.providerName} size="xl" style={{ width: '100%', height: '100%' }} />
+                      </div>
+                    ) : (
+                      <ProviderLogo providerName={plan.plan.providerName} size="xl" />
+                    )}
+                  </div>
+                  {!(plan.plan.id?.toLowerCase().includes('crowd') || plan.plan.id?.toLowerCase().includes('knew')) && (
+                    <div className="flex flex-col items-start ml-4">
+                      <h2 className="text-2xl font-bold text-gray-900 mb-2">{plan.plan.providerName} {plan.plan.planName}</h2>
+                    </div>
+                  )}
+                </div>
+                <div className="flex items-center gap-1 mt-2">
                   {plan.plan.id?.toLowerCase().includes('crowd') && planDetailsData['crowdhealth-membership'] && planDetailsData['crowdhealth-membership'].providerDetails ? (
                     <RatingStars
                       rating={planDetailsData['crowdhealth-membership'].providerDetails.ratings?.overall ?? 4.8}
