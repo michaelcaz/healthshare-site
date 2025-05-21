@@ -145,11 +145,12 @@ export function HeroRecommendation({
         
         {/* MOBILE: Plan Logo/Name, then Trust Elements */}
         <div className="block sm:hidden">
-          {/* Plan Logo, Name and Provider */}
+          {/* Plan Logo and Name */}
           <div className="mb-6 flex flex-col items-center">
             <ProviderLogo providerName={plan.providerName} size="xl" />
-            {!(isCrowdHealth || plan.providerName.toLowerCase().includes('knew')) && (
-              <h2 className="text-2xl font-bold text-gray-900 mt-4 mb-2 text-center">{plan.providerName} {plan.planName}</h2>
+            {/* Only show plan name for Zion and Sedera, not for Knew or Crowd */}
+            {((plan.providerName.toLowerCase().includes('zion') || plan.providerName.toLowerCase().includes('sedera')) && !(isCrowdHealth || plan.providerName.toLowerCase().includes('knew'))) && (
+              <h2 className="text-2xl font-bold text-gray-900 mt-4 mb-2 text-center">{plan.planName}</h2>
             )}
           </div>
           {/* Trust Elements (Ratings, Reviews, Members, Est. Date) */}
@@ -198,7 +199,7 @@ export function HeroRecommendation({
               </div>
             </div>
           </div>
-          {/* Plan Logo, Name and Provider */}
+          {/* Plan Logo and Name */}
           <div className="mb-10 flex flex-row items-center gap-4">
             <div className="flex-shrink-0 flex justify-center w-auto">
               {(isCrowdHealth || plan.providerName.toLowerCase().includes('knew')) ? (
@@ -209,10 +210,11 @@ export function HeroRecommendation({
                 <ProviderLogo providerName={plan.providerName} size="xl" />
               )}
             </div>
-            {!(isCrowdHealth || plan.providerName.toLowerCase().includes('knew')) && (
+            {/* Only show plan name for Zion and Sedera, not for Knew or Crowd */}
+            {((plan.providerName.toLowerCase().includes('zion') || plan.providerName.toLowerCase().includes('sedera')) && !(isCrowdHealth || plan.providerName.toLowerCase().includes('knew'))) && (
               <div className="flex flex-col items-start">
                 <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-2 text-left" style={{ wordBreak: 'keep-all', hyphens: 'none' }}>
-                  {plan.providerName} {plan.planName}
+                  {plan.planName}
                 </h2>
                 {/* Feature badges */}
                 <div className="flex flex-wrap gap-3 mt-3 justify-start w-full">

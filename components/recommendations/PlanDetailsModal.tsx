@@ -58,13 +58,12 @@ export function PlanDetailsModal({
           <div className="flex justify-between items-center p-4 sm:p-6 border-b">
             <div className="flex items-center gap-4 min-w-0 w-full">
               <ProviderLogo providerName={plan.plan.providerName} size="lg" className="flex-shrink-0" />
-              <div className="min-w-0 flex flex-col">
-                {(plan.plan.id?.toLowerCase().includes('knew') || plan.plan.id?.toLowerCase().includes('crowd')) ? (
-                  <h2 className="text-xl sm:text-2xl font-bold break-words whitespace-normal leading-tight truncate sm:whitespace-normal sm:truncate-0">{plan.plan.providerName}</h2>
-                ) : (
+              {/* Only show plan name for non-Crowd/Knew plans */}
+              {!(plan.plan.id?.toLowerCase().includes('knew') || plan.plan.id?.toLowerCase().includes('crowd')) && (
+                <div className="min-w-0 flex flex-col">
                   <h2 className="text-xl sm:text-2xl font-bold break-words whitespace-normal leading-tight truncate sm:whitespace-normal sm:truncate-0">{plan.plan.planName}</h2>
-                )}
-              </div>
+                </div>
+              )}
             </div>
             <button 
               onClick={onClose} 
@@ -110,22 +109,6 @@ export function PlanDetailsModal({
               <div className="hidden sm:block h-10 border-l border-gray-300 mx-4"></div>
               <div className="flex flex-col items-center sm:items-start flex-1 min-w-0 mt-4 sm:mt-0">
                 <div className="flex items-center justify-center sm:justify-start w-full">
-                  <div className="flex-shrink-0 flex justify-center w-auto">
-                    {(plan.plan.id?.toLowerCase().includes('crowd') || plan.plan.id?.toLowerCase().includes('knew')) ? (
-                      <div className="flex" style={{ width: 180, height: 110 }}>
-                        <ProviderLogo providerName={plan.plan.providerName} size="xl" style={{ width: '100%', height: '100%' }} />
-                      </div>
-                    ) : (
-                      <ProviderLogo providerName={plan.plan.providerName} size="xl" />
-                    )}
-                  </div>
-                  {!(plan.plan.id?.toLowerCase().includes('crowd') || plan.plan.id?.toLowerCase().includes('knew')) && (
-                    <div className="flex flex-col items-start ml-4">
-                      <h2 className="text-2xl font-bold text-gray-900 mb-2">{plan.plan.providerName} {plan.plan.planName}</h2>
-                    </div>
-                  )}
-                </div>
-                <div className="flex items-center gap-1 mt-2">
                   {plan.plan.id?.toLowerCase().includes('crowd') && planDetailsData['crowdhealth-membership'] && planDetailsData['crowdhealth-membership'].providerDetails ? (
                     <RatingStars
                       rating={planDetailsData['crowdhealth-membership'].providerDetails.ratings?.overall ?? 4.8}
