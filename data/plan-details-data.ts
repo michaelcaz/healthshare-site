@@ -358,7 +358,7 @@ export const planDetailsData: Record<string, PlanDetailsData> = {
     },
     medicalServices: {
       emergencyCare: "**ER visits, including medically necessary ambulance rides are generally eligible for sharing**. Air ambulance rides are eligible for sharing for up to $25,000.",
-      surgeryAndTreatment: "**Surgical procedures are generally shareable after a 60-day waiting period**. Pre-authorization is required for non-emergency procedures over $3,000.",
+      surgeryAndTreatment: "**Surgical procedures are generally shareable once the member's Initial Unshareable Amount (IUA) is met and the procedure qualifies as a shareable need. There is no general waiting period for surgeries unless related to a pre-existing condition, in which case standard sharing limitations apply.<br/><br/>For non-emergency treatments, Sedera may require participation in their Expert Second Opinion (ESO) program prior to sharing. Advance notice is strongly encouraged, and any requests for upfront sharing on procedures over $3,000 must be submitted at least 14 days in advance. ",
       prescriptionDrugs: "**Acute condition medications shareable for 120-day supply**. Chronic medications require prior authorization. Maintenance medications for chronic conditions require prior authorization and are shareable for up to a 120-day supply. You also get access to Sedera's Rx Marketplace and GoodRx for additional prescription discounts for prescriptions related to eligible needs as well as those not related to an eligible need."
     },
     providerDetails: {
@@ -460,7 +460,7 @@ export const planDetailsData: Record<string, PlanDetailsData> = {
     },
     medicalServices: {
       emergencyCare: "**ER visits, including medically necessary ambulance rides are generally eligible for sharing**. Air ambulance rides are eligible for sharing for up to $25,000.",
-      surgeryAndTreatment: "**Surgical procedures are generally shareable after a 60-day waiting period**. Pre-authorization is required for non-emergency procedures over $3,000.",
+      surgeryAndTreatment: "**Surgical procedures are generally shareable once the member's Initial Unshareable Amount (IUA) is met and the procedure qualifies as a shareable need. There is no general waiting period for surgeries unless related to a pre-existing condition, in which case standard sharing limitations apply.<br/><br/>For non-emergency treatments, Sedera may require participation in their Expert Second Opinion (ESO) program prior to sharing. Advance notice is strongly encouraged, and any requests for upfront sharing on procedures over $3,000 must be submitted at least 14 days in advance. ",
       prescriptionDrugs: "**Acute condition medications shareable for 120-day supply**. Chronic medications require prior authorization. Maintenance medications for chronic conditions require prior authorization and are shareable for up to a 120-day supply. You also get access to Sedera's Rx Marketplace and GoodRx for additional prescription discounts for prescriptions related to eligible needs as well as those not related to an eligible need."
     },
     providerDetails: {
@@ -553,19 +553,15 @@ export const planDetailsData: Record<string, PlanDetailsData> = {
         {
           title: "Telemedicine",
           description: "Knew Health offers complimentary, 24/7 unlimited access to help with urgent health concerns, like strep throat or urinary tract infection(UTI), from the comfort of your own home."
-        },
-        {
-          title: "Urgent/Emergency Care",
-          description: "Shares costs for emergency room visits and urgent care after IUA met."
         }
       ],
       pregnancy: "12 Month Waiting Period: You must be a member for 12 months before conceiving, for your pregnancy related needs to be eligible for sharing. Services available for sharing include pre-natal, delivery (including birthing centers and home-births), post-natal, and miscarriage.",
       preExistingConditions: "Starting on the day you sign up, there is a one-year waiting period before pre-membership medical conditions are eligible for sharing. After the waiting period, the amount eligible for sharing increases with each membership year:<br/><br/><strong>Year One:</strong> $0 (waiting period)<br/><strong>Year Two:</strong> $25,000 maximum per sharing request<br/><strong>Year Three:</strong> $50,000 maximum per sharing request<br/><strong>Year Four (and beyond):</strong> $125,000 maximum per sharing request"
     },
     medicalServices: {
-      emergencyCare: "Emergency care, ambulances, and airlifts eligible for sharing after meeting the IUA.",
-      surgeryAndTreatment: "Surgeries and major treatments are generally shareable. Elective surgeries require pre-approval. Prior medical review and approval is required for non-emergent surgical procedures to be eligible to share. Chronic conditions have 12-month waiting period.",
-      prescriptionDrugs: "Covers generic medications for acute conditions. Specialty drugs require prior authorization.",
+      emergencyCare: "Emergency room visits are shareable when related to an eligible illness, injury, or accident. The first ER visit for a condition is treated as a standard need. Additional ER visits for the same condition require an added $500 member responsibility, on top of the Initial Unshareable Amount (IUA).<br/><br/>Medically necessary ambulance transports—both ground and air—are shareable when connected to a shareable need.<br/><br/>Emergency care received outside the United States is also eligible for sharing, provided the need meets Knew Health's general sharing criteria.",
+      surgeryAndTreatment: "Surgical procedures are generally shareable once the Initial Unshareable Amount (IUA) is met, provided the surgery addresses a new, eligible need. Procedures related to pre-existing conditions are shareable according to the standard phase-in schedule.<br/><br/>For most non-emergency surgeries, members are expected to submit a needs request through the Member Portal before the procedure takes place. Knew Health may require supporting medical documentation to confirm medical necessity.",
+      prescriptionDrugs: "Prescriptions related to an eligible Need are shareable for up to 12 months or $10,000, whichever comes first, after the Initial Unshareable Amount (IUA) has been met. Maintenance medications that a member is already taking at the time of enrollment are not shareable in the first year. Prescriptions for Needs below the IUA (e.g., short-term antibiotics for minor illnesses) are not shareable; however, members have access to prescription discount tools in the Member Portal, including SingleCare and GoodRx. These platforms often provide lower prices for self-pay patients than traditional insurance copays.",
       pregnancy: "12 Month Waiting Period: You must be a member for 12 months before conceiving, for your pregnancy related needs to be eligible for sharing. Services available for sharing include pre-natal, delivery (including birthing centers and home-births), post-natal, and miscarriage.",
       preExistingConditions: "Starting on the day you sign up, there is a one-year waiting period before pre-membership medical conditions are eligible for sharing. After the waiting period, the amount eligible for sharing increases with each membership year:<br/><br/><strong>Year One:</strong> $0 (waiting period)<br/><strong>Year Two:</strong> $25,000 maximum per sharing request<br/><strong>Year Three:</strong> $50,000 maximum per sharing request<br/><strong>Year Four (and beyond):</strong> $125,000 maximum per sharing request"
     },

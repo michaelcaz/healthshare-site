@@ -29,7 +29,6 @@ export const MedicalServices: React.FC<MedicalServicesProps> = ({ plan }) => {
             <div className="font-medium">Emergency Services</div>
             <div className="text-sm text-gray-600 mt-1">
               <p className="mb-2" dangerouslySetInnerHTML={{ __html: markdownToBold(planData.medicalServices.emergencyCare) }}></p>
-              <p>Maximum Coverage: {plan.plan.maxCoverage}</p>
             </div>
           </div>
         </div>
