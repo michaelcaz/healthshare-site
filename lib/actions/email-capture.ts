@@ -18,21 +18,35 @@ interface EmailCaptureResult {
 
 export async function submitEmailCapture(data: EmailCaptureData): Promise<EmailCaptureResult> {
   try {
+    console.log('Email capture started with data:', {
+      hasFirstName: !!data.firstName,
+      hasEmail: !!data.email,
+      hasMarketingConsent: data.marketingConsent,
+      hasQuestionnaireData: !!data.questionnaireData
+    });
+
     // Only subscribe to ConvertKit if user gave consent and env variables are set
     if (data.marketingConsent) {
+      console.log('Checking ConvertKit configuration:', {
+        hasApiKey: !!process.env.CONVERTKIT_API_KEY,
+        hasFormId: !!process.env.CONVERTKIT_FORM_ID,
+        environment: process.env.NODE_ENV
+      });
+
       if (process.env.CONVERTKIT_API_KEY && process.env.CONVERTKIT_FORM_ID) {
         // Real ConvertKit integration
+        console.log('Attempting to subscribe to ConvertKit...');
         await subscribeToConvertKit({
           email: data.email,
           firstName: data.firstName,
           questionnaireInfo: data.questionnaireData
         });
+        console.log('ConvertKit subscription completed');
       } else {
         // Log for development without breaking
-        console.log('ConvertKit would receive:', {
-          email: data.email,
-          firstName: data.firstName,
-          questionnaireData: data.questionnaireData
+        console.log('ConvertKit configuration missing:', {
+          apiKey: process.env.CONVERTKIT_API_KEY ? 'present' : 'missing',
+          formId: process.env.CONVERTKIT_FORM_ID ? 'present' : 'missing'
         });
       }
     }

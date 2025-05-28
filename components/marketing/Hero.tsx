@@ -147,8 +147,8 @@ export function Hero() {
               className="flex-1 text-center lg:text-left max-w-xl lg:max-w-none pt-4 md:pt-8"
             >
               <h1 className="text-3xl md:text-4xl lg:text-5xl leading-tight font-bold mb-4 md:mb-6 text-gray-warm" style={{ wordBreak: 'keep-all', hyphens: 'none' }}>
-                <span className="block">Share your health.</span>
-                <span className="block text-[#6366F1]">Save your wealth.</span>
+                <span className="block">Share the health.</span>
+                <span className="block text-[#6366F1]">Save the wealth.</span>
               </h1>
               <p className="text-lg md:text-xl leading-relaxed text-gray-warm/80 mb-6 md:mb-10 max-w-xl">
                 Hot take: healthier people should pay less for a safety net. Why should you pay sky-high premiums to cover other people's health problems? Join 2M+ Americans saving 30-50% with healthcare plans that reward health-conscious entrepreneurs, freelancers, and independent contractors like you.

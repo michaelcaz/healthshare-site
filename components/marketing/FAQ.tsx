@@ -50,6 +50,10 @@ export function FAQ() {
     {
       question: "How is pregnancy handled?",
       answer: "There's a waiting period of 6-12 months before maternity needs will be covered. This means that if you are already pregnant when you join, or you get pregnant before the waiting period is over (times vary by health share plan), your maternity expenses will not be eligible for sharing.\n\nIn cases where the mother is pregnant or is considering getting pregnant very soon, many families opt for signing up everyone other than the mother. Then signing the mother up after delivery.\n\nAs with any other need, expectant mothers pay a single IUA for all expenses related to their pregnancy. Expenses eligible for sharing are related to miscarriage, prenatal care, postnatal care, and delivery."
+    },
+    {
+      question: "Isn't it required by law that you must have health insurance?",
+      answer: "No, there's no longer a federal penalty for being uninsured. However, a few states do require health coverage and impose penalties if you don't have it. As of now, those states are:\n\nCalifornia, Massachusetts, New Jersey, Rhode Island, Vermont, and Washington, D.C.\n\nIf you live in one of these states, check your local tax requirements — otherwise, you're not legally required to have insurance."
     }
   ];
 
