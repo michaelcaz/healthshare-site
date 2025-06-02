@@ -84,9 +84,6 @@ export function calculateAnnualCost(
   // Calculate visit frequency cost
   const visitFrequencyCost = getVisitFrequencyCost(visitFrequency, coverageType);
   
-  // Add DPC cost if applicable
-  const dpcCost = isDpcPlan ? 2000 : 0;
-  
   // Enhanced logging for debugging
   console.log(`calculateAnnualCost [${caller}] - DETAILED - Input Parameters:`, {
     monthlyPremium,
@@ -105,12 +102,11 @@ export function calculateAnnualCost(
     coverageType,
     visitFrequencyCost,
     isDpcPlan,
-    dpcCost,
-    totalAnnualCost: annualPremium + visitFrequencyCost + dpcCost
+    totalAnnualCost: annualPremium + visitFrequencyCost
   });
   
   // Return the total annual cost
-  return annualPremium + visitFrequencyCost + dpcCost;
+  return annualPremium + visitFrequencyCost;
 }
 
 // Helper function to get visit frequency cost - exported so it can be used across components

@@ -293,9 +293,7 @@ export function HeroRecommendation({
               <CustomTooltip 
                 id="annual-cost-tooltip"
                 trigger="Your Estimated Annual Cost"
-                content={isDpcPlan 
-                  ? `Includes monthly premiums × 12, expected healthcare costs based on visit frequency and family size, and $2,000 for DPC membership`
-                  : `Includes monthly premiums × 12 and expected healthcare costs based on visit frequency and family size`}
+                content="Includes monthly premiums × 12 and expected healthcare costs based on visit frequency and family size"
               />
             </div>
             <div className="flex items-baseline">

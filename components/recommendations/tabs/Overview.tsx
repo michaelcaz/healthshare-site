@@ -200,9 +200,7 @@ export const Overview: React.FC<OverviewProps> = ({
                 <div className="text-sm text-gray-600">Estimated Annual Total</div>
                 <div className="text-xl font-bold text-blue-600">${estimatedAnnualCost.toLocaleString()}</div>
                 <div className="text-xs text-gray-500 mt-1">
-                  {isDpcPlan 
-                    ? "Monthly premium × 12 + visit costs + DPC membership"
-                    : "Monthly premium × 12 + visit costs"}
+                  Monthly premium × 12 + visit costs
                 </div>
               </div>
             </div>
