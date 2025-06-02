@@ -217,7 +217,7 @@ export const healthshareProviders: Record<string, ProviderPlan> = {
   crowdHealth: {
     id: 'crowdhealth-standard',
     providerName: "CrowdHealth",
-    sourceUrl: "https://www.joincrowdhealth.com/resources/member-guide",
+    sourceUrl: "https://www.joincrowdhealth.com/",
     plans: [{
       id: 'crowdhealth-standard',
       name: "CrowdHealth Standard",
@@ -248,7 +248,7 @@ export const healthshareProviders: Record<string, ProviderPlan> = {
           limit: "No limit"
         }
       },
-      sourceUrl: ''
+      sourceUrl: 'https://www.joincrowdhealth.com/'
     }]
   },
   sedera: {

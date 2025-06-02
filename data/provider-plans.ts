@@ -547,12 +547,12 @@ export const providerPlans: PricingPlan[] = [
     ]
   },
   {
-    "id": "crowdhealth-essential-membership",
+    "id": "crowdhealth-standard",
     "providerName": "CrowdHealth",
-    "planName": "Essential Membership",
+    "planName": "Standard",
     "maxCoverage": "No limit",
     "annualUnsharedAmount": "Total of paid three IUAs in 12 months",
-    "sourceUrl": "",
+    "sourceUrl": "https://www.joincrowdhealth.com/",
     "ageRules": {
       "type": "custom",
       "customBrackets": {
