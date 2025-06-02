@@ -22,7 +22,7 @@ export const providerPlans: PricingPlan[] = [
     "planName": "Direct Membership",
     "maxCoverage": "no limit",
     "annualUnsharedAmount": "Total of paid three IUAs in 12 months",
-    "sourceUrl": "",
+    "sourceUrl": "https://zionhealthshare.org/?affiliate=200016",
     "ageRules": {
       "type": "standard"
     },
@@ -323,7 +323,7 @@ export const providerPlans: PricingPlan[] = [
     "planName": "Essential Membership",
     "maxCoverage": "no limit",
     "annualUnsharedAmount": "Total of paid three IUAs in 12 months",
-    "sourceUrl": "",
+    "sourceUrl": "https://zionhealthshare.org/?affiliate=200016",
     "ageRules": {
       "type": "standard"
     },

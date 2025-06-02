@@ -217,15 +217,15 @@ export function PlanComparisonGrid({
                 </div>
               </div>
               
-              {/* Action Button */}
+              {/* Action Button for Top Plan */}
               <button
-                onClick={() => onPlanSelect(topPlan.plan.id)}
+                onClick={() => {
+                  onPlanSelect(topPlan.plan.id);
+                }}
                 className="w-full mt-4 details-button"
               >
-                View Details
-                <ChevronRight className="h-4 w-4 ml-1 inline" />
+                Plan Details
               </button>
-              
               {renderCompareButton(topPlan)}
             </div>
           </Card>
@@ -295,22 +295,16 @@ export function PlanComparisonGrid({
                   </div>
                 </div>
                 
-                {/* Action Button */}
+                {/* Action Button for Alternative Plans */}
                 <button
                   onClick={() => {
-                    console.log('Alternative plan button clicked:', {
-                      planId: plan.plan.id,
-                      planName: plan.plan.planName,
-                      providerName: plan.plan.providerName
-                    });
                     onPlanSelect(plan.plan.id);
                   }}
                   className="w-full mt-4 details-button"
                 >
-                  View Details
+                  Plan Details
                   <ChevronRight className="h-4 w-4 ml-1 inline" />
                 </button>
-                
                 {renderCompareButton(plan)}
               </div>
             </Card>

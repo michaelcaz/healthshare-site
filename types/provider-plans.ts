@@ -71,6 +71,7 @@ export interface PlanVariant {
   maternity: MaternityDetails;
   preExistingConditions: PreExistingConditions;
   coverageLimits: CoverageLimits;
+  sourceUrl: string;
 }
 
 export interface ProviderPlan {
@@ -120,7 +121,7 @@ export const healthshareProviders: Record<string, ProviderPlan> = {
   zion: {
     id: 'zion-health',
     providerName: "Zion HealthShare",
-    sourceUrl: "https://zionhealthshare.org/memberships/direct/",
+    sourceUrl: "https://zionhealthshare.org/?affiliate=200016",
     plans: [
       {
         id: 'zion-healthshare-direct-membership',
@@ -153,10 +154,11 @@ export const healthshareProviders: Record<string, ProviderPlan> = {
           lifetime: {
             limit: "No limit"
           }
-        }
+        },
+        sourceUrl: "https://zionhealthshare.org/?affiliate=200016"
       },
       {
-        id: 'zion-essential',
+        id: 'zion-healthshare-essential-membership',
         name: "Essential Membership",
         maxCoverage: "No limit",
         annualUnsharedAmount: "Total of paid three IUAs in 12 months",
@@ -207,7 +209,8 @@ export const healthshareProviders: Record<string, ProviderPlan> = {
           lifetime: {
             limit: "No limit"
           }
-        }
+        },
+        sourceUrl: "https://zionhealthshare.org/?affiliate=200016"
       }
     ]
   },
@@ -244,7 +247,8 @@ export const healthshareProviders: Record<string, ProviderPlan> = {
         lifetime: {
           limit: "No limit"
         }
-      }
+      },
+      sourceUrl: ''
     }]
   },
   sedera: {
@@ -283,7 +287,8 @@ export const healthshareProviders: Record<string, ProviderPlan> = {
             limit: "No limit",
             details: "Sharing is limited to the total number of shares made available by the collective participants"
           }
-        }
+        },
+        sourceUrl: ''
       },
       {
         id: 'sedera-access+-+dpc/vpc',
@@ -316,7 +321,8 @@ export const healthshareProviders: Record<string, ProviderPlan> = {
             limit: "No limit",
             details: "Sharing is limited to the total number of shares made available by the collective participants"
           }
-        }
+        },
+        sourceUrl: ''
       }
     ]
   },
@@ -354,7 +360,8 @@ export const healthshareProviders: Record<string, ProviderPlan> = {
         lifetime: {
           limit: "No limit"
         }
-      }
+      },
+      sourceUrl: ''
     }]
   },
   mpbHealthPremium: {
@@ -392,7 +399,8 @@ export const healthshareProviders: Record<string, ProviderPlan> = {
           limit: "No limit",
           details: "Sharing is limited to the total number of shares made available by the collective participants"
         }
-      }
+      },
+      sourceUrl: ''
     }]
   },
   knewHealth: {
@@ -429,7 +437,8 @@ export const healthshareProviders: Record<string, ProviderPlan> = {
         lifetime: {
           limit: "No limit"
         }
-      }
+      },
+      sourceUrl: ''
     }]
   }
 } 

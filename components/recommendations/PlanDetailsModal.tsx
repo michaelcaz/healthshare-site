@@ -157,7 +157,13 @@ export function PlanDetailsModal({
       {/* Mobile sticky CTA (Sign Up Now) - fixed at viewport bottom */}
       <BottomCTAAction
         mode="signup"
-        onSignup={() => router.push(`/enroll/${plan.plan.id}`)}
+        onSignup={() => {
+          if (plan.plan.sourceUrl) {
+            window.location.href = plan.plan.sourceUrl;
+          } else {
+            alert('No affiliate link available for this plan.');
+          }
+        }}
         label="Sign up now"
         isVisible={true}
       />

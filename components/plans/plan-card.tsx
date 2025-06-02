@@ -27,6 +27,8 @@ interface PlanCardProps {
   onGetPlan: () => void
   isLoading?: boolean
   isRecommended?: boolean
+  websiteUrl?: string
+  sourceUrl?: string
 }
 
 export function PlanCard({
@@ -41,7 +43,9 @@ export function PlanCard({
   onViewDetails,
   onGetPlan,
   isLoading = false,
-  isRecommended = false
+  isRecommended = false,
+  websiteUrl,
+  sourceUrl
 }: PlanCardProps) {
   const [isHovered, setIsHovered] = useState(false)
   
@@ -130,7 +134,15 @@ export function PlanCard({
       <div className="mt-6 space-y-3">
         <EnhancedButton
           variant="primary"
-          onClick={onGetPlan}
+          onClick={() => {
+            if (websiteUrl) {
+              window.location.href = websiteUrl;
+            } else if (sourceUrl) {
+              window.location.href = sourceUrl;
+            } else {
+              alert('No affiliate link available for this plan.');
+            }
+          }}
           isLoading={isLoading}
           showArrow={true}
           className="w-full"

@@ -319,17 +319,16 @@ export function HeroRecommendation({
         <div className="flex flex-col sm:flex-row gap-4">
           <Button
             onClick={() => {
-              console.log('Hero recommendation button clicked:', {
-                planId: plan.id,
-                planName: plan.planName,
-                providerName: plan.providerName
-              });
-              onGetPlan();
+              if (plan.sourceUrl) {
+                window.location.href = plan.sourceUrl;
+              } else {
+                alert('No affiliate link available for this plan.');
+              }
             }}
             disabled={isLoading}
             className="cta-button"
           >
-            Sign up now
+            {isLoading ? 'Redirecting...' : 'Sign up now'}
             <ArrowRight className="h-4 w-4 ml-2" />
           </Button>
           <Button

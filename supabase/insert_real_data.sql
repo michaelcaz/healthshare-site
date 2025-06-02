@@ -16,7 +16,7 @@ INSERT INTO providers (
 VALUES (
     'zion-health',
     'Zion Healthshare',
-    'https://zionhealthshare.org',
+    'https://zionhealthshare.org/?affiliate=200016',
     'A modern healthshare ministry focused on simplicity and transparency',
     true,
     now(),
