@@ -14,6 +14,7 @@ export interface RecommendationsProps {
 export interface PlanCosts {
   monthlyPremium: number
   initialUnsharedAmount: number
+  sourceUrl?: string
 }
 
 export interface RecommendationBadges {

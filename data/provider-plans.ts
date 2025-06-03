@@ -680,23 +680,28 @@ export const providerPlans: PricingPlan[] = [
         "costs": [
           {
             "monthlyPremium": 267,
-            "initialUnsharedAmount": 500
+            "initialUnsharedAmount": 500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45838"
           },
           {
             "monthlyPremium": 252,
-            "initialUnsharedAmount": 1000
+            "initialUnsharedAmount": 1000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45839"
           },
           {
             "monthlyPremium": 226,
-            "initialUnsharedAmount": 1500
+            "initialUnsharedAmount": 1500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45840"
           },
           {
             "monthlyPremium": 201,
-            "initialUnsharedAmount": 2500
+            "initialUnsharedAmount": 2500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45841"
           },
           {
             "monthlyPremium": 153,
-            "initialUnsharedAmount": 5000
+            "initialUnsharedAmount": 5000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45842"
           }
         ]
       },
@@ -706,23 +711,28 @@ export const providerPlans: PricingPlan[] = [
         "costs": [
           {
             "monthlyPremium": 495,
-            "initialUnsharedAmount": 500
+            "initialUnsharedAmount": 500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45838"
           },
           {
             "monthlyPremium": 464,
-            "initialUnsharedAmount": 1000
+            "initialUnsharedAmount": 1000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45839"
           },
           {
             "monthlyPremium": 413,
-            "initialUnsharedAmount": 1500
+            "initialUnsharedAmount": 1500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45840"
           },
           {
             "monthlyPremium": 362,
-            "initialUnsharedAmount": 2500
+            "initialUnsharedAmount": 2500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45841"
           },
           {
             "monthlyPremium": 266,
-            "initialUnsharedAmount": 5000
+            "initialUnsharedAmount": 5000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45842"
           }
         ]
       },
@@ -732,23 +742,28 @@ export const providerPlans: PricingPlan[] = [
         "costs": [
           {
             "monthlyPremium": 477,
-            "initialUnsharedAmount": 500
+            "initialUnsharedAmount": 500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45838"
           },
           {
             "monthlyPremium": 447,
-            "initialUnsharedAmount": 1000
+            "initialUnsharedAmount": 1000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45839"
           },
           {
             "monthlyPremium": 399,
-            "initialUnsharedAmount": 1500
+            "initialUnsharedAmount": 1500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45840"
           },
           {
             "monthlyPremium": 352,
-            "initialUnsharedAmount": 2500
+            "initialUnsharedAmount": 2500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45841"
           },
           {
             "monthlyPremium": 260,
-            "initialUnsharedAmount": 5000
+            "initialUnsharedAmount": 5000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45842"
           }
         ]
       },
@@ -758,23 +773,28 @@ export const providerPlans: PricingPlan[] = [
         "costs": [
           {
             "monthlyPremium": 710,
-            "initialUnsharedAmount": 500
+            "initialUnsharedAmount": 500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45838"
           },
           {
             "monthlyPremium": 667,
-            "initialUnsharedAmount": 1000
+            "initialUnsharedAmount": 1000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45839"
           },
           {
             "monthlyPremium": 592,
-            "initialUnsharedAmount": 1500
+            "initialUnsharedAmount": 1500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45840"
           },
           {
             "monthlyPremium": 519,
-            "initialUnsharedAmount": 2500
+            "initialUnsharedAmount": 2500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45841"
           },
           {
             "monthlyPremium": 378,
-            "initialUnsharedAmount": 5000
+            "initialUnsharedAmount": 5000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45842"
           }
         ]
       },
@@ -784,23 +804,28 @@ export const providerPlans: PricingPlan[] = [
         "costs": [
           {
             "monthlyPremium": 311,
-            "initialUnsharedAmount": 500
+            "initialUnsharedAmount": 500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45838"
           },
           {
             "monthlyPremium": 303,
-            "initialUnsharedAmount": 1000
+            "initialUnsharedAmount": 1000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45839"
           },
           {
             "monthlyPremium": 272,
-            "initialUnsharedAmount": 1500
+            "initialUnsharedAmount": 1500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45840"
           },
           {
             "monthlyPremium": 224,
-            "initialUnsharedAmount": 2500
+            "initialUnsharedAmount": 2500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45841"
           },
           {
             "monthlyPremium": 194,
-            "initialUnsharedAmount": 5000
+            "initialUnsharedAmount": 5000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45842"
           }
         ]
       },
@@ -810,23 +835,28 @@ export const providerPlans: PricingPlan[] = [
         "costs": [
           {
             "monthlyPremium": 580,
-            "initialUnsharedAmount": 500
+            "initialUnsharedAmount": 500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45838"
           },
           {
             "monthlyPremium": 565,
-            "initialUnsharedAmount": 1000
+            "initialUnsharedAmount": 1000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45839"
           },
           {
             "monthlyPremium": 505,
-            "initialUnsharedAmount": 1500
+            "initialUnsharedAmount": 1500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45840"
           },
           {
             "monthlyPremium": 407,
-            "initialUnsharedAmount": 2500
+            "initialUnsharedAmount": 2500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45841"
           },
           {
             "monthlyPremium": 347,
-            "initialUnsharedAmount": 5000
+            "initialUnsharedAmount": 5000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45842"
           }
         ]
       },
@@ -836,23 +866,28 @@ export const providerPlans: PricingPlan[] = [
         "costs": [
           {
             "monthlyPremium": 559,
-            "initialUnsharedAmount": 500
+            "initialUnsharedAmount": 500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45838"
           },
           {
             "monthlyPremium": 545,
-            "initialUnsharedAmount": 1000
+            "initialUnsharedAmount": 1000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45839"
           },
           {
             "monthlyPremium": 486,
-            "initialUnsharedAmount": 1500
+            "initialUnsharedAmount": 1500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45840"
           },
           {
             "monthlyPremium": 395,
-            "initialUnsharedAmount": 2500
+            "initialUnsharedAmount": 2500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45841"
           },
           {
             "monthlyPremium": 337,
-            "initialUnsharedAmount": 5000
+            "initialUnsharedAmount": 5000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45842"
           }
         ]
       },
@@ -862,23 +897,28 @@ export const providerPlans: PricingPlan[] = [
         "costs": [
           {
             "monthlyPremium": 836,
-            "initialUnsharedAmount": 500
+            "initialUnsharedAmount": 500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45838"
           },
           {
             "monthlyPremium": 812,
-            "initialUnsharedAmount": 1000
+            "initialUnsharedAmount": 1000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45839"
           },
           {
             "monthlyPremium": 725,
-            "initialUnsharedAmount": 1500
+            "initialUnsharedAmount": 1500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45840"
           },
           {
             "monthlyPremium": 586,
-            "initialUnsharedAmount": 2500
+            "initialUnsharedAmount": 2500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45841"
           },
           {
             "monthlyPremium": 497,
-            "initialUnsharedAmount": 5000
+            "initialUnsharedAmount": 5000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45842"
           }
         ]
       },
@@ -888,23 +928,28 @@ export const providerPlans: PricingPlan[] = [
         "costs": [
           {
             "monthlyPremium": 358,
-            "initialUnsharedAmount": 500
+            "initialUnsharedAmount": 500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45838"
           },
           {
             "monthlyPremium": 316,
-            "initialUnsharedAmount": 1000
+            "initialUnsharedAmount": 1000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45839"
           },
           {
             "monthlyPremium": 285,
-            "initialUnsharedAmount": 1500
+            "initialUnsharedAmount": 1500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45840"
           },
           {
             "monthlyPremium": 249,
-            "initialUnsharedAmount": 2500
+            "initialUnsharedAmount": 2500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45841"
           },
           {
             "monthlyPremium": 216,
-            "initialUnsharedAmount": 5000
+            "initialUnsharedAmount": 5000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45842"
           }
         ]
       },
@@ -914,23 +959,28 @@ export const providerPlans: PricingPlan[] = [
         "costs": [
           {
             "monthlyPremium": 677,
-            "initialUnsharedAmount": 500
+            "initialUnsharedAmount": 500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45838"
           },
           {
             "monthlyPremium": 590,
-            "initialUnsharedAmount": 1000
+            "initialUnsharedAmount": 1000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45839"
           },
           {
             "monthlyPremium": 530,
-            "initialUnsharedAmount": 1500
+            "initialUnsharedAmount": 1500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45840"
           },
           {
             "monthlyPremium": 458,
-            "initialUnsharedAmount": 2500
+            "initialUnsharedAmount": 2500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45841"
           },
           {
             "monthlyPremium": 393,
-            "initialUnsharedAmount": 5000
+            "initialUnsharedAmount": 5000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45842"
           }
         ]
       },
@@ -940,23 +990,28 @@ export const providerPlans: PricingPlan[] = [
         "costs": [
           {
             "monthlyPremium": 650,
-            "initialUnsharedAmount": 500
+            "initialUnsharedAmount": 500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45838"
           },
           {
             "monthlyPremium": 568,
-            "initialUnsharedAmount": 1000
+            "initialUnsharedAmount": 1000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45839"
           },
           {
             "monthlyPremium": 510,
-            "initialUnsharedAmount": 1500
+            "initialUnsharedAmount": 1500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45840"
           },
           {
             "monthlyPremium": 443,
-            "initialUnsharedAmount": 2500
+            "initialUnsharedAmount": 2500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45841"
           },
           {
             "monthlyPremium": 380,
-            "initialUnsharedAmount": 5000
+            "initialUnsharedAmount": 5000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45842"
           }
         ]
       },
@@ -966,23 +1021,28 @@ export const providerPlans: PricingPlan[] = [
         "costs": [
           {
             "monthlyPremium": 974,
-            "initialUnsharedAmount": 500
+            "initialUnsharedAmount": 500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45838"
           },
           {
             "monthlyPremium": 850,
-            "initialUnsharedAmount": 1000
+            "initialUnsharedAmount": 1000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45839"
           },
           {
             "monthlyPremium": 762,
-            "initialUnsharedAmount": 1500
+            "initialUnsharedAmount": 1500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45840"
           },
           {
             "monthlyPremium": 658,
-            "initialUnsharedAmount": 2500
+            "initialUnsharedAmount": 2500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45841"
           },
           {
             "monthlyPremium": 562,
-            "initialUnsharedAmount": 5000
+            "initialUnsharedAmount": 5000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45842"
           }
         ]
       },
@@ -992,23 +1052,28 @@ export const providerPlans: PricingPlan[] = [
         "costs": [
           {
             "monthlyPremium": 438,
-            "initialUnsharedAmount": 500
+            "initialUnsharedAmount": 500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45838"
           },
           {
             "monthlyPremium": 378,
-            "initialUnsharedAmount": 1000
+            "initialUnsharedAmount": 1000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45839"
           },
           {
             "monthlyPremium": 348,
-            "initialUnsharedAmount": 1500
+            "initialUnsharedAmount": 1500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45840"
           },
           {
             "monthlyPremium": 314,
-            "initialUnsharedAmount": 2500
+            "initialUnsharedAmount": 2500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45841"
           },
           {
             "monthlyPremium": 249,
-            "initialUnsharedAmount": 5000
+            "initialUnsharedAmount": 5000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45842"
           }
         ]
       },
@@ -1018,23 +1083,28 @@ export const providerPlans: PricingPlan[] = [
         "costs": [
           {
             "monthlyPremium": 834,
-            "initialUnsharedAmount": 500
+            "initialUnsharedAmount": 500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45838"
           },
           {
             "monthlyPremium": 717,
-            "initialUnsharedAmount": 1000
+            "initialUnsharedAmount": 1000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45839"
           },
           {
             "monthlyPremium": 657,
-            "initialUnsharedAmount": 1500
+            "initialUnsharedAmount": 1500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45840"
           },
           {
             "monthlyPremium": 586,
-            "initialUnsharedAmount": 2500
+            "initialUnsharedAmount": 2500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45841"
           },
           {
             "monthlyPremium": 458,
-            "initialUnsharedAmount": 5000
+            "initialUnsharedAmount": 5000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45842"
           }
         ]
       },
@@ -1044,23 +1114,28 @@ export const providerPlans: PricingPlan[] = [
         "costs": [
           {
             "monthlyPremium": 801,
-            "initialUnsharedAmount": 500
+            "initialUnsharedAmount": 500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45838"
           },
           {
             "monthlyPremium": 689,
-            "initialUnsharedAmount": 1000
+            "initialUnsharedAmount": 1000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45839"
           },
           {
             "monthlyPremium": 631,
-            "initialUnsharedAmount": 1500
+            "initialUnsharedAmount": 1500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45840"
           },
           {
             "monthlyPremium": 564,
-            "initialUnsharedAmount": 2500
+            "initialUnsharedAmount": 2500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45841"
           },
           {
             "monthlyPremium": 443,
-            "initialUnsharedAmount": 5000
+            "initialUnsharedAmount": 5000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45842"
           }
         ]
       },
@@ -1070,23 +1145,28 @@ export const providerPlans: PricingPlan[] = [
         "costs": [
           {
             "monthlyPremium": 1203,
-            "initialUnsharedAmount": 500
+            "initialUnsharedAmount": 500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45838"
           },
           {
             "monthlyPremium": 1034,
-            "initialUnsharedAmount": 1000
+            "initialUnsharedAmount": 1000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45839"
           },
           {
             "monthlyPremium": 946,
-            "initialUnsharedAmount": 1500
+            "initialUnsharedAmount": 1500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45840"
           },
           {
             "monthlyPremium": 843,
-            "initialUnsharedAmount": 2500
+            "initialUnsharedAmount": 2500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45841"
           },
           {
             "monthlyPremium": 658,
-            "initialUnsharedAmount": 5000
+            "initialUnsharedAmount": 5000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45842"
           }
         ]
       },
@@ -1096,23 +1176,28 @@ export const providerPlans: PricingPlan[] = [
         "costs": [
           {
             "monthlyPremium": 742,
-            "initialUnsharedAmount": 500
+            "initialUnsharedAmount": 500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45838"
           },
           {
             "monthlyPremium": 641,
-            "initialUnsharedAmount": 1000
+            "initialUnsharedAmount": 1000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45839"
           },
           {
             "monthlyPremium": 598,
-            "initialUnsharedAmount": 1500
+            "initialUnsharedAmount": 1500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45840"
           },
           {
             "monthlyPremium": 541,
-            "initialUnsharedAmount": 2500
+            "initialUnsharedAmount": 2500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45841"
           },
           {
             "monthlyPremium": 440,
-            "initialUnsharedAmount": 5000
+            "initialUnsharedAmount": 5000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45842"
           }
         ]
       },
@@ -1122,23 +1207,28 @@ export const providerPlans: PricingPlan[] = [
         "costs": [
           {
             "monthlyPremium": 1444,
-            "initialUnsharedAmount": 500
+            "initialUnsharedAmount": 500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45838"
           },
           {
             "monthlyPremium": 1241,
-            "initialUnsharedAmount": 1000
+            "initialUnsharedAmount": 1000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45839"
           },
           {
             "monthlyPremium": 1155,
-            "initialUnsharedAmount": 1500
+            "initialUnsharedAmount": 1500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45840"
           },
           {
             "monthlyPremium": 1043,
-            "initialUnsharedAmount": 2500
+            "initialUnsharedAmount": 2500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45841"
           },
           {
             "monthlyPremium": 839,
-            "initialUnsharedAmount": 5000
+            "initialUnsharedAmount": 5000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45842"
           }
         ]
       },
@@ -1148,23 +1238,28 @@ export const providerPlans: PricingPlan[] = [
         "costs": [
           {
             "monthlyPremium": 1378,
-            "initialUnsharedAmount": 500
+            "initialUnsharedAmount": 500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45838"
           },
           {
             "monthlyPremium": 1186,
-            "initialUnsharedAmount": 1000
+            "initialUnsharedAmount": 1000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45839"
           },
           {
             "monthlyPremium": 1104,
-            "initialUnsharedAmount": 1500
+            "initialUnsharedAmount": 1500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45840"
           },
           {
             "monthlyPremium": 998,
-            "initialUnsharedAmount": 2500
+            "initialUnsharedAmount": 2500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45841"
           },
           {
             "monthlyPremium": 806,
-            "initialUnsharedAmount": 5000
+            "initialUnsharedAmount": 5000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45842"
           }
         ]
       },
@@ -1174,23 +1269,28 @@ export const providerPlans: PricingPlan[] = [
         "costs": [
           {
             "monthlyPremium": 2088,
-            "initialUnsharedAmount": 500
+            "initialUnsharedAmount": 500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45838"
           },
           {
             "monthlyPremium": 1793,
-            "initialUnsharedAmount": 1000
+            "initialUnsharedAmount": 1000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45839"
           },
           {
             "monthlyPremium": 1668,
-            "initialUnsharedAmount": 1500
+            "initialUnsharedAmount": 1500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45840"
           },
           {
             "monthlyPremium": 1506,
-            "initialUnsharedAmount": 2500
+            "initialUnsharedAmount": 2500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45841"
           },
           {
             "monthlyPremium": 1211,
-            "initialUnsharedAmount": 5000
+            "initialUnsharedAmount": 5000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45842"
           }
         ]
       }
@@ -1213,23 +1313,28 @@ export const providerPlans: PricingPlan[] = [
         "costs": [
           {
             "monthlyPremium": 230.23,
-            "initialUnsharedAmount": 500
+            "initialUnsharedAmount": 500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45843"
           },
           {
             "monthlyPremium": 217.33,
-            "initialUnsharedAmount": 1000
+            "initialUnsharedAmount": 1000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45844"
           },
           {
             "monthlyPremium": 194.97,
-            "initialUnsharedAmount": 1500
+            "initialUnsharedAmount": 1500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45845"
           },
           {
             "monthlyPremium": 173.47,
-            "initialUnsharedAmount": 2500
+            "initialUnsharedAmount": 2500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45846"
           },
           {
             "monthlyPremium": 132.19,
-            "initialUnsharedAmount": 5000
+            "initialUnsharedAmount": 5000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45847"
           }
         ]
       },
@@ -1239,23 +1344,28 @@ export const providerPlans: PricingPlan[] = [
         "costs": [
           {
             "monthlyPremium": 426.31,
-            "initialUnsharedAmount": 500
+            "initialUnsharedAmount": 500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45843"
           },
           {
             "monthlyPremium": 399.65,
-            "initialUnsharedAmount": 1000
+            "initialUnsharedAmount": 1000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45844"
           },
           {
             "monthlyPremium": 355.79,
-            "initialUnsharedAmount": 1500
+            "initialUnsharedAmount": 1500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45845"
           },
           {
             "monthlyPremium": 311.93,
-            "initialUnsharedAmount": 2500
+            "initialUnsharedAmount": 2500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45846"
           },
           {
             "monthlyPremium": 229.37,
-            "initialUnsharedAmount": 5000
+            "initialUnsharedAmount": 5000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45847"
           }
         ]
       },
@@ -1265,23 +1375,28 @@ export const providerPlans: PricingPlan[] = [
         "costs": [
           {
             "monthlyPremium": 410.83,
-            "initialUnsharedAmount": 500
+            "initialUnsharedAmount": 500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45843"
           },
           {
             "monthlyPremium": 385.03,
-            "initialUnsharedAmount": 1000
+            "initialUnsharedAmount": 1000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45844"
           },
           {
             "monthlyPremium": 343.75,
-            "initialUnsharedAmount": 1500
+            "initialUnsharedAmount": 1500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45845"
           },
           {
             "monthlyPremium": 303.33,
-            "initialUnsharedAmount": 2500
+            "initialUnsharedAmount": 2500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45846"
           },
           {
             "monthlyPremium": 224.21,
-            "initialUnsharedAmount": 5000
+            "initialUnsharedAmount": 5000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45847"
           }
         ]
       },
@@ -1291,23 +1406,28 @@ export const providerPlans: PricingPlan[] = [
         "costs": [
           {
             "monthlyPremium": 611.21,
-            "initialUnsharedAmount": 500
+            "initialUnsharedAmount": 500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45843"
           },
           {
             "monthlyPremium": 574.23,
-            "initialUnsharedAmount": 1000
+            "initialUnsharedAmount": 1000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45844"
           },
           {
             "monthlyPremium": 509.73,
-            "initialUnsharedAmount": 1500
+            "initialUnsharedAmount": 1500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45845"
           },
           {
             "monthlyPremium": 446.95,
-            "initialUnsharedAmount": 2500
+            "initialUnsharedAmount": 2500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45846"
           },
           {
             "monthlyPremium": 325.69,
-            "initialUnsharedAmount": 5000
+            "initialUnsharedAmount": 5000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45847"
           }
         ]
       },
@@ -1317,23 +1437,28 @@ export const providerPlans: PricingPlan[] = [
         "costs": [
           {
             "monthlyPremium": 268.07,
-            "initialUnsharedAmount": 500
+            "initialUnsharedAmount": 500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45843"
           },
           {
             "monthlyPremium": 261.19,
-            "initialUnsharedAmount": 1000
+            "initialUnsharedAmount": 1000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45844"
           },
           {
             "monthlyPremium": 232.53,
-            "initialUnsharedAmount": 1500
+            "initialUnsharedAmount": 1500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45845"
           },
           {
             "monthlyPremium": 193.25,
-            "initialUnsharedAmount": 2500
+            "initialUnsharedAmount": 2500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45846"
           },
           {
             "monthlyPremium": 167.45,
-            "initialUnsharedAmount": 5000
+            "initialUnsharedAmount": 5000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45847"
           }
         ]
       },
@@ -1343,23 +1468,28 @@ export const providerPlans: PricingPlan[] = [
         "costs": [
           {
             "monthlyPremium": 499.41,
-            "initialUnsharedAmount": 500
+            "initialUnsharedAmount": 500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45843"
           },
           {
             "monthlyPremium": 486.51,
-            "initialUnsharedAmount": 1000
+            "initialUnsharedAmount": 1000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45844"
           },
           {
             "monthlyPremium": 434.91,
-            "initialUnsharedAmount": 1500
+            "initialUnsharedAmount": 1500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45845"
           },
           {
             "monthlyPremium": 350.63,
-            "initialUnsharedAmount": 2500
+            "initialUnsharedAmount": 2500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45846"
           },
           {
             "monthlyPremium": 299.03,
-            "initialUnsharedAmount": 5000
+            "initialUnsharedAmount": 5000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45847"
           }
         ]
       },
@@ -1369,23 +1499,28 @@ export const providerPlans: PricingPlan[] = [
         "costs": [
           {
             "monthlyPremium": 481.35,
-            "initialUnsharedAmount": 500
+            "initialUnsharedAmount": 500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45843"
           },
           {
             "monthlyPremium": 469.31,
-            "initialUnsharedAmount": 1000
+            "initialUnsharedAmount": 1000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45844"
           },
           {
             "monthlyPremium": 418.57,
-            "initialUnsharedAmount": 1500
+            "initialUnsharedAmount": 1500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45845"
           },
           {
             "monthlyPremium": 340.31,
-            "initialUnsharedAmount": 2500
+            "initialUnsharedAmount": 2500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45846"
           },
           {
             "monthlyPremium": 290.43,
-            "initialUnsharedAmount": 5000
+            "initialUnsharedAmount": 5000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45847"
           }
         ]
       },
@@ -1395,23 +1530,28 @@ export const providerPlans: PricingPlan[] = [
         "costs": [
           {
             "monthlyPremium": 719.57,
-            "initialUnsharedAmount": 500
+            "initialUnsharedAmount": 500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45843"
           },
           {
             "monthlyPremium": 698.93,
-            "initialUnsharedAmount": 1000
+            "initialUnsharedAmount": 1000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45844"
           },
           {
             "monthlyPremium": 624.11,
-            "initialUnsharedAmount": 1500
+            "initialUnsharedAmount": 1500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45845"
           },
           {
             "monthlyPremium": 504.57,
-            "initialUnsharedAmount": 2500
+            "initialUnsharedAmount": 2500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45846"
           },
           {
             "monthlyPremium": 428.03,
-            "initialUnsharedAmount": 5000
+            "initialUnsharedAmount": 5000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45847"
           }
         ]
       },
@@ -1421,23 +1561,28 @@ export const providerPlans: PricingPlan[] = [
         "costs": [
           {
             "monthlyPremium": 308.49,
-            "initialUnsharedAmount": 500
+            "initialUnsharedAmount": 500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45843"
           },
           {
             "monthlyPremium": 272.37,
-            "initialUnsharedAmount": 1000
+            "initialUnsharedAmount": 1000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45844"
           },
           {
             "monthlyPremium": 245.71,
-            "initialUnsharedAmount": 1500
+            "initialUnsharedAmount": 1500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45845"
           },
           {
             "monthlyPremium": 214.75,
-            "initialUnsharedAmount": 2500
+            "initialUnsharedAmount": 2500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45846"
           },
           {
             "monthlyPremium": 186.37,
-            "initialUnsharedAmount": 5000
+            "initialUnsharedAmount": 5000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45847"
           }
         ]
       },
@@ -1447,23 +1592,28 @@ export const providerPlans: PricingPlan[] = [
         "costs": [
           {
             "monthlyPremium": 582.83,
-            "initialUnsharedAmount": 500
+            "initialUnsharedAmount": 500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45843"
           },
           {
             "monthlyPremium": 508.01,
-            "initialUnsharedAmount": 1000
+            "initialUnsharedAmount": 1000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45844"
           },
           {
             "monthlyPremium": 456.41,
-            "initialUnsharedAmount": 1500
+            "initialUnsharedAmount": 1500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45845"
           },
           {
             "monthlyPremium": 394.49,
-            "initialUnsharedAmount": 2500
+            "initialUnsharedAmount": 2500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45846"
           },
           {
             "monthlyPremium": 338.59,
-            "initialUnsharedAmount": 5000
+            "initialUnsharedAmount": 5000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45847"
           }
         ]
       },
@@ -1473,23 +1623,28 @@ export const providerPlans: PricingPlan[] = [
         "costs": [
           {
             "monthlyPremium": 559.61,
-            "initialUnsharedAmount": 500
+            "initialUnsharedAmount": 500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45843"
           },
           {
             "monthlyPremium": 489.09,
-            "initialUnsharedAmount": 1000
+            "initialUnsharedAmount": 1000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45844"
           },
           {
             "monthlyPremium": 439.21,
-            "initialUnsharedAmount": 1500
+            "initialUnsharedAmount": 1500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45845"
           },
           {
             "monthlyPremium": 381.59,
-            "initialUnsharedAmount": 2500
+            "initialUnsharedAmount": 2500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45846"
           },
           {
             "monthlyPremium": 327.41,
-            "initialUnsharedAmount": 5000
+            "initialUnsharedAmount": 5000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45847"
           }
         ]
       },
@@ -1499,23 +1654,28 @@ export const providerPlans: PricingPlan[] = [
         "costs": [
           {
             "monthlyPremium": 838.25,
-            "initialUnsharedAmount": 500
+            "initialUnsharedAmount": 500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45843"
           },
           {
             "monthlyPremium": 731.61,
-            "initialUnsharedAmount": 1000
+            "initialUnsharedAmount": 1000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45844"
           },
           {
             "monthlyPremium": 655.93,
-            "initialUnsharedAmount": 1500
+            "initialUnsharedAmount": 1500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45845"
           },
           {
             "monthlyPremium": 566.49,
-            "initialUnsharedAmount": 2500
+            "initialUnsharedAmount": 2500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45846"
           },
           {
             "monthlyPremium": 483.93,
-            "initialUnsharedAmount": 5000
+            "initialUnsharedAmount": 5000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45847"
           }
         ]
       },
@@ -1525,23 +1685,28 @@ export const providerPlans: PricingPlan[] = [
         "costs": [
           {
             "monthlyPremium": 377.29,
-            "initialUnsharedAmount": 500
+            "initialUnsharedAmount": 500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45843"
           },
           {
             "monthlyPremium": 325.69,
-            "initialUnsharedAmount": 1000
+            "initialUnsharedAmount": 1000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45844"
           },
           {
             "monthlyPremium": 299.89,
-            "initialUnsharedAmount": 1500
+            "initialUnsharedAmount": 1500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45845"
           },
           {
             "monthlyPremium": 270.65,
-            "initialUnsharedAmount": 2500
+            "initialUnsharedAmount": 2500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45846"
           },
           {
             "monthlyPremium": 214.75,
-            "initialUnsharedAmount": 5000
+            "initialUnsharedAmount": 5000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45847"
           }
         ]
       },
@@ -1551,23 +1716,28 @@ export const providerPlans: PricingPlan[] = [
         "costs": [
           {
             "monthlyPremium": 717.85,
-            "initialUnsharedAmount": 500
+            "initialUnsharedAmount": 500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45843"
           },
           {
             "monthlyPremium": 617.23,
-            "initialUnsharedAmount": 1000
+            "initialUnsharedAmount": 1000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45844"
           },
           {
             "monthlyPremium": 565.63,
-            "initialUnsharedAmount": 1500
+            "initialUnsharedAmount": 1500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45845"
           },
           {
             "monthlyPremium": 504.57,
-            "initialUnsharedAmount": 2500
+            "initialUnsharedAmount": 2500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45846"
           },
           {
             "monthlyPremium": 394.49,
-            "initialUnsharedAmount": 5000
+            "initialUnsharedAmount": 5000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45847"
           }
         ]
       },
@@ -1577,23 +1747,28 @@ export const providerPlans: PricingPlan[] = [
         "costs": [
           {
             "monthlyPremium": 689.47,
-            "initialUnsharedAmount": 500
+            "initialUnsharedAmount": 500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45843"
           },
           {
             "monthlyPremium": 593.15,
-            "initialUnsharedAmount": 1000
+            "initialUnsharedAmount": 1000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45844"
           },
           {
             "monthlyPremium": 543.27,
-            "initialUnsharedAmount": 1500
+            "initialUnsharedAmount": 1500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45845"
           },
           {
             "monthlyPremium": 485.65,
-            "initialUnsharedAmount": 2500
+            "initialUnsharedAmount": 2500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45846"
           },
           {
             "monthlyPremium": 381.59,
-            "initialUnsharedAmount": 5000
+            "initialUnsharedAmount": 5000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45847"
           }
         ]
       },
@@ -1603,23 +1778,28 @@ export const providerPlans: PricingPlan[] = [
         "costs": [
           {
             "monthlyPremium": 1035.19,
-            "initialUnsharedAmount": 500
+            "initialUnsharedAmount": 500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45843"
           },
           {
             "monthlyPremium": 889.85,
-            "initialUnsharedAmount": 1000
+            "initialUnsharedAmount": 1000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45844"
           },
           {
             "monthlyPremium": 814.17,
-            "initialUnsharedAmount": 1500
+            "initialUnsharedAmount": 1500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45845"
           },
           {
             "monthlyPremium": 725.59,
-            "initialUnsharedAmount": 2500
+            "initialUnsharedAmount": 2500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45846"
           },
           {
             "monthlyPremium": 566.49,
-            "initialUnsharedAmount": 5000
+            "initialUnsharedAmount": 5000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45847"
           }
         ]
       },
@@ -1629,23 +1809,28 @@ export const providerPlans: PricingPlan[] = [
         "costs": [
           {
             "monthlyPremium": 683.73,
-            "initialUnsharedAmount": 500
+            "initialUnsharedAmount": 500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45843"
           },
           {
             "monthlyPremium": 551.87,
-            "initialUnsharedAmount": 1000
+            "initialUnsharedAmount": 1000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45844"
           },
           {
             "monthlyPremium": 514.89,
-            "initialUnsharedAmount": 1500
+            "initialUnsharedAmount": 1500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45845"
           },
           {
             "monthlyPremium": 465.87,
-            "initialUnsharedAmount": 2500
+            "initialUnsharedAmount": 2500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45846"
           },
           {
             "monthlyPremium": 379.01,
-            "initialUnsharedAmount": 5000
+            "initialUnsharedAmount": 5000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45847"
           }
         ]
       },
@@ -1655,23 +1840,28 @@ export const providerPlans: PricingPlan[] = [
         "costs": [
           {
             "monthlyPremium": 1242.45,
-            "initialUnsharedAmount": 500
+            "initialUnsharedAmount": 500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45843"
           },
           {
             "monthlyPremium": 1067.87,
-            "initialUnsharedAmount": 1000
+            "initialUnsharedAmount": 1000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45844"
           },
           {
             "monthlyPremium": 993.91,
-            "initialUnsharedAmount": 1500
+            "initialUnsharedAmount": 1500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45845"
           },
           {
             "monthlyPremium": 897.59,
-            "initialUnsharedAmount": 2500
+            "initialUnsharedAmount": 2500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45846"
           },
           {
             "monthlyPremium": 722.15,
-            "initialUnsharedAmount": 5000
+            "initialUnsharedAmount": 5000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45847"
           }
         ]
       },
@@ -1681,23 +1871,28 @@ export const providerPlans: PricingPlan[] = [
         "costs": [
           {
             "monthlyPremium": 1185.69,
-            "initialUnsharedAmount": 500
+            "initialUnsharedAmount": 500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45843"
           },
           {
             "monthlyPremium": 1020.57,
-            "initialUnsharedAmount": 1000
+            "initialUnsharedAmount": 1000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45844"
           },
           {
             "monthlyPremium": 950.05,
-            "initialUnsharedAmount": 1500
+            "initialUnsharedAmount": 1500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45845"
           },
           {
             "monthlyPremium": 858.89,
-            "initialUnsharedAmount": 2500
+            "initialUnsharedAmount": 2500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45846"
           },
           {
             "monthlyPremium": 693.77,
-            "initialUnsharedAmount": 5000
+            "initialUnsharedAmount": 5000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45847"
           }
         ]
       },
@@ -1707,23 +1902,28 @@ export const providerPlans: PricingPlan[] = [
         "costs": [
           {
             "monthlyPremium": 1796.29,
-            "initialUnsharedAmount": 500
+            "initialUnsharedAmount": 500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45843"
           },
           {
             "monthlyPremium": 1542.59,
-            "initialUnsharedAmount": 1000
+            "initialUnsharedAmount": 1000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45844"
           },
           {
             "monthlyPremium": 1435.09,
-            "initialUnsharedAmount": 1500
+            "initialUnsharedAmount": 1500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45845"
           },
           {
             "monthlyPremium": 1295.77,
-            "initialUnsharedAmount": 2500
+            "initialUnsharedAmount": 2500,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45846"
           },
           {
             "monthlyPremium": 1042.07,
-            "initialUnsharedAmount": 5000
+            "initialUnsharedAmount": 5000,
+            "sourceUrl": "https://www.1enrollment.com/order/checkout.cfm?id=862417&pdid=45847"
           }
         ]
       }

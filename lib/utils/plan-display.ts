@@ -48,7 +48,12 @@ export function getDisplayCosts(
     const costs = getPlanCost(planId, age, coverageType as any, iuaPreference);
     if (costs) {
       console.log(`Using getPlanCost result for ${planId}:`, costs);
-      return costs;
+      // Ensure sourceUrl is included if present on the cost object
+      return {
+        monthlyPremium: costs.monthlyPremium,
+        initialUnsharedAmount: costs.initialUnsharedAmount,
+        ...(costs.sourceUrl ? { sourceUrl: costs.sourceUrl } : {})
+      };
     }
   }
   

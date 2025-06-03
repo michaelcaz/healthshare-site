@@ -317,8 +317,9 @@ export function HeroRecommendation({
         <div className="flex flex-col sm:flex-row gap-4">
           <Button
             onClick={() => {
-              if (plan.sourceUrl) {
-                window.location.href = plan.sourceUrl;
+              const signupUrl = costs?.sourceUrl || plan.sourceUrl;
+              if (signupUrl) {
+                window.location.href = signupUrl;
               } else {
                 alert('No affiliate link available for this plan.');
               }

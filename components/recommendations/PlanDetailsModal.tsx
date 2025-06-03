@@ -158,8 +158,18 @@ export function PlanDetailsModal({
       <BottomCTAAction
         mode="signup"
         onSignup={() => {
-          if (plan.plan.sourceUrl) {
-            window.location.href = plan.plan.sourceUrl;
+          // Find the selected cost object based on iuaPreference
+          const iuaPref = iuaPreference ? Number(iuaPreference) : undefined;
+          let selectedCost;
+          if (iuaPref && Array.isArray(plan.plan.planMatrix)) {
+            for (const matrix of plan.plan.planMatrix) {
+              selectedCost = matrix.costs.find(cost => cost.initialUnsharedAmount === iuaPref);
+              if (selectedCost) break;
+            }
+          }
+          const signupUrl = selectedCost?.sourceUrl || plan.plan.sourceUrl;
+          if (signupUrl) {
+            window.location.href = signupUrl;
           } else {
             alert('No affiliate link available for this plan.');
           }

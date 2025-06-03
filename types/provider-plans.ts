@@ -17,6 +17,7 @@ export interface PreExistingTier {
 export interface PlanCost {
   monthlyPremium: number;  // Monthly payment to maintain coverage
   initialUnsharedAmount: number;  // Amount paid before sharing begins (similar to a deductible)
+  sourceUrl?: string;  // Optional URL specific to this cost/IUA level
 }
 
 export interface PlanMatrix {
