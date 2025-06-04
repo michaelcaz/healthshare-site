@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 
 export function PlanRecommendationHeroCta({
   calendlyLink = "https://calendly.com/michaelcaz/30min",
-  phoneNumber = "(225) 718-8977"
+  phoneNumber = "(737) 237-1055"
 }) {
   return (
     <div className="bg-white rounded-xl p-6 md:p-8 shadow-lg border border-primary/20 mt-8">

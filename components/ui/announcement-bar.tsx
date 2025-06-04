@@ -62,7 +62,7 @@ export const AnnouncementBar = () => {
       >
         <span className="flex-1 text-center break-words">
           Interested? Hop on the phone with a team member now – call us at{' '}
-          <a href="tel:2257188977" className="underline font-medium hover:text-white/90 transition-colors">(225) 718-8977</a>
+          <a href="tel:7372371055" className="underline font-medium hover:text-white/90 transition-colors">(737) 237-1055</a>
           {' '}or{' '}
           <a
             href="https://calendly.com/michaelcaz/sharewize"

@@ -73,7 +73,7 @@ export function PlanRecommendations({ response }: PlanRecommendationsProps) {
       />
       
       <PlanRecommendationHeroCta 
-        phoneNumber="(225) 718-8977" 
+        phoneNumber="(737) 237-1055" 
         calendlyLink="https://calendly.com/michaelcaz/30min" 
       />
       

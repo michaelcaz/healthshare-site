@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 
 export function HeroCta({
   calendlyLink = "https://calendly.com/michaelcaz/30min",
-  phoneNumber = "(225) 718-8977"
+  phoneNumber = "(737) 237-1055"
 }) {
   const router = useRouter()
   

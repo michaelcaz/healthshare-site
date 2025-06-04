@@ -31,22 +31,13 @@ export default function ContactPage() {
             <div className="space-y-6">
               <div>
                 <h3 className="text-base font-medium text-gray-900">Email</h3>
-                <p className="mt-1 text-gray-600">support@sharewize.com</p>
+                <p className="mt-1 text-gray-600">m@sharewize.com</p>
               </div>
               
               <div>
                 <h3 className="text-base font-medium text-gray-900">Phone</h3>
-                <p className="mt-1 text-gray-600">(555) 123-4567</p>
+                <p className="mt-1 text-gray-600">(737) 237-1055</p>
                 <p className="mt-1 text-sm text-gray-500">Monday-Friday, 9am-5pm EST</p>
-              </div>
-              
-              <div>
-                <h3 className="text-base font-medium text-gray-900">Office</h3>
-                <p className="mt-1 text-gray-600">
-                  123 Health Avenue<br />
-                  Suite 456<br />
-                  Nashville, TN 37203
-                </p>
               </div>
             </div>
           </div>

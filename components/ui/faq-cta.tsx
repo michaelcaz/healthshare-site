@@ -4,7 +4,7 @@ import Link from 'next/link'
 
 export function FaqCta({
   calendlyLink = "https://calendly.com/michaelcaz/30min",
-  phoneNumber = "(225) 718-8977"
+  phoneNumber = "(737) 237-1055"
 }) {
   return (
     <div className="mt-12 p-8 bg-primary/10 rounded-xl text-center">

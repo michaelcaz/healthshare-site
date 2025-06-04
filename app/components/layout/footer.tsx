@@ -48,7 +48,7 @@ export function Footer() {
                 <a href="mailto:m@sharewize.com" className="hover:text-primary hover:underline transition-colors">m@sharewize.com</a>
               </li>
               <li>
-                <a href="tel:2257188977" className="hover:text-primary hover:underline transition-colors">(225) 718-8977</a>
+                <a href="tel:7372371055" className="hover:text-primary hover:underline transition-colors">(737) 237-1055</a>
               </li>
               <li className="flex items-center gap-2">
                 <a

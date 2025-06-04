@@ -106,7 +106,7 @@ export default function PrivacyPage() {
             <p className="mt-4">
               <strong>Sharewize</strong><br />
               Email: privacy@sharewize.com<br />
-              Phone: (225) 718-8977
+              Phone: (737) 237-1055
             </p>
           </section>
 
