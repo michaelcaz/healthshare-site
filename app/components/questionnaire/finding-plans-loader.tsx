@@ -101,7 +101,7 @@ export const FindingPlansLoader = ({
       </div>
       
       <p className="text-gray-600 text-center">
-        Did you know? Every plan is required to provide some health care services for free. Check out plan details to see what each plan offers.
+        Did you know? Every plan is required to provide some health care services for free. Check out membership details to see what each plan offers.
       </p>
     </div>
   );

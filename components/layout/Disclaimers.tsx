@@ -13,7 +13,7 @@ export function Disclaimers({ className, variant = 'default' }: DisclaimersProps
       case 'compact':
         return (
           <p className="text-xs text-gray-500">
-            Healthcare sharing ministries are not insurance and do not guarantee payment of medical expenses. Results may vary. See plan details for limitations, eligibility requirements, and specific coverage information.
+            Healthcare sharing ministries are not insurance and do not guarantee payment of medical expenses. Results may vary. See membership details for limitations, eligibility requirements, and specific coverage information.
           </p>
         );
       case 'footer':

@@ -36,7 +36,7 @@ export const CoverageTimeline: React.FC<CoverageTimelineProps> = ({ plan }) => {
 
       {/* Plan Details */}
       <section>
-        <h3 className="text-xl font-semibold mb-4">Plan Details</h3>
+        <h3 className="text-xl font-semibold mb-4">Membership Details</h3>
         <div className="grid gap-4">
           <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg">
             <Clock className="h-5 w-5 text-blue-500 mt-0.5" />

@@ -263,7 +263,7 @@ export function PlanComparisonTable({ selectedPlans, topRecommendationId, render
         <Table className="min-w-full border-separate border-spacing-y-2 font-sans" style={{ fontFamily: 'Inter, Lato, Work Sans, sans-serif' }}>
           <TableHeader>
             <TableRow>
-              <TableHead className="sticky left-0 z-10 bg-gradient-to-r from-blue-50 via-white to-white/80 backdrop-blur border-r border-gray-100 min-w-[160px] text-gray-700 text-base font-semibold rounded-tl-xl">Plan Details</TableHead>
+              <TableHead className="sticky left-0 z-10 bg-gradient-to-r from-blue-50 via-white to-white/80 backdrop-blur border-r border-gray-100 min-w-[160px] text-gray-700 text-base font-semibold rounded-tl-xl">Membership Details</TableHead>
               {selectedPlans.map((plan) => {
                 const canonicalName = getFeatureData(plan)?.planName?.toLowerCase();
                 return (

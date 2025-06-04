@@ -342,7 +342,7 @@ export function HeroRecommendation({
             }}
             className="details-button"
           >
-            View Plan Details
+            Membership Details
             <ChevronRight className="h-4 w-4 ml-1" />
           </Button>
         </div>

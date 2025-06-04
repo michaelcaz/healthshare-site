@@ -36,7 +36,7 @@ export function PregnancyAlert({ isPregnant }: PregnancyAlertProps) {
             </div>
             
             <p>
-              The recommendations below are based on your other health needs and preferences. Each plan has different waiting periods for maternity coverage, so please review the plan details carefully.
+              The recommendations below are based on your other health needs and preferences. Each plan has different waiting periods for maternity coverage, so please review the membership details carefully.
             </p>
           </div>
         </div>

@@ -218,14 +218,9 @@ export function PlanComparisonGrid({
               </div>
               
               {/* Action Button for Top Plan */}
-              <button
-                onClick={() => {
-                  onPlanSelect(topPlan.plan.id);
-                }}
-                className="w-full mt-4 details-button"
-              >
-                Plan Details
-              </button>
+              <Button className="w-full mt-4 details-button text-base py-2 px-4 rounded-lg font-semibold bg-white hover:bg-blue-50 transition-colors duration-150 shadow-sm border border-gray-200">
+                Membership Details
+              </Button>
               {renderCompareButton(topPlan)}
             </div>
           </Card>
@@ -296,15 +291,9 @@ export function PlanComparisonGrid({
                 </div>
                 
                 {/* Action Button for Alternative Plans */}
-                <button
-                  onClick={() => {
-                    onPlanSelect(plan.plan.id);
-                  }}
-                  className="w-full mt-4 details-button"
-                >
-                  Plan Details
-                  <ChevronRight className="h-4 w-4 ml-1 inline" />
-                </button>
+                <Button className="w-full mt-4 details-button text-base py-2 px-4 rounded-lg font-semibold bg-white hover:bg-blue-50 transition-colors duration-150 shadow-sm border border-gray-200">
+                  Membership Details
+                </Button>
                 {renderCompareButton(plan)}
               </div>
             </Card>
