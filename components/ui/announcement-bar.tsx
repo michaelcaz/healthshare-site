@@ -55,7 +55,7 @@ export const AnnouncementBar = () => {
         animate={{ y: 0 }}
         exit={{ y: -40 }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        className="w-full bg-primary text-white px-2 py-1 min-h-[40px] flex items-center justify-center text-center text-xs md:text-sm md:px-4 md:py-2 fixed top-0 left-0 right-0 z-[60] shadow"
+        className="w-full bg-primary text-white px-2 py-1 h-[40px] flex items-center justify-center text-center text-xs md:text-sm md:px-4 md:py-2 fixed top-0 left-0 right-0 z-[60] overflow-hidden"
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}

@@ -173,7 +173,7 @@ export function Header() {
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md shadow-sm transition-all" style={{ top: 'var(--announcement-bar-height, 0px)' }}>
+      <header className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md transition-all" style={{ top: 'var(--announcement-bar-height, 0px)' }}>
         <nav className="container mx-auto flex items-center justify-between px-4 py-2 md:py-3">
           {/* Logo */}
           <Link href="/" className="flex items-center h-10 md:h-12 lg:h-14">
