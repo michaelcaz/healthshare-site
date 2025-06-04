@@ -88,6 +88,9 @@ export default function PrivacyPolicy() {
           <li>Send relevant updates or marketing communications via platforms like ConvertKit.</li>
           <li>Maintain internal analytics and user insights via tools such as Airtable.</li>
         </ul>
+        <p className="text-gray-700 mt-4">
+          All the above categories exclude text messaging originator opt-in data and consent; this information will not be shared with any third parties.
+        </p>
       </section>
 
       <section className="mb-12">

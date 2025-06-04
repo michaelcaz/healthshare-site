@@ -7,6 +7,7 @@ import { QuestionnaireResponse } from '@/types/questionnaire';
 interface EmailCaptureData {
   firstName: string;
   email: string;
+  phone?: string;
   marketingConsent: boolean;
   questionnaireData: QuestionnaireResponse | null;
 }
@@ -39,6 +40,7 @@ export async function submitEmailCapture(data: EmailCaptureData): Promise<EmailC
         await subscribeToConvertKit({
           email: data.email,
           firstName: data.firstName,
+          phone: data.phone,
           questionnaireInfo: data.questionnaireData
         });
         console.log('ConvertKit subscription completed');
@@ -67,10 +69,12 @@ export async function submitEmailCapture(data: EmailCaptureData): Promise<EmailC
 async function subscribeToConvertKit({
   email,
   firstName,
+  phone,
   questionnaireInfo
 }: {
   email: string;
   firstName: string;
+  phone?: string;
   questionnaireInfo: QuestionnaireResponse | null;
 }) {
   // Log environment variables for debugging
@@ -101,6 +105,10 @@ async function subscribeToConvertKit({
     signup_date: new Date().toISOString(),
   };
   
+  if (phone) {
+    customFields.phone = phone;
+  }
+  
   if (questionnaireInfo) {
     customFields.age = questionnaireInfo.age.toString();
     customFields.coverage_type = questionnaireInfo.coverage_type;
@@ -119,6 +127,7 @@ async function subscribeToConvertKit({
     formId,
     email,
     firstName,
+    phone,
     tags,
     customFields
   });

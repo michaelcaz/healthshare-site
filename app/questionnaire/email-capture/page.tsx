@@ -15,7 +15,11 @@ import { submitEmailCapture } from '@/lib/actions/email-capture';
 // Define form schema for validation
 const formSchema = z.object({
   firstName: z.string().min(2, "Please enter your first name"),
-  email: z.string().email("Please enter a valid email address")
+  email: z.string().email("Please enter a valid email address"),
+  phone: z.string().min(10, "Please enter a valid phone number"),
+  marketingConsent: z.literal(true, {
+    errorMap: () => ({ message: "Oops — we need your thumbs-up to text you. Check the box to keep going." })
+  })
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -24,6 +28,7 @@ type FormValues = z.infer<typeof formSchema>;
 type EmailCaptureApiRequest = {
   firstName: string;
   email: string;
+  phone?: string;
   marketingConsent: boolean;
   questionnaireData: any;
 };
@@ -42,7 +47,8 @@ function EmailForm() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       firstName: '',
-      email: ''
+      email: '',
+      phone: ''
     }
   });
   
@@ -65,7 +71,8 @@ function EmailForm() {
       const emailCaptureData = {
         firstName: data.firstName,
         email: data.email,
-        marketingConsent: true, // Always true since we're using ConvertKit
+        phone: data.phone,
+        marketingConsent: data.marketingConsent,
         questionnaireData: questionnaireResponse
       };
       
@@ -127,6 +134,42 @@ function EmailForm() {
           {errors.email && (
             <p className="mt-1 text-sm text-red-500">
               {errors.email.message}
+            </p>
+          )}
+        </div>
+        
+        <div className="mb-6">
+          <label htmlFor="phone" className="block text-lg font-medium text-gray-800 mb-2">
+            What's your phone number?
+          </label>
+          <input
+            id="phone"
+            type="tel"
+            {...register('phone')}
+            className="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-100 focus:border-blue-500 transition-colors"
+            required
+          />
+          {errors.phone && (
+            <p className="mt-1 text-sm text-red-500">
+              {errors.phone.message}
+            </p>
+          )}
+        </div>
+        
+        <div className="mb-6">
+          <label className="flex items-center space-x-2">
+            <input
+              type="checkbox"
+              {...register('marketingConsent')}
+              className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+            />
+            <span className="text-sm text-gray-700">
+              I'm cool with getting texts from Sharewize. Message frequency varies. Msg/data rates may apply. Reply STOP to bail at any time.
+            </span>
+          </label>
+          {errors.marketingConsent && (
+            <p className="mt-1 text-sm text-red-500">
+              {errors.marketingConsent.message}
             </p>
           )}
         </div>
