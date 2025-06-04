@@ -1,61 +1,80 @@
-import Image from 'next/image';
+import Link from 'next/link';
 import { Disclaimers } from '@/components/layout/Disclaimers';
 
 export function Footer() {
   return (
-    <footer className="border-t mt-auto">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+    <footer className="bg-warm border-t border-gray-200 mt-auto">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
           {/* Company Info */}
-          <div>
-            <div className="mb-4">
-              <img 
-                src="/images/sharewizelogo.svg" 
-                alt="Sharewize" 
-                className="h-14 w-auto"
+          <div className="md:col-span-1 flex flex-col items-start">
+            <Link href="/" className="flex items-center">
+              <img
+                src="/images/sharewizelogofull.svg"
+                alt="Sharewize"
+                className="h-10 w-auto mb-4"
               />
-            </div>
+            </Link>
             <p className="text-sm text-gray-600">
               Helping you find the perfect healthshare plan for your needs.
             </p>
           </div>
 
-          {/* Quick Links */}
+          {/* Core Navigation */}
           <div>
-            <h3 className="font-semibold mb-4">Quick Links</h3>
+            <h3 className="font-semibold mb-4 text-gray-900">Quick Links</h3>
             <ul className="space-y-2 text-sm">
-              <li><a href="/about" className="hover:text-gray-600">About</a></li>
-              <li><a href="/blog" className="hover:text-gray-600">Blog</a></li>
-              <li><a href="/questionnaire" className="hover:text-gray-600">Get Free Quote</a></li>
-            </ul>
-          </div>
-
-          {/* Resources */}
-          <div>
-            <h3 className="font-semibold mb-4">Resources</h3>
-            <ul className="space-y-2 text-sm">
-              <li><a href="/faq" className="hover:text-gray-600">FAQ</a></li>
-              <li><a href="/providers" className="hover:text-gray-600">Providers</a></li>
-              <li><a href="/contact" className="hover:text-gray-600">Contact</a></li>
+              <li><a href="/" className="hover:text-primary hover:underline transition-colors">Home</a></li>
+              <li><a href="/about" className="hover:text-primary hover:underline transition-colors">About</a></li>
+              <li><a href="/contact" className="hover:text-primary hover:underline transition-colors">Contact</a></li>
+              <li><a href="/questionnaire" className="hover:text-primary hover:underline transition-colors">Get Started</a></li>
             </ul>
           </div>
 
           {/* Legal */}
           <div>
-            <h3 className="font-semibold mb-4">Legal</h3>
+            <h3 className="font-semibold mb-4 text-gray-900">Policies</h3>
             <ul className="space-y-2 text-sm">
-              <li><a href="/privacy" className="hover:text-gray-600">Privacy Policy</a></li>
-              <li><a href="/terms" className="hover:text-gray-600">Terms of Service</a></li>
+              <li><a href="/privacy-policy" className="hover:text-primary hover:underline transition-colors">Privacy Policy</a></li>
+              <li><a href="/terms" className="hover:text-primary hover:underline transition-colors">Terms of Service</a></li>
+            </ul>
+          </div>
+
+          {/* Contact & Social */}
+          <div>
+            <h3 className="font-semibold mb-4 text-gray-900">Connect With Us</h3>
+            <ul className="space-y-2 text-sm">
+              <li>
+                <a href="mailto:m@sharewize.com" className="hover:text-primary hover:underline transition-colors">m@sharewize.com</a>
+              </li>
+              <li>
+                <a href="tel:2257188977" className="hover:text-primary hover:underline transition-colors">(225) 718-8977</a>
+              </li>
+              <li className="flex items-center gap-2">
+                <a
+                  href="https://instagram.com/thehealthshareguy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Instagram @thehealthshareguy"
+                  className="flex items-center hover:text-primary hover:underline transition-colors"
+                >
+                  <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="inline-block mr-2">
+                    <rect width="18" height="18" x="3" y="3" rx="5" strokeWidth="2"/>
+                    <circle cx="12" cy="12" r="4" strokeWidth="2"/>
+                    <circle cx="17.5" cy="6.5" r="1.5" fill="currentColor"/>
+                  </svg>
+                  <span className="text-sm">@thehealthshareguy</span>
+                </a>
+              </li>
             </ul>
           </div>
         </div>
-        
+
         {/* Disclaimers Section */}
-        <div className="mt-8 pt-8 border-t">
+        <div className="mt-10 pt-8 border-t border-gray-200">
           <Disclaimers variant="footer" className="mb-4" />
-          
           <div className="text-sm text-center text-gray-600">
-            © {new Date().getFullYear()} All rights reserved.
+            © 2025 Sharewize LLC. All rights reserved.
           </div>
         </div>
       </div>

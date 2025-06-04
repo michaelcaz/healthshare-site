@@ -19,12 +19,6 @@ export function Disclaimers({ className, variant = 'default' }: DisclaimersProps
       case 'footer':
         return (
           <div className="space-y-2 text-xs text-gray-400">
-            <p>
-              Healthshare Plan Finder is not affiliated with any healthcare sharing ministry. We provide information and recommendations to help individuals and families find suitable healthshare plans.
-            </p>
-            <p>
-              Healthcare sharing ministries are not insurance. They do not guarantee payment of medical expenses and are not subject to state insurance regulations.
-            </p>
           </div>
         );
       default:

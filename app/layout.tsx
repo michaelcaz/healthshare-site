@@ -1,6 +1,7 @@
 import './globals.css'
 import { Inter, Montserrat, Caveat } from 'next/font/google'
 import { Header } from '@/components/layout/header'
+import { Footer } from 'app/components/layout/footer'
 import { Toaster } from '@/components/ui/toaster'
 import { GoogleAnalytics } from '@/components/providers/GoogleAnalytics'
 import { ScrollRestoration } from '@/components/ui/scroll-restoration'
@@ -81,9 +82,10 @@ export default function RootLayout({
           <ScrollRestoration />
           <AnnouncementBar />
           <Header />
-          <main>
+          <main className="pt-[72px] md:pt-[72px]">
             {children}
           </main>
+          <Footer />
           <FloatingCTA 
             phoneNumber="(225) 718-8977" 
             calendlyLink="https://calendly.com/michaelcaz/30min" 
