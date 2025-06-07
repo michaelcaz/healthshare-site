@@ -1,15 +1,16 @@
 'use client';
 
 import React, { useState, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import { Info, DollarSign, Building2, Calendar, CheckSquare, Users, Shield, ChevronDown } from 'lucide-react';
+import { Info, DollarSign, Building2, Calendar, CheckSquare, Users, Shield, ChevronDown, Check, X, ChevronUp } from 'lucide-react';
 import { Alert, AlertDescription } from '../ui/alert';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { LoginModal } from '@/components/auth/login-modal';
+import { Tooltip } from '../ui/tooltip';
 
 const features = [
   {
@@ -56,9 +57,21 @@ const features = [
   }
 ];
 
+// Helper to determine icon and color for each value
+const getCellIcon = (value: string, column: 'Sharewize' | 'Traditional Insurance') => {
+  if (column === 'Sharewize' && /yes|any|join|98%|healthy|less|included|none|high|rich|supports|emerald|approval|provider|\$/i.test(value)) {
+    return <Check className="w-5 h-5 text-emerald-500 inline-block mr-1 align-middle" />;
+  }
+  if (column === 'Traditional Insurance' && /no|restrictive|once|sick|not|x|artificial|high|denied|absent|\-|\$/i.test(value)) {
+    return <X className="w-5 h-5 text-orange-500 inline-block mr-1 align-middle" />;
+  }
+  return null;
+};
+
 export function ComparisonTable() {
   const router = useRouter();
   const [hoveredFeature, setHoveredFeature] = useState<number | null>(null);
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [ref, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1
@@ -72,6 +85,10 @@ export function ComparisonTable() {
 
   const handleContinueAsGuest = () => {
     router.push('/questionnaire');
+  };
+
+  const handleDropdown = (index: number) => {
+    setOpenIndex(openIndex === index ? null : index);
   };
 
   return (
@@ -98,113 +115,113 @@ export function ComparisonTable() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl p-4 sm:p-6 border border-gray-100"
           >
-            {/* Mobile & Tablet View: Feature List */}
-            <div className="lg:hidden flex flex-col gap-3">
-              {features.map((feature, index) => (
-                <div
-                  key={feature.name}
-                  className={`w-full space-y-3 p-3 rounded-xl transition-all duration-200 border border-gray-100 focus:outline-none focus:ring-2 focus:ring-emerald-400 active:scale-95 relative ${hoveredFeature === index ? 'bg-gray-50/80 shadow-md' : 'hover:bg-gray-50/40'}`}
-                  onClick={() => setHoveredFeature(hoveredFeature === index ? null : index)}
-                  tabIndex={0}
-                  aria-expanded={hoveredFeature === index}
-                >
-                  <div className="flex items-center gap-3 justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center">{feature.icon}</div>
-                      <span className="font-semibold text-base text-gray-900 leading-7">{feature.name}</span>
-                    </div>
-                    {/* Chevron icon, animated */}
-                    <ChevronDown
-                      className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${hoveredFeature === index ? 'rotate-180' : 'rotate-0'}`}
-                      aria-hidden="true"
-                    />
-                  </div>
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="flex flex-col justify-start">
-                      <div className="flex items-center h-6 mb-1">
-                        <img 
-                          src="/images/sharewizelogofull.svg" 
-                          alt="Sharewize" 
-                          loading="lazy"
-                          className="w-auto h-5"
-                          style={{ display: 'block' }}
-                        />
-                      </div>
-                      <div className="text-emerald-600 font-bold text-base leading-7">{feature.Sharewize}</div>
-                    </div>
-                    <div className="flex flex-col justify-start">
-                      <div className="flex items-center h-6 mb-1">
-                        <span className="text-xs font-medium text-orange-600">Insurance</span>
-                      </div>
-                      <div className="text-orange-600 text-base leading-7">{feature.insurance}</div>
-                    </div>
-                  </div>
-                  {hoveredFeature === index && (
-                    <motion.div 
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                    >
-                      <Alert variant="info" className="bg-indigo-50/50 border border-indigo-100">
-                        <Info className="h-5 w-5 text-indigo-600" />
-                        <AlertDescription className="text-indigo-900">
-                          {feature.description}
-                        </AlertDescription>
-                      </Alert>
-                    </motion.div>
-                  )}
-                </div>
-              ))}
-            </div>
-
             {/* Desktop View: Grid Layout */}
             <div className="hidden lg:block">
-              <div className="grid grid-cols-3 gap-6 mb-4">
-                <div className="font-bold text-xl text-gray-900 pl-20"></div>
-                <div className="flex items-center">
+              <div className="grid grid-cols-3 gap-0 mb-2">
+                <div className=""></div>
+                <div className="flex flex-col items-center justify-center bg-emerald-50 border-2 border-emerald-300 rounded-t-2xl shadow-sm py-4">
                   <img 
                     src="/images/sharewizelogofull.svg" 
                     alt="Sharewize" 
                     loading="lazy"
-                    className="comparison-logo w-auto h-12"
+                    className="w-auto h-10 mb-1"
                   />
                 </div>
-                <div className="font-bold text-2xl text-orange-600 pl-5 flex items-center break-keep">Insurance</div>
+                <div className="flex flex-col items-center justify-center py-4 border-l border-gray-200">
+                  <span className="font-bold text-2xl text-orange-600">Traditional Insurance</span>
+                </div>
               </div>
-
               {features.map((feature, index) => (
                 <div
                   key={feature.name}
-                  className={`grid grid-cols-3 gap-6 p-4 rounded-xl transition-all duration-300 border border-gray-100 mb-3
-                    ${hoveredFeature === index ? 'bg-gray-50/80 shadow-md' : 'hover:bg-gray-50/40'}`}
-                  onMouseEnter={() => setHoveredFeature(index)}
-                  onMouseLeave={() => setHoveredFeature(null)}
+                  className={`grid grid-cols-3 gap-0 items-center border-b border-gray-200 ${index % 2 === 0 ? 'bg-gray-50/60' : 'bg-white'}`}
+                  style={{ minHeight: 72 }}
                 >
-                  <div className="flex items-center gap-4">
-                    <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center">
-                      {feature.icon}
+                  <div className="flex items-center justify-between px-6 py-4 w-full">
+                    <div className="flex items-center gap-3">
+                      <div className="flex-shrink-0 w-10 h-10 flex items-center justify-center">{feature.icon}</div>
+                      <span className="font-bold uppercase text-base text-gray-900 leading-8">{feature.name}</span>
                     </div>
-                    <span className="font-bold text-base text-gray-900 leading-8">{feature.name}</span>
+                    <button
+                      onClick={() => handleDropdown(index)}
+                      className="flex items-center justify-center ml-4 focus:outline-none"
+                      aria-expanded={openIndex === index}
+                      aria-controls={`feature-desc-${index}`}
+                    >
+                      <span className={`flex items-center justify-center w-8 h-8 rounded-full transition-colors duration-200 ${openIndex === index ? 'bg-indigo-100 text-indigo-600' : 'bg-gray-100 text-gray-500'}`}>{openIndex === index ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}</span>
+                    </button>
                   </div>
-                  <div className="text-emerald-600 font-bold text-lg flex items-center px-5 leading-8">
+                  <div className="flex items-center justify-center px-5 py-4 border-l-2 border-emerald-300 bg-emerald-50 font-semibold text-emerald-700 text-lg shadow-sm text-center">
                     {feature.Sharewize}
                   </div>
-                  <div className="text-orange-600 text-lg flex items-center px-5 leading-8">{feature.insurance}</div>
-                  {hoveredFeature === index && (
-                    <motion.div 
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      className="col-span-3 mt-4"
-                    >
-                      <Alert variant="info" className="bg-indigo-50/50 border border-indigo-100">
-                        <Info className="h-5 w-5 text-indigo-600" />
-                        <AlertDescription className="text-indigo-900">
+                  <div className="flex items-center justify-center px-5 py-4 font-semibold text-orange-600 text-lg border-l border-gray-200 text-center">
+                    {feature.insurance}
+                  </div>
+                  <AnimatePresence>
+                    {openIndex === index && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="col-span-3 overflow-hidden"
+                        id={`feature-desc-${index}`}
+                      >
+                        <div className="px-8 py-4 text-gray-700 text-center text-base bg-indigo-50/60 border-t border-indigo-100">
                           {feature.description}
-                        </AlertDescription>
-                      </Alert>
-                    </motion.div>
-                  )}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              ))}
+            </div>
+
+            {/* Mobile & Tablet View: Stacked Columns */}
+            <div className="lg:hidden flex flex-col gap-3">
+              {features.map((feature, index) => (
+                <div
+                  key={feature.name}
+                  className={`rounded-xl border border-gray-100 bg-white/90 shadow-sm transition-all duration-200 ${openIndex === index ? 'ring-2 ring-indigo-200' : ''}`}
+                >
+                  <button
+                    onClick={() => handleDropdown(index)}
+                    className="flex items-center w-full justify-between px-4 py-3 focus:outline-none"
+                    aria-expanded={openIndex === index}
+                    aria-controls={`feature-desc-mobile-${index}`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center">{feature.icon}</div>
+                      <span className="font-bold uppercase text-sm text-gray-900 leading-6">{feature.name}</span>
+                    </div>
+                    <span className={`flex items-center justify-center w-7 h-7 rounded-full transition-colors duration-200 ${openIndex === index ? 'bg-indigo-100 text-indigo-600' : 'bg-gray-100 text-gray-500'}`}>{openIndex === index ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}</span>
+                  </button>
+                  <div className="grid grid-cols-2">
+                    <div className="flex flex-col items-center justify-center px-3 py-3 border-t border-emerald-100 bg-emerald-50 font-semibold text-emerald-700 text-sm text-center">
+                      <div className="font-medium text-xs text-emerald-500 mb-1">Sharewize</div>
+                      {feature.Sharewize}
+                    </div>
+                    <div className="flex flex-col items-center justify-center px-3 py-3 border-t border-orange-100 font-semibold text-orange-600 text-sm text-center">
+                      <div className="font-medium text-xs text-orange-500 mb-1">Traditional Insurance</div>
+                      {feature.insurance}
+                    </div>
+                  </div>
+                  <AnimatePresence>
+                    {openIndex === index && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="overflow-hidden"
+                        id={`feature-desc-mobile-${index}`}
+                      >
+                        <div className="px-4 py-3 text-gray-700 text-center text-sm bg-indigo-50/60 border-t border-indigo-100">
+                          {feature.description}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
               ))}
             </div>
