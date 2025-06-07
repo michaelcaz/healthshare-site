@@ -6,11 +6,13 @@ import { SafetyNet } from '@/components/marketing/SafetyNet';
 import { ComparisonTable } from '@/components/marketing/ComparisonTable';
 import { RealTalk } from '@/components/marketing/RealTalk';
 import { MobileBottomCTAHome } from '@/components/ui/MobileBottomCTA'
+import { TransparencySection } from '@/components/marketing/TransparencySection';
 
 export default function Home() {
   return (
     <div className="pt-[calc(var(--announcement-bar-height,40px)+56px)] md:pt-[calc(var(--announcement-bar-height,40px)+64px)]">
       <Hero />
+      <TransparencySection />
       <ComparisonTable />
       <WhyHealthshare />
       <ProgressiveLearning />

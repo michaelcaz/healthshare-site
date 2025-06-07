@@ -15,24 +15,14 @@ interface Testimonial {
 }
 
 interface TestimonialCardProps {
-  title: string;
-  description: string;
-  highlight: string;
   testimonial: Testimonial;
 }
 
 const TestimonialCard = ({
-  title,
-  description,
-  highlight,
   testimonial
 }: TestimonialCardProps) => {
-  const [isExpanded, setIsExpanded] = useState(false);
   const [isQuoteExpanded, setIsQuoteExpanded] = useState(false);
-  
-  // Split description into paragraphs
-  const paragraphs = description.split('\n');
-  
+
   // Truncate quote if longer than 150 characters
   const shouldTruncateQuote = testimonial.quote.length > 150;
   const truncatedQuote = shouldTruncateQuote 
@@ -41,87 +31,51 @@ const TestimonialCard = ({
 
   // Custom styling for Knew Health logo
   const isKnewHealth = testimonial.planName === "Knew Health";
-  
+
   return (
-    <motion.div 
-      className={cn(
-        "bg-white rounded-xl p-8 mb-12",
-        "shadow-md transition-all duration-300",
-        "border border-indigo-100"
-      )}
-    >
-      <div className="flex flex-col lg:flex-row gap-8">
-        {/* Left side - Concern and explanation */}
-        <div className="flex-1">
-          <div className="mb-6">
-            <h3 className="text-2xl font-semibold text-gray-900 mb-4">{title}</h3>
-            
-            <div className="space-y-4">
-              {paragraphs.map((paragraph, idx) => (
-                <p key={idx} className="text-gray-700">{paragraph}</p>
-              ))}
-            </div>
-          </div>
-          
-          <div className="bg-indigo-50 p-4 rounded-lg border border-indigo-100 mb-6">
-            <p className="text-indigo-900 font-medium">{highlight}</p>
-          </div>
-        </div>
-        
-        {/* Right side - Testimonial */}
-        <div className="flex-1">
-          <div className="bg-gray-50 p-6 rounded-lg border border-gray-100">
-            <div className="flex items-center mb-4">
-              <div className="relative w-16 h-16 rounded-full overflow-hidden mr-4 border-2 border-white shadow-sm">
-                <Image 
-                  src={testimonial.photoPath} 
-                  alt={testimonial.name}
-                  fill
-                  className="object-cover object-center"
-                  priority
-                />
-              </div>
-              <div>
-                <h4 className="font-semibold text-gray-900">{testimonial.name}</h4>
-                <p className="text-sm text-gray-600">{testimonial.role}</p>
-              </div>
-            </div>
-            
-            <div className="mb-4">
-              {isQuoteExpanded ? (
-                <p className="text-gray-700">{testimonial.quote}</p>
-              ) : (
-                <p className="text-gray-700">{truncatedQuote}</p>
-              )}
-              
-              {shouldTruncateQuote && (
-                <button 
-                  onClick={() => setIsQuoteExpanded(!isQuoteExpanded)}
-                  className="text-indigo-600 font-medium hover:text-indigo-700 transition-colors mt-2"
-                >
-                  {isQuoteExpanded ? 'Read less' : 'Read more'}
-                </button>
-              )}
-            </div>
-            
-            <div className="mt-4">
-              <div className="relative h-8 w-28">
-                <Image 
-                  src={testimonial.logoPath} 
-                  alt={`${testimonial.planName} logo`}
-                  fill
-                  className={cn(
-                    "object-contain object-left",
-                    isKnewHealth && "scale-110"
-                  )}
-                  priority
-                />
-              </div>
-            </div>
-          </div>
-        </div>
+    <div className="flex flex-col items-center text-center px-2 sm:px-4">
+      <div className={cn(
+        "relative w-16 h-16 rounded-full overflow-hidden mb-4 border-2 border-white shadow-sm",
+        testimonial.name === "Taylor Chamness" && "scale-110"
+      )}>
+        <Image 
+          src={testimonial.photoPath} 
+          alt={testimonial.name}
+          fill
+          className="object-cover object-center"
+          priority
+        />
       </div>
-    </motion.div>
+      <h4 className="font-semibold text-gray-900 mb-1">{testimonial.name}</h4>
+      <p className="text-sm text-gray-600 mb-4">{testimonial.role}</p>
+      <div className="mb-4">
+        {isQuoteExpanded ? (
+          <p className="text-gray-700">{testimonial.quote}</p>
+        ) : (
+          <p className="text-gray-700">{truncatedQuote}</p>
+        )}
+        {shouldTruncateQuote && (
+          <button
+            onClick={() => setIsQuoteExpanded(!isQuoteExpanded)}
+            className="text-indigo-600 font-medium hover:text-indigo-700 transition-colors mt-2"
+          >
+            {isQuoteExpanded ? 'Read less' : 'Read more'}
+          </button>
+        )}
+      </div>
+      <div className="relative h-8 w-28 mt-auto">
+        <Image 
+          src={testimonial.logoPath} 
+          alt={`${testimonial.planName} logo`}
+          fill
+          className={cn(
+            "object-contain object-center",
+            isKnewHealth && "scale-110"
+          )}
+          priority
+        />
+      </div>
+    </div>
   );
 };
 
@@ -186,32 +140,23 @@ export function RealTalk() {
           transition={{ duration: 0.5 }}
           className="text-center max-w-2xl mx-auto mb-16"
         >
-          <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl mb-4" style={{ wordBreak: 'keep-all', hyphens: 'none' }}>
-            Real Talk About Health Sharing
+          <h2
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-6xl font-bold leading-tight tracking-tight text-balance text-center mb-4 text-gray-warm max-w-xs sm:max-w-none mx-auto"
+            style={{ wordBreak: 'keep-all', hyphens: 'none' }}
+          >
+            Healthcare Pioneers Share Their Stories
           </h2>
           <div className="w-24 h-1 bg-[#6366F1] mx-auto rounded-full mb-6" />
           <p className="text-lg text-gray-600">
-            Let's address the common concerns about health sharing and see how our members feel about their experience.
+            See why 2+ million Americans chose health sharing over traditional insurance
           </p>
         </motion.div>
         
-        <div className="space-y-8">
+        <div
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto"
+        >
           {testimonials.map((item, index) => (
-            <motion.div
-              key={index}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={fadeInUpVariants}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-            >
-              <TestimonialCard 
-                title={item.title}
-                description={item.description}
-                highlight={item.highlight}
-                testimonial={item.testimonial}
-              />
-            </motion.div>
+            <TestimonialCard key={index} testimonial={item.testimonial} />
           ))}
         </div>
       </div>

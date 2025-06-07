@@ -198,11 +198,16 @@ export function ComparisonTable() {
                   </button>
                   <div className="grid grid-cols-2">
                     <div className="flex flex-col items-center justify-center px-3 py-3 border-t border-emerald-100 bg-emerald-50 font-semibold text-emerald-700 text-sm text-center">
-                      <div className="font-medium text-xs text-emerald-500 mb-1">Sharewize</div>
+                      <img 
+                        src="/images/sharewizelogofull.svg" 
+                        alt="Sharewize" 
+                        loading="lazy"
+                        className="w-auto h-7 mb-1"
+                      />
                       {feature.Sharewize}
                     </div>
                     <div className="flex flex-col items-center justify-center px-3 py-3 border-t border-orange-100 font-semibold text-orange-600 text-sm text-center">
-                      <div className="font-medium text-xs text-orange-500 mb-1">Traditional Insurance</div>
+                      <div className="font-bold text-xs text-orange-500 mb-1">Traditional Insurance</div>
                       {feature.insurance}
                     </div>
                   </div>
