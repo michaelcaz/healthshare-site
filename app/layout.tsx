@@ -4,6 +4,7 @@ import { Header } from '@/components/layout/header'
 import { Footer } from 'app/components/layout/footer'
 import { Toaster } from '@/components/ui/toaster'
 import { GoogleAnalytics } from '@/components/providers/GoogleAnalytics'
+import { PlausibleAnalytics } from '@/components/providers/PlausibleAnalytics'
 import { ScrollRestoration } from '@/components/ui/scroll-restoration'
 import { FloatingCTA } from '@/components/ui/floating-cta'
 import { ExitIntentPopup } from '@/components/ui/exit-intent-popup'
@@ -77,6 +78,7 @@ export default function RootLayout({
           <title>Sharewize</title>
           <link rel="icon" type="image/svg+xml" href="/images/illustrations/sharewizelogovector-white.svg" />
           <GoogleAnalytics />
+          <PlausibleAnalytics />
         </head>
         <body suppressHydrationWarning className={`${inter.variable} ${montserrat.variable} ${caveat.variable} font-sans bg-warm`}>
           <ScrollRestoration />
