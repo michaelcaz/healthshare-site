@@ -188,7 +188,7 @@ export function Header() {
           </Link>
 
           {/* Desktop Nav */}
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden lg:flex items-center gap-8">
             <Link href="/about" className="nav-link">
               About
             </Link>
@@ -205,7 +205,7 @@ export function Header() {
 
           {/* Mobile Hamburger */}
           <button
-            className="md:hidden p-2 rounded-lg hover:bg-gray-100"
+            className="lg:hidden p-2 rounded-lg hover:bg-gray-100"
             onClick={() => setMobileOpen((v) => !v)}
             aria-label="Open menu"
           >
@@ -215,7 +215,7 @@ export function Header() {
 
         {/* Mobile Menu */}
         {mobileOpen && (
-          <div className="md:hidden bg-white shadow-lg border-t">
+          <div className="lg:hidden bg-white shadow-lg border-t">
             <div className="flex flex-col gap-2 px-4 py-4">
               <Link href="/about" className="nav-link" onClick={() => setMobileOpen(false)}>
                 About
