@@ -27,6 +27,7 @@ const caveat = Caveat({
 export const metadata: Metadata = {
   title: 'Sharewize',
   description: 'Join 2M+ Americans saving 30-50% with healthcare plans that reward health-conscious entrepreneurs, freelancers, and independent contractors.',
+  metadataBase: new URL('https://sharewize.com'),
   openGraph: {
     title: 'Sharewize',
     description: 'Join 2M+ Americans saving 30-50% with healthcare plans that reward health-conscious entrepreneurs, freelancers, and independent contractors.',
@@ -37,7 +38,8 @@ export const metadata: Metadata = {
         url: '/images/sharewizelogofulljpg.jpg',
         width: 1200,
         height: 630,
-        alt: 'Sharewize',
+        alt: 'Sharewize Logo',
+        type: 'image/jpeg',
       },
     ],
     locale: 'en_US',
@@ -49,9 +51,13 @@ export const metadata: Metadata = {
     description: 'Join 2M+ Americans saving 30-50% with healthcare plans that reward health-conscious entrepreneurs, freelancers, and independent contractors.',
     images: ['/images/sharewizelogofulljpg.jpg'],
     creator: '@sharewize',
+    site: '@sharewize',
   },
   icons: {
     icon: '/images/illustrations/sharewizelogovector-white.svg',
+  },
+  alternates: {
+    canonical: 'https://sharewize.com',
   },
 }
 
