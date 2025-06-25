@@ -218,7 +218,10 @@ export function PlanComparisonGrid({
               </div>
               
               {/* Action Button for Top Plan */}
-              <Button className="w-full mt-4 details-button text-base py-2 px-4 rounded-lg font-semibold bg-white hover:bg-blue-50 transition-colors duration-150 shadow-sm border border-gray-200">
+              <Button 
+                onClick={() => onPlanSelect(topPlan.plan.id)}
+                className="w-full mt-4 details-button text-base py-2 px-4 rounded-lg font-semibold bg-white hover:bg-blue-50 transition-colors duration-150 shadow-sm border border-gray-200"
+              >
                 Membership Details
               </Button>
               {renderCompareButton(topPlan)}
@@ -291,7 +294,10 @@ export function PlanComparisonGrid({
                 </div>
                 
                 {/* Action Button for Alternative Plans */}
-                <Button className="w-full mt-4 details-button text-base py-2 px-4 rounded-lg font-semibold bg-white hover:bg-blue-50 transition-colors duration-150 shadow-sm border border-gray-200">
+                <Button 
+                  onClick={() => onPlanSelect(plan.plan.id)}
+                  className="w-full mt-4 details-button text-base py-2 px-4 rounded-lg font-semibold bg-white hover:bg-blue-50 transition-colors duration-150 shadow-sm border border-gray-200"
+                >
                   Membership Details
                 </Button>
                 {renderCompareButton(plan)}
