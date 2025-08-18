@@ -124,7 +124,7 @@ export async function middleware(req: NextRequest) {
     style-src 'self' 'unsafe-inline' https://api.fontshare.com https://cdn.fontshare.com;
     style-src-elem 'self' 'unsafe-inline' https://api.fontshare.com https://cdn.fontshare.com;
     font-src 'self' data: https://api.fontshare.com https://cdn.fontshare.com;
-    img-src 'self' https://cdn.sanity.io https://lrwewkxwfgmzkvhozdin.supabase.co https://images.unsplash.com data: blob:;
+    img-src 'self' https://cdn.sanity.io https://lrwewkxwfgmzkvhozdin.supabase.co https://images.unsplash.com https://www.clarity.ms https://clarity.ms data: blob:;
     connect-src 'self' 
       https://lrwewkxwfgmzkvhozdin.supabase.co 
       https://*.supabase.co 
