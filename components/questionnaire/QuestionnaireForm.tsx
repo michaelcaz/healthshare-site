@@ -28,6 +28,8 @@ import { InfoIcon } from 'lucide-react';
 import { PregnancyQuestion } from './PregnancyQuestion';
 import { PlansLoader } from '../../app/components/questionnaire';
 import { Tooltip } from '@/components/ui/tooltip';
+import { StateInsurancePenaltyAlert } from './StateInsurancePenaltyAlert';
+import { zipToState, isPenaltyState, PenaltyState } from '@/lib/utils/zip-to-state';
 import { PregnancyQuestionAlert } from './PregnancyQuestionAlert';
 
 const COOKIE_KEY = 'questionnaire-form-data';
@@ -327,10 +329,42 @@ const renderFormControl = (fieldName: string, field: any, form: UseFormReturn<Fo
 };
 
 // Helper function to render form fields
-const renderFormField = (fieldName: keyof FormValues, form: UseFormReturn<FormValues>) => {
+const renderFormField = (fieldName: keyof FormValues, form: UseFormReturn<FormValues>, penaltyState?: PenaltyState | null) => {
   // Special handling for pregnancy field
   if (fieldName === 'pregnancy') {
     return <PregnancyQuestion key={fieldName} form={form} fieldName={fieldName} />;
+  }
+  
+  // Special handling for zip_code field to show penalty alert
+  if (fieldName === 'zip_code') {
+    return (
+      <>
+        <FormField
+          key={fieldName}
+          control={form.control}
+          name={fieldName}
+          render={({ field }) => (
+            <FormItem className="mb-6">
+              <div className="flex justify-between items-start">
+                <FormLabel className="text-lg font-medium text-gray-900 mb-2">
+                  {getFieldLabel(fieldName)}
+                </FormLabel>
+              </div>
+              <FormControl>
+                {renderFormControl(fieldName, field, form)}
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        {penaltyState && (
+          <StateInsurancePenaltyAlert 
+            isVisible={true}
+            state={penaltyState}
+          />
+        )}
+      </>
+    );
   }
   
   // Regular handling for other fields
@@ -462,6 +496,9 @@ export const QuestionnaireForm = () => {
   const [isPotentialBot, setIsPotentialBot] = useState(false);
   const [honeypotValue, setHoneypotValue] = useState('');
   
+  // Add state for tracking penalty state
+  const [penaltyState, setPenaltyState] = useState<PenaltyState | null>(null);
+  
   // Define the steps for the questionnaire
   const questionnaireSections = [
     {
@@ -587,6 +624,9 @@ export const QuestionnaireForm = () => {
   // Watch the pre_existing field to conditionally show pre_existing_approach
   const watchPreExisting = form.watch('pre_existing');
   
+  // Watch the zip_code field to detect penalty states
+  const watchZipCode = form.watch('zip_code');
+  
   // Reset pregnancy_planning when pregnancy changes to 'true'
   useEffect(() => {
     if (watchPregnancy === 'true') {
@@ -596,6 +636,20 @@ export const QuestionnaireForm = () => {
   
   // Watch the pregnancy_planning field to show alert if 'yes'
   const watchPregnancyPlanning = form.watch('pregnancy_planning');
+  
+  // Effect to detect penalty state from ZIP code
+  useEffect(() => {
+    if (watchZipCode && watchZipCode.length >= 5) {
+      const state = zipToState(watchZipCode);
+      if (isPenaltyState(state)) {
+        setPenaltyState(state);
+      } else {
+        setPenaltyState(null);
+      }
+    } else {
+      setPenaltyState(null);
+    }
+  }, [watchZipCode]);
   
   // Dynamically determine fields for the current step
   const getCurrentStepFields = () => {
@@ -965,7 +1019,7 @@ export const QuestionnaireForm = () => {
           {/* Form fields with animation */}
           <div className="space-y-12 transition-all duration-300">
             {getCurrentStepFields().map(fieldName => 
-              renderFormField(fieldName as keyof FormValues, form)
+              renderFormField(fieldName as keyof FormValues, form, penaltyState)
             )}
             
             {/* Honeypot field - invisible to humans, but bots might fill it */}
