@@ -64,7 +64,7 @@ export function trackQuestionnaireStep(
   });
 
   // Track with Facebook Pixel
-  const fbEventMap = {
+  const fbEventMap: Record<string, () => void> = {
     [FunnelEvents.QUESTIONNAIRE_START]: () => fbEvents.startQuestionnaireEvent({ questionnaire_type: 'healthcare_plan_finder' }),
     [FunnelEvents.QUESTIONNAIRE_COMPLETE]: () => fbEvents.completeQuestionnaireEvent({ 
       questionnaire_type: 'healthcare_plan_finder', 
@@ -80,7 +80,7 @@ export function trackQuestionnaireStep(
     [FunnelEvents.USER_SIGNUP]: () => fbEvents.completeRegistration({ content_name: 'user_registration', status: 'completed' })
   };
 
-  const fbTracker = fbEventMap[action as keyof typeof FunnelEvents];
+  const fbTracker = fbEventMap[action];
   if (fbTracker) {
     fbTracker();
   }
