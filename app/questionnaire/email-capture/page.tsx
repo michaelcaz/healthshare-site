@@ -38,6 +38,7 @@ type EmailCaptureApiRequest = {
 function EmailForm() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [hasTrackedEvents, setHasTrackedEvents] = useState(false);
   
   const {
     register,
@@ -84,16 +85,20 @@ function EmailForm() {
         throw new Error(result.error || 'Failed to submit information');
       }
       
-      // Track successful email capture with Facebook Pixel
-      fbEvents.lead({
-        content_name: 'email_capture',
-        content_category: 'lead_generation'
-      });
-      
-      // Track newsletter subscription
-      fbEvents.subscribeNewsletter({
-        subscription_source: 'questionnaire_flow'
-      });
+      // Track successful email capture with Facebook Pixel (only once)
+      if (!hasTrackedEvents) {
+        fbEvents.lead({
+          content_name: 'email_capture',
+          content_category: 'lead_generation'
+        });
+        
+        // Track newsletter subscription
+        fbEvents.subscribeNewsletter({
+          subscription_source: 'questionnaire_flow'
+        });
+        
+        setHasTrackedEvents(true);
+      }
       
       // Mark email capture as complete in localStorage
       localStorage.setItem('email-capture-complete', 'true');

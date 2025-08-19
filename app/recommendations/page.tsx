@@ -17,6 +17,7 @@ export default function RecommendationsPage() {
   const [recommendations, setRecommendations] = useState<any[] | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [hasCompletedEmailCapture, setHasCompletedEmailCapture] = useState<boolean>(false)
+  const [hasTrackedRecommendations, setHasTrackedRecommendations] = useState(false)
 
   // Check if email capture is complete and redirect if not
   useEffect(() => {
@@ -74,11 +75,14 @@ export default function RecommendationsPage() {
         const recommendationsData = await getRecommendations(providerPlans, questionnaireData)
         setRecommendations(recommendationsData)
         
-        // Track viewing recommendations with Facebook Pixel
-        fbEvents.viewPlanRecommendations({
-          plan_count: recommendationsData.length,
-          user_type: 'completed_questionnaire'
-        });
+        // Track viewing recommendations with Facebook Pixel (only once)
+        if (!hasTrackedRecommendations) {
+          fbEvents.viewPlanRecommendations({
+            plan_count: recommendationsData.length,
+            user_type: 'completed_questionnaire'
+          });
+          setHasTrackedRecommendations(true);
+        }
         
         setIsLoading(false)
       } catch (error) {

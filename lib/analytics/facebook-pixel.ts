@@ -1,9 +1,28 @@
 export const FB_PIXEL_ID = process.env.NEXT_PUBLIC_FB_PIXEL_ID;
 
-// Facebook Pixel event tracking functions
+// Global event deduplication to prevent React Strict Mode double firing
+const firedEvents = new Set<string>();
+
+// Facebook Pixel event tracking functions with deduplication
 export const fbPixelEvent = (eventName: string, params?: Record<string, any>) => {
   if (typeof window !== 'undefined' && window.fbq) {
+    // Create a unique key for this event + params combination
+    const eventKey = `${eventName}_${JSON.stringify(params || {})}`;
+    
+    // Skip if this exact event was already fired recently (within 1 second)
+    if (firedEvents.has(eventKey)) {
+      console.log(`[FB Pixel] Skipping duplicate event: ${eventName}`, params);
+      return;
+    }
+    
+    // Track the event
+    firedEvents.add(eventKey);
     window.fbq('track', eventName, params);
+    
+    // Clear the event from the set after 1 second to allow legitimate re-fires
+    setTimeout(() => {
+      firedEvents.delete(eventKey);
+    }, 1000);
   }
 };
 
