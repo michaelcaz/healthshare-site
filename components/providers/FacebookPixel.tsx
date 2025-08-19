@@ -1,8 +1,7 @@
 'use client';
 
 import Script from 'next/script';
-import { usePathname, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import React from 'react';
 
 export const FB_PIXEL_ID = process.env.NEXT_PUBLIC_FB_PIXEL_ID;
 
@@ -18,21 +17,8 @@ declare global {
 }
 
 export function FacebookPixel() {
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const [hasInitialized, setHasInitialized] = useState(false);
-
-  useEffect(() => {
-    if (pathname && window.fbq && hasInitialized) {
-      // Only track PageView for route changes, not initial mount
-      window.fbq('track', 'PageView');
-    }
-  }, [pathname, searchParams, hasInitialized]);
-
-  // Mark as initialized after first render
-  useEffect(() => {
-    setHasInitialized(true);
-  }, []);
+  // Don't track PageView in useEffect at all - let the script handle it
+  // This prevents React Strict Mode double firing issues
 
   if (process.env.NODE_ENV !== 'production' || !FB_PIXEL_ID) {
     return null;

@@ -7,7 +7,7 @@ import { providerPlans } from '@/data/provider-plans'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { QuestionnaireResponse } from '@/types/questionnaire'
-import { fbEvents } from '@/lib/analytics/facebook-pixel'
+// Removed Facebook Pixel import to prevent multiple activations
 
 export default function RecommendationsPage() {
   const router = useRouter()
@@ -17,7 +17,7 @@ export default function RecommendationsPage() {
   const [recommendations, setRecommendations] = useState<any[] | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [hasCompletedEmailCapture, setHasCompletedEmailCapture] = useState<boolean>(false)
-  const [hasTrackedRecommendations, setHasTrackedRecommendations] = useState(false)
+// Removed tracking state to prevent multiple activations
 
   // Check if email capture is complete and redirect if not
   useEffect(() => {
@@ -75,14 +75,8 @@ export default function RecommendationsPage() {
         const recommendationsData = await getRecommendations(providerPlans, questionnaireData)
         setRecommendations(recommendationsData)
         
-        // Track viewing recommendations with Facebook Pixel (only once)
-        if (!hasTrackedRecommendations) {
-          fbEvents.viewPlanRecommendations({
-            plan_count: recommendationsData.length,
-            user_type: 'completed_questionnaire'
-          });
-          setHasTrackedRecommendations(true);
-        }
+        // Removed Facebook Pixel tracking to prevent multiple activations
+        // PageView tracking is handled by the global FacebookPixel component
         
         setIsLoading(false)
       } catch (error) {
