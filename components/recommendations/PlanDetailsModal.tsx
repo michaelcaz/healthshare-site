@@ -167,7 +167,8 @@ export function PlanDetailsModal({
               if (selectedCost) break;
             }
           }
-          const signupUrl = selectedCost?.sourceUrl || plan.plan.sourceUrl;
+          const isKnewHealth = plan.plan.providerName?.toLowerCase().includes('knew');
+          const signupUrl = selectedCost?.sourceUrl || plan.plan.sourceUrl || (isKnewHealth ? 'https://knewhealth.com/?a_aid=Sharewize' : undefined);
           if (signupUrl) {
             window.location.href = signupUrl;
           } else {

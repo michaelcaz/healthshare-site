@@ -317,7 +317,8 @@ export function HeroRecommendation({
         <div className="flex flex-col sm:flex-row gap-4">
           <Button
             onClick={() => {
-              const signupUrl = costs?.sourceUrl || plan.sourceUrl;
+              const isKnewHealth = plan.providerName.toLowerCase().includes('knew');
+              const signupUrl = costs?.sourceUrl || plan.sourceUrl || (isKnewHealth ? 'https://knewhealth.com/?a_aid=Sharewize' : undefined);
               if (signupUrl) {
                 window.location.href = signupUrl;
               } else {

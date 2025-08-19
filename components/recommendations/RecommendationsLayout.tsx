@@ -209,7 +209,12 @@ export function RecommendationsLayout({
         <div className="md:hidden">
           <BottomCTAAction
             mode={selectedPlans.length >= 2 ? 'compare' : 'signup'}
-            onSignup={() => window.location.href = `/enroll/${topPlan.plan.id}`}
+            onSignup={() => {
+              const providerName = topPlan.plan.providerName.toLowerCase();
+              const isKnewHealth = providerName.includes('knew');
+              const fallbackAffiliate = isKnewHealth ? 'https://knewhealth.com/?a_aid=Sharewize' : (topPlan.plan.sourceUrl || `/enroll/${topPlan.plan.id}`);
+              window.location.href = fallbackAffiliate;
+            }}
             onCompare={openComparisonModal}
             compareCount={selectedPlans.length}
             label="Sign up now"

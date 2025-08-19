@@ -407,7 +407,7 @@ export const healthshareProviders: Record<string, ProviderPlan> = {
   knewHealth: {
     id: 'knew-health-standard',
     providerName: "Knew Health",
-    sourceUrl: "https://knewhealth.com/",
+    sourceUrl: "https://knewhealth.com/?a_aid=Sharewize",
     plans: [{
       id: 'knew-health-standard',
       name: "Knew Health Standard",
