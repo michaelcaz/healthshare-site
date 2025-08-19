@@ -25,10 +25,10 @@ Add your Facebook Pixel ID to your environment variables:
 
 ```bash
 # Production
-NEXT_PUBLIC_FB_PIXEL_ID=your_pixel_id_here
+NEXT_PUBLIC_FB_PIXEL_ID=1507151933610779
 
 # Development (optional - pixel won't load in dev mode by default)
-NEXT_PUBLIC_FB_PIXEL_ID=your_pixel_id_here
+NEXT_PUBLIC_FB_PIXEL_ID=1507151933610779
 ```
 
 ### 3. Verify Installation
