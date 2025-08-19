@@ -44,8 +44,8 @@ export function FacebookPixel() {
       })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js', null, null, null);
 
       // Initialize the pixel
-      window.fbq('init', FB_PIXEL_ID);
-      window.fbq('track', 'PageView');
+      window.fbq!('init', FB_PIXEL_ID);
+      window.fbq!('track', 'PageView');
     }
   }, []); // Empty dependency array ensures this only runs once
 
