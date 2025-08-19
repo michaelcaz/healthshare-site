@@ -6,18 +6,7 @@ import { useEffect } from 'react';
 
 export const FB_PIXEL_ID = process.env.NEXT_PUBLIC_FB_PIXEL_ID;
 
-declare global {
-  interface Window {
-    fbq?: (
-      action: string,
-      event?: string,
-      params?: Record<string, any>
-    ) => void;
-    _fbq?: any;
-  }
-}
-
-export function FacebookPixel() {
+export function FacebookPixelAlternative() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
@@ -27,21 +16,12 @@ export function FacebookPixel() {
     }
   }, [pathname, searchParams]);
 
-  // Debug logging
-  console.log('FacebookPixel Debug:', {
-    NODE_ENV: process.env.NODE_ENV,
-    FB_PIXEL_ID,
-    shouldRender: process.env.NODE_ENV === 'production' && FB_PIXEL_ID
-  });
-
-  if (process.env.NODE_ENV !== 'production' || !FB_PIXEL_ID) {
-    console.log('FacebookPixel not rendering:', {
-      isProduction: process.env.NODE_ENV === 'production',
-      hasPixelId: !!FB_PIXEL_ID,
-      pixelId: FB_PIXEL_ID
-    });
+  // Match GoogleAnalytics pattern - only check NODE_ENV, not the ID
+  if (process.env.NODE_ENV !== 'production') {
     return null;
   }
+
+  console.log('FacebookPixel Alternative - Rendering with ID:', FB_PIXEL_ID);
 
   return (
     <>
