@@ -13,13 +13,11 @@ declare global {
       params?: Record<string, any>
     ) => void;
     _fbq?: any;
+    __FB_PIXEL_INITIALIZED?: boolean;
   }
 }
 
 export function FacebookPixel() {
-  // Don't track PageView in useEffect at all - let the script handle it
-  // This prevents React Strict Mode double firing issues
-
   if (process.env.NODE_ENV !== 'production' || !FB_PIXEL_ID) {
     return null;
   }
@@ -31,16 +29,19 @@ export function FacebookPixel() {
         strategy="afterInteractive"
         dangerouslySetInnerHTML={{
           __html: `
-            !function(f,b,e,v,n,t,s)
-            {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-            n.queue=[];t=b.createElement(e);t.async=!0;
-            t.src=v;s=b.getElementsByTagName(e)[0];
-            s.parentNode.insertBefore(t,s)}(window, document,'script',
-            'https://connect.facebook.net/en_US/fbevents.js');
-            fbq('init', '${FB_PIXEL_ID}');
-            fbq('track', 'PageView');
+            if (!window.__FB_PIXEL_INITIALIZED) {
+              !function(f,b,e,v,n,t,s)
+              {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+              n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+              if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+              n.queue=[];t=b.createElement(e);t.async=!0;
+              t.src=v;s=b.getElementsByTagName(e)[0];
+              s.parentNode.insertBefore(t,s)}(window, document,'script',
+              'https://connect.facebook.net/en_US/fbevents.js');
+              fbq('init', '${FB_PIXEL_ID}');
+              fbq('track', 'PageView');
+              window.__FB_PIXEL_INITIALIZED = true;
+            }
           `,
         }}
       />
