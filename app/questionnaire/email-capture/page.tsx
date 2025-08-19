@@ -11,6 +11,7 @@ import { Input } from '@/components/ui/input';
 import { toast } from '@/components/ui/use-toast';
 import { PlansLoader } from '@/app/components/questionnaire';
 import { submitEmailCapture } from '@/lib/actions/email-capture';
+import { fbEvents } from '@/lib/analytics/facebook-pixel';
 
 // Define form schema for validation
 const formSchema = z.object({
@@ -82,6 +83,17 @@ function EmailForm() {
       if (!result.success) {
         throw new Error(result.error || 'Failed to submit information');
       }
+      
+      // Track successful email capture with Facebook Pixel
+      fbEvents.lead({
+        content_name: 'email_capture',
+        content_category: 'lead_generation'
+      });
+      
+      // Track newsletter subscription
+      fbEvents.subscribeNewsletter({
+        subscription_source: 'questionnaire_flow'
+      });
       
       // Mark email capture as complete in localStorage
       localStorage.setItem('email-capture-complete', 'true');

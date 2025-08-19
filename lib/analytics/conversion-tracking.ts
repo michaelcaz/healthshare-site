@@ -1,4 +1,5 @@
 import { event } from './google-analytics';
+import { fbEvents } from './facebook-pixel';
 
 export function trackPotentialConversion({
   providerId,
@@ -11,6 +12,7 @@ export function trackPotentialConversion({
   questionnaireId?: string;
   monthlyPrice?: number;
 }) {
+  // Track with Google Analytics
   event({
     action: 'potential_conversion',
     category: 'Conversions',
@@ -23,4 +25,20 @@ export function trackPotentialConversion({
       conversion_type: 'outbound_click'
     }
   });
+
+  // Track with Facebook Pixel
+  fbEvents.requestPlanQuote({
+    plan_name: planId || 'unknown',
+    provider: providerId,
+    estimated_savings: monthlyPrice
+  });
+
+  // Track high-value conversion for retargeting
+  if (monthlyPrice && monthlyPrice > 200) {
+    fbEvents.addToWishlist({
+      content_ids: [planId || providerId],
+      content_name: `${providerId} Plan`,
+      value: monthlyPrice
+    });
+  }
 } 

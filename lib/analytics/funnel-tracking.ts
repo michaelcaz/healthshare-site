@@ -1,4 +1,5 @@
 import { event } from './google-analytics';
+import { fbEvents, trackHealthcarePlanJourney } from './facebook-pixel';
 
 export const FunnelEvents = {
   // Detailed Questionnaire Flow
@@ -45,6 +46,7 @@ export function trackQuestionnaireStep(
     answers?: Record<string, any>;
   }
 ) {
+  // Track with Google Analytics
   event({
     action,
     category: 'Questionnaire',
@@ -60,6 +62,28 @@ export function trackQuestionnaireStep(
       answers: JSON.stringify(answers)
     }
   });
+
+  // Track with Facebook Pixel
+  const fbEventMap = {
+    [FunnelEvents.QUESTIONNAIRE_START]: () => fbEvents.startQuestionnaireEvent({ questionnaire_type: 'healthcare_plan_finder' }),
+    [FunnelEvents.QUESTIONNAIRE_COMPLETE]: () => fbEvents.completeQuestionnaireEvent({ 
+      questionnaire_type: 'healthcare_plan_finder', 
+      completion_time: timeSpent 
+    }),
+    [FunnelEvents.QUESTIONNAIRE_STEP_COMPLETE]: () => trackHealthcarePlanJourney(`step_${stepNumber}_complete`, {
+      step_name: stepName,
+      time_spent: timeSpent
+    }),
+    [FunnelEvents.RESULTS_VIEW]: () => fbEvents.viewPlanRecommendations({ user_type: 'questionnaire_completed' }),
+    [FunnelEvents.PLAN_DETAILS_VIEW]: () => fbEvents.clickPlanDetails({ plan_name: stepName }),
+    [FunnelEvents.AFFILIATE_LINK_CLICK]: () => fbEvents.lead({ content_name: 'plan_selection', content_category: 'healthcare' }),
+    [FunnelEvents.USER_SIGNUP]: () => fbEvents.completeRegistration({ content_name: 'user_registration', status: 'completed' })
+  };
+
+  const fbTracker = fbEventMap[action as keyof typeof FunnelEvents];
+  if (fbTracker) {
+    fbTracker();
+  }
 }
 
 // Helper for tracking abandonment

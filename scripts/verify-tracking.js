@@ -108,6 +108,40 @@ const TRACKING_SYSTEMS = [
         }
       }}
     ]
+  },
+  {
+    name: 'Facebook Pixel',
+    detectionMethods: [
+      { type: 'script', pattern: /connect\.facebook\.net.*fbevents\.js/ },
+      { type: 'object', name: 'fbq' },
+      { type: 'object', name: '_fbq' }
+    ],
+    networkRequests: [
+      { includes: 'facebook.com/tr' },
+      { includes: 'connect.facebook.net' }
+    ],
+    eventsToTrigger: [
+      { name: 'Page View', action: async (page) => {
+        // Page view is automatically triggered
+        await page.waitForTimeout(1000);
+      }},
+      { name: 'Questionnaire Start', action: async (page) => {
+        await page.goto(`${BASE_URL}/questionnaire`, { waitUntil: 'networkidle2' });
+        await page.click('[data-testid="start-questionnaire-button"]');
+        await page.waitForTimeout(2000);
+      }},
+      { name: 'Email Capture', action: async (page) => {
+        await page.goto(`${BASE_URL}/questionnaire/email-capture`, { waitUntil: 'networkidle2' });
+        const emailInput = await page.$('input[name="email"]');
+        if (emailInput) {
+          await page.type('input[name="email"]', `test_${Date.now()}@example.com`);
+          await page.type('input[name="firstName"]', 'Test');
+          await page.type('input[name="phone"]', '5551234567');
+          await page.click('input[name="marketingConsent"]');
+          await page.waitForTimeout(1000);
+        }
+      }}
+    ]
   }
 ];
 

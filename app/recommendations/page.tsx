@@ -7,6 +7,7 @@ import { providerPlans } from '@/data/provider-plans'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { QuestionnaireResponse } from '@/types/questionnaire'
+import { fbEvents } from '@/lib/analytics/facebook-pixel'
 
 export default function RecommendationsPage() {
   const router = useRouter()
@@ -72,6 +73,13 @@ export default function RecommendationsPage() {
         // Fetch recommendations
         const recommendationsData = await getRecommendations(providerPlans, questionnaireData)
         setRecommendations(recommendationsData)
+        
+        // Track viewing recommendations with Facebook Pixel
+        fbEvents.viewPlanRecommendations({
+          plan_count: recommendationsData.length,
+          user_type: 'completed_questionnaire'
+        });
+        
         setIsLoading(false)
       } catch (error) {
         console.error('Error loading recommendations:', error)

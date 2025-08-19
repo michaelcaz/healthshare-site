@@ -6,6 +6,7 @@ import { Toaster } from '@/components/ui/toaster'
 import { GoogleAnalytics } from '@/components/providers/GoogleAnalytics'
 import { PlausibleAnalytics } from './components/providers/PlausibleAnalytics'
 import { MicrosoftClarity } from './components/providers/MicrosoftClarity'
+import { FacebookPixel } from '@/components/providers/FacebookPixel'
 import { ScrollRestoration } from '@/components/ui/scroll-restoration'
 import { FloatingCTA } from '@/components/ui/floating-cta'
 import { ExitIntentPopup } from '@/components/ui/exit-intent-popup'
@@ -86,6 +87,7 @@ export default function RootLayout({
           <GoogleAnalytics />
           <PlausibleAnalytics />
           <MicrosoftClarity />
+          <FacebookPixel />
         </head>
         <body suppressHydrationWarning className={`${inter.variable} ${montserrat.variable} ${caveat.variable} font-sans bg-warm`}>
           <ScrollRestoration />

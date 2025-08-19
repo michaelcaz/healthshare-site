@@ -120,11 +120,11 @@ export async function middleware(req: NextRequest) {
   // Add CSP headers
   const cspHeader = `
     default-src 'self';
-    script-src 'self' 'unsafe-eval' 'unsafe-inline' https://*.sentry.io https://*.launchdarkly.com https://plausible.io https://*.clarity.ms;
+    script-src 'self' 'unsafe-eval' 'unsafe-inline' https://*.sentry.io https://*.launchdarkly.com https://plausible.io https://*.clarity.ms https://connect.facebook.net;
     style-src 'self' 'unsafe-inline' https://api.fontshare.com https://cdn.fontshare.com;
     style-src-elem 'self' 'unsafe-inline' https://api.fontshare.com https://cdn.fontshare.com;
     font-src 'self' data: https://api.fontshare.com https://cdn.fontshare.com;
-    img-src 'self' https://cdn.sanity.io https://lrwewkxwfgmzkvhozdin.supabase.co https://images.unsplash.com https://*.clarity.ms https://*.bing.com data: blob:;
+    img-src 'self' https://cdn.sanity.io https://lrwewkxwfgmzkvhozdin.supabase.co https://images.unsplash.com https://*.clarity.ms https://*.bing.com https://www.facebook.com data: blob:;
     connect-src 'self' 
       https://lrwewkxwfgmzkvhozdin.supabase.co 
       https://*.supabase.co 
@@ -136,7 +136,9 @@ export async function middleware(req: NextRequest) {
       wss://*.supabase.co
       https://formspree.io
       https://plausible.io
-      https://*.clarity.ms;
+      https://*.clarity.ms
+      https://www.facebook.com
+      https://connect.facebook.net;
     frame-ancestors 'self';
     form-action 'self';
     base-uri 'self';
