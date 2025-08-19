@@ -27,19 +27,7 @@ export function FacebookPixel() {
     }
   }, [pathname, searchParams]);
 
-  // Debug logging
-  console.log('FacebookPixel Debug:', {
-    NODE_ENV: process.env.NODE_ENV,
-    FB_PIXEL_ID,
-    shouldRender: process.env.NODE_ENV === 'production' && FB_PIXEL_ID
-  });
-
   if (process.env.NODE_ENV !== 'production' || !FB_PIXEL_ID) {
-    console.log('FacebookPixel not rendering:', {
-      isProduction: process.env.NODE_ENV === 'production',
-      hasPixelId: !!FB_PIXEL_ID,
-      pixelId: FB_PIXEL_ID
-    });
     return null;
   }
 
