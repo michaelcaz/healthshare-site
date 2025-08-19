@@ -157,11 +157,11 @@ export function Hero() {
                 <motion.button
                   type="button"
                   onClick={handleCTA}
-                  className="w-full max-w-xs md:max-w-sm py-3 md:py-4 px-6 md:px-8 bg-[#FF4500] hover:bg-[#E03E00] text-white font-bold text-lg md:text-xl rounded-full shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#FF4500]"
+                  className="btn-primary btn-arrow w-full max-w-xs md:max-w-sm py-3 md:py-4 px-6 md:px-8 text-lg md:text-xl"
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
                 >
-                  Find my plan
+                  See My Savings in 60 Seconds
                 </motion.button>
               </div>
             </motion.div>

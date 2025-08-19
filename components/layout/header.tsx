@@ -28,6 +28,7 @@ export function Header() {
   const [isLoggingOut, setIsLoggingOut] = useState(false)
   const { toast } = useToast()
   const [mobileOpen, setMobileOpen] = useState(false)
+  const ctaLabel = pathname === '/' ? 'See My Savings in 60 Seconds' : 'Get Started'
 
   const supabase = createBrowserClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -199,7 +200,7 @@ export function Header() {
               Contact
             </Link>
             <Link href="/questionnaire">
-              <button className="btn-primary ml-2">Get Started</button>
+              <button className="btn-primary ml-2">{ctaLabel}</button>
             </Link>
           </div>
 
@@ -227,7 +228,7 @@ export function Header() {
                 Contact
               </Link>
               <Link href="/questionnaire" onClick={() => setMobileOpen(false)}>
-                <button className="btn-primary w-full mt-2">Get Started</button>
+                <button className="btn-primary w-full mt-2">{ctaLabel}</button>
               </Link>
             </div>
           </div>

@@ -92,7 +92,7 @@ export function HealthcarePioneers() {
             onClick={handleJoinRevolution}
             className="bg-gradient-to-r from-[#6366F1] to-[#4F46E5] text-white px-8 py-4 rounded-lg text-lg font-semibold shadow-lg hover:scale-105 transition"
           >
-            Join the Healthcare Revolution →
+            See My Savings in 60 Seconds
           </button>
         </div>
       </div>

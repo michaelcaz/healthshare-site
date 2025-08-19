@@ -243,7 +243,7 @@ export function ComparisonTable() {
               onClick={handleFindMyPlan}
               className="w-full sm:w-[200px] h-12 bg-emerald-500 text-white px-8 py-3 rounded-xl text-lg font-bold hover:bg-emerald-600 transition-all duration-300 hover:scale-105 hover:shadow-lg border border-emerald-400"
             >
-              Find My Plan →
+              See My Savings in 60 Seconds
             </button>
           </motion.div>
         </div>

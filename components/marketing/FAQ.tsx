@@ -145,7 +145,7 @@ export function FAQ() {
               onClick={handleFindMyPlan}
               className="bg-primary hover:bg-primary/90 text-white font-medium py-3 px-8 rounded-lg transition-all duration-300"
             >
-              Find My Plan →
+              See My Savings in 60 Seconds
             </button>
           </div>
         </motion.div>

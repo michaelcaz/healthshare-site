@@ -181,7 +181,7 @@ export function SafetyNet() {
               "flex items-center gap-2 mx-auto"
             )}
           >
-            See Your Savings
+            See My Savings in 60 Seconds
             <ArrowRight className="w-5 h-5" />
           </motion.button>
         </motion.div>

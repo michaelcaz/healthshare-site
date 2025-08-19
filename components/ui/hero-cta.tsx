@@ -21,7 +21,7 @@ export function HeroCta({
         whileTap={{ scale: 0.98 }}
         className="btn-primary btn-arrow py-3 px-6 w-full sm:w-auto"
       >
-        Get Started
+        See My Savings in 60 Seconds
       </motion.button>
       <motion.button
         onClick={() => {
