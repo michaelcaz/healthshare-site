@@ -200,7 +200,7 @@ export function Header() {
               Contact
             </Link>
             <Link href="/questionnaire">
-              <button className="btn-primary ml-2">{ctaLabel}</button>
+              <button className="btn-primary ml-2 text-[0.85rem] px-3.5 py-1.5 leading-none whitespace-nowrap">{ctaLabel}</button>
             </Link>
           </div>
 

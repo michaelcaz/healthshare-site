@@ -232,20 +232,7 @@ export function ComparisonTable() {
             </div>
           </motion.div>
 
-          {/* Desktop CTA */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="hidden md:block mt-16 text-center px-4 sm:px-0"
-          >
-            <button 
-              onClick={handleFindMyPlan}
-              className="w-full sm:w-[200px] h-12 bg-emerald-500 text-white px-8 py-3 rounded-xl text-lg font-bold hover:bg-emerald-600 transition-all duration-300 hover:scale-105 hover:shadow-lg border border-emerald-400"
-            >
-              See My Savings in 60 Seconds
-            </button>
-          </motion.div>
+          {/* CTA removed per request */}
         </div>
       </div>
 
