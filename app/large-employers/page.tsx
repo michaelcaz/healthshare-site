@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import { HeroSection } from '@/components/employers/hero-section'
+import { PressSection } from '@/components/employers/press-section'
 import { ProblemSection } from '@/components/employers/problem-section'
 import { MarketShiftSection } from '@/components/employers/market-shift-section'
 import { ComparisonTable } from '@/components/employers/comparison-table'
@@ -21,6 +22,7 @@ export default function LargeEmployersPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <HeroSection />
+      <PressSection />
       <ProblemSection />
       <MarketShiftSection />
       <ComparisonTable />
