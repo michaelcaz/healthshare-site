@@ -1,0 +1,8 @@
+export { HeroSection } from './hero-section'
+export { ProblemSection } from './problem-section'
+export { MarketShiftSection } from './market-shift-section'
+export { ComparisonTable } from './comparison-table'
+export { BenefitsSection } from './benefits-section'
+export { BoardApprovalSection } from './board-approval-section'
+export { ProcessSection } from './process-section'
+export { FinalCTASection } from './final-cta-section'

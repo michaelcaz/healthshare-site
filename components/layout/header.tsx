@@ -196,8 +196,8 @@ export function Header() {
             <a href="#healthshare-explainer" className="nav-link" onClick={handleHealthSharingClick}>
               What's Health Sharing?
             </a>
-            <Link href="/contact" className="nav-link">
-              Contact
+            <Link href="/large-employers" className="nav-link">
+              Employers
             </Link>
             <Link href="/questionnaire">
               <button className="btn-primary ml-2 text-[0.85rem] px-3.5 py-1.5 leading-none whitespace-nowrap">{ctaLabel}</button>
@@ -224,8 +224,8 @@ export function Header() {
               <a href="#healthshare-explainer" className="nav-link" onClick={handleHealthSharingClick}>
                 What's Health Sharing?
               </a>
-              <Link href="/contact" className="nav-link" onClick={() => setMobileOpen(false)}>
-                Contact
+              <Link href="/large-employers" className="nav-link" onClick={() => setMobileOpen(false)}>
+                Employers
               </Link>
               <Link href="/questionnaire" onClick={() => setMobileOpen(false)}>
                 <button className="btn-primary w-full mt-2">{ctaLabel}</button>
