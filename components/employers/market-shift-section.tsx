@@ -7,17 +7,22 @@ export function MarketShiftSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl lg:text-5xl mb-6">
-            The Multi-Billion Dollar Shift Already Underway
+            The Quiet Revolution in Benefits Design
           </h2>
         </div>
         
         <div className="mb-12">
-          <p className="text-lg text-gray-700 max-w-4xl mx-auto text-center mb-12">
-            While you've been managing rising premiums, over{' '}
-            <span className="font-bold text-primary">2 million Americans</span>{' '}
-            have quietly moved to healthshare memberships saving an average of{' '}
-            <span className="font-bold text-primary">$4,200 per person, per year</span>.
-          </p>
+          <div className="max-w-4xl mx-auto text-center mb-12 space-y-4">
+            <p className="text-lg text-gray-700">
+              While premiums rise 10-20% every year, many employers have discovered an overlooked option for some employees: medical cost-sharing memberships. Over{' '}
+              <span className="font-bold text-primary">2 million Americans</span>{' '}
+              now use them, saving an average of{' '}
+              <span className="font-bold text-primary">$4,200 per person annually</span>.
+            </p>
+            <p className="text-lg text-gray-700">
+              These programs (commonly called healthshares) are a better alternative to traditional insurance for many employees. They're a modern financial model built for healthy employees who rarely need care. For this segment of your workforce, they're often a smarter fit.
+            </p>
+          </div>
 
           {/* Image and Stats Grid */}
           <div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
@@ -39,53 +44,53 @@ export function MarketShiftSection() {
               </div>
             </div>
             
-            {/* Right side - Stats Cards */}
-            <div className="grid gap-6">
-              <div className="bg-green-50 rounded-xl p-6 border border-green-200">
-                <div className="flex items-center mb-4">
-                  <div className="w-10 h-10 bg-green-200 rounded-full flex items-center justify-center mr-3">
-                    <TrendingUp className="w-5 h-5 text-green-600" />
+            {/* Right side - Info Cards */}
+            <div className="grid gap-4">
+              <div className="bg-green-50 rounded-xl p-4 border border-green-200">
+                <div className="flex items-center mb-3">
+                  <div className="w-8 h-8 bg-green-200 rounded-full flex items-center justify-center mr-3">
+                    <Shield className="w-4 h-4 text-green-600" />
                   </div>
-                  <h4 className="text-xl font-semibold text-gray-900">
-                    $4,200 Average Savings
+                  <h4 className="text-lg font-semibold text-gray-900">
+                    Fully legal and compliant
                   </h4>
                 </div>
-                <p className="text-gray-700">
-                  Per person, per year compared to traditional insurance
+                <p className="text-sm text-gray-700 leading-relaxed">
+                  Healthshares aren't insurance—but they operate legally in every state and used by millions of Americans today. Employers don't replace insurance; they simply add this as an option for employees who rarely need care and are tired of being ripped off by traditional plans.
                 </p>
               </div>
               
-              <div className="bg-blue-50 rounded-xl p-6 border border-blue-200">
-                <div className="flex items-center mb-4">
-                  <div className="w-10 h-10 bg-blue-200 rounded-full flex items-center justify-center mr-3">
-                    <Shield className="w-5 h-5 text-blue-600" />
+              <div className="bg-blue-50 rounded-xl p-4 border border-blue-200">
+                <div className="flex items-center mb-3">
+                  <div className="w-8 h-8 bg-blue-200 rounded-full flex items-center justify-center mr-3">
+                    <Users className="w-4 h-4 text-blue-600" />
                   </div>
-                  <h4 className="text-xl font-semibold text-gray-900">
-                    Full Protection
+                  <h4 className="text-lg font-semibold text-gray-900">
+                    Major Medical
                   </h4>
                 </div>
-                <p className="text-gray-700">
-                  Major medical expenses covered without regulatory overhead
+                <p className="text-sm text-gray-700 leading-relaxed">
+                  Members get protection against high-cost, unexpected events - hospitalizations, surgeries, emergencies, expensive treatments - without the bloated overhead of insurance. Everyday care is paid cash (usually 40–60% less than insurance rates).
+                </p>
+              </div>
+              
+              <div className="bg-purple-50 rounded-xl p-4 border border-purple-200">
+                <div className="flex items-center mb-3">
+                  <div className="w-8 h-8 bg-purple-200 rounded-full flex items-center justify-center mr-3">
+                    <TrendingUp className="w-4 h-4 text-purple-600" />
+                  </div>
+                  <h4 className="text-lg font-semibold text-gray-900">
+                    Built for Low-Utilization Employees
+                  </h4>
+                </div>
+                <p className="text-sm text-gray-700 leading-relaxed">
+                  Employees who rarely hit their deductible often overpay for insurance they don't use. Healthshare memberships give them a more cost-effective option while those that utilize care more often can stay on traditional plans.
                 </p>
               </div>
             </div>
           </div>
         </div>
-        
-        {/* Why it works section - moved down */}
-        <div className="max-w-3xl mx-auto text-center">
-          <h3 className="text-2xl font-bold text-gray-900 mb-6">
-            Why it works:
-          </h3>
-          <p className="text-lg text-gray-700 mb-6">
-            Healthshares aren't insurance, so they aren't burdened by the regulatory overhead 
-            and broken system that drives up traditional plan costs.
-          </p>
-          <p className="text-lg text-gray-700">
-            For healthy, low-utilization employees, this unlocks a{' '}
-            <span className="font-bold text-primary">massive opportunity</span>.
-          </p>
-        </div>
+
 
         {/* Dom's Healthcare Journey */}
         <div className="mt-20">
