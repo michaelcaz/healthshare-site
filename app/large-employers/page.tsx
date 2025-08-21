@@ -4,7 +4,7 @@ import { PressSection } from '@/components/employers/press-section'
 import { ProblemSection } from '@/components/employers/problem-section'
 import { MarketShiftSection } from '@/components/employers/market-shift-section'
 import { ComparisonTable } from '@/components/employers/comparison-table'
-import { BenefitsSection } from '@/components/employers/benefits-section'
+
 import { BoardApprovalSection } from '@/components/employers/board-approval-section'
 import { ProcessSection } from '@/components/employers/process-section'
 import { FinalCTASection } from '@/components/employers/final-cta-section'
@@ -26,7 +26,6 @@ export default function LargeEmployersPage() {
       <ProblemSection />
       <MarketShiftSection />
       <ComparisonTable />
-      <BenefitsSection />
       <BoardApprovalSection />
       <ProcessSection />
       <FinalCTASection />
