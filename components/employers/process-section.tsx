@@ -1,4 +1,5 @@
 import { MessageCircle, Search, HelpCircle, Target } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 
 export function ProcessSection() {
   return (
@@ -6,7 +7,7 @@ export function ProcessSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl mb-6">
-            Clarity First. Solutions Second.
+            Clarity First. Let's See If This Is a Fit.
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             Before we talk about solutions, we start with a call. Not a pitch. Not a pre-packaged playbook. Just questions.
@@ -60,11 +61,20 @@ export function ProcessSection() {
           </div>
         </div>
         
-        <div className="bg-primary/5 rounded-2xl p-8 text-center border border-primary/20">
+        <div className="bg-primary/5 rounded-2xl p-8 text-center border border-primary/20 mb-12">
           <p className="text-lg text-gray-700 max-w-4xl mx-auto">
             By the end of our conversation, you'll know exactly where the inefficiencies are 
             in your current approach and whether we can actually help.
           </p>
+        </div>
+
+        <div className="text-center">
+          <Button 
+            size="lg" 
+            className="bg-primary text-white hover:bg-primary-dark px-12 py-4 text-xl font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200"
+          >
+            See If This Fits Your Workforce
+          </Button>
         </div>
       </div>
     </section>

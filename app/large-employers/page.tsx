@@ -7,7 +7,6 @@ import { ComparisonTable } from '@/components/employers/comparison-table'
 
 import { BoardApprovalSection } from '@/components/employers/board-approval-section'
 import { ProcessSection } from '@/components/employers/process-section'
-import { FinalCTASection } from '@/components/employers/final-cta-section'
 
 export const metadata: Metadata = {
   title: 'Large Employers | Sharewize - Cut Healthcare Costs by 40%',
@@ -28,7 +27,6 @@ export default function LargeEmployersPage() {
       <ComparisonTable />
       <BoardApprovalSection />
       <ProcessSection />
-      <FinalCTASection />
     </div>
   )
 }
