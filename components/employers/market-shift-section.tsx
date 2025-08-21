@@ -94,7 +94,10 @@ export function MarketShiftSection() {
 
         {/* Dom's Healthcare Journey */}
         <div className="mt-20">
-          <div className="text-center mb-8">
+          <div className="text-center mb-12">
+            <h3 className="text-2xl font-bold text-gray-900 sm:text-3xl mb-4">
+              What Happens When You Give Employees a Smarter Choice
+            </h3>
             <p className="text-lg text-gray-700">
               Let's follow Dom, a typical healthy employee, through his healthcare year...
             </p>
@@ -102,8 +105,14 @@ export function MarketShiftSection() {
 
           {/* Character Introduction */}
           <div className="bg-white rounded-2xl p-6 shadow-lg max-w-xl mx-auto mb-8 text-center">
-            <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-full flex items-center justify-center mx-auto mb-4">
-              <span className="text-2xl">👨‍💼</span>
+            <div className="flex justify-center mb-4">
+              <Image
+                src="/images/dom.svg"
+                alt="Dom - Marketing Manager"
+                width={80}
+                height={80}
+                className="w-20 h-20"
+              />
             </div>
             <h3 className="text-xl font-bold text-gray-900 mb-3">Meet Dom</h3>
             <div className="space-y-1 text-gray-600 text-sm">
@@ -123,7 +132,6 @@ export function MarketShiftSection() {
               <h4 className="text-base font-bold text-gray-900 mb-2">Company Pays 80% of His Premium</h4>
               <div className="text-xl font-bold text-green-600 mb-1">$400/month</div>
               <div className="text-xs text-gray-600 mb-2">Company pays $3,840/year<br/>Dom pays $960/year</div>
-              <p className="text-xs text-gray-500">High-deductible health plan</p>
             </div>
 
             {/* Step 2 */}
@@ -153,7 +161,7 @@ export function MarketShiftSection() {
               </div>
               <div className="text-xs text-gray-600 mb-1">Used $700 of $7,000 deductible</div>
               <p className="text-xs font-medium text-orange-600">Never reached his deductible</p>
-              <p className="text-xs text-gray-500 mt-1">Paid full price for everything</p>
+              <p className="text-xs text-gray-500 mt-1">Paid inflated rates for care compared to cash pay prices</p>
             </div>
 
             {/* Step 4 */}
@@ -168,14 +176,13 @@ export function MarketShiftSection() {
                 <div className="text-base font-bold text-red-600">Wasted: $4,100</div>
               </div>
               <p className="text-xs font-medium text-red-600">85% of premium unused</p>
-              <p className="text-xs text-gray-500 mt-1">Could have paid cash for lower prices</p>
             </div>
           </div>
 
           {/* Alternative Solution */}
           <div className="bg-gradient-to-br from-primary/5 to-green-50 rounded-2xl p-6 shadow-lg max-w-4xl mx-auto">
             <h4 className="text-xl font-bold text-gray-900 mb-4 text-center">
-              What if Dom had a healthshare plan instead?
+              What if Dom had a healthshare membership instead?
             </h4>
             
             <div className="grid md:grid-cols-2 gap-6 mb-4">
@@ -194,7 +201,7 @@ export function MarketShiftSection() {
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">Major medical:</span>
-                  <span className="font-semibold">Fully covered</span>
+                  <span className="font-semibold">Fully protected</span>
                 </div>
                 <div className="flex justify-between border-t pt-2 text-sm">
                   <span className="text-gray-600">Total annual cost:</span>
@@ -208,9 +215,6 @@ export function MarketShiftSection() {
                   <div className="text-xl font-bold text-green-600">Company saves: $2,688</div>
                   <div className="text-lg font-bold text-blue-600">Dom saves: $922</div>
                 </div>
-                <p className="text-xs text-gray-600 mt-3">
-                  Dom is still protected for major medical events
-                </p>
               </div>
             </div>
             
