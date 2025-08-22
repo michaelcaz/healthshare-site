@@ -68,7 +68,7 @@ export function NotificationCard({
 }
 
 interface StatCardProps extends Omit<FloatingCardProps, 'children'> {
-  value: string;
+  value: ReactNode;
   label: ReactNode;
   trend?: {
     direction: 'up' | 'down';

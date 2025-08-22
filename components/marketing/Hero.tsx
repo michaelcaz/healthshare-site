@@ -244,7 +244,7 @@ export function Hero() {
                           </div>
                         </div>
                       </div>
-                    } as any
+                    }
                     label={
                       <div className="flex flex-col items-start space-y-0">
                         <span className="block leading-tight">Active Healthshare</span>
