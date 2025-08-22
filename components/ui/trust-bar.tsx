@@ -46,8 +46,8 @@ export function TrustBar({ className = '' }: TrustBarProps) {
             </div>
           </div>
           <div className="text-sm text-gray-warm/80 leading-relaxed text-left">
-            <div>Americans have ditched</div>
-            <div>insurance for healthshares</div>
+            <div>Americans actively using</div>
+            <div>healthshares</div>
           </div>
         </div>
       </div>
