@@ -15,7 +15,7 @@ export function MarketShiftSection() {
           <div className="max-w-4xl mx-auto text-center mb-12 space-y-4">
             <p className="text-lg text-gray-700">
               While premiums rise 10-20% every year, many employers have discovered an overlooked option for some employees: medical cost-sharing memberships. Over{' '}
-              <span className="font-bold text-primary">2 million Americans</span>{' '}
+              <span className="font-bold text-primary">1.7 million Americans</span>{' '}
               now use them, saving an average of{' '}
               <span className="font-bold text-primary">$4,200 per person annually</span>.
             </p>
@@ -39,7 +39,7 @@ export function MarketShiftSection() {
               </div>
               {/* Overlay stat */}
               <div className="absolute -bottom-6 -right-6 bg-primary text-white px-6 py-4 rounded-xl shadow-lg">
-                <div className="text-2xl font-bold">2+ Million</div>
+                <div className="text-2xl font-bold">1.7 Million</div>
                 <div className="text-sm opacity-90">Americans</div>
               </div>
             </div>
@@ -52,7 +52,7 @@ export function MarketShiftSection() {
                     <Shield className="w-4 h-4 text-green-600" />
                   </div>
                   <h4 className="text-lg font-semibold text-gray-900">
-                    Fully legal and compliant
+                    Fully compliant
                   </h4>
                 </div>
                 <p className="text-sm text-gray-700 leading-relaxed">
