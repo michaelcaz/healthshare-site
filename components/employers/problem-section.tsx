@@ -37,16 +37,16 @@ export function ProblemSection() {
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl lg:text-5xl mb-4">
+          <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl lg:text-5xl mb-6 max-w-4xl mx-auto leading-tight" style={{textWrap: 'balance'}}>
             Why You're Overpaying Today
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed" style={{textWrap: 'balance'}}>
             You're spending thousands per employee every year whether they use their benefits or not.
           </p>
         </div>
         
         <div className="mb-8">
-          <p className="text-lg text-gray-700 max-w-4xl mx-auto text-center mb-6">
+          <p className="text-lg text-gray-700 max-w-3xl mx-auto text-center mb-8 leading-relaxed" style={{textWrap: 'balance'}}>
             For a large portion of your workforce, it's an expensive benefit they barely touch. 
             These low utilization employees:
           </p>
@@ -96,10 +96,10 @@ export function ProblemSection() {
           </div>
         </div>
         
-        <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-8 shadow-2xl border border-white/30 max-w-4xl mx-auto text-center relative overflow-hidden">
+        <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-8 shadow-2xl border border-white/30 max-w-3xl mx-auto text-center relative overflow-hidden">
           <div className="absolute -top-12 -left-12 w-32 h-32 bg-gradient-to-br from-primary/8 to-blue-500/8 rounded-full blur-2xl"></div>
           <div className="absolute -bottom-8 -right-8 w-24 h-24 bg-gradient-to-br from-indigo-500/8 to-primary/8 rounded-full blur-xl"></div>
-          <p className="text-xl font-semibold text-gray-900 relative z-10">
+          <p className="text-xl font-semibold text-gray-900 relative z-10 leading-relaxed" style={{textWrap: 'balance'}}>
             It's not wasteful employees. It's an outdated plan design.
           </p>
         </div>

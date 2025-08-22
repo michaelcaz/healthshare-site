@@ -56,7 +56,7 @@ export function MarketShiftSection() {
                   </h4>
                 </div>
                 <p className="text-sm text-gray-700 leading-relaxed">
-                  Healthshares aren't insurance—but they operate legally in every state and used by millions of Americans today. Employers don't replace insurance; they simply add this as an option for employees who rarely need care and are tired of being ripped off by traditional plans.
+                  Healthshares aren't insurance—but they operate legally in every state and are used by millions of Americans today. Employers don't replace insurance; they simply add this as an option for employees who rarely need care and are tired of being ripped off by traditional plans.
                 </p>
               </div>
               
@@ -70,7 +70,7 @@ export function MarketShiftSection() {
                   </h4>
                 </div>
                 <p className="text-sm text-gray-700 leading-relaxed">
-                  Members get protection against high-cost, unexpected events - hospitalizations, surgeries, emergencies, expensive treatments - without the bloated overhead of insurance. Everyday care is paid cash (usually 40–60% less than insurance rates).
+                  Members get protection against high-cost, unexpected events - hospitalizations, surgeries, emergencies, expensive treatments - without the bloated overhead of insurance. Everyday care is paid in cash (usually 40–60% less than insurance rates) and then submitted to the healthshare community for reimbursement.
                 </p>
               </div>
               
