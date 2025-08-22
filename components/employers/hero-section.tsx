@@ -1,3 +1,5 @@
+'use client'
+
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 
@@ -71,6 +73,11 @@ export function HeroSection() {
             <Button 
               size="lg" 
               className="bg-primary text-white hover:bg-primary-dark px-6 py-3 text-base font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 group"
+              onClick={() => {
+                if (typeof window !== 'undefined') {
+                  window.open('https://calendly.com/michaelcaz/sharewize-enterprise-consultation', '_blank')
+                }
+              }}
             >
               See If This Fits Your Workforce
               <svg className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">

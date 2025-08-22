@@ -1,3 +1,5 @@
+'use client'
+
 import { Button } from '@/components/ui/button'
 import { Scissors, TrendingUp, Lightbulb } from 'lucide-react'
 
@@ -53,6 +55,11 @@ export function FinalCTASection() {
           <Button 
             size="lg" 
             className="bg-primary text-white hover:bg-primary-dark px-12 py-4 text-xl font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200"
+            onClick={() => {
+              if (typeof window !== 'undefined') {
+                window.open('https://calendly.com/michaelcaz/sharewize-enterprise-consultation', '_blank')
+              }
+            }}
           >
             See If This Fits Your Workforce
           </Button>

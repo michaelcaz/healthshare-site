@@ -1,3 +1,5 @@
+'use client'
+
 import { MessageCircle, Search, HelpCircle, Target } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
@@ -72,6 +74,11 @@ export function ProcessSection() {
           <Button 
             size="lg" 
             className="bg-primary text-white hover:bg-primary-dark px-12 py-4 text-xl font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200"
+            onClick={() => {
+              if (typeof window !== 'undefined') {
+                window.open('https://calendly.com/michaelcaz/sharewize-enterprise-consultation', '_blank')
+              }
+            }}
           >
             See If This Fits Your Workforce
           </Button>
