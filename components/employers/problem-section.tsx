@@ -2,7 +2,7 @@ import { AlertTriangle, DollarSign, TrendingDown } from 'lucide-react'
 
 export function ProblemSection() {
   return (
-    <section className="py-12 lg:py-16 bg-gray-50 relative overflow-hidden">
+    <section className="py-16 lg:py-24 bg-gray-50 relative overflow-hidden">
       {/* Sophisticated Background Pattern */}
       <div className="absolute inset-0 opacity-30">
         {/* Primary gradient mesh */}
@@ -37,7 +37,7 @@ export function ProblemSection() {
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl lg:text-5xl mb-6 max-w-4xl mx-auto leading-tight" style={{textWrap: 'balance'}}>
+          <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl lg:text-4xl mb-6 max-w-4xl mx-auto leading-tight" style={{textWrap: 'balance'}}>
             Why You're Overpaying Today
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed" style={{textWrap: 'balance'}}>

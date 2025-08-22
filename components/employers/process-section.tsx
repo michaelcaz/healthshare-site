@@ -5,8 +5,8 @@ export function ProcessSection() {
   return (
     <section className="py-16 lg:py-24 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl mb-6">
+        <div className="text-center mb-12 lg:mb-16">
+          <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl lg:text-4xl mb-6">
             Clarity First. Let's See If This Is a Fit.
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
@@ -15,7 +15,7 @@ export function ProcessSection() {
         </div>
         
         <div className="mb-12">
-          <h3 className="text-2xl font-bold text-gray-900 mb-8 text-center">
+          <h3 className="text-2xl font-bold text-gray-900 sm:text-3xl lg:text-4xl mb-8 text-center">
             We want to understand:
           </h3>
           

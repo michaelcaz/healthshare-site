@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 
 export function HeroSection() {
   return (
-    <section className="relative bg-gradient-to-br from-gray-50 via-white to-blue-50 pt-20 pb-8 lg:pt-24 lg:pb-12 overflow-hidden min-h-[85vh] flex items-center">
+    <section className="relative bg-gradient-to-br from-gray-50 via-white to-blue-50 pt-20 pb-12 lg:pt-24 lg:pb-16 overflow-hidden min-h-[85vh] flex items-center">
       {/* Background Pattern */}
       <div className="absolute inset-0 bg-grid-gray-100/50 [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)] pointer-events-none" />
       

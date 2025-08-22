@@ -5,8 +5,8 @@ export function MarketShiftSection() {
   return (
     <section className="py-16 lg:py-24 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl lg:text-5xl mb-6">
+        <div className="text-center mb-12 lg:mb-16">
+          <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl lg:text-4xl mb-6">
             The Quiet Revolution in Benefits Design
           </h2>
         </div>
@@ -45,47 +45,47 @@ export function MarketShiftSection() {
             </div>
             
             {/* Right side - Info Cards */}
-            <div className="grid gap-4">
-              <div className="bg-green-50 rounded-xl p-4 border border-green-200">
-                <div className="flex items-center mb-3">
-                  <div className="w-8 h-8 bg-green-200 rounded-full flex items-center justify-center mr-3">
-                    <Shield className="w-4 h-4 text-green-600" />
-                  </div>
-                  <h4 className="text-lg font-semibold text-gray-900">
+            <div className="flex flex-col justify-center space-y-6">
+              <div className="flex items-start space-x-3">
+                <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <Shield className="w-5 h-5 text-green-600" />
+                </div>
+                <div>
+                  <h4 className="text-lg font-semibold text-gray-900 mb-2">
                     Fully compliant
                   </h4>
+                  <p className="text-sm text-gray-600 leading-relaxed">
+                    Healthshares aren't insurance—but they operate legally in every state and are used by millions of Americans today. Employers don't replace insurance; they simply add this as an option for employees who rarely need care and are tired of being ripped off by traditional plans.
+                  </p>
                 </div>
-                <p className="text-sm text-gray-700 leading-relaxed">
-                  Healthshares aren't insurance—but they operate legally in every state and are used by millions of Americans today. Employers don't replace insurance; they simply add this as an option for employees who rarely need care and are tired of being ripped off by traditional plans.
-                </p>
               </div>
               
-              <div className="bg-blue-50 rounded-xl p-4 border border-blue-200">
-                <div className="flex items-center mb-3">
-                  <div className="w-8 h-8 bg-blue-200 rounded-full flex items-center justify-center mr-3">
-                    <Users className="w-4 h-4 text-blue-600" />
-                  </div>
-                  <h4 className="text-lg font-semibold text-gray-900">
+              <div className="flex items-start space-x-3">
+                <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <Users className="w-5 h-5 text-blue-600" />
+                </div>
+                <div>
+                  <h4 className="text-lg font-semibold text-gray-900 mb-2">
                     Major Medical
                   </h4>
+                  <p className="text-sm text-gray-600 leading-relaxed">
+                    Members get protection against high-cost, unexpected events - hospitalizations, surgeries, emergencies, expensive treatments - without the bloated overhead of insurance. Everyday care is paid in cash (usually 40–60% less than insurance rates) and then submitted to the healthshare community for reimbursement.
+                  </p>
                 </div>
-                <p className="text-sm text-gray-700 leading-relaxed">
-                  Members get protection against high-cost, unexpected events - hospitalizations, surgeries, emergencies, expensive treatments - without the bloated overhead of insurance. Everyday care is paid in cash (usually 40–60% less than insurance rates) and then submitted to the healthshare community for reimbursement.
-                </p>
               </div>
               
-              <div className="bg-purple-50 rounded-xl p-4 border border-purple-200">
-                <div className="flex items-center mb-3">
-                  <div className="w-8 h-8 bg-purple-200 rounded-full flex items-center justify-center mr-3">
-                    <TrendingUp className="w-4 h-4 text-purple-600" />
-                  </div>
-                  <h4 className="text-lg font-semibold text-gray-900">
+              <div className="flex items-start space-x-3">
+                <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <TrendingUp className="w-5 h-5 text-purple-600" />
+                </div>
+                <div>
+                  <h4 className="text-lg font-semibold text-gray-900 mb-2">
                     Built for Low-Utilization Employees
                   </h4>
+                  <p className="text-sm text-gray-600 leading-relaxed">
+                    Employees who rarely hit their deductible often overpay for insurance they don't use. Healthshare memberships give them a more cost-effective option while those that utilize care more often can stay on traditional plans.
+                  </p>
                 </div>
-                <p className="text-sm text-gray-700 leading-relaxed">
-                  Employees who rarely hit their deductible often overpay for insurance they don't use. Healthshare memberships give them a more cost-effective option while those that utilize care more often can stay on traditional plans.
-                </p>
               </div>
             </div>
           </div>
@@ -93,11 +93,11 @@ export function MarketShiftSection() {
 
 
         {/* Dom's Healthcare Journey */}
-        <div className="mt-20">
+        <div className="mt-12 lg:mt-16">
           <div className="text-center mb-12">
-            <h3 className="text-2xl font-bold text-gray-900 sm:text-3xl mb-4">
+            <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl lg:text-4xl mb-4">
               What Happens When You Give Employees a Smarter Choice
-            </h3>
+            </h2>
             <p className="text-lg text-gray-700">
               Let's follow Dom, a typical healthy employee, through his healthcare year...
             </p>
@@ -189,7 +189,7 @@ export function MarketShiftSection() {
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">Monthly cost:</span>
-                  <span className="font-semibold">$120 (company pays $96, Dom pays $24)</span>
+                  <span className="font-semibold text-right">$120 (company pays $96, Dom pays $24)</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">Annual cost:</span>

@@ -2,7 +2,7 @@ import { CheckCircle } from 'lucide-react'
 
 export function ComparisonTable() {
   return (
-    <section className="py-12 lg:py-20 bg-white">
+    <section className="py-16 lg:py-24 bg-white">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl lg:text-4xl mb-4">
