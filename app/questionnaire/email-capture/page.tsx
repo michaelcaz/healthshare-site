@@ -237,7 +237,7 @@ export default function EmailCapturePage() {
   return (
     <div className="questionnaire-container">
       <div className="questionnaire-card max-w-xl mx-auto">
-        <h1 className="questionnaire-step-title text-center mb-2" style={{ wordBreak: 'keep-all', hyphens: 'none' }}>Get Your Personalized Results</h1>
+        <h1 className="questionnaire-step-title text-center mb-2" style={{ wordBreak: 'keep-all', hyphens: 'none' }}>See your savings</h1>
         <p className="questionnaire-step-description text-center text-gray-600 mb-8">
           Enter your information to view your personalized healthshare recommendations.
         </p>
