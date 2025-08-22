@@ -165,8 +165,8 @@ export function Hero() {
                 </motion.button>
               </div>
 
-              {/* Trust Bar - Left Aligned */}
-              <div className="flex justify-center lg:justify-start">
+              {/* Trust Bar - Left Aligned - Hidden on mobile since info moved to floating cards */}
+              <div className="hidden md:flex justify-center lg:justify-start">
                 <TrustBar className="mt-8 md:mt-10" />
               </div>
             </motion.div>
@@ -197,20 +197,63 @@ export function Hero() {
                 {/* Mobile: only two stat cards, smaller text, custom positions */}
                 <div className="block md:hidden">
                   <StatCard
-                    value="$487"
-                    label="Avg. Monthly Savings"
-                    trend={{ direction: 'up', value: '8%' }}
+                    value="Top 4%"
+                    label={
+                      <div className="text-left space-y-0">
+                        <div className="leading-tight">of healthshare</div>
+                        <div className="leading-tight">providers curated</div>
+                        <div className="leading-tight">for you</div>
+                      </div>
+                    }
                     position="bottom-left"
                     delay={1.2}
-                    className="left-2 bottom-2 shadow-xl bg-white/95 backdrop-blur-sm text-xs px-2 py-1"
+                    className="left-2 bottom-2 shadow-xl bg-white/95 backdrop-blur-sm text-xs px-2 py-1 [&>div:first-child]:text-lg [&>div:first-child]:font-semibold [&>p]:text-[10px] [&>p]:leading-tight [&>p]:text-left"
                   />
                   <StatCard
-                    value="1.7M+"
-                    label={<span className="block md:inline">Active Healthshare<br className="block md:hidden" />Members</span>}
-                    trend={{ direction: 'up', value: '12%' }}
+                    value={
+                      <div className="flex items-center gap-1">
+                        1.7M+
+                        <div className="flex -space-x-1">
+                          <div className="w-4 h-4 rounded-full border border-white shadow-sm overflow-hidden bg-gray-300">
+                            <img
+                              src="/images/social-photo-1.jpg"
+                              alt="Member"
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                          <div className="w-4 h-4 rounded-full border border-white shadow-sm overflow-hidden bg-gray-300">
+                            <img
+                              src="/images/social-photo-2.jpg"
+                              alt="Member"
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                          <div className="w-4 h-4 rounded-full border border-white shadow-sm overflow-hidden bg-gray-300">
+                            <img
+                              src="/images/social-photo-3.jpg"
+                              alt="Member"
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                          <div className="w-4 h-4 rounded-full border border-white shadow-sm overflow-hidden bg-gray-300">
+                            <img
+                              src="/images/social-photo-4.jpg"
+                              alt="Member"
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    } as any
+                    label={
+                      <div className="flex flex-col items-start space-y-0">
+                        <span className="block leading-tight">Active Healthshare</span>
+                        <span className="block leading-tight">Members</span>
+                      </div>
+                    }
                     position="top-right"
                     delay={0.8}
-                    className="right-2 top-2 shadow-xl bg-white/95 backdrop-blur-sm text-xs px-2 py-1 min-w-[110px]"
+                    className="right-2 top-2 shadow-xl bg-white/95 backdrop-blur-sm text-xs px-2 py-1 min-w-[85px] [&>div:first-child]:text-lg [&>div:first-child]:font-semibold [&>p]:text-[10px] [&>p]:leading-tight [&>p]:text-left"
                   />
                 </div>
                 {/* Desktop: all four cards, original layout */}
