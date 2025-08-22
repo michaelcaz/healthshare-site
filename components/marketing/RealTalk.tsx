@@ -148,7 +148,7 @@ export function RealTalk() {
           </h2>
           <div className="w-24 h-1 bg-[#6366F1] mx-auto rounded-full mb-6" />
           <p className="text-lg text-gray-600">
-            See why 2+ million Americans chose health sharing over traditional insurance
+            See why 1.7+ million Americans chose health sharing over traditional insurance
           </p>
         </motion.div>
         

@@ -7,6 +7,7 @@ import { NotificationCard, StatCard } from '@/components/ui/floating-card';
 import { CheckCircle, Users } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { SvgImage } from '@/components/ui/SvgImage';
+import { TrustBar } from '@/components/ui/trust-bar';
 
 export function Hero() {
   console.log('Hero component mounted');
@@ -150,7 +151,7 @@ export function Hero() {
                 <span className="block text-[#6366F1]">Save the wealth.</span>
               </h1>
               <p className="text-lg md:text-xl leading-relaxed text-gray-warm/80 mb-6 md:mb-10 max-w-xl">
-                Hot take: healthier people should pay less for a safety net. Why should you pay sky-high premiums to cover other people's health problems? Join 2M+ Americans saving 30-50% with healthcare plans that reward health-conscious entrepreneurs, freelancers, and independent contractors like you.
+                Hot take: healthier people should pay less for a safety net. Why should you pay sky-high premiums to cover other people's health problems? Join 1.7M+ Americans saving 30-50% with healthcare plans that reward health-conscious entrepreneurs, freelancers, and independent contractors like you.
               </p>
               <div className="flex w-full justify-center">
                 <motion.button
@@ -162,6 +163,11 @@ export function Hero() {
                 >
                   See My Savings in 60 Seconds
                 </motion.button>
+              </div>
+
+              {/* Trust Bar - Left Aligned */}
+              <div className="flex justify-center lg:justify-start">
+                <TrustBar className="mt-8 md:mt-10" />
               </div>
             </motion.div>
 
@@ -199,7 +205,7 @@ export function Hero() {
                     className="left-2 bottom-2 shadow-xl bg-white/95 backdrop-blur-sm text-xs px-2 py-1"
                   />
                   <StatCard
-                    value="2M+"
+                    value="1.7M+"
                     label={<span className="block md:inline">Active Healthshare<br className="block md:hidden" />Members</span>}
                     trend={{ direction: 'up', value: '12%' }}
                     position="top-right"
@@ -218,7 +224,7 @@ export function Hero() {
                     className="-left-8 top-8 shadow-xl bg-white/95 backdrop-blur-sm"
                   />
                   <StatCard
-                    value="2M+"
+                    value="1.7M+"
                     label="Active Healthshare Members"
                     trend={{ direction: 'up', value: '12%' }}
                     position="bottom-right"

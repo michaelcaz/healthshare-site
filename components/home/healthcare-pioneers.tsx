@@ -69,7 +69,7 @@ export function HealthcarePioneers() {
           <h3 className="text-2xl font-semibold text-gray-900 text-center mb-8">The Numbers Don't Lie</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center">
-              <div className="text-4xl font-bold text-[#6366F1] mb-2">2M+</div>
+              <div className="text-4xl font-bold text-[#6366F1] mb-2">1.7M+</div>
               <p className="text-gray-700">Americans Participating</p>
             </div>
             <div className="text-center">
@@ -86,7 +86,7 @@ export function HealthcarePioneers() {
         {/* CTA section */}
         <div className="text-center">
           <p className="text-xl text-gray-700 mb-8">
-            Healthcare Pioneers don't wait for the crowd's permission.
+            Join 1.7 million healthcare pioneers to finally get health care designed for you.
           </p>
           <button
             onClick={handleJoinRevolution}

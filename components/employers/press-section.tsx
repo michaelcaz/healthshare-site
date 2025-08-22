@@ -4,7 +4,7 @@ import { Star } from 'lucide-react'
 
 export function PressSection() {
   return (
-    <div className="w-full bg-white py-6 md:py-8">
+    <div className="w-full bg-gradient-to-b from-blue-50 via-white to-gray-50 py-6 md:py-8">
       <div className="container mx-auto px-4">
         <div className="flex flex-col items-center space-y-8">
           {/* Trust Element */}
