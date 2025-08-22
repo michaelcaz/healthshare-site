@@ -153,7 +153,7 @@ export function Hero() {
               <p className="text-lg md:text-xl leading-relaxed text-gray-warm/80 mb-6 md:mb-10 max-w-xl">
                 Hot take: healthier people should pay less for a safety net. Why should you pay sky-high premiums to cover other people's health problems? Join 1.7M+ Americans saving 30-50% with healthcare plans that reward health-conscious entrepreneurs, freelancers, and independent contractors like you.
               </p>
-              <div className="flex w-full justify-center">
+              <div className="flex w-full justify-center lg:justify-start">
                 <motion.button
                   type="button"
                   onClick={handleCTA}
@@ -256,24 +256,8 @@ export function Hero() {
                     className="right-2 top-2 shadow-xl bg-white/95 backdrop-blur-sm text-xs px-2 py-1 min-w-[85px] [&>div:first-child]:text-lg [&>div:first-child]:font-semibold [&>p]:text-[10px] [&>p]:leading-tight [&>p]:text-left"
                   />
                 </div>
-                {/* Desktop: all four cards, original layout */}
+                {/* Desktop: reduced cards, keeping only the most impactful ones */}
                 <div className="hidden md:block">
-                  <NotificationCard
-                    icon={<CheckCircle className="w-4 h-4 text-primary" />}
-                    title="New Member Joined"
-                    subtitle="Just now"
-                    position="top-left"
-                    delay={0.6}
-                    className="-left-8 top-8 shadow-xl bg-white/95 backdrop-blur-sm"
-                  />
-                  <StatCard
-                    value="1.7M+"
-                    label="Active Healthshare Members"
-                    trend={{ direction: 'up', value: '12%' }}
-                    position="bottom-right"
-                    delay={0.8}
-                    className="-right-8 bottom-16 shadow-xl bg-white/95 backdrop-blur-sm"
-                  />
                   <NotificationCard
                     icon={<Users className="w-4 h-4 text-accent" />}
                     title="Healthcare Revolution"
