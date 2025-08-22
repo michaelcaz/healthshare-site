@@ -48,12 +48,12 @@ export function PressSection() {
               They've also been featured in...
             </h2>
             <div className="grid grid-cols-3 gap-x-4 gap-y-4 md:grid-cols-3 lg:grid-cols-6 items-center justify-items-center w-full max-w-6xl mx-auto">
-              <img src="/images/logos/wsj.svg" alt="Wall Street Journal" width={140} height={46} />
-              <img src="/images/logos/pbs.svg" alt="PBS" width={96} height={32} />
-              <img src="/images/logos/forbes.svg" alt="Forbes" width={96} height={32} />
-              <img src="/images/logos/vox.svg" alt="Vox" width={144} height={32} />
-              <img src="/images/logos/nbcnews.svg" alt="NBC News" width={200} height={32} />
-              <img src="/images/logos/cbsnews.svg" alt="CBS News" width={140} height={46} />
+              <img src="/images/logos/wsj.svg" alt="Wall Street Journal" width={96} height={32} className="opacity-60 grayscale" />
+              <img src="/images/logos/cbsnews.svg" alt="CBS News" width={240} height={80} className="opacity-60 grayscale" />
+              <img src="/images/logos/forbes.svg" alt="Forbes" width={96} height={32} className="opacity-60 grayscale" />
+              <img src="/images/logos/vox.svg" alt="Vox" width={144} height={32} className="opacity-70 grayscale" />
+              <img src="/images/logos/nbcnews.svg" alt="NBC News" width={200} height={32} className="opacity-70 grayscale" />
+              <img src="/images/logos/pbs.svg" alt="PBS" width={96} height={32} className="opacity-60 grayscale" />
             </div>
           </div>
         </div>
