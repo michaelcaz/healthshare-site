@@ -196,7 +196,7 @@ export function Header() {
             <a href="#healthshare-explainer" className="nav-link" onClick={handleHealthSharingClick}>
               What's Health Sharing?
             </a>
-            <Link href="/large-employers" className="nav-link">
+            <Link href="/employers" className="nav-link">
               Employers
             </Link>
             <Link href="/questionnaire">
@@ -224,7 +224,7 @@ export function Header() {
               <a href="#healthshare-explainer" className="nav-link" onClick={handleHealthSharingClick}>
                 What's Health Sharing?
               </a>
-              <Link href="/large-employers" className="nav-link" onClick={() => setMobileOpen(false)}>
+              <Link href="/employers" className="nav-link" onClick={() => setMobileOpen(false)}>
                 Employers
               </Link>
               <Link href="/questionnaire" onClick={() => setMobileOpen(false)}>
