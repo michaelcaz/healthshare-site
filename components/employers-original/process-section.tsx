@@ -63,16 +63,10 @@ export function ProcessSection() {
           </div>
         </div>
         
-        <div className="bg-primary/5 rounded-2xl p-8 text-center border border-primary/20 mb-8">
+        <div className="bg-primary/5 rounded-2xl p-8 text-center border border-primary/20 mb-12">
           <p className="text-lg text-gray-700 max-w-4xl mx-auto">
             By the end of our conversation, you'll know exactly where the inefficiencies are 
             in your current approach and whether we can actually help.
-          </p>
-        </div>
-
-        <div className="text-center mb-12">
-          <p className="text-base text-gray-600 font-medium">
-            No long-term contracts. Even if we're not the right fit, you'll walk away with insights most brokers can't provide.
           </p>
         </div>
 

@@ -23,16 +23,52 @@ export function HeroSection() {
               <span className="text-primary font-extrabold">
                 Up to 40%
               </span>{' '}
-              While Dramatically Improving Care Quality and Access
+              Without Cutting Benefits
             </h1>
             
-            <p className="text-lg text-gray-600 mb-2 leading-relaxed">
-              Every year, you brace for another double-digit healthcare increase. What if this year was different?
+            <p className="text-lg text-gray-600 mb-6 leading-relaxed">
+              Your employees aren't one-size-fits-all. Your healthcare strategy shouldn't be either.
             </p>
             
-            <p className="text-lg text-primary font-bold mb-6 leading-relaxed">
-              2025 renewal season is here. Lock in savings before rates reset for next year.
-            </p>
+            <div className="mb-6">
+              <p className="text-base text-gray-700 mb-4 font-medium">
+                Sharewize helps you layer smarter options into your benefits package:
+              </p>
+              
+              <div className="space-y-3 mb-6">
+                <div className="flex items-start space-x-3 p-3 bg-white/60 backdrop-blur-sm rounded-lg border border-gray-200/50 shadow-sm hover:shadow-md transition-shadow">
+                  <div className="flex-shrink-0 w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
+                    <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.031 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="text-base font-semibold text-gray-900 mb-1">
+                      Traditional insurance
+                    </h3>
+                    <p className="text-sm text-gray-600">
+                      for employees with ongoing or complex medical needs
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start space-x-3 p-3 bg-primary/5 backdrop-blur-sm rounded-lg border border-primary/20 shadow-sm hover:shadow-md transition-shadow">
+                  <div className="flex-shrink-0 w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
+                    <svg className="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="text-base font-semibold text-gray-900 mb-1">
+                      Healthshare memberships
+                    </h3>
+                    <p className="text-sm text-gray-600">
+                      for employees who rarely use care but still want protection and flexibility
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
             
             <Button 
               size="lg" 

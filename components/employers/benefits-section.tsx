@@ -1,65 +1,73 @@
-import { Target, Users2, Lightbulb } from 'lucide-react'
+'use client'
+
+import { useState, useEffect } from 'react'
 
 export function BenefitsSection() {
+  const [currentTextIndex, setCurrentTextIndex] = useState(0)
+  
+  const employeeTypes = [
+    "Who can't afford high deductibles but need reliable care access",
+    "Who are healthy and rarely use their benefits", 
+    "With ongoing or complex medical conditions",
+    "Frustrated with narrow networks and high out-of-pocket costs"
+  ]
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTextIndex((prevIndex) => (prevIndex + 1) % employeeTypes.length)
+    }, 3500) // Extended timing - 3.5s for better readability
+
+    return () => clearInterval(interval)
+  }, [employeeTypes.length])
+
   return (
-    <section className="py-16 lg:py-24 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12 lg:mb-16">
-          <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl lg:text-4xl mb-6">
-            The game-changer for enterprises:
+    <section className="relative py-20 bg-gradient-to-br from-gray-50 via-white to-blue-50 overflow-hidden">
+      {/* Subtle grid pattern - Adds texture without distraction */}
+      <div className="absolute inset-0 bg-grid-gray-100/30 [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)] pointer-events-none opacity-40" />
+      
+      {/* Gradient overlay - Creates depth behind the main content card */}
+      <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-primary/10 to-primary/5 rounded-2xl blur-xl opacity-50"></div>
+      
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+        <div className="text-center">
+          {/* Visual Hierarchy & Typography - Larger, more impactful headline */}
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-12 leading-tight max-w-5xl mx-auto">
+            Sharewize helps you cut costs by{' '}
+            <span className="text-primary">layering smarter options</span>{' '}
+            into your benefits package for employees:
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-            You don't replace insurance. You simply add an option.
-          </p>
-        </div>
-        
-        <div className="grid lg:grid-cols-3 gap-8 mb-16">
-          <div className="bg-gray-50 rounded-xl p-8 text-center">
-            <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <Users2 className="w-8 h-8 text-blue-600" />
-            </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-4">
-              Employees with chronic conditions
-            </h3>
-            <p className="text-gray-700">
-              keep their preferred coverage.
-            </p>
-          </div>
           
-          <div className="bg-primary/5 rounded-xl p-8 text-center border border-primary/20">
-            <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-6">
-              <Target className="w-8 h-8 text-primary" />
+          {/* Enhanced revolving text section */}
+          <div className="relative">
+            {/* Fluid typography - Scales beautifully across all devices */}
+            <div className="text-xl md:text-2xl lg:text-3xl text-gray-800 min-h-[3rem] md:min-h-[4rem] flex items-center justify-center font-medium leading-relaxed max-w-4xl mx-auto">
+              <span 
+                key={currentTextIndex}
+                className="animate-fade-in-up text-primary font-semibold"
+              >
+                {employeeTypes[currentTextIndex]}
+              </span>
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-4">
-              Healthy employees
-            </h3>
-            <p className="text-gray-700">
-              can pick a smarter financial choice.
-            </p>
           </div>
-          
-          <div className="bg-green-50 rounded-xl p-8 text-center border border-green-200">
-            <div className="w-16 h-16 bg-green-200 rounded-full flex items-center justify-center mx-auto mb-6">
-              <Lightbulb className="w-8 h-8 text-green-600" />
-            </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-4">
-              You reduce total benefits spend
-            </h3>
-            <p className="text-gray-700">
-              without reducing care quality.
-            </p>
-          </div>
-        </div>
-        
-        <div className="bg-gradient-to-r from-primary/10 to-accent/10 rounded-2xl p-8 text-center">
-          <p className="text-lg text-gray-700 mb-4">
-            This isn't experimental anymore. Large employers are already running innovative mixed-model benefits.
-          </p>
-          <p className="text-xl font-bold text-gray-900">
-            The question isn't if this shift will happen. It's whether you'll lead it or follow it.
-          </p>
         </div>
       </div>
+      
+      <style jsx>{`
+        @keyframes fade-in-up {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        .animate-fade-in-up {
+          animation: fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+      `}</style>
     </section>
   )
 }

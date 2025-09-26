@@ -1,10 +1,12 @@
 import { Metadata } from 'next'
-import { HeroSection } from '@/components/employers/hero-section'
-import { PressSection } from '@/components/employers/press-section'
-import { BenefitsSection } from '@/components/employers/benefits-section'
-import { ApproachSection } from '@/components/employers/approach-section'
-import { BoardApprovalSection } from '@/components/employers/board-approval-section'
-import { ProcessSection } from '@/components/employers/process-section'
+import { HeroSection } from '@/components/employers-original/hero-section'
+import { PressSection } from '@/components/employers-original/press-section'
+import { ProblemSection } from '@/components/employers-original/problem-section'
+import { MarketShiftSection } from '@/components/employers-original/market-shift-section'
+import { ComparisonTable } from '@/components/employers-original/comparison-table'
+
+import { BoardApprovalSection } from '@/components/employers-original/board-approval-section'
+import { ProcessSection } from '@/components/employers-original/process-section'
 
 export const metadata: Metadata = {
   title: 'Large Employers | Sharewize - Cut Healthcare Costs by 40%',
@@ -20,8 +22,9 @@ export default function LargeEmployersPage() {
     <div className="min-h-screen bg-gray-50">
       <HeroSection />
       <PressSection />
-      <BenefitsSection />
-      <ApproachSection />
+      <ProblemSection />
+      <MarketShiftSection />
+      <ComparisonTable />
       <BoardApprovalSection />
       <ProcessSection />
     </div>

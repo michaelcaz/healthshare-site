@@ -7,13 +7,27 @@ export function BoardApprovalSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl lg:text-4xl mb-4">
-            The Numbers Your Leadership Team Cares About
+            Why This Gets Board Approval
           </h2>
         </div>
         
         {/* Hero Section with Image and Key Stats */}
         <div className="grid lg:grid-cols-2 gap-12 mb-16">
-          {/* Left side - Key Benefits */}
+          {/* Left side - Image */}
+          <div className="relative">
+            <div className="relative bg-white p-2 rounded-2xl shadow-2xl">
+              <Image
+                src="/images/boardroom-zoom.jpg"
+                alt="Executive boardroom meeting discussing strategic healthcare benefits decisions"
+                width={600}
+                height={400}
+                className="rounded-xl object-cover w-full h-[300px] lg:h-[400px]"
+                priority
+              />
+            </div>
+          </div>
+          
+          {/* Right side - Key Benefits */}
           <div className="flex flex-col justify-center space-y-8">
             <div className="flex items-start space-x-4">
               <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
@@ -65,20 +79,6 @@ export function BoardApprovalSection() {
               </div>
             </div>
           </div>
-          
-          {/* Right side - Image */}
-          <div className="relative">
-            <div className="relative bg-white p-2 rounded-2xl shadow-2xl">
-              <Image
-                src="/images/boardroom-zoom.jpg"
-                alt="Executive boardroom meeting discussing strategic healthcare benefits decisions"
-                width={600}
-                height={400}
-                className="rounded-xl object-cover w-full h-[300px] lg:h-[400px]"
-                priority
-              />
-            </div>
-          </div>
         </div>
         
         {/* Bottom Line Section */}
@@ -90,7 +90,9 @@ export function BoardApprovalSection() {
               Bottom line:
             </h3>
             <p className="text-lg text-gray-700 max-w-4xl mx-auto leading-relaxed">
-              While competitors budget for 15% increases, you'll be planning cost reductions and happier employees.
+              Stop overpaying for employees who don't use expensive coverage.{' '}
+              <span className="font-bold">Keep insurance where it's needed.</span>{' '}
+              <span className="font-bold text-primary">Add smarter options where it's not.</span>
             </p>
           </div>
         </div>
