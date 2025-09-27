@@ -120,12 +120,7 @@ export function ComparisonTable() {
               <div className="grid grid-cols-3 gap-0 mb-2">
                 <div className=""></div>
                 <div className="flex flex-col items-center justify-center bg-emerald-50 border-2 border-emerald-300 rounded-t-2xl shadow-sm py-4">
-                  <img 
-                    src="/images/sharewizelogofull.svg" 
-                    alt="Sharewize" 
-                    loading="lazy"
-                    className="w-auto h-10 mb-1"
-                  />
+                  <span className="text-2xl font-bold text-emerald-700">Healthshares</span>
                 </div>
                 <div className="flex flex-col items-center justify-center py-4 border-l border-gray-200">
                   <span className="font-bold text-2xl text-orange-600">Traditional Insurance</span>
@@ -198,12 +193,7 @@ export function ComparisonTable() {
                   </button>
                   <div className="grid grid-cols-2">
                     <div className="flex flex-col items-center justify-center px-3 py-3 border-t border-emerald-100 bg-emerald-50 font-semibold text-emerald-700 text-sm text-center">
-                      <img 
-                        src="/images/sharewizelogofull.svg" 
-                        alt="Sharewize" 
-                        loading="lazy"
-                        className="w-auto h-7 mb-1"
-                      />
+                      <div className="font-bold text-xs text-emerald-600 mb-1">Healthshares</div>
                       {feature.Sharewize}
                     </div>
                     <div className="flex flex-col items-center justify-center px-3 py-3 border-t border-orange-100 font-semibold text-orange-600 text-sm text-center">

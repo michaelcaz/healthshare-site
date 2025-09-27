@@ -1,6 +1,6 @@
 import { Hero } from '@/components/marketing/Hero';
 import { FAQ } from '@/components/marketing/FAQ';
-import { ProgressiveLearning } from '@/components/marketing/ProgressiveLearning';
+import { DomStory } from '@/components/marketing/DomStory';
 import { SafetyNet } from '@/components/marketing/SafetyNet';
 import { ComparisonTable } from '@/components/marketing/ComparisonTable';
 import { RealTalk } from '@/components/marketing/RealTalk';
@@ -16,7 +16,7 @@ export default function Home() {
       <PressSection />
       <TransparencySection />
       <ComparisonTable />
-      <ProgressiveLearning />
+      <DomStory />
       <RealTalk />
       <SafetyNet />
       <HealthcarePioneers />
