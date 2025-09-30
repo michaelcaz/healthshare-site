@@ -53,7 +53,11 @@ export default function Page() {
               name: 'Example Frontend Span',
               op: 'test'
             }, async () => {
-              const res = await fetch("/api/sentry-example-api");
+              // Use absolute URL to avoid edge runtime issues
+              const baseUrl = typeof window !== 'undefined' 
+                ? window.location.origin 
+                : process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+              const res = await fetch(`${baseUrl}/api/sentry-example-api`);
               if (!res.ok) {
                 throw new Error("Sentry Example Frontend Error");
               }
