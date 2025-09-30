@@ -2,7 +2,7 @@ import Image from 'next/image'
 
 export function DomStory() {
   return (
-    <section className="py-16 lg:py-24 bg-white">
+    <section id="how-it-works" className="py-16 lg:py-24 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Dom's Healthcare Journey */}
         <div className="mt-12 lg:mt-16">

@@ -151,10 +151,10 @@ export function Header() {
     }
   }
 
-  // Smooth scroll handler for Health Sharing section
+  // Smooth scroll handler for How it Works section
   const handleHealthSharingClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
-    const sectionId = 'healthshare-explainer';
+    const sectionId = 'how-it-works';
     if (pathname === '/') {
       const header = document.querySelector('header');
       const section = document.getElementById(sectionId);
@@ -193,7 +193,7 @@ export function Header() {
             <Link href="/about" className="nav-link">
               About
             </Link>
-            <a href="#healthshare-explainer" className="nav-link" onClick={handleHealthSharingClick}>
+            <a href="#how-it-works" className="nav-link" onClick={handleHealthSharingClick}>
               What's Health Sharing?
             </a>
             <Link href="/employers" className="nav-link">
@@ -221,7 +221,7 @@ export function Header() {
               <Link href="/about" className="nav-link" onClick={() => setMobileOpen(false)}>
                 About
               </Link>
-              <a href="#healthshare-explainer" className="nav-link" onClick={handleHealthSharingClick}>
+              <a href="#how-it-works" className="nav-link" onClick={handleHealthSharingClick}>
                 What's Health Sharing?
               </a>
               <Link href="/employers" className="nav-link" onClick={() => setMobileOpen(false)}>
