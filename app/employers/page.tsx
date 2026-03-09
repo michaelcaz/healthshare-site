@@ -8,10 +8,10 @@ import { ProcessSection } from '@/components/employers/process-section'
 
 export const metadata: Metadata = {
   title: 'Employers | Reduce Healthcare Costs 20–50%.',
-  description: 'Help your employees save thousands on healthcare while reducing your benefits spend by up to 40%. Layer smarter healthshare options alongside traditional insurance.',
+  description: 'Employer health benefit strategies that reduce costs up to 50% while improving employee experience.',
   openGraph: {
     title: 'Employers | Reduce Healthcare Costs 20–50%.',
-    description: 'Help your employees save thousands on healthcare while reducing your benefits spend by up to 40%. Layer smarter healthshare options alongside traditional insurance.',
+    description: 'Employer health benefit strategies that reduce costs up to 50% while improving employee experience.',
   }
 }
 
