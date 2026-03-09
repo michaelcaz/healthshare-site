@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { NotificationCard, StatCard } from '@/components/ui/floating-card';
 import { CheckCircle, Users } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { SvgImage } from '@/components/ui/SvgImage';
 import { TrustBar } from '@/components/ui/trust-bar';
 
@@ -153,6 +154,17 @@ export function Hero() {
               <p className="text-lg md:text-xl leading-relaxed text-gray-warm/80 mb-6 md:mb-10 max-w-xl">
                 Hot take: healthier people should pay less for a safety net. Why should you pay sky-high premiums to cover other people's health problems? Join 1.7M+ Americans saving 30-50% with healthcare plans that reward health-conscious entrepreneurs, freelancers, and independent contractors like you.
               </p>
+              <div className="mb-[18px] md:mb-[22px] flex flex-col items-center lg:items-start justify-center lg:justify-start">
+                <span className="text-xs md:text-sm text-gray-warm/60 font-normal">
+                  Looking for employer benefits?
+                </span>
+                <Link
+                  href="/employers"
+                  className="mt-1.5 text-sm md:text-base text-primary font-medium hover:underline underline-offset-2 transition-colors duration-200 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded"
+                >
+                  See how Sharewize works for companies →
+                </Link>
+              </div>
               <div className="flex w-full justify-center lg:justify-start">
                 <motion.button
                   type="button"
