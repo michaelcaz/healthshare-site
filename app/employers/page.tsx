@@ -7,10 +7,10 @@ import { BoardApprovalSection } from '@/components/employers/board-approval-sect
 import { ProcessSection } from '@/components/employers/process-section'
 
 export const metadata: Metadata = {
-  title: 'Large Employers | Sharewize - Cut Healthcare Costs by 40%',
+  title: 'Employers | Reduce Healthcare Costs 20–50%.',
   description: 'Help your employees save thousands on healthcare while reducing your benefits spend by up to 40%. Layer smarter healthshare options alongside traditional insurance.',
   openGraph: {
-    title: 'Large Employers | Sharewize - Cut Healthcare Costs by 40%',
+    title: 'Employers | Reduce Healthcare Costs 20–50%.',
     description: 'Help your employees save thousands on healthcare while reducing your benefits spend by up to 40%. Layer smarter healthshare options alongside traditional insurance.',
   }
 }
