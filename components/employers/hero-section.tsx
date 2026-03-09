@@ -26,12 +26,8 @@ export function HeroSection() {
               While Dramatically Improving Care Quality and Access
             </h1>
             
-            <p className="text-lg text-gray-600 mb-2 leading-relaxed">
+            <p className="text-lg text-gray-600 mb-6 leading-relaxed">
               Every year, you brace for another double-digit healthcare increase. What if this year was different?
-            </p>
-            
-            <p className="text-lg text-primary font-bold mb-6 leading-relaxed">
-              2025 renewal season is here. Lock in savings before rates reset for next year.
             </p>
             
             <Button 
