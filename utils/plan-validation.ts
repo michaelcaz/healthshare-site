@@ -8,7 +8,7 @@ const planCostSchema = z.object({
 
 const planMatrixSchema = z.object({
   ageBracket: z.enum(['18-29', '30-39', '40-49', '50-64']),
-  householdType: z.enum(['Member Only', 'Member & Spouse', 'Member & Child(ren)', 'Member & Family']),
+  householdType: z.enum(['Member Only', 'Member & Spouse', 'Member & Child(ren)', 'Member & Family', 'Member & Family (5+)']),
   costs: z.array(planCostSchema)
 });
 

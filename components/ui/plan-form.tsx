@@ -12,7 +12,7 @@ interface PlanFormProps {
 }
 
 const AGE_BRACKETS: AgeBracket[] = ['18-29', '30-39', '40-49', '50-64']
-const HOUSEHOLD_TYPES: HouseholdType[] = ['Member Only', 'Member & Spouse', 'Member & Child(ren)', 'Member & Family']
+const HOUSEHOLD_TYPES: HouseholdType[] = ['Member Only', 'Member & Spouse', 'Member & Child(ren)', 'Member & Family', 'Member & Family (5+)']
 const IUA_OPTIONS = [1000, 2500, 5000]
 
 const supabase = createBrowserClient(

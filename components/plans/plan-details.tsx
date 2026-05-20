@@ -77,6 +77,7 @@ export function PlanDetails({
             <option value="Member & Spouse">Individual + Spouse</option>
             <option value="Member & Child(ren)">Individual + Children</option>
             <option value="Member & Family">Family</option>
+            <option value="Member & Family (5+)">Family (5+)</option>
           </select>
         </div>
 

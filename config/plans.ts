@@ -3,7 +3,8 @@ export const HOUSEHOLD_TYPES = [
   'Member Only',
   'Member & Spouse',
   'Member & Child(ren)',
-  'Member & Family'
+  'Member & Family',
+  'Member & Family (5+)',
 ] as const;
 
 export const DEFAULT_AGE_BRACKET = '30-39';

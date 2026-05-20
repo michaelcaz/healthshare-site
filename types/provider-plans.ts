@@ -36,7 +36,8 @@ export type HouseholdType =
   | 'Member Only' 
   | 'Member & Spouse'
   | 'Member & Child(ren)'
-  | 'Member & Family';
+  | 'Member & Family'
+  | 'Member & Family (5+)';
 
 interface MaternityDetails {
   coverage: {
