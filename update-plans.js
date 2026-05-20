@@ -301,9 +301,185 @@ function validatePlans(plans) {
   console.log('Validation complete.');
 }
 
+function normalizeText(value) {
+  return String(value || '').replace(/\r\n/g, ' ').replace(/\s+/g, ' ').trim().toLowerCase();
+}
+
+function loadExistingProviderPlans(filePath) {
+  const content = fs.readFileSync(filePath, 'utf8');
+  const marker = 'export const providerPlans';
+  const eq = content.indexOf('=', content.indexOf(marker));
+  const start = content.indexOf('[', eq);
+  const end = content.lastIndexOf('];') + 1;
+  return JSON.parse(content.slice(start, end));
+}
+
+function findExistingPlan(existingPlans, providerName, planName) {
+  const provider = String(providerName || '').trim();
+  const plan = normalizeText(planName);
+  const providerPlans = existingPlans.filter((p) => p.providerName === provider);
+
+  if (providerPlans.length === 1) {
+    return providerPlans[0];
+  }
+
+  if (!plan || plan === 'basic') {
+    return null;
+  }
+
+  let match = providerPlans.find((p) => normalizeText(p.planName) === plan);
+  if (match) return match;
+
+  match = providerPlans.find((p) => {
+    const existingPlan = normalizeText(p.planName);
+    return existingPlan.includes(plan) || plan.includes(existingPlan);
+  });
+  if (match) return match;
+
+  if (provider === 'Sedera' && plan.includes('dpc/vpc')) {
+    return providerPlans.find((p) => normalizeText(p.planName).includes('dpc/vpc'));
+  }
+  if (provider === 'Sedera' && plan.includes('access')) {
+    return providerPlans.find((p) => {
+      const name = normalizeText(p.planName);
+      return name.includes('access') && !name.includes('dpc/vpc');
+    });
+  }
+
+  return null;
+}
+
+function mergePricesOnly(existingPlans, excelData) {
+  const stats = { updated: 0, skipped: 0, unmatched: 0 };
+
+  let currentProvider = '';
+  let currentPlan = '';
+  let currentAgeBracket = '';
+  let currentHouseholdType = '';
+
+  const safeString = (value) => {
+    if (value === undefined || value === null) return '';
+    return String(value).trim();
+  };
+
+  excelData.forEach((row) => {
+    if (row['Provider Name']) currentProvider = safeString(row['Provider Name']);
+    if (row['Plan Name']) currentPlan = safeString(row['Plan Name']);
+    if (row['Age Bracket']) currentAgeBracket = safeString(row['Age Bracket']);
+    if (row['Household Size']) currentHouseholdType = safeString(row['Household Size']);
+
+    if (!currentProvider) return;
+
+    const isSinglePlanProvider =
+      currentProvider === 'CrowdHealth' || currentProvider === 'Knew Health';
+    if (!currentPlan && !isSinglePlanProvider) return;
+
+    const monthlyPremium = sanitizeNumber(safeString(row['Monthly Premium ($)']));
+    const initialUnsharedAmount = sanitizeNumber(safeString(row['Initial Unshared Amount ($)']));
+    if (monthlyPremium === null || initialUnsharedAmount === null) return;
+    if (!currentAgeBracket || !currentHouseholdType) return;
+
+    const ageBracket = validateAgeBracket(currentAgeBracket);
+    const householdType = validateHouseholdType(currentHouseholdType);
+    if (!ageBracket || !householdType) {
+      stats.skipped += 1;
+      return;
+    }
+
+    const existingPlan = findExistingPlan(existingPlans, currentProvider, currentPlan);
+    if (!existingPlan) {
+      stats.unmatched += 1;
+      return;
+    }
+
+    let matrixEntry = existingPlan.planMatrix.find(
+      (entry) => entry.ageBracket === ageBracket && entry.householdType === householdType
+    );
+
+    if (!matrixEntry) {
+      matrixEntry = { ageBracket, householdType, costs: [] };
+      existingPlan.planMatrix.push(matrixEntry);
+    }
+
+    const existingCost = matrixEntry.costs.find(
+      (cost) => cost.initialUnsharedAmount === initialUnsharedAmount
+    );
+
+    if (existingCost) {
+      if (
+        existingCost.monthlyPremium !== monthlyPremium ||
+        existingCost.initialUnsharedAmount !== initialUnsharedAmount
+      ) {
+        existingCost.monthlyPremium = monthlyPremium;
+        existingCost.initialUnsharedAmount = initialUnsharedAmount;
+        stats.updated += 1;
+      }
+    } else {
+      matrixEntry.costs.push({ monthlyPremium, initialUnsharedAmount });
+      stats.updated += 1;
+    }
+  });
+
+  existingPlans.forEach((plan) => {
+    plan.planMatrix.forEach((entry) => {
+      entry.costs.sort((a, b) => a.initialUnsharedAmount - b.initialUnsharedAmount);
+    });
+  });
+
+  return stats;
+}
+
+function writeProviderPlansFile(outputPath, plans) {
+  const tsContent = `// Auto-generated on ${new Date().toISOString()}
+import { PricingPlan, ProviderAgeRules } from '@/types/provider-plans';
+
+const standardAgeRules: ProviderAgeRules = {
+  type: 'standard'
+};
+
+const crowdHealthAgeRules: ProviderAgeRules = {
+  type: 'custom',
+  customBrackets: {
+    ranges: [
+      { min: 18, max: 54, bracket: '18-54' },
+      { min: 55, max: 64, bracket: '55-64' }
+    ]
+  }
+};
+
+export const providerPlans: PricingPlan[] = ${JSON.stringify(plans, null, 2)};
+`;
+
+  fs.writeFileSync(outputPath, tsContent);
+}
+
+async function updatePricesOnly(filePath, outputPath) {
+  const data = await processExcelFile(filePath);
+  const finalOutputPath = outputPath || path.join(process.cwd(), 'data', 'provider-plans.ts');
+  const existingPlans = loadExistingProviderPlans(finalOutputPath);
+  const stats = mergePricesOnly(existingPlans, data);
+
+  writeProviderPlansFile(finalOutputPath, existingPlans);
+
+  console.log('Prices-only update complete.');
+  console.log(`Updated ${stats.updated} price entries`);
+  if (stats.unmatched) {
+    console.warn(`Warning: ${stats.unmatched} spreadsheet rows could not be matched to existing plans`);
+  }
+  if (stats.skipped) {
+    console.warn(`Warning: skipped ${stats.skipped} rows with invalid age/household values`);
+  }
+
+  return { plans: existingPlans, stats };
+}
+
 // Main function
-async function updateProviderPlans(filePath, outputPath) {
+async function updateProviderPlans(filePath, outputPath, options = {}) {
   try {
+    if (options.pricesOnly) {
+      return updatePricesOnly(filePath, outputPath);
+    }
+
     const data = await processExcelFile(filePath);
     const plans = transformToProviderPlans(data);
     validatePlans(plans);
@@ -359,34 +535,8 @@ async function updateProviderPlans(filePath, outputPath) {
     }
     console.log("=== END SEDERA DEBUG ===\n");
     
-    // Default output path if not specified
     const finalOutputPath = outputPath || path.join(process.cwd(), 'data', 'provider-plans.ts');
-    
-    // Generate TypeScript file
-    const tsContent = `// Auto-generated on ${new Date().toISOString()}
-import { PricingPlan, ProviderAgeRules } from '@/types/provider-plans';
-
-const standardAgeRules: ProviderAgeRules = {
-  type: 'standard'
-};
-
-const crowdHealthAgeRules: ProviderAgeRules = {
-  type: 'custom',
-  customBrackets: {
-    ranges: [
-      { min: 18, max: 54, bracket: '18-54' },
-      { min: 55, max: 64, bracket: '55-64' }
-    ]
-  }
-};
-
-export const providerPlans: PricingPlan[] = ${JSON.stringify(plans, null, 2)
-  .replace(/"ageRules": {"type": "standard"}/, 'ageRules: standardAgeRules')
-  .replace(/"ageRules": {"type": "custom".*?}}/g, 'ageRules: crowdHealthAgeRules')};
-`;
-    
-    // Write the file
-    fs.writeFileSync(finalOutputPath, tsContent);
+    writeProviderPlansFile(finalOutputPath, plans);
     console.log(`Successfully updated provider plans at ${finalOutputPath}`);
     console.log(`Processed ${plans.length} plans with ${plans.reduce((sum, plan) => sum + plan.planMatrix.length, 0)} matrix entries`);
     
@@ -399,14 +549,17 @@ export const providerPlans: PricingPlan[] = ${JSON.stringify(plans, null, 2)
 
 // If this file is run directly
 if (require.main === module) {
-  const filePath = process.argv[2] || 'healthshare-plans.xlsx';
-  const outputPath = process.argv[3] || 'provider-plans.json';
-  
-  updateProviderPlans(filePath, outputPath)
+  const args = process.argv.slice(2);
+  const pricesOnly = args.includes('--prices-only');
+  const positionalArgs = args.filter((arg) => !arg.startsWith('--'));
+  const filePath = positionalArgs[0] || 'healthshare-plans.xlsx';
+  const outputPath = positionalArgs[1] || path.join(process.cwd(), 'data', 'provider-plans.ts');
+
+  updateProviderPlans(filePath, outputPath, { pricesOnly })
     .catch(error => {
       console.error('Failed to update plans:', error);
       process.exit(1);
     });
 }
 
-module.exports = { updateProviderPlans, processExcelFile }; 
+module.exports = { updateProviderPlans, updatePricesOnly, processExcelFile }; 
