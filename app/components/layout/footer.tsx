@@ -26,7 +26,6 @@ export function Footer() {
             <ul className="space-y-2 text-sm">
               <li><a href="/" className="hover:text-primary hover:underline transition-colors">Home</a></li>
               <li><a href="/about" className="hover:text-primary hover:underline transition-colors">About</a></li>
-              <li><a href="/contact" className="hover:text-primary hover:underline transition-colors">Contact</a></li>
               <li><a href="/questionnaire" className="hover:text-primary hover:underline transition-colors">See My Savings in 60 Seconds</a></li>
             </ul>
           </div>
@@ -44,7 +43,9 @@ export function Footer() {
           <div>
             <h3 className="font-semibold mb-4 text-gray-900">Connect With Us</h3>
             <ul className="space-y-2 text-sm">
-
+              <li>
+                <a href="mailto:m@sharewize.com" className="hover:text-primary hover:underline transition-colors">m@sharewize.com</a>
+              </li>
               <li>
                 <a href="tel:7372371055" className="hover:text-primary hover:underline transition-colors">(737) 237-1055</a>
               </li>

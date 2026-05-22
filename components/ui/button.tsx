@@ -45,17 +45,6 @@ export interface ButtonProps
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, showArrow = false, children, ...props }, ref) => {
-    // Add logging
-    console.log('Button component rendered with:', {
-      asChild,
-      children: React.Children.count(children),
-      hasMultipleChildren: React.Children.count(children) > 1,
-      childrenType: React.Children.map(children, child => 
-        child ? typeof child : 'null'
-      ),
-      props: { ...props }
-    })
-
     const Comp = asChild ? Slot : "button"
     return (
       <Comp
@@ -63,9 +52,15 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         {...props}
       >
-        {children}
-        {showArrow && (
-          <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+        {asChild ? (
+          children
+        ) : (
+          <>
+            {children}
+            {showArrow && (
+              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+            )}
+          </>
         )}
       </Comp>
     )
