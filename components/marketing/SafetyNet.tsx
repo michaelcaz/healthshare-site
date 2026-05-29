@@ -25,22 +25,22 @@ const cards = [
     title: "Emergency Room Visit",
     icon: Activity,
     iconColor: "text-red-600",
-    coverage: "Plan covers 100% after your share for eligible needs",
+    coverage: "Healthshare picks up 100% after your IUA for eligible needs",
     example: "Struck by a sudden stroke with an initial $90,000 hospital bill? Your health share provider would first negotiate it down to a fair market rate of, say, $55,000, then cover $54,000 (after your IUA of $1,000) and any follow up visits or therapy you need since it's part of the same \"need.\""
   },
   {
     title: "Accident",
     icon: Stethoscope,
     iconColor: "text-blue-600",
-    coverage: "Plan covers 100% after your share for eligible needs",
-    example: "Picture this: you fall off a ladder while painting your home, breaking your leg. You rack up $16,000 in bills for urgent care, a cast, follow-up visits, and physical therapy. Again, your health share plan steps in, negotiates the costs down to $6500, then covers the $5500 over your IUA."
+    coverage: "Healthshare picks up 100% after your IUA for eligible needs",
+    example: "Picture this: you fall off a ladder while painting your home, breaking your leg. You rack up $16,000 in bills for urgent care, a cast, follow-up visits, and physical therapy. Again, your health share steps in, negotiates the costs down to $6500, then covers the $5500 over your IUA."
   },
   {
     title: "Planned Surgery",
     icon: Scissors,
     iconColor: "text-purple-600",
-    coverage: "Your plan covers 100% after your share for eligible needs",
-    example: "Let's say you need a hip replacement. Your health share plan helps you find a high quality, trusted outpatient center. The cash pay market cost for the procedure is ~$22,000—a bundled rate covering the surgeon, facility, and follow-up care. After negotiation, your health share provider sends you $21,000 (you still cover your IUA), ensuring you can pay upfront at the time of service."
+    coverage: "Healthshare picks up 100% after your IUA for eligible needs",
+    example: "Let's say you need a hip replacement. Your health share provider helps you find a high quality, trusted outpatient center. The cash pay market cost for the procedure is ~$22,000—a bundled rate covering the surgeon, facility, and follow-up care. After negotiation, your health share provider sends you $21,000 (you still cover your IUA), ensuring you can pay upfront at the time of service."
   }
 ];
 
@@ -94,7 +94,7 @@ export function SafetyNet() {
           </div>
           <div className="inline-block px-6 py-2 bg-gray-50 rounded-full">
             <p className="text-gray-600 text-sm">
-              Pick a plan with <span className="font-semibold text-indigo-600">$1,000</span> Initial Unshared Amount—or customize yours from <span className="font-semibold text-indigo-600">$500</span> to <span className="font-semibold text-indigo-600">$5,000</span>!
+              Pick a healthshare with <span className="font-semibold text-indigo-600">$1,000</span> Initial Unshared Amount—or customize yours from <span className="font-semibold text-indigo-600">$500</span> to <span className="font-semibold text-indigo-600">$5,000</span>!
             </p>
           </div>
           <div className="mb-12" />

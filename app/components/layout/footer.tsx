@@ -16,7 +16,7 @@ export function Footer() {
               />
             </Link>
             <p className="text-sm text-gray-600">
-              Helping you find the perfect healthshare plan for your needs.
+              Helping you find the perfect healthshare for your needs.
             </p>
           </div>
 

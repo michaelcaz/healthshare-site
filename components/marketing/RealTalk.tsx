@@ -114,7 +114,7 @@ const testimonials = [
       name: "Karielle Silk",
       role: "Director, Playwright, Mother of three",
       planName: "Knew Health",
-      quote: "The single greatest healthcare coverage experience my husband and I have ever had, combined! Not only is the plan affordable, the coverage makes sense and is fair - but the greatest thing of all is the opportunity to actually talk to a real person when things come up. Whenever information needs to be shared or a follow up needs to happen, I always get an email and am able to reply right there as well. As a mom of three young children, I don't have time to wait on hold or play phone tag with agents. Knew Health makes it easy to understand and easy to manage! 10/10 recommend.",
+      quote: "The single greatest healthcare experience my husband and I have ever had, combined! Not only is the membership affordable, it makes sense and is fair - but the greatest thing of all is the opportunity to actually talk to a real person when things come up. Whenever information needs to be shared or a follow up needs to happen, I always get an email and am able to reply right there as well. As a mom of three young children, I don't have time to wait on hold or play phone tag with agents. Knew Health makes it easy to understand and easy to manage! 10/10 recommend.",
       photoPath: "/images/testimonials/Karielle-Silk.png",
       logoPath: "/images/logos/knew.svg"
     }

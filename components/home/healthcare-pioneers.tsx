@@ -74,7 +74,7 @@ export function HealthcarePioneers() {
             </div>
             <div className="text-center">
               <div className="text-4xl font-bold text-[#6366F1] mb-2">98%+</div>
-              <p className="text-gray-700">Approval on Eligible Claims</p>
+              <p className="text-gray-700">Approval on Eligible Sharing Requests</p>
             </div>
             <div className="text-center">
               <div className="text-4xl font-bold text-[#6366F1] mb-2">40+</div>

@@ -152,7 +152,7 @@ export function Hero() {
                 <span className="block text-[#6366F1]">Save the wealth.</span>
               </h1>
               <p className="text-lg md:text-xl leading-relaxed text-gray-warm/80 mb-6 md:mb-10 max-w-xl">
-                Hot take: healthier people should pay less for a safety net. Why should you pay sky-high premiums to cover other people's health problems? Join 1.7M+ Americans saving 30-50% with healthcare plans that reward health-conscious entrepreneurs, freelancers, and independent contractors like you.
+                Hot take: healthier people should pay less for a safety net. Why should you pay sky-high premiums to cover other people's health problems? Join 1.7M+ Americans saving 30-50% with healthcare memberships that reward health-conscious entrepreneurs, freelancers, and independent contractors like you.
               </p>
               <div className="mb-[18px] md:mb-[22px] flex flex-col items-center lg:items-start justify-center lg:justify-start">
                 <span className="text-xs md:text-sm text-gray-warm/60 font-normal">

@@ -26,7 +26,7 @@ export function TransparencySection() {
       icon: "🏥",
       title: "Not Insurance",
       subtitle: "No legal guarantee, but read this",
-      body: "Insurance companies legally promise to pay your claims. Then they deny 15-51% of them and force you to fight billion dollar legal teams in court. Health share providers make no legal promises yet pay 98%+ of eligible claims and have stellar track records (each plan on this site has a 4.5/5 or higher avg. with hundreds of reviews on Google and Trustpilot). Which would you choose?"
+      body: "Insurance companies legally promise to pay your claims. Then they deny 15-51% of them and force you to fight billion dollar legal teams in court. Health share providers make no legal promises yet pay 98%+ of eligible sharing requests and have stellar track records (each healthshare on this site has a 4.5/5 or higher avg. with hundreds of reviews on Google and Trustpilot). Which would you choose?"
     },
     {
       icon: "💰",
